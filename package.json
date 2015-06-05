@@ -1,0 +1,47 @@
+{
+  "name": "fly",
+  "version": "0.0.1",
+  "description": "New Generation Build System",
+  "dependencies": {
+    "babel-runtime": "^5.4.7",
+    "chokidar": "^1.0.3",
+    "clor": "^0.2.1",
+    "co": "^4.5.4",
+    "dateformat": "^1.0.11",
+    "gaze": "^0.5.1",
+    "glob": "^5.0.10",
+    "mz": "^2.0.0",
+    "parsec": "^0.0.8",
+    "rimraf": "^2.4.0",
+    "update-notifier": "^0.5.0",
+    "yieldables": "^0.2.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^3.1.9",
+    "eslint": "^0.21.2",
+    "tap-spec": "^4.0.2",
+    "tape": "^4.0.0"
+  },
+  "scripts": {
+    "build": "npm test && babel --optional runtime src/ -d ./dist",
+    "tape": "NODE_ENV=development tape test/*.js",
+    "test": "npm run lint && npm run tape | tspec",
+    "lint": "eslint src/**/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flyjs/fly.git"
+  },
+  "keywords": [
+    "build system",
+    "promise pipeline",
+    "task runner",
+    "task automation"
+  ],
+  "author": "Jorge Bucaran",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/flyjs/fly/issues"
+  },
+  "homepage": "https://github.com/flyjs/fly"
+}

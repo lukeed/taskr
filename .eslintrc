@@ -1,0 +1,18 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "rules": {
+    "semi": [2, "never"],
+    "curly": 0,
+    "strict": 0,
+    "no-var": 2,
+    "no-empty": 0,
+    "no-shadow": 0,
+    "no-unused-expressions": 2,
+    "no-use-before-define": 2,
+    "no-underscore-dangle": 0
+  }
+}
