@@ -10,7 +10,7 @@
     "tape": "^4.0.0"
   },
   "devDependencies": {
-    "fly-babelify": "0.0.1",
+    "fly-babel": "0.0.3",
     "fly-coffee": "0.0.1",
     "fly-eslint": "0.0.1",
     "fly-mocha": "0.0.1",

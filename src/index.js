@@ -1,11 +1,10 @@
-/** @overview CLI Engine */
-
 import Parsec from "parsec"
 import { notifyUpdates, resolve } from "./util"
 import reporter from "./reporter"
 import cli from "./cli/"
 import pkg from "../package"
 
+/** @desc CLI Engine */
 export default function* () {
   notifyUpdates({ pkg })
 

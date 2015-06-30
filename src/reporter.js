@@ -1,5 +1,3 @@
-/** @overview Fly reporter */
-
 import fmt from "./fmt"
 import { log } from "./util"
 
