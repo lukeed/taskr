@@ -10,9 +10,9 @@
 |
 <b><a href="#flyfile">Flyfile</a></b>
 |
-<b><a href="#basics">API</a></b>
+<b><a href="#api">API</a></b>
 |
-<b><a href="#plugins">Plugins</a></b>
+<b><a href="#plugins-1">Plugins</a></b>
 
 
 # Documentation
