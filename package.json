@@ -2,6 +2,10 @@
   "name": "fly",
   "version": "0.0.1",
   "description": "New Generation Build System",
+  "main": "dist/index.js",
+  "bin": {
+    "fly": "./bin/index.js"
+  },
   "dependencies": {
     "babel-runtime": "^5.4.7",
     "chokidar": "^1.0.3",
