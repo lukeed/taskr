@@ -26,7 +26,7 @@ exports.map = function* () {
 exports.babel = function* () {
   yield this
     .source("babel/src/*.js")
-    .babelify({ stage: 0 })
+    .babel({ stage: 0 })
     .target("babel/dist")
 }
 
