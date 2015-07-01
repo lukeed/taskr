@@ -11,7 +11,7 @@
 |
 <b><a href="/docs/README.md">Documentation</a></b>
 |
-<b><a href="wiki/Plugins">Plugins</a></b>
+<b><a href="https://github.com/flyjs/fly/wiki#plugins">Plugins</a></b>
 |
 <b><a href="#contributing">Contributing</a></b>
 </p>
