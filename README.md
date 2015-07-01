@@ -71,6 +71,12 @@ exports.scripts = function* () {
 
 Contributions are absolutely welcome. Check out our [contribution guide](/CONTRIBUTING.md).
 
+# Roadmap ✈
+
++ Watching files should be more transparent.
++ Proper tests.
++ Configuration options (disable plugin auto-loading, etc.)
+
 # License
 
 

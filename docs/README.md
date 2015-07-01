@@ -72,7 +72,7 @@ Similar to other build systems, _Fly_ reads a Flyfile to load and run tasks. See
 
 Fly exposes a number of methods that let you create and manipulate Fly instances, as well as built-in tasks such as `clear`, `concat` and `filter`.
 
-### `Fly.prototype.constructor`
+#### `Fly.prototype.constructor`
 Creates a new Fly instance.
 
 #### Options
@@ -86,26 +86,26 @@ Relative base path / root.
 * #### `plugins`
 List of plugins to load.
 
-### `Fly.prototype.log (...args)`
+#### `Fly.prototype.log (...args)`
 Log a message with a time stamp.
 
-### `Fly.prototype.reset ()`
+#### `Fly.prototype.reset ()`
 Reset the internal state of the Fly instance.
 
-### `Fly.prototype.clear (...paths)`
+#### `Fly.prototype.clear (...paths)`
 [rimraf](https://github.com/isaacs/rimraf) wrapper. Clear each specified directory.
 
-### `Fly.prototype.concat (name)`
+#### `Fly.prototype.concat (name)`
 Concatenate files read with `Fly.prototype.source`.
 
-### `Fly.prototype.filter (...filters)`
+#### `Fly.prototype.filter (...filters)`
 Add a sync filter / transform to the promise-pipeline. For async filters, you must wrap the function into a promise using `Fly.prototype.defer` for example.
 
-### `Fly.prototype.watch (globs, ...tasks)`
+#### `Fly.prototype.watch (globs, ...tasks)`
 
 Run the specified tasks when a change is detected in any of the paths that expand from `globs`.
 
-### `Fly.prototype.start (tasks = [])`
+#### `Fly.prototype.start (tasks = [])`
 
 Run all tasks specified in `tasks` or the `default` if `tasks.length === 0`.
 
@@ -115,12 +115,12 @@ Adds one or more read operations to the promise-pipeline.
 Each file is mapped to a read file promise that resolves in a recursive
 filter where each existing filter is applied and eventually yields a `{ file, data }` object.
 
-### `Fly.prototype.unwrap (source = this._src)`
+#### `Fly.prototype.unwrap (source = this._src)`
 Resolves an array of promises an returns a new promise with the result.
 
 This method can be used when creating plugins that need to read the source promises before the pipeline is finally resolved in `Fly.prototype.target`. Examples of plugins that can use this method are linting and testing plugins.
 
-### `Fly.prototype.target (...dest)`
+#### `Fly.prototype.target (...dest)`
 
 Resolves all source promises and writes to each of the destination paths.
 
