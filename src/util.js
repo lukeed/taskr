@@ -49,7 +49,7 @@ export function plugins ({ pkg, deps, blacklist = []}) {
   return deps
     .filter((dep) => /^fly-.+/g.test(dep))
     .filter((dep) => !~blacklist.indexOf(dep))
-    .reduce((prev, curr) => [].concat(prev, curr))
+    .reduce((prev, curr) => [].concat(prev, curr), [])
 }
 
 /**

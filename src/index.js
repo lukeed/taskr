@@ -1,4 +1,5 @@
 import Parsec from "parsec"
+import { jsVariants } from "interpret"
 import { notifyUpdates, resolve } from "./util"
 import reporter from "./reporter"
 import cli from "./cli/"
@@ -23,6 +24,13 @@ export default function* () {
 
   } else {
     const path = yield resolve({ file, name: "Flyfile" })
+    const ext = path.split(".")[path.split(".").length - 1]
+    const modules = jsVariants["." + ext]
+    let extModule = modules
+    if(Array.isArray(modules)) {
+      extModule = modules[0]
+    }
+    require(extModule)
     if (list) {
       cli.list(path, { simple: list === "simple" })
     } else {
