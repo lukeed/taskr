@@ -1,8 +1,19 @@
+> New Generation Build System
+
+[![][fly-badge]][fly]
+[![][dl-badge]][npm-pkg-link]
+![][mit-badge]
+[![][TravisLogo]][Travis]
+
+
+
+
 <p align="center">
   <a href="http://github.com/flyjs/fly">
     <img width=300px  src="https://cloud.githubusercontent.com/assets/8317250/8430194/35c6043a-1f6a-11e5-8cbd-af6cc86baa84.png">
   </a>
 </p>
+
 
 <p align="center">
 <b><a href="#about">About</a></b>
@@ -17,14 +28,9 @@
 </p>
 <br>
 
-[![][fly-badge]][fly]
-[![][dl-badge]][npm-pkg-link]
-![][mit-badge]
-[![][TravisLogo]][Travis]
-
-> New Generation Build System
 
 ## About
+[![Join the chat at https://gitter.im/flyjs/fly](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/flyjs/fly?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 _Fly_ is a [build system](https://en.wikipedia.org/wiki/Build_automation) for [Node](https://nodejs.org/) based in [ES6](http://www.ecma-international.org/ecma-262/6.0/index.html) [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that aims to be simple and elegant to write and extend.
 
