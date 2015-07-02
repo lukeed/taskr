@@ -1,5 +1,3 @@
-/** @overview Fly reporter */
-
 "use strict";
 
 var _interopRequireDefault = require("babel-runtime/helpers/interop-require-default")["default"];

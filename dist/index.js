@@ -26,10 +26,7 @@ var _package = require("../package");
 
 var _package2 = _interopRequireDefault(_package);
 
-/**
-  CLI Engine
-  @overview This generator is 
- */
+/** @desc CLI Engine */
 exports["default"] = _regeneratorRuntime.mark(function callee$0$0() {
   var _Parsec$parse$options$options$options$options, help, list, file, version, tasks, path;
 
