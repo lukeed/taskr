@@ -10,6 +10,8 @@
 |
 <b><a href="#flyfile">Flyfile</a></b>
 |
+<b><a href="#cli">CLI</a></b>
+|
 <b><a href="#api">API</a></b>
 |
 <b><a href="#plugins-1">Plugins</a></b>
@@ -66,7 +68,58 @@ Similar to Gulp, _Fly_ favors code over configuration, but aims to provide a def
 
 ## Flyfile
 
-Similar to other build systems, _Fly_ reads a Flyfile to load and run tasks. See inside `examples/` for Flyfile samples.
+Similar to other build systems, _Fly_ reads a Flyfile to load and run tasks.
+
+A Flyfile exports its tasks as generator functions:
+
+```js
+exports.myTask = function* () {
+  yield this.source("a").target("b")
+}
+```
+
+See inside `examples/` for Flyfile samples.
+
+## CLI
+
+When you install Fly, you can access the CLI via `fly [options] [tasks]` in your terminal:
+
+```
+fly task1 task2 ...
+```
+
+Fly currently supports the following flags:
+
+#### `-h  --help`
+
+Display the help.
+
+#### `-f  --file` `<path>`
+
+Use an alternate Flyfile.
+
+```
+fly -f examples/
+```
+
+Or
+
+
+```
+fly -f path/to/Flyfile
+```
+
+#### `-l  --list[=simple]`
+
+Display available tasks. Use `--list=simple` to get a clean print of the tasks.
+
+> Useful when writing shell completions.
+
+#### `-v  --version`
+
+Display the version number.
+
+If you have a Flyfile
 
 ## API
 
@@ -136,6 +189,8 @@ Resolves all source promises and writes to each of the destination paths.
 ## Plugins
 
 > See the [Wiki](https://github.com/flyjs/fly/wiki) for the list of currently supported plugins.
+
+> See [this gist](https://gist.github.com/bucaran/f018ade8dee8ae189407) for an example README template for your Fly plugins.
 
 Plugins are regular node modules that export a single default method. This method method is automatically run when a new Fly instance is created. The following adds a new method to the Fly instance:
 
