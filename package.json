@@ -1,6 +1,6 @@
 {
   "name": "fly",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "New Generation Build System",
   "main": "dist/index.js",
   "bin": {
@@ -12,7 +12,6 @@
     "clor": "^0.2.1",
     "co": "^4.5.4",
     "dateformat": "^1.0.11",
-    "gaze": "^0.5.1",
     "glob": "^5.0.10",
     "mkdirp": "^0.5.1",
     "mz": "^2.0.0",
@@ -29,7 +28,7 @@
   },
   "scripts": {
     "build": "npm test && babel --optional runtime src/ -d ./dist",
-    "tape": "NODE_ENV=development tape test/*.js",
+    "tape": "tape test/*.js",
     "test": "npm run lint && npm run tape | tspec",
     "lint": "eslint src/**/*.js"
   },
