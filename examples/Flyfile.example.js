@@ -1,31 +1,22 @@
-var paths = {
-  scripts: ["client/js/**/*.coffee", "!client/external/**/*.coffee"],
-  images: "client/img/**/*"
+const paths = {
+  scripts: ["src/**/*.js", "!src/ignore/**/*.js"]
 }
 
 exports.default = function* () {
   yield this.tasks.clean()
   yield this.tasks.scripts()
-  yield this.tasks.images()
-  yield this.watch([paths.scripts, paths.images])
+  yield this.watch([paths.scripts])
 }
 
-exports.clean = function* () {
-  yield this.rimraf("build")
+exports.clear = function* () {
+  yield this.clear("build")
 }
 
 exports.scripts = function* () {
   yield this
     .source(paths.scripts)
-    .coffee({/* options */})
+    .babel({/* options */})
     .uglify({/* options */})
     .concat("all.min.js")
     .target("build/js")
-}
-
-exports.images = function* () {
-  yield this
-    .source(paths.images)
-    .imagemin({/* options */})
-    .target("build/img")
 }
