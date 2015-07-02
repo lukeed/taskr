@@ -192,7 +192,7 @@ Resolves all source promises and writes to each of the destination paths.
 
 > See [this gist](https://gist.github.com/bucaran/f018ade8dee8ae189407) for an example README template for your Fly plugins.
 
-Plugins are regular node modules that export a single default method. This method method is automatically run when a new Fly instance is created. The following adds a new method to the Fly instance:
+Plugins are regular node modules that export a single default method. This method is automatically run when a new Fly instance is created. The following adds a new method to the Fly instance:
 
 ```js
 module.exports = function () {
