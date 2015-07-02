@@ -56,10 +56,10 @@ var _ = _interopRequireWildcard(_util);
 
 var Fly = (function (_Emitter) {
   /**
+    Create a new instance of Fly. Use fly.start(...) to run tasks.
     @param {Object} host Flyfile
     @param {String} root Relative base path / root.
     @param {Array} plugins List of plugins to load.
-    @desc Create a new instance of Fly. Use fly.start(...) to run tasks.
    */
 
   function Fly(_ref) {
@@ -74,9 +74,9 @@ var Fly = (function (_Emitter) {
     _classCallCheck(this, Fly);
 
     _get(Object.getPrototypeOf(Fly.prototype), "constructor", this).call(this);
+    this.defer = _.defer;
     this.encoding = process.env.ENCODING;
     this.host = this.tasks = {};
-    this.defer = _.defer;
     _Object$keys(host).forEach(function (task) {
       return _this.tasks[task] = _this.host[task] = host[task].bind(_this);
     });
@@ -92,7 +92,7 @@ var Fly = (function (_Emitter) {
     key: "log",
 
     /**
-      @desc Log a message with a time stamp as defined in fly-fmt.
+      Log a message with a time stamp as defined in /fmt.
      */
     value: function log() {
       for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
@@ -103,23 +103,11 @@ var Fly = (function (_Emitter) {
       return this;
     }
   }, {
-    key: "reset",
-
-    /**
-      @desc Reset the internal state.
-     */
-    value: function reset() {
-      this._src = [];
-      this._filters = [];
-      this._writers = [];
-      return this;
-    }
-  }, {
     key: "clear",
 
     /**
+      Clear each specified directory. Wraps rimraf.
       @param {...String} paths
-      @desc Clear each specified directory. Wraps rimraf.
      */
     value: function clear() {
       var _clear = this.defer(_rimraf2["default"]);
@@ -136,9 +124,9 @@ var Fly = (function (_Emitter) {
     key: "concat",
 
     /**
+      Concatenates files read via source.
       @param {String} name File name to concatenate unwrapped sources.
-      @desc Concatenates files read via source.
-      @todo: clear files before appending to them.
+      @todo: Append only to files that do not exist.
      */
     value: function concat(name) {
       var _this2 = this;
@@ -156,8 +144,8 @@ var Fly = (function (_Emitter) {
     key: "filter",
 
     /**
+      Add a filter to be applied when unwrapping the source promises.
       @param {...Function} filters
-      @desc Add a filter to be applied when unwrapping the source promises.
      */
     value: function filter() {
       var _this3 = this;
@@ -175,9 +163,9 @@ var Fly = (function (_Emitter) {
     key: "watch",
 
     /**
+      Run the specified tasks when a change is detected in the globs.
       @param {Array} globs Glob pattern to watch for changes.
       @param {...String} tasks List of tasks to apply.
-      @desc Run the specified tasks when a change is detected in the globs.
      */
     value: function watch(globs) {
       var _this4 = this;
@@ -186,8 +174,10 @@ var Fly = (function (_Emitter) {
         tasks[_key4 - 1] = arguments[_key4];
       }
 
-      _.watch.apply(_, [globs].concat(tasks)).on("change", function () {
-        return _this4.start(tasks);
+      ["change", "add", "unlink"].forEach(function (event) {
+        _.watch(globs).on(event, function () {
+          return _this4.start(tasks);
+        });
       });
       return this;
     }
@@ -195,8 +185,8 @@ var Fly = (function (_Emitter) {
     key: "start",
 
     /**
+      Runs the specified tasks.
       @param {Array} tasks List of tasks to run
-      @desc Runs the specified tasks.
      */
     value: function start() {
       var tasks = arguments[0] === undefined ? [] : arguments[0];
@@ -295,13 +285,18 @@ var Fly = (function (_Emitter) {
     key: "source",
 
     /**
+      Creates an array of promises with read sources from a list of globs.
+      When a promise resolved, the data source is reduced applying each of
+      the existing filters.
       @param {...String} globs Glob pattern
-      @desc expand resolves to an array of file names from the glob pattern.
-      Each file is mapped to a read file promise that resolves in a recursive
-      filter returning { file, data }
+      @return Fly instance. Promises resolve to { file, data }
     */
     value: function source() {
       var _this6 = this;
+
+      this._source = [];
+      this._filters = [];
+      this._writers = [];
 
       for (var _len5 = arguments.length, globs = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
         globs[_key5] = arguments[_key5];
@@ -311,10 +306,11 @@ var Fly = (function (_Emitter) {
         var base = (function (base) {
           return base.length > 1 ? base.shift() : "";
         })(pattern.split("*"));
-        _this6.reset()._src.push(_.expand(pattern, function (files) {
+
+        _this6._source.push(_.expand(pattern, function (files) {
           return files.map(function (file) {
             return _mzFs2["default"].readFile(file, _this6.encoding).then(function (data) {
-              return (function filter(_x3, _x4) {
+              return (function reduce(_x3, _x4) {
                 var _this7 = this;
 
                 var _again = true;
@@ -343,13 +339,14 @@ var Fly = (function (_Emitter) {
     key: "unwrap",
 
     /**
+      Resolves an array of promises an return a new promise with the result.
+      By default resolves the current promise sources.
       @param {Array:Promise} source
-      @desc Resolves an array of promises an return a new promise with the result.
      */
     value: function unwrap() {
       var _this8 = this;
 
-      var source = arguments[0] === undefined ? this._src : arguments[0];
+      var source = arguments[0] === undefined ? this._source : arguments[0];
 
       return new _Promise(function (resolve) {
         _Promise.all(source).then(function (result) {
@@ -361,8 +358,8 @@ var Fly = (function (_Emitter) {
     key: "target",
 
     /**
+      Resolves all source promises and writes to each destination path.
       @param {...String} dest Destination paths
-      @desc Resolves all source promises and writes to each destination path.
      */
     value: function target() {
       var _this9 = this;
@@ -372,7 +369,7 @@ var Fly = (function (_Emitter) {
       }
 
       return _Promise.all(dest.map(function (dest) {
-        return _this9.unwrap(_this9._src).then(function (files) {
+        return _this9.unwrap(_this9._source).then(function (files) {
           return files.map(function (_ref3) {
             var file = _ref3.file;
             var data = _ref3.data;

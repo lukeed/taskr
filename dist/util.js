@@ -41,11 +41,11 @@ var _updateNotifier = require("update-notifier");
 
 var _updateNotifier2 = _interopRequireDefault(_updateNotifier);
 
-/** @desc Object.assign wrapper for fly clients */
+/** Object.assign wrapper for fly clients */
 var assign = _Object$assign;
 
 exports.assign = assign;
-/** @desc console.log wrapper */
+/** console.log wrapper */
 
 function log() {
   for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
@@ -55,7 +55,7 @@ function log() {
   console.log.apply(console, args);
 }
 
-/** @desc console.error wrapper */
+/** console.error wrapper */
 
 function error() {
   for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
@@ -65,7 +65,7 @@ function error() {
   console.error.apply(console, args);
 }
 
-/** @desc Promisify an async function. */
+/** Promisify an async function. */
 
 function defer(asyncFunc) {
   var _this = this;
@@ -76,19 +76,20 @@ function defer(asyncFunc) {
     }
 
     return new _Promise(function (resolve, reject) {
-      var cb = function cb(err) {
+      return asyncFunc.apply(_this, args.concat(function (err) {
         for (var _len4 = arguments.length, args = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
           args[_key4 - 1] = arguments[_key4];
         }
 
         return err ? reject(err) : resolve(args);
-      };
-      return asyncFunc.apply(_this, args.concat(cb));
+      }));
     });
   };
 }
 
-/** @desc If file is a directory resolve to cwd/name, cwd/file otherwise. */
+/**
+  Resolve a path to file or file/name is file is a directory.
+ */
 
 function resolve(_ref) {
   var file = _ref.file;
@@ -125,7 +126,7 @@ function resolve(_ref) {
 }
 
 /**
-  @desc Load fly-plugins from a package.json deps
+  Load `fly-*` plugins from a package.json deps.
   @param {Package} opts.pkg
   @param {Array} opts.deps
   @param {Array} opts.blacklist
@@ -155,7 +156,7 @@ function plugins(_ref2) {
 }
 
 /**
-  @desc Return a promise that unwraps to an expanded glob pattern
+  Expand a glob pattern and runs a handler for each expanded glob.
   @param pattern {String} Pattern to be matched
   @param handler {Function} Function to run for each unwrapped glob promise.
   @return {Promise}
@@ -163,21 +164,22 @@ function plugins(_ref2) {
 
 function expand(pattern, handler) {
   return new _Promise(function (resolve, reject) {
-    (0, _glob2["default"])(pattern, {}, function (e, files) {
-      if (e) {
-        reject(e);
-      } else {
-        _Promise.all(handler(files)).then(function (files) {
-          return resolve(files);
-        })["catch"](function (e) {
-          throw e;
-        });
-      }
+    (0, _glob2["default"])(pattern, {}, function (error, files) {
+      return error ? reject(error) : _Promise.all(handler(files)).then(function (files) {
+        return resolve(files);
+      })["catch"](function (error) {
+        throw error;
+      });
     });
   });
 }
 
-/** @desc Wrapper for a glob watcher on "change" event */
+/**
+  Wrapper for chokidar.watch. Array of globs are flattened.
+  @param {Array:String} globs
+  @param {...String} tasks Tasks to run
+  @return {chokidar.FSWatcher}
+ */
 
 function watch(globs) {
   return _chokidar2["default"].watch((function flatten(arr) {
@@ -187,8 +189,10 @@ function watch(globs) {
   })([globs]));
 }
 
-/** @desc Wrapper for update-notifier notify */
+/** Wrapper for update-notifier */
 
 function notifyUpdates(options) {
   (0, _updateNotifier2["default"])(options).notify();
 }
+
+/* TODO */
