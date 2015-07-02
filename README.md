@@ -24,9 +24,6 @@
 
 > New Generation Build System
 
-
-
-
 ## About
 
 _Fly_ is a [build system](https://en.wikipedia.org/wiki/Build_automation) for [Node](https://nodejs.org/) based in [ES6](http://www.ecma-international.org/ecma-262/6.0/index.html) [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that aims to be simple and elegant to write and extend.
@@ -44,13 +41,13 @@ npm install fly
 
 ```js
 const paths = {
-  scripts: ["client/js/**/*.coffee", "!client/external/**/*.coffee"]
+  scripts: ["src/**/*.js", "!src/ignore/**/*.js"]
 }
 
 exports.default = function* () {
-  yield this.tasks.clear()
+  yield this.tasks.clean()
   yield this.tasks.scripts()
-  yield this.watch(paths.scripts)
+  yield this.watch([paths.scripts])
 }
 
 exports.clear = function* () {
@@ -60,8 +57,8 @@ exports.clear = function* () {
 exports.scripts = function* () {
   yield this
     .source(paths.scripts)
-    .coffee()
-    .uglify()
+    .babel({/* options */})
+    .uglify({/* options */})
     .concat("all.min.js")
     .target("build/js")
 }
@@ -73,7 +70,6 @@ Contributions are absolutely welcome. Check out our [contribution guide](/CONTRI
 
 # Roadmap ✈
 
-+ Watching files should be more transparent.
 + Proper tests.
 + Configuration options (disable plugin auto-loading, etc.)
 
@@ -87,7 +83,7 @@ Contributions are absolutely welcome. Check out our [contribution guide](/CONTRI
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/flyjs/fly/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
 
-[author]: http://about.flyjs.me
+[author]: http://about.bucaran.me
 
 [fly]: https://www.github.com/flyjs/fly
 

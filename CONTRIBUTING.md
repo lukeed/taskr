@@ -46,19 +46,11 @@ If your issue is related to a specific _existing_ package, open an issue on that
 
 Start reading our code and you'll get the hang of it. No particular style is better, but consistency is sanity.
 
-+ No semicolons.
-
-+ The ternary operator is fine, but favor the following style:
-
-```js
-condition
-  ? expr1
-  : expr2
-```
++ [No semicolons](http://blog.izs.me/post/2353458699/an-open-letter-to-javascript-leaders-regarding).
 
 + ~80 characters per line.
 
-+ Space before function parenthesis, but not before function calls.
++ Space before function parenthesis, _but_ not before function calls.
 
 ```js
 function make (arg) {
