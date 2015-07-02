@@ -4,39 +4,37 @@ import fs from "mz/fs"
 import chokidar from "chokidar"
 import updateNotifier from "update-notifier"
 
-/** @desc Object.assign wrapper for fly clients */
+/** Object.assign wrapper for fly clients */
 export const assign = Object.assign
 
-/** @desc console.log wrapper */
+/** console.log wrapper */
 export function log (...args) {
   console.log.apply(console, args)
 }
 
-/** @desc console.error wrapper */
+/** console.error wrapper */
 export function error (...args) {
   console.error.apply(console, args)
 }
 
-/** @desc Promisify an async function. */
+/** Promisify an async function. */
 export function defer (asyncFunc) {
-  return (...args) => {
-    return new Promise((resolve, reject) => {
-      const cb = (err, ...args) => err ? reject(err) : resolve(args)
-      return asyncFunc.apply(this, args.concat(cb))
-    })
-  }
-}
-
-/** @desc If file is a directory resolve to cwd/name, cwd/file otherwise. */
-export function *resolve ({ file, name }) {
-  const root = join(process.cwd(), file)
-  return (yield fs.stat(file)).isDirectory()
-    ? join(root, name)
-    : root
+  return (...args) => new Promise((resolve, reject) =>
+    asyncFunc.apply(this, args.concat((err, ...args) =>
+      err ? reject(err) : resolve(args))))
 }
 
 /**
-  @desc Load fly-plugins from a package.json deps
+  Resolve a path to file or file/name is file is a directory.
+ */
+export function *resolve ({ file, name }) {
+  const root = join(process.cwd(), file)
+  return (yield fs.stat(file))
+    .isDirectory() ? join(root, name) : root
+}
+
+/**
+  Load `fly-*` plugins from a package.json deps.
   @param {Package} opts.pkg
   @param {Array} opts.deps
   @param {Array} opts.blacklist
@@ -46,9 +44,7 @@ export function plugins ({ pkg, deps, blacklist = []}) {
   if (pkg) {
     deps = ["dependencies", "devDependencies", "peerDependencies"]
       .filter((key) => key in pkg)
-      .reduce((p, c) => [].concat(
-        Object.keys(pkg[p]),
-        Object.keys(pkg[c])))
+      .reduce((p, c) => [].concat(Object.keys(pkg[p]), Object.keys(pkg[c])))
   }
   return deps
     .filter((dep) => /^fly-.+/g.test(dep))
@@ -57,26 +53,28 @@ export function plugins ({ pkg, deps, blacklist = []}) {
 }
 
 /**
-  @desc Return a promise that unwraps to an expanded glob pattern
+  Expand a glob pattern and runs a handler for each expanded glob.
   @param pattern {String} Pattern to be matched
   @param handler {Function} Function to run for each unwrapped glob promise.
   @return {Promise}
  */
 export function expand (pattern, handler) {
   return new Promise((resolve, reject) => {
-    glob(pattern, {}, (e, files) => {
-      if (e) {
-        reject(e)
-      } else {
-        Promise.all(handler(files)).then((files) =>
-          resolve(files)).catch((e) => { throw e })
-      }
-    })
+    glob(pattern, {/* TODO */}, (error, files) =>
+      error
+        ? reject(error)
+        : Promise.all(handler(files)).then((files) =>
+          resolve(files)).catch((error) => { throw error }))
   })
 }
 
-/** @desc Wrapper for a glob watcher on "change" event */
-export function watch (globs, ...tasks) {
+/**
+  Wrapper for chokidar.watch. Array of globs are flattened.
+  @param {Array:String} globs
+  @param {...String} tasks Tasks to run
+  @return {chokidar.FSWatcher}
+ */
+export function watch (globs) {
   return chokidar.watch(
     (function flatten (arr) {
       return arr.reduce((flat, next) =>
@@ -84,7 +82,7 @@ export function watch (globs, ...tasks) {
     }([globs])))
 }
 
-/** @desc Wrapper for update-notifier notify */
+/** Wrapper for update-notifier */
 export function notifyUpdates (options) {
   updateNotifier(options).notify()
 }
