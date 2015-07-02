@@ -16,21 +16,29 @@
 
 
 <p align="center">
-<b><a href="#about">About</a></b>
-|
-<b><a href="#usage">Usage</a></b>
-|
-<b><a href="/docs/README.md">Documentation</a></b>
-|
-<b><a href="https://github.com/flyjs/fly/wiki#plugins">Plugins</a></b>
-|
-<b><a href="#contributing">Contributing</a></b>
+  <b><a href="#about">About</a></b>
+  |
+  <b><a href="#usage">Usage</a></b>
+  |
+  <b><a href="/docs/README.md">Documentation</a></b>
+  |
+  <b><a href="https://github.com/flyjs/fly/wiki#plugins">Plugins</a></b>
+  |
+  <b><a href="#contributing">Contributing</a></b>
+  
+  <p align="center">
+    <a href="https://gitter.im/flyjs/fly?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge">
+      <img src="https://badges.gitter.im/Join%20Chat.svg">
+    </a>
+  </p>
 </p>
+
+
+
 <br>
 
 
 ## About
-[![Join the chat at https://gitter.im/flyjs/fly](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/flyjs/fly?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 _Fly_ is a [build system](https://en.wikipedia.org/wiki/Build_automation) for [Node](https://nodejs.org/) based in [ES6](http://www.ecma-international.org/ecma-262/6.0/index.html) [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that aims to be simple and elegant to write and extend.
 
