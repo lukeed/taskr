@@ -18,10 +18,6 @@ var _path = require("path");
 
 var _path2 = _interopRequireDefault(_path);
 
-// function requireFromString(src, filename) {
-//   return (new module.constructor())._compile(src, filename).exports
-// }
-
 /**
   @desc Resolve flyfile using flypath and create a new Fly instance.
   @param {String} flypath Path to a flyfile
