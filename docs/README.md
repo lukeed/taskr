@@ -119,8 +119,6 @@ Display available tasks. Use `--list=simple` to get a clean print of the tasks.
 
 Display the version number.
 
-If you have a Flyfile
-
 ## API
 
 Fly exposes a number of methods that let you create and manipulate Fly instances, as well as built-in tasks such as `clear`, `concat` and `filter`.
@@ -192,24 +190,23 @@ Resolves all source promises and writes to each of the destination paths.
 
 > See [this gist](https://gist.github.com/bucaran/f018ade8dee8ae189407) for an example README template for your Fly plugins.
 
-Plugins are regular node modules that export a single default method. This method method is automatically run when a new Fly instance is created. The following adds a new method to the Fly instance:
+Plugins are regular node modules that export a single default method. This method method is invoked when a new Fly instance is created.
 
 ```js
 module.exports = function () {
-  this.method = function (opts) {
-    return this
-  }
+  return this.filter("myPlugin", (src, opts) => {
+    try { return ... }
+    catch (e) { throw e }
+  })
 }
 ```
 
-Make sure your method returns `this` if the method should be composed within a `source..target` pipeline (typical case of filters / transforms). If the method is supposed to be _yielded_ inside a task, then you must return a promise.
+> Make sure your method returns `this` if the method should be composed within a `source..target` pipeline (in the example above, `Fly.prototype.filter` already returns `this`). If the method is desired to be _yielded_ inside a task, you must return a promise.
 
 ```js
 module.exports = function () {
   this.method = function (opts) {
-    return new Promise((resolve, reject) => {
-
-    })
+    return new Promise((resolve, reject) => {...})
   }
 }
 ```
