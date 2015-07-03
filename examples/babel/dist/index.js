@@ -16,16 +16,15 @@ function later() {
     }
   }, null, this);
 }
+
 later().then(function () {
   return console.log("Out of Time!");
 });
 
-// Observing stuff!
 var o = { prop: 0 };
 Object.observe(o, function (changes) {
   return console.log(changes);
 });
 o.prop++;
 
-// Other stuff
 console.log(Math.pow(20, 160), [0, null, NaN].includes(NaN));

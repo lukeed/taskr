@@ -3,9 +3,7 @@ const paths = {
 }
 
 exports.default = function* () {
-  yield this.tasks.clean()
-  yield this.tasks.scripts()
-  yield this.watch([paths.scripts])
+  this.watch([paths.scripts], ["clear", "scripts"])
 }
 
 exports.clear = function* () {
