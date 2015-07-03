@@ -3,39 +3,33 @@ import { log } from "./util"
 
 /** @desc Bound to an emitter (fly) object observing triggered events */
 export default function () {
-  this.on("fly_start", () =>
-    log(`[${fmt.time}] ${fmt.title}`, "Starting Fly..."))
+  this.on("fly_run", ({ path }) =>
+    log(`[${fmt.time}] Flying with ${fmt.path}...`, path))
 
   .on("flyfile_not_found", ({ error }) =>
     log(`No Flyfile Error: ${fmt.error}`, error))
 
-  .on("plugin_load", ({ plugin }) =>
-    log(`[${fmt.time}] Loading plugin ${fmt.plugin}`, plugin))
+  .on("fly_watch", () =>
+    log(`[${fmt.time}] ${fmt.warn}`, "Watching files..."))
 
-  .on("plugin_run", ({ plugin }) =>
-    log(`[${fmt.time}] Running ${fmt.plugin}`, plugin))
+  .on("plugin_load", ({ plugin }) =>
+    log(`[${fmt.time}] Loading plugin ${fmt.name}`, plugin))
 
   .on("plugin_error", ({ plugin, error }) =>
-    log(`[${fmt.time}] ${fmt.plugin} failed due to ${fmt.error}`, plugin, error))
-
-  .on("task_skip", ({ task }) =>
-    log(`${fmt.error} is a function reserved by Fly.`, task))
-
-  .on("task_start", ({ task }) =>
-    log(`[${fmt.time}] Running ${fmt.task}`, task))
+    log(`[${fmt.time}] ${fmt.error} failed due to ${fmt.error}`, plugin, error))
 
   .on("task_error", ({ task, error }) =>
-    log(`[${fmt.time}] ${fmt.task} failed due to ${fmt.error}`, task, error))
+    log(`[${fmt.time}] ${fmt.error} failed due to ${fmt.error}`, task, error))
+
+  .on("task_start", ({ task }) =>
+    log(`[${fmt.time}] Starting ${fmt.start}`, task))
 
   .on("task_complete", ({ task, duration }) =>
-    log(`[${fmt.time}] Completed ${fmt.task} in ${fmt.secs}`,
+    log(`[${fmt.time}] Finished ${fmt.complete} in ${fmt.secs}`,
       task, duration, "ms"))
 
   .on("task_not_found", ({ task }) =>
     log(`[${fmt.time}] ${fmt.error} not found in Flyfile.`, task))
-
-  .on("file_created", ({ file }) =>
-    log(`[${fmt.time}] File ${fmt.file} created.`, file))
 
   return this
 }
