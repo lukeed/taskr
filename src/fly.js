@@ -10,9 +10,9 @@ import * as _ from "./util"
 export default class Fly extends Emitter {
   /**
     Create a new instance of Fly. Use fly.start(...) to run tasks.
-    @param {Object} host Flyfile
-    @param {String} root Relative base path / root.
-    @param {Array} plugins List of plugins to load.
+    @param {Object} Flyfile, also known as host
+    @param {String} relative base path / root
+    @param {Array} list of plugins to load.
    */
   constructor ({ host, root = "./", plugins = [] }) {
     super()
@@ -41,43 +41,57 @@ export default class Fly extends Emitter {
   }
   /**
     Concatenates files read via source.
-    @param {String} name File name to concatenate unwrapped sources.
-    @todo: Append only to files that do not exist.
+    @param {String} name of the concatenated file
+    @TODO: by default this operation should clear the target file to concat
    */
   concat (name) {
     this._writers.push(({ dest, data }) => {
       mkdirp.sync(dest)
-      return fs.appendFile(join(dest, name), data, this.encoding)
+      fs.appendFile(join(dest, name), data, this.encoding)
     })
     return this
   }
   /**
     Add a filter to be applied when unwrapping the source promises.
-    @param {...Function} filters
+    @param {
+      {String} name of the filter.
+      {Object} { filter, options } object.
+      {Function} filter function.
+    }
+    @param [{Function}] filter function.
    */
-  filter (...filters) {
-    filters.forEach((filter) => this._filters.push(filter))
+  filter (name, filter) {
+    if (name instanceof Function) {
+      this.filter({ filter: name })
+    } else if (typeof name === "object") {
+      this._filters.push(name)
+    } else {
+      if (this[name] instanceof Function)
+        throw new Error(`${name} method already defined in instance.`)
+      this[name] = (options) => this.filter({ filter, options })
+    }
     return this
   }
   /**
-    Run the specified tasks when a change is detected in the globs.
-    @param {Array} globs Glob pattern to watch for changes.
-    @param {...String} tasks List of tasks to apply.
+    Watch for changes on globs and run each of the specified tasks.
+    @param {Array:String} glob patterns to observe for changes
+    @param {Array:String} list of tasks to run on changes
    */
-  watch (globs, ...tasks) {
-    ["change", "add", "unlink"].forEach((event) => {
-      _.watch(globs).on(event, () => this.start(tasks))
-    })
+  watch (globs, tasks) {
+    this.notify("fly_watch").start(tasks)
+    _.watch(globs, { ignoreInitial: true })
+      .on("all", () => this.start(tasks))
     return this
   }
   /**
     Runs the specified tasks.
-    @param {Array} tasks List of tasks to run
+    @param {Array} list of tasks to run
    */
   start (tasks = []) {
-    if (tasks.length === 0) tasks.push("default")
+    if (tasks.length === 0) tasks.push(this.host.default ? "default" : "main")
     co.call(this, function* () {
-      for (let task of [].concat(tasks).filter((task) => {
+      for (let task of [].concat(tasks)
+        .filter((task) => {
           return ~Object.keys(this.host).indexOf(task)
           || !this.notify("task_not_found", { task })
       })) {
@@ -93,12 +107,13 @@ export default class Fly extends Emitter {
         }
       }
     })
+    return this
   }
   /**
     Creates an array of promises with read sources from a list of globs.
     When a promise resolved, the data source is reduced applying each of
     the existing filters.
-    @param {...String} globs Glob pattern
+    @param {...String} glob patterns
     @return Fly instance. Promises resolve to { file, data }
   */
   source (...globs) {
@@ -116,9 +131,10 @@ export default class Fly extends Emitter {
           return fs.readFile(file, this.encoding)
             .then((data) => (function reduce (data, filters) {
               return (filters.length > 0)
-                ? reduce(filters[0].call(this, data), filters.slice(1))
+                ? reduce(filters[0].filter
+                  .apply(this, [data, filters[0].options]), filters.slice(1))
                 : { file, data, base }
-            }.call(this, `${data}`, this._filters)))
+            }.call(this, `${data}`, this._filters))).catch(_=>console.log(_, "||||"))
         })
       }))
     })
@@ -136,7 +152,7 @@ export default class Fly extends Emitter {
   }
   /**
     Resolves all source promises and writes to each destination path.
-    @param {...String} dest Destination paths
+    @param {...String} destination paths
    */
   target (...dest) {
     return Promise.all(dest.map((dest) => {
