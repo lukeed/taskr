@@ -2,8 +2,6 @@
 
 var _regeneratorRuntime = require("babel-runtime/regenerator")["default"];
 
-var _Object$assign = require("babel-runtime/core-js/object/assign")["default"];
-
 var _Promise = require("babel-runtime/core-js/promise")["default"];
 
 var _Object$keys = require("babel-runtime/core-js/object/keys")["default"];
@@ -23,28 +21,26 @@ exports.watch = watch;
 exports.notifyUpdates = notifyUpdates;
 var marked0$0 = [resolve].map(_regeneratorRuntime.mark);
 
-var _glob = require("glob");
-
-var _glob2 = _interopRequireDefault(_glob);
-
-var _path = require("path");
-
 var _mzFs = require("mz/fs");
 
 var _mzFs2 = _interopRequireDefault(_mzFs);
+
+var _glob = require("glob");
+
+var _glob2 = _interopRequireDefault(_glob);
 
 var _chokidar = require("chokidar");
 
 var _chokidar2 = _interopRequireDefault(_chokidar);
 
+var _path = require("path");
+
+var _interpret = require("interpret");
+
 var _updateNotifier = require("update-notifier");
 
 var _updateNotifier2 = _interopRequireDefault(_updateNotifier);
 
-/** Object.assign wrapper for fly clients */
-var assign = _Object$assign;
-
-exports.assign = assign;
 /** console.log wrapper */
 
 function log() {
@@ -65,7 +61,11 @@ function error() {
   console.error.apply(console, args);
 }
 
-/** Promisify an async function. */
+/**
+  Promisify an async function.
+  @param {Function} async function to promisify
+  @return {Promise}
+ */
 
 function defer(asyncFunc) {
   var _this = this;
@@ -88,13 +88,17 @@ function defer(asyncFunc) {
 }
 
 /**
-  Resolve a path to file or file/name is file is a directory.
+  Resolve the Flyfile path. Check the file extension for JavaScript variants.
+  @param {String} file or path to the Flyfile
+  @param [{String}] Flyfile variant name
+  @return {String} path to the Flyfile
  */
 
 function resolve(_ref) {
   var file = _ref.file;
-  var name = _ref.name;
-  var root;
+  var _ref$name = _ref.name;
+  var name = _ref$name === undefined ? "Flyfile" : _ref$name;
+  var root, path, mod;
   return _regeneratorRuntime.wrap(function resolve$(context$1$0) {
     while (1) switch (context$1$0.prev = context$1$0.next) {
       case 0:
@@ -116,9 +120,13 @@ function resolve(_ref) {
         context$1$0.t0 = root;
 
       case 8:
-        return context$1$0.abrupt("return", context$1$0.t0);
+        path = context$1$0.t0;
+        mod = _interpret.jsVariants["." + (path.split(".").slice(1).join(".") || "js")];
 
-      case 9:
+        if (Array.isArray(mod)) require(mod[0]);else if (mod) require(mod.module);
+        return context$1$0.abrupt("return", path);
+
+      case 12:
       case "end":
         return context$1$0.stop();
     }
@@ -152,7 +160,7 @@ function plugins(_ref2) {
     return ! ~blacklist.indexOf(dep);
   }).reduce(function (prev, curr) {
     return [].concat(prev, curr);
-  });
+  }, []);
 }
 
 /**
@@ -181,12 +189,12 @@ function expand(pattern, handler) {
   @return {chokidar.FSWatcher}
  */
 
-function watch(globs) {
-  return _chokidar2["default"].watch((function flatten(arr) {
-    return arr.reduce(function (flat, next) {
+function watch(globs, opts) {
+  return _chokidar2["default"].watch((function flatten(array) {
+    return array.reduce(function (flat, next) {
       return flat.concat(Array.isArray(next) ? flatten(next) : next);
     }, []);
-  })([globs]));
+  })([globs]), opts);
 }
 
 /** Wrapper for update-notifier */
@@ -194,5 +202,3 @@ function watch(globs) {
 function notifyUpdates(options) {
   (0, _updateNotifier2["default"])(options).notify();
 }
-
-/* TODO */
