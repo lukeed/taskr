@@ -18,12 +18,14 @@ var _dateformat2 = _interopRequireDefault(_dateformat);
 
 /** @desc Format and styles for fly reporters */
 exports["default"] = _Object$assign(_clor2["default"], {
-  plugin: _clor2["default"].blue.bold("\"%s\""),
+  complete: _clor2["default"].blue.bold("\"%s\""),
+  start: _clor2["default"].bold.yellow("\"%s\""),
   error: _clor2["default"].bold.red("%s"),
-  title: _clor2["default"].bold.green("%s"),
-  task: _clor2["default"].bold.yellow("\"%s\""),
+  path: _clor2["default"].underline.cyan("%s"),
+  warn: _clor2["default"].bold.magenta("%s"),
+  name: _clor2["default"].bold.yellow("\"%s\""),
   secs: _clor2["default"].green("%d %s"),
-  file: (0, _clor2["default"])("\"").underline("%s")("\""),
+  // file: clor("\"").underline("%s")("\""),
   time: _clor2["default"].gray((0, _dateformat2["default"])(new Date(), "HH:MM:ss"))
 });
 module.exports = exports["default"];

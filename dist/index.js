@@ -26,7 +26,6 @@ var _package = require("../package");
 
 var _package2 = _interopRequireDefault(_package);
 
-/** @desc CLI Engine */
 exports["default"] = _regeneratorRuntime.mark(function callee$0$0() {
   var _Parsec$parse$options$options$options$options, help, list, file, version, tasks, path;
 
@@ -49,7 +48,7 @@ exports["default"] = _regeneratorRuntime.mark(function callee$0$0() {
 
         _cli2["default"].help();
 
-        context$1$0.next = 28;
+        context$1$0.next = 29;
         break;
 
       case 11:
@@ -60,12 +59,12 @@ exports["default"] = _regeneratorRuntime.mark(function callee$0$0() {
 
         _cli2["default"].version(_package2["default"]);
 
-        context$1$0.next = 28;
+        context$1$0.next = 29;
         break;
 
       case 15:
         context$1$0.next = 17;
-        return (0, _util.resolve)({ file: file, name: "Flyfile" });
+        return (0, _util.resolve)({ file: file });
 
       case 17:
         path = context$1$0.sent;
@@ -76,7 +75,7 @@ exports["default"] = _regeneratorRuntime.mark(function callee$0$0() {
         }
 
         _cli2["default"].list(path, { simple: list === "simple" });
-        context$1$0.next = 28;
+        context$1$0.next = 29;
         break;
 
       case 22:
@@ -86,10 +85,11 @@ exports["default"] = _regeneratorRuntime.mark(function callee$0$0() {
 
       case 25:
         context$1$0.t1 = context$1$0.sent;
-        context$1$0.t2 = tasks;
-        context$1$0.t0.call.call(context$1$0.t0, context$1$0.t1).start(context$1$0.t2);
+        context$1$0.t2 = { path: path };
+        context$1$0.t3 = tasks;
+        context$1$0.t0.call.call(context$1$0.t0, context$1$0.t1).notify("fly_run", context$1$0.t2).start(context$1$0.t3);
 
-      case 28:
+      case 29:
       case "end":
         return context$1$0.stop();
     }
