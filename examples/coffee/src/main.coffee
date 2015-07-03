@@ -1,3 +1,5 @@
 square = require "./lib"
-variable = 10
+
+variable = 100
+
 console.log square variable

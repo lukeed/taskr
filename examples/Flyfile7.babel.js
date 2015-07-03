@@ -1,35 +1,32 @@
-exports.log = function* () {
+export async function log () {
   this.log("Yay!")
 }
 
-exports.default = function* () {
+export async function main () {
+  await this.clear("coffee/dist")
   this.watch(
     ["babel/src/*.js", "map/src/*", "coffee/src/**/*.coffee"],
     ["lint", "test", "clear", "grind", "map", "babel"])
 }
 
-exports.clear = function* () {
-  yield this.clear("coffee/dist")
-}
-
-exports.map = function* () {
-  yield this
+export async function map () {
+  await this
     .source("map/src/*")
     .filter((s) => s.toUpperCase())
     .filter((s) => s.split("").reverse().join(""))
     .target("map/dist")
 }
 
-exports.babel = function* () {
-  yield this
+export async function babel () {
+  await this
     .source("babel/src/*.js")
     .babel({ stage: 0 })
     .target("babel/dist")
 }
 
-exports.grind = function* () {
-  yield this.clear("coffee/dist")
-  yield this
+export async function grind () {
+  await this.clear("coffee/dist")
+  await this
     .source("coffee/src/**/*.coffee")
     .coffee()
     .uglify()
@@ -37,14 +34,14 @@ exports.grind = function* () {
     .target("coffee/dist/")
 }
 
-exports.lint = function* () {
-  yield this
+export async function lint () {
+  await this
     .source("lint/*.js")
     .eslint()
 }
 
-exports.test = function* () {
-  yield this
+export async function test () {
+  await this
     .source("spec/*Spec.js")
     .mocha({ reporter: "list" })
 }

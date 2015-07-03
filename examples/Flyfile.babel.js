@@ -1,18 +1,18 @@
-exports.log = function* () {
+export function* log () {
   this.log("Yay!")
 }
 
-exports.default = function* () {
+export function* main () {
   this.watch(
     ["babel/src/*.js", "map/src/*", "coffee/src/**/*.coffee"],
     ["lint", "test", "clear", "grind", "map", "babel"])
 }
 
-exports.clear = function* () {
+export function* clear () {
   yield this.clear("coffee/dist")
 }
 
-exports.map = function* () {
+export function* map () {
   yield this
     .source("map/src/*")
     .filter((s) => s.toUpperCase())
@@ -20,14 +20,14 @@ exports.map = function* () {
     .target("map/dist")
 }
 
-exports.babel = function* () {
+export function* babel () {
   yield this
     .source("babel/src/*.js")
     .babel({ stage: 0 })
     .target("babel/dist")
 }
 
-exports.grind = function* () {
+export function* grind () {
   yield this.clear("coffee/dist")
   yield this
     .source("coffee/src/**/*.coffee")
@@ -37,13 +37,13 @@ exports.grind = function* () {
     .target("coffee/dist/")
 }
 
-exports.lint = function* () {
+export function* lint () {
   yield this
     .source("lint/*.js")
     .eslint()
 }
 
-exports.test = function* () {
+export function* test () {
   yield this
     .source("spec/*Spec.js")
     .mocha({ reporter: "list" })
