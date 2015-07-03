@@ -4,7 +4,6 @@ import reporter from "./reporter"
 import cli from "./cli/"
 import pkg from "../package"
 
-/** @desc CLI Engine */
 export default function* () {
   notifyUpdates({ pkg })
 
@@ -22,11 +21,14 @@ export default function* () {
     cli.version(pkg)
 
   } else {
-    const path = yield resolve({ file, name: "Flyfile" })
+    const path = yield resolve({ file })
     if (list) {
       cli.list(path, { simple: list === "simple" })
     } else {
-      reporter.call(yield cli.spawn(path)).start(tasks)
+      reporter
+        .call(yield cli.spawn(path))
+        .notify("fly_run", { path })
+        .start(tasks)
     }
   }
 }
