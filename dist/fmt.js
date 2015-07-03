@@ -16,7 +16,7 @@ var _dateformat = require("dateformat");
 
 var _dateformat2 = _interopRequireDefault(_dateformat);
 
-/** @desc Format and styles for fly reporters */
+/** Format and styles for fly reporters */
 exports["default"] = _Object$assign(_clor2["default"], {
   complete: _clor2["default"].blue.bold("\"%s\""),
   start: _clor2["default"].bold.yellow("\"%s\""),
