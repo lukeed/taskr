@@ -26,7 +26,7 @@
 
 ## About
 
-_Fly_ is a [build system](https://en.wikipedia.org/wiki/Build_automation) for [Node](https://nodejs.org/) based in [ES6](http://www.ecma-international.org/ecma-262/6.0/index.html) [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that aims to be simple and elegant to write and extend.
+_Fly_ is a [build system](https://en.wikipedia.org/wiki/Build_automation) for [Node](https://nodejs.org/) based in [ES6](http://www.ecma-international.org/ecma-262/6.0/index.html) [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that aims to be simple and elegant to write.
 
 See the [Documentation](/docs/README.md) page to learn more.
 
@@ -39,26 +39,23 @@ npm install fly
 
 ### _Flyfile_
 
+> Flyfiles can be written in ES5/6/7 and [others](https://github.com/jashkenas/coffeescript/wiki/List-of-languages-that-compile-to-JS).
+
 ```js
 const paths = {
   scripts: ["src/**/*.js", "!src/ignore/**/*.js"]
 }
 
-exports.default = function* () {
-  yield this.tasks.clean()
-  yield this.tasks.scripts()
-  yield this.watch([paths.scripts])
-}
-
-exports.clear = function* () {
+export function* main () {
   yield this.clear("build")
+  this.watch([paths.scripts], ["scripts"])
 }
 
-exports.scripts = function* () {
+export function* scripts () {
   yield this
     .source(paths.scripts)
-    .babel({/* options */})
-    .uglify({/* options */})
+    .babel({/*...*/})
+    .uglify({/*...*/})
     .concat("all.min.js")
     .target("build/js")
 }
