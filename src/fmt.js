@@ -1,7 +1,7 @@
 import clor from "clor"
 import date from "dateformat"
 
-/** @desc Format and styles for fly reporters */
+/** Format and styles for fly reporters */
 export default Object.assign(clor, {
   complete: clor.blue.bold("\"%s\""),
   start: clor.bold.yellow("\"%s\""),
