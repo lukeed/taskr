@@ -1,6 +1,6 @@
 {
   "name": "fly",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "New Generation Build System",
   "main": "dist/index.js",
   "bin": {
@@ -11,8 +11,10 @@
     "chokidar": "^1.0.3",
     "clor": "^0.2.1",
     "co": "^4.5.4",
+    "coffee-script": "^1.9.3",
     "dateformat": "^1.0.11",
     "glob": "^5.0.10",
+    "interpret": "^0.6.2",
     "mkdirp": "^0.5.1",
     "mz": "^2.0.0",
     "parsec": "^0.0.8",
