@@ -1,11 +1,9 @@
-import glob from "glob"
-import { join } from "path"
 import fs from "mz/fs"
+import glob from "glob"
 import chokidar from "chokidar"
+import { join } from "path"
+import { jsVariants } from "interpret"
 import updateNotifier from "update-notifier"
-
-/** Object.assign wrapper for fly clients */
-export const assign = Object.assign
 
 /** console.log wrapper */
 export function log (...args) {
@@ -17,7 +15,11 @@ export function error (...args) {
   console.error.apply(console, args)
 }
 
-/** Promisify an async function. */
+/**
+  Promisify an async function.
+  @param {Function} async function to promisify
+  @return {Promise}
+ */
 export function defer (asyncFunc) {
   return (...args) => new Promise((resolve, reject) =>
     asyncFunc.apply(this, args.concat((err, ...args) =>
@@ -25,12 +27,18 @@ export function defer (asyncFunc) {
 }
 
 /**
-  Resolve a path to file or file/name is file is a directory.
+  Resolve the Flyfile path. Check the file extension for JavaScript variants.
+  @param {String} file or path to the Flyfile
+  @param [{String}] Flyfile variant name
+  @return {String} path to the Flyfile
  */
-export function *resolve ({ file, name }) {
+export function *resolve ({ file, name = "Flyfile" }) {
   const root = join(process.cwd(), file)
-  return (yield fs.stat(file))
-    .isDirectory() ? join(root, name) : root
+  const path = (yield fs.stat(file)).isDirectory() ? join(root, name) : root
+  const mod = jsVariants[`.${path.split(".").slice(1).join(".") || "js"}`]
+  if (Array.isArray(mod)) require(mod[0])
+  else if (mod) require(mod.module)
+  return path
 }
 
 /**
@@ -49,7 +57,7 @@ export function plugins ({ pkg, deps, blacklist = []}) {
   return deps
     .filter((dep) => /^fly-.+/g.test(dep))
     .filter((dep) => !~blacklist.indexOf(dep))
-    .reduce((prev, curr) => [].concat(prev, curr))
+    .reduce((prev, curr) => [].concat(prev, curr), [])
 }
 
 /**
@@ -60,7 +68,7 @@ export function plugins ({ pkg, deps, blacklist = []}) {
  */
 export function expand (pattern, handler) {
   return new Promise((resolve, reject) => {
-    glob(pattern, {/* TODO */}, (error, files) =>
+    glob(pattern, {}, (error, files) =>
       error
         ? reject(error)
         : Promise.all(handler(files)).then((files) =>
@@ -74,12 +82,12 @@ export function expand (pattern, handler) {
   @param {...String} tasks Tasks to run
   @return {chokidar.FSWatcher}
  */
-export function watch (globs) {
+export function watch (globs, opts) {
   return chokidar.watch(
-    (function flatten (arr) {
-      return arr.reduce((flat, next) =>
+    (function flatten (array) {
+      return array.reduce((flat, next) =>
         flat.concat(Array.isArray(next) ? flatten(next) : next), [])
-    }([globs])))
+    }([globs])), opts)
 }
 
 /** Wrapper for update-notifier */
