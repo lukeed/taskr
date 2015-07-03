@@ -143,18 +143,15 @@ Log a message with a time stamp.
 #### `Fly.prototype.reset ()`
 Reset the internal state of the Fly instance.
 
-#### `Fly.prototype.clear (...paths)`
-[rimraf](https://github.com/isaacs/rimraf) wrapper. Clear each specified directory.
-
 #### `Fly.prototype.concat (name)`
 Concatenate files read with `Fly.prototype.source`.
 
 #### `Fly.prototype.filter (...filters)`
-Add a sync filter / transform to the promise-pipeline. For async filters, you must wrap the function into a promise using `Fly.prototype.defer` for example.
+Add a sync filter / transform to the promise-pipeline. For async filters, you must wrap the function into a promise using `Fly.prototype.defer` or promisify it yourself.
 
-#### `Fly.prototype.watch (globs, ...tasks)`
+#### `Fly.prototype.watch ([globs], [tasks])`
 
-Run the specified tasks when a change is detected in any of the paths that expand from `globs`.
+Run the specified tasks when a change is detected in any of the paths expanded from `globs`.
 
 #### `Fly.prototype.start (tasks = [])`
 
@@ -175,22 +172,14 @@ This method can be used when creating plugins that need to read the source promi
 
 Resolves all source promises and writes to each of the destination paths.
 
-### External Dependencies
-
-* [co](https://github.com/tj/co)
-* [mz/fs](https://github.com/normalize/mz)
-* [mkdirp](https://github.com/substack/node-mkdirp)
-* [rimraf](https://github.com/isaacs/rimraf)
-* [glob](https://github.com/isaacs/node-glob)
-* [chokidar](https://github.com/paulmillr/chokidar)
-
 ## Plugins
 
 > See the [Wiki](https://github.com/flyjs/fly/wiki) for the list of currently supported plugins.
 
 > See [this gist](https://gist.github.com/bucaran/f018ade8dee8ae189407) for an example README template for your Fly plugins.
 
-Plugins are regular node modules that export a single default method. This method method is invoked when a new Fly instance is created.
+Plugins are regular node modules that export a single default method. This method is automatically run when a new Fly instance is created. The following adds a new method to the Fly instance:
+
 
 ```js
 module.exports = function () {

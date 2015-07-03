@@ -14,7 +14,7 @@
     "fly-coffee": "0.0.1",
     "fly-eslint": "0.0.1",
     "fly-mocha": "0.0.1",
-    "fly-uglify": "0.0.1"
+    "fly-uglify": "0.0.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
