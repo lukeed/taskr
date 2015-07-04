@@ -48,3 +48,11 @@ exports.test = function* () {
     .source("spec/*Spec.js")
     .mocha({ reporter: "list" })
 }
+
+exports.styles = function* () {
+  /** @desc Hello */
+  yield this
+    .source("styles/*.styl")
+    .stylus()
+    .target("styles/dist/")
+}
