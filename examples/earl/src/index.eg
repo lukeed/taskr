@@ -1,0 +1,11 @@
+gen fib() =
+   var {a, b} = {0, 1}
+   while true:
+      yield a
+      {a, b} = {b, a + b}
+
+fib() each
+   > 100 ->
+      break
+   n when n mod 2 == 0 ->
+      print n
