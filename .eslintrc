@@ -12,7 +12,7 @@
     "no-empty": 0,
     "no-shadow": 0,
     "no-unused-expressions": 2,
-    "no-use-before-define": 2,
+    "no-use-before-define": [2, "nofunc"],
     "no-underscore-dangle": 0
   }
 }
