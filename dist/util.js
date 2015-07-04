@@ -178,12 +178,14 @@ function find(_ref) {
             (function reduce(modules) {
               if (modules.length === 0) return;
               try {
-                require(modules[0].module);
+                require(modules[0]);
               } catch (_) {
                 reduce(modules.slice(1));
               }
             })(js);
-          } else if (js) require(js.module);
+          } else if (js) {
+            require(js.module);
+          }
           return path;
         };
 
