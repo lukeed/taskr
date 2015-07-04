@@ -5,12 +5,23 @@
 </div>
 
 # Changelog
++ [v0.1.3](#v0.1.1)
++ [v0.1.2](#v0.1.2)
 + [v0.1.1](#v0.1.1)
 + [v0.1.0](#v0.1.0)
   + [Multi-Flyfile Support](multi-flyfile-support)
   + [Plugins API update](plugins-api-update)
   + [`watch` API update](watch-api-update)
 + [v0.0.1](#0.0.1)
+
+## v0.1.3
+
++ Revise CLI engine, minor refactoring.
++ Fixed bug in `util.plugins` where CLI engine was failing to load if there were  no listed plugins.
+
+## v0.1.2
+
++ Bug fix: Rename `main` in `package.json` from `dist/index` to `dist/index.json`.
 
 ## v0.1.1
 
@@ -27,7 +38,7 @@
 
 + Support Flyfile, flyfile, Flypath and flypath mapped to all the available `jsVariant` [extensions](https://github.com/tkellen/js-interpret#extensions) by default when you run `fly` on the command line.
 
-Before you had to use `fly -f path/to/file` in order to run a specific Flyfile. You can still use `-f`, but _now_ Fly will automatically attempt to load Flyfiles based in the extension autoamtically. 
+Before you had to use `fly -f path/to/file` in order to run a specific Flyfile. You can still use `-f`, but _now_ Fly will automatically attempt to load Flyfiles based in the extension autoamtically.
 
 + Improve handling of globs by allowing nested arrays (See `util.flatten`).
 
