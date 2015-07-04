@@ -5,10 +5,10 @@ exports.main = ->
     ["lint", "test", "grind", "map", "babel"])
 
 exports.map = ->
-  yield @source("map/src/*")
+  yield @source([[[[["map/src/*"]]]]])
   .filter((s) => s.toUpperCase())
   .filter((s) => s.split("").reverse().join(""))
-  .target("map/dist")
+  .target([[[[[["map/dist"]]]]]])
 
 exports.babel = ->
   yield @source("babel/src/*.js")
