@@ -16,9 +16,9 @@ exports.error = error;
 exports.trace = trace;
 exports.defer = defer;
 exports.find = find;
-exports.plugins = plugins;
-exports.expand = expand;
 exports.flatten = flatten;
+exports.searchPlugins = searchPlugins;
+exports.expand = expand;
 exports.watch = watch;
 exports.notifyUpdates = notifyUpdates;
 var marked0$0 = [find].map(_regeneratorRuntime.mark);
@@ -72,16 +72,18 @@ function error() {
 }
 
 /**
+  Pretty print error.
+  @param {Object}
  */
 
-function trace(e) {
-  error(_prettyjson2["default"].render(e).replace(/(\sFunction|\sObject)\./g, _fmt2["default"].blue("$1") + ".").replace(/\((~?\/.*)\)/g, "(" + _fmt2["default"].gray("$1") + ")").replace(/:([0-9]*):([0-9]*)/g, " " + _fmt2["default"].yellow("$1") + ":" + _fmt2["default"].yellow("$2")).replace(new RegExp(process.env.HOME, "g"), "~"));
+function trace(error) {
+  error(_prettyjson2["default"].render(error).replace(/(\sFunction|\sObject)\./g, _fmt2["default"].blue("$1") + ".").replace(/\((~?\/.*)\)/g, "(" + _fmt2["default"].gray("$1") + ")").replace(/:([0-9]*):([0-9]*)/g, " " + _fmt2["default"].yellow("$1") + ":" + _fmt2["default"].yellow("$2")).replace(new RegExp(process.env.HOME, "g"), "~"));
 }
 
 /**
   Promisify an async function.
   @param {Function} async function to promisify
-  @return {Promise}
+  @return {Function} function that returns a promise
  */
 
 function defer(asyncFunc) {
@@ -224,33 +226,38 @@ function find(_ref) {
 }
 
 /**
-  Load `fly-*` plugins from a package.json deps.
-  @param {Package} opts.pkg
-  @param {Array} opts.deps
-  @param {Array} opts.blacklist
-  @return {Array} List of fly deps that can be loaded.
+  Flattens a nested array recursively.
+  @return [[a],[b],[c]] -> [a,b,c]
  */
 
-function plugins(_ref2) {
+function flatten(array) {
+  return array.reduce(function (flat, next) {
+    return flat.concat(Array.isArray(next) ? flatten(next) : next);
+  }, []);
+}
+
+/**
+  Search `fly-*` plugins listed in package.json dependencies.
+  @param {Package} project's package.json
+  @param {Array} blacklisted plugins
+  @return {Array} list of loadable fly deps
+ */
+
+function searchPlugins(_ref2) {
   var pkg = _ref2.pkg;
-  var deps = _ref2.deps;
   var _ref2$blacklist = _ref2.blacklist;
   var blacklist = _ref2$blacklist === undefined ? [] : _ref2$blacklist;
 
-  if (pkg) {
-    deps = ["dependencies", "devDependencies", "peerDependencies"].filter(function (key) {
-      return key in pkg;
-    }).reduce(function (p, c) {
-      return [].concat(_Object$keys(pkg[p]), _Object$keys(pkg[c]));
-    });
-  }
-  return deps.filter(function (dep) {
+  if (!pkg) return [];
+  return flatten(["dependencies", "devDependencies", "peerDependencies"].filter(function (key) {
+    return key in pkg;
+  }).map(function (dep) {
+    return _Object$keys(pkg[dep]);
+  })).filter(function (dep) {
     return /^fly-.+/g.test(dep);
   }).filter(function (dep) {
     return ! ~blacklist.indexOf(dep);
-  }).reduce(function (prev, curr) {
-    return [].concat(prev, curr);
-  }, []);
+  });
 }
 
 /**
@@ -270,17 +277,6 @@ function expand(pattern, handler) {
       });
     });
   });
-}
-
-/**
-  Flattens a nested array recursively.
-  @return [[a],[b],[c]] -> [a,b,c]
- */
-
-function flatten(array) {
-  return array.reduce(function (flat, next) {
-    return flat.concat(Array.isArray(next) ? flatten(next) : next);
-  }, []);
 }
 
 /**
