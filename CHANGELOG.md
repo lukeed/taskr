@@ -5,7 +5,7 @@
 </div>
 
 # Changelog
-+ [v0.1.3](#v0.1.1)
++ [v0.1.3](#v0.1.3)
 + [v0.1.2](#v0.1.2)
 + [v0.1.1](#v0.1.1)
 + [v0.1.0](#v0.1.0)
@@ -17,7 +17,7 @@
 ## v0.1.3
 
 + Revise CLI engine, minor refactoring.
-+ Fixed bug in `util.plugins` where CLI engine was failing to load if there were  no listed plugins.
++ Fixed critical bug in `util.plugins` where CLI engine was failing to load if there were no listed plugins.
 
 ## v0.1.2
 
