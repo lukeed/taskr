@@ -6,9 +6,9 @@
 
 
 <p align="center">
-<b><a href="#synopsis">Features</a></b>
+<b><a href="#features">Features</a></b>
 |
-<b><a href="#flyfile">Flyfiles</a></b>
+<b><a href="#flyfiles">Flyfiles</a></b>
 |
 <b><a href="#cli">CLI</a></b>
 |
@@ -69,12 +69,11 @@ Similar to gulp, _Fly_ favors code over configuration, but aims to provide a *de
   }
   ```
 
-
 ## _Flyfiles_
 
 Similar to other build systems, _Fly_ reads a Flyfile to load and run tasks. A _Flypath_ is also a valid file name.
 
-Flyfiles written in ES5, ES6 and ES7 are supported out of the box. Flyfiles written in other JavaScript variants require you to download the corresponding module that can transpile them.
+Flyfiles written in ES5, ES6 and ES7 are supported out of the box. Flyfiles written in other JavaScript variants require downloading the corresponding module to transpile them.
 
 > For example `coffee-script` for CoffeeScript.
 
