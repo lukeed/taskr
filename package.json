@@ -1,6 +1,6 @@
 {
   "name": "fly",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Fly Build System",
   "main": "dist/index.js",
   "bin": {
