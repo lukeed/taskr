@@ -15,13 +15,13 @@ exports.log = log;
 exports.error = error;
 exports.trace = trace;
 exports.defer = defer;
-exports.find = find;
 exports.flatten = flatten;
 exports.searchPlugins = searchPlugins;
 exports.expand = expand;
 exports.watch = watch;
 exports.notifyUpdates = notifyUpdates;
-var marked0$0 = [find].map(_regeneratorRuntime.mark);
+exports.findFlypath = findFlypath;
+var marked0$0 = [findFlypath].map(_regeneratorRuntime.mark);
 
 var _mzFs = require("mz/fs");
 
@@ -76,8 +76,8 @@ function error() {
   @param {Object}
  */
 
-function trace(error) {
-  error(_prettyjson2["default"].render(error).replace(/(\sFunction|\sObject)\./g, _fmt2["default"].blue("$1") + ".").replace(/\((~?\/.*)\)/g, "(" + _fmt2["default"].gray("$1") + ")").replace(/:([0-9]*):([0-9]*)/g, " " + _fmt2["default"].yellow("$1") + ":" + _fmt2["default"].yellow("$2")).replace(new RegExp(process.env.HOME, "g"), "~"));
+function trace(e) {
+  error(_prettyjson2["default"].render(e).replace(/(\sFunction|\sObject)\./g, _fmt2["default"].blue("$1") + ".").replace(/\((~?\/.*)\)/g, "(" + _fmt2["default"].gray("$1") + ")").replace(/:([0-9]*):([0-9]*)/g, " " + _fmt2["default"].yellow("$1") + ":" + _fmt2["default"].yellow("$2")).replace(new RegExp(process.env.HOME, "g"), "~"));
 }
 
 /**
@@ -107,6 +107,80 @@ function defer(asyncFunc) {
 }
 
 /**
+  Flattens a nested array recursively.
+  @return [[a],[b],[c]] -> [a,b,c]
+ */
+
+function flatten(array) {
+  return array.reduce(function (flat, next) {
+    return flat.concat(Array.isArray(next) ? flatten(next) : next);
+  }, []);
+}
+
+/**
+  Search `fly-*` plugins listed in package.json dependencies.
+  @param {Package} project's package.json
+  @param {Array} blacklisted plugins
+  @return {Array} list of loadable fly deps
+ */
+
+function searchPlugins(_ref) {
+  var pkg = _ref.pkg;
+  var _ref$blacklist = _ref.blacklist;
+  var blacklist = _ref$blacklist === undefined ? [] : _ref$blacklist;
+
+  if (!pkg) return [];
+  return flatten(["dependencies", "devDependencies", "peerDependencies"].filter(function (key) {
+    return key in pkg;
+  }).map(function (dep) {
+    return _Object$keys(pkg[dep]);
+  })).filter(function (dep) {
+    return /^fly-.+/g.test(dep);
+  }).filter(function (dep) {
+    return ! ~blacklist.indexOf(dep);
+  });
+}
+
+/**
+  Expand a glob pattern and runs a handler for each expanded glob.
+  @param pattern {String} Pattern to be matched
+  @param handler {Function} Function to run for each unwrapped glob promise.
+  @return {Promise}
+ */
+
+function expand(pattern, handler) {
+  return new _Promise(function (resolve, reject) {
+    (0, _glob2["default"])(pattern, {}, function (error, files) {
+      return error ? reject(error) : _Promise.all(handler(files)).then(function (files) {
+        return resolve(files);
+      })["catch"](function (error) {
+        throw error;
+      });
+    });
+  });
+}
+
+/**
+  Wrapper for chokidar.watch. Array of globs are flattened.
+  @param {Array:String} globs
+  @param {...String} tasks Tasks to run
+  @return {chokidar.FSWatcher}
+ */
+
+function watch(globs, opts) {
+  return _chokidar2["default"].watch(flatten([globs]), opts);
+}
+
+/**
+  Wrapper for update-notifier.
+  @param {Array} options
+ */
+
+function notifyUpdates(options) {
+  (0, _updateNotifier2["default"])(options).notify();
+}
+
+/**
   Resolve the Flyfile path. Check the file extension and attempt to load
   every possible JavaScript variant if `file` is a directory.
   @param {String} file or path to the Flyfile
@@ -114,12 +188,12 @@ function defer(asyncFunc) {
   @return {String} path to the Flyfile
  */
 
-function find(_ref) {
-  var file = _ref.file;
-  var _ref$names = _ref.names;
-  var names = _ref$names === undefined ? ["Flyfile", "Flypath"] : _ref$names;
+function findFlypath(_ref2) {
+  var file = _ref2.file;
+  var _ref2$names = _ref2.names;
+  var names = _ref2$names === undefined ? ["Flyfile", "Flypath"] : _ref2$names;
   var marked1$0, root, hook, resolve, match;
-  return _regeneratorRuntime.wrap(function find$(context$1$0) {
+  return _regeneratorRuntime.wrap(function findFlypath$(context$1$0) {
     while (1) switch (context$1$0.prev = context$1$0.next) {
       case 0:
         match = function match(files, exts) {
@@ -178,13 +252,13 @@ function find(_ref) {
             (function reduce(modules) {
               if (modules.length === 0) return;
               try {
-                require(modules[0]);
+                require(modules[0].module ? modules[0].module : modules[0]);
               } catch (_) {
                 reduce(modules.slice(1));
               }
             })(js);
           } else if (js) {
-            require(js.module);
+            require(js);
           }
           return path;
         };
@@ -225,80 +299,6 @@ function find(_ref) {
         return context$1$0.stop();
     }
   }, marked0$0[0], this);
-}
-
-/**
-  Flattens a nested array recursively.
-  @return [[a],[b],[c]] -> [a,b,c]
- */
-
-function flatten(array) {
-  return array.reduce(function (flat, next) {
-    return flat.concat(Array.isArray(next) ? flatten(next) : next);
-  }, []);
-}
-
-/**
-  Search `fly-*` plugins listed in package.json dependencies.
-  @param {Package} project's package.json
-  @param {Array} blacklisted plugins
-  @return {Array} list of loadable fly deps
- */
-
-function searchPlugins(_ref2) {
-  var pkg = _ref2.pkg;
-  var _ref2$blacklist = _ref2.blacklist;
-  var blacklist = _ref2$blacklist === undefined ? [] : _ref2$blacklist;
-
-  if (!pkg) return [];
-  return flatten(["dependencies", "devDependencies", "peerDependencies"].filter(function (key) {
-    return key in pkg;
-  }).map(function (dep) {
-    return _Object$keys(pkg[dep]);
-  })).filter(function (dep) {
-    return /^fly-.+/g.test(dep);
-  }).filter(function (dep) {
-    return ! ~blacklist.indexOf(dep);
-  });
-}
-
-/**
-  Expand a glob pattern and runs a handler for each expanded glob.
-  @param pattern {String} Pattern to be matched
-  @param handler {Function} Function to run for each unwrapped glob promise.
-  @return {Promise}
- */
-
-function expand(pattern, handler) {
-  return new _Promise(function (resolve, reject) {
-    (0, _glob2["default"])(pattern, {}, function (error, files) {
-      return error ? reject(error) : _Promise.all(handler(files)).then(function (files) {
-        return resolve(files);
-      })["catch"](function (error) {
-        throw error;
-      });
-    });
-  });
-}
-
-/**
-  Wrapper for chokidar.watch. Array of globs are flattened.
-  @param {Array:String} globs
-  @param {...String} tasks Tasks to run
-  @return {chokidar.FSWatcher}
- */
-
-function watch(globs, opts) {
-  return _chokidar2["default"].watch(flatten([globs]), opts);
-}
-
-/**
-  Wrapper for update-notifier.
-  @param {Array} options
- */
-
-function notifyUpdates(options) {
-  (0, _updateNotifier2["default"])(options).notify();
 }
 
 /**
