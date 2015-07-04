@@ -306,7 +306,7 @@ var Fly = (function (_Emitter) {
         globs[_key3] = arguments[_key3];
       }
 
-      globs.forEach(function (pattern) {
+      _.flatten(globs).forEach(function (pattern) {
         var base = (function (base) {
           return base.length > 1 ? base.shift() : "";
         })(pattern.split("*"));
@@ -333,8 +333,6 @@ var Fly = (function (_Emitter) {
                   }
                 }
               }).call(_this6, "" + data, _this6._filters);
-            })["catch"](function (_) {
-              return console.log(_, "||||");
             });
           });
         }));
@@ -374,7 +372,7 @@ var Fly = (function (_Emitter) {
         dest[_key4] = arguments[_key4];
       }
 
-      return _Promise.all(dest.map(function (dest) {
+      return _Promise.all(_.flatten(dest).map(function (dest) {
         return _this9.unwrap(_this9._source).then(function (files) {
           return files.map(function (_ref3) {
             var file = _ref3.file;

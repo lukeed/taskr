@@ -47,7 +47,6 @@ exports["default"] = _regeneratorRuntime.mark(function callee$0$0() {
         }
 
         _cli2["default"].help();
-
         context$1$0.next = 29;
         break;
 
@@ -58,13 +57,12 @@ exports["default"] = _regeneratorRuntime.mark(function callee$0$0() {
         }
 
         _cli2["default"].version(_package2["default"]);
-
         context$1$0.next = 29;
         break;
 
       case 15:
         context$1$0.next = 17;
-        return (0, _util.resolve)({ file: file });
+        return (0, _util.find)({ file: file });
 
       case 17:
         path = context$1$0.sent;

@@ -19,7 +19,7 @@ var _path = require("path");
 var _path2 = _interopRequireDefault(_path);
 
 /**
-  @desc Resolve flyfile using flypath and create a new Fly instance.
+  Resolve flyfile using flypath and create a new Fly instance.
   @param {String} flypath Path to a flyfile
   */
 exports["default"] = _regeneratorRuntime.mark(function callee$0$0(flypath) {
