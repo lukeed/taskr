@@ -15,7 +15,7 @@ var _fmt2 = _interopRequireDefault(_fmt);
 var _util = require("../util");
 
 /**
-  @desc List all tasks available in the flyfile
+  List all tasks available in the flyfile
   @param {Object} flyfile
   @param {Object} opts.simple Simple task listing.
   */
