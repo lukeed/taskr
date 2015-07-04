@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "description": "Fly Examples",
   "dependencies": {
-    "fly-earl": "^0.1.21",
     "fly-postcss": "^0.1.0",
     "fly-stylus": "^0.1.0",
     "tap": "^1.3.1",
