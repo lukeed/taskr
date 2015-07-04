@@ -18,9 +18,11 @@ export function error (...args) {
 }
 
 /**
+  Pretty print error.
+  @param {Object}
  */
-export function trace (e) {
-  error(pretty.render(e)
+export function trace (error) {
+  error(pretty.render(error)
     .replace(/(\sFunction|\sObject)\./g, `${fmt.blue("$1")}.`)
     .replace(/\((~?\/.*)\)/g, `(${fmt.gray("$1")})`)
     .replace(/:([0-9]*):([0-9]*)/g, ` ${fmt.yellow("$1")}:${fmt.yellow("$2")}`)
@@ -31,7 +33,7 @@ export function trace (e) {
 /**
   Promisify an async function.
   @param {Function} async function to promisify
-  @return {Promise}
+  @return {Function} function that returns a promise
  */
 export function defer (asyncFunc) {
   return (...args) => new Promise((resolve, reject) =>
@@ -104,22 +106,27 @@ export function* find ({ file, names = ["Flyfile", "Flypath"] }) {
 }
 
 /**
-  Load `fly-*` plugins from a package.json deps.
-  @param {Package} opts.pkg
-  @param {Array} opts.deps
-  @param {Array} opts.blacklist
-  @return {Array} List of fly deps that can be loaded.
+  Flattens a nested array recursively.
+  @return [[a],[b],[c]] -> [a,b,c]
  */
-export function plugins ({ pkg, deps, blacklist = []}) {
-  if (pkg) {
-    deps = ["dependencies", "devDependencies", "peerDependencies"]
-      .filter((key) => key in pkg)
-      .reduce((p, c) => [].concat(Object.keys(pkg[p]), Object.keys(pkg[c])))
-  }
-  return deps
+export function flatten (array) {
+  return array.reduce((flat, next) =>
+    flat.concat(Array.isArray(next) ? flatten(next) : next), [])
+}
+
+/**
+  Search `fly-*` plugins listed in package.json dependencies.
+  @param {Package} project's package.json
+  @param {Array} blacklisted plugins
+  @return {Array} list of loadable fly deps
+ */
+export function searchPlugins ({ pkg, blacklist = []}) {
+  if (!pkg) return []
+  return flatten(["dependencies", "devDependencies", "peerDependencies"]
+    .filter((key) => key in pkg)
+    .map((dep) => Object.keys(pkg[dep])))
     .filter((dep) => /^fly-.+/g.test(dep))
     .filter((dep) => !~blacklist.indexOf(dep))
-    .reduce((prev, curr) => [].concat(prev, curr), [])
 }
 
 /**
@@ -136,15 +143,6 @@ export function expand (pattern, handler) {
         : Promise.all(handler(files)).then((files) =>
           resolve(files)).catch((error) => { throw error }))
   })
-}
-
-/**
-  Flattens a nested array recursively.
-  @return [[a],[b],[c]] -> [a,b,c]
- */
-export function flatten (array) {
-  return array.reduce((flat, next) =>
-    flat.concat(Array.isArray(next) ? flatten(next) : next), [])
 }
 
 /**
