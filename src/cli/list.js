@@ -11,7 +11,8 @@ export default function (flyfile, { simple }) {
   if (!simple) log(`\n${fmt.dim.bold("Available tasks")}`)
   Object.keys(host).forEach((key) => {
     const match = /^\s*\/\*\*\s*@desc\s+(.*)\s*\*\//gm.exec(`${host[key]}`)
-    log(`${simple ? "%s" : fmt.title + "\t"} ${match ? match[0] : ""}`, key)
+    const description = match ? match.pop() : ""
+    log(`${simple ? "%s" : "  " + fmt.title + "\t" + description}`, key)
   })
   if (!simple) log()
 }
