@@ -2,7 +2,7 @@ import fmt from "../fmt"
 import { log } from "../util"
 
 /**
-  @desc List all tasks available in the flyfile
+  List all tasks available in the flyfile
   @param {Object} flyfile
   @param {Object} opts.simple Simple task listing.
   */
