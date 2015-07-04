@@ -56,3 +56,10 @@ exports.styles = function* () {
     .stylus()
     .target("styles/dist/")
 }
+
+
+exports.move = function* () {
+  yield this
+  .source("dummy")
+  .target("dummies")
+}
