@@ -1,5 +1,5 @@
 import Parsec from "parsec"
-import { notifyUpdates, resolve } from "./util"
+import { notifyUpdates, find } from "./util"
 import reporter from "./reporter"
 import cli from "./cli/"
 import pkg from "../package"
@@ -16,12 +16,10 @@ export default function* () {
 
   if (help) {
     cli.help()
-
   } else if (version) {
     cli.version(pkg)
-
   } else {
-    const path = yield resolve({ file })
+    const path = yield find({ file })
     if (list) {
       cli.list(path, { simple: list === "simple" })
     } else {

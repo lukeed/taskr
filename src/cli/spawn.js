@@ -3,7 +3,7 @@ import { plugins } from "../util"
 import path from "path"
 
 /**
-  @desc Resolve flyfile using flypath and create a new Fly instance.
+  Resolve flyfile using flypath and create a new Fly instance.
   @param {String} flypath Path to a flyfile
   */
 export default function* (flypath) {

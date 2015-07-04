@@ -79,8 +79,7 @@ export default class Fly extends Emitter {
    */
   watch (globs, tasks) {
     this.notify("fly_watch").start(tasks)
-    _.watch(globs, { ignoreInitial: true })
-      .on("all", () => this.start(tasks))
+    _.watch(globs, { ignoreInitial: true }).on("all", () => this.start(tasks))
     return this
   }
   /**
@@ -121,7 +120,7 @@ export default class Fly extends Emitter {
     this._filters = []
     this._writers = []
 
-    globs.forEach((pattern) => {
+    _.flatten(globs).forEach((pattern) => {
       const base = ((base) => {
         return base.length > 1 ? base.shift() : ""
       }(pattern.split("*")))
@@ -134,7 +133,7 @@ export default class Fly extends Emitter {
                 ? reduce(filters[0].filter
                   .apply(this, [data, filters[0].options]), filters.slice(1))
                 : { file, data, base }
-            }.call(this, `${data}`, this._filters))).catch(_=>console.log(_, "||||"))
+            }.call(this, `${data}`, this._filters)))
         })
       }))
     })
@@ -155,7 +154,7 @@ export default class Fly extends Emitter {
     @param {...String} destination paths
    */
   target (...dest) {
-    return Promise.all(dest.map((dest) => {
+    return Promise.all(_.flatten(dest).map((dest) => {
       return this.unwrap(this._source).then((files) => {
         return files.map(({ file, data, base }) => {
           return ((file) => {
