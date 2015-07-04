@@ -1,5 +1,5 @@
 #!/bin/sh
-":" //# comment; exec /usr/bin/env node --harmony "$0" "$@"
+":" //# comment; exec /usr/bin/env node --harmony --harmony_arrow_functions "$0" "$@"
 
 if (!require("yieldables"))
   throw new Error("Fly requires node >= 0.11")
@@ -10,6 +10,6 @@ require("co")(require("../dist")).catch(function (e) {
       "Your project is missing a Flyfile. For more info about" +
       "\nrunning Fly, see the Fly Start guide: git.io/fly-start")
   } else {
-    console.error(e)
+    require("../dist/util").trace(e)
   }
 })
