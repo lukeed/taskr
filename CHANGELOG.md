@@ -5,6 +5,7 @@
 </div>
 
 # Changelog
++ [v0.1.5](#v0.1.5)
 + [v0.1.4](#v0.1.4)
 + [v0.1.3](#v0.1.3)
 + [v0.1.2](#v0.1.2)
@@ -14,6 +15,20 @@
   + [Plugins API update](plugins-api-update)
   + [`watch` API update](watch-api-update)
 + [v0.0.1](#0.0.1)
+
+## v0.1.5
+
++ Fix bug in `util.error`, where function's argument `error` was shadowing function name `error`. :feelsgood:
+
++ Fix bug in `util.find/hook` that was still breaking the require hook for some type of files. Basically the problem is `jsVariant` either exposes an array with dependencies that should be loaded or a string. In the case of arrays its contents could be strings or object literals with a `module` property. The following check patches this:
+
+```js
+require(modules[0].module
+  ? modules[0].module
+  : modules[0])
+```
+
+> Note to Earl Gray users: `interpret@0.6.2` does not support earl at the moment. Please refer to [this PR](https://github.com/tkellen/js-interpret/pull/31). Make sure to install both `earlgray` and `earlgray-runtime` if you are using `Flyfile.eg` files. See `examples/Flyfile.eg` for an Earl Gray Flyfile example.
 
 ## v0.1.4
 
