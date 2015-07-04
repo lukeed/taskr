@@ -5,6 +5,7 @@
 </div>
 
 # Changelog
++ [v0.1.4](#v0.1.4)
 + [v0.1.3](#v0.1.3)
 + [v0.1.2](#v0.1.2)
 + [v0.1.1](#v0.1.1)
@@ -13,6 +14,10 @@
   + [Plugins API update](plugins-api-update)
   + [`watch` API update](watch-api-update)
 + [v0.0.1](#0.0.1)
+
+## v0.1.4
+
++ Fix bug in `util.find/hook` where jsVariants that expose the transformer module name using an array without a `module` property was being called causing Flyfiles in languages other than ES5/6/7 to fail.
 
 ## v0.1.3
 
