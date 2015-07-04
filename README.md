@@ -4,6 +4,7 @@
 [![][dl-badge]][npm-pkg-link]
 ![][mit-badge]
 [![][TravisLogo]][Travis]
+[![][codeclimate-badge]][codeclimate]
 
 
 <p align="center">
@@ -103,3 +104,6 @@ Contributions are absolutely welcome. Check out our [contribution guide](/CONTRI
 
 [TravisLogo]: http://img.shields.io/travis/flyjs/fly.svg?style=flat-square
 [Travis]: https://travis-ci.org/flyjs/fly
+
+[codeclimate-badge]: https://codeclimate.com/github/flyjs/fly/badges/gpa.svg
+[codeclimate]: https://codeclimate.com/github/flyjs/fly
