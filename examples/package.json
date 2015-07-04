@@ -11,6 +11,7 @@
   "devDependencies": {
     "fly-babel": "0.0.4",
     "fly-coffee": "0.0.2",
+    "fly-earl": "^0.1.21",
     "fly-eslint": "0.0.2",
     "fly-mocha": "0.0.2",
     "fly-uglify": "0.0.3"

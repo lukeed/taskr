@@ -1,5 +1,5 @@
 paths = {scripts = {
-   "src/**/*.eg"
+   "earl/src/**/*.eg"
 }}
 
 provide: main, clear, scripts
@@ -16,4 +16,4 @@ gen scripts = ->
       @source: paths.scripts[0]
       @earl() ;;  with { es5 = false }
       @concat("all.js")
-      @target("build/js")
+      @target("earl/build/js")
