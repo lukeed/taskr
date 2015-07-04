@@ -1,5 +1,5 @@
 import Parsec from "parsec"
-import { notifyUpdates, find } from "./util"
+import { notifyUpdates, findFlypath as find } from "./util"
 import reporter from "./reporter"
 import cli from "./cli/"
 import pkg from "../package"
