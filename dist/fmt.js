@@ -20,6 +20,7 @@ var _dateformat2 = _interopRequireDefault(_dateformat);
 exports["default"] = _Object$assign(_clor2["default"], {
   complete: _clor2["default"].blue.bold("\"%s\""),
   start: _clor2["default"].bold.yellow("\"%s\""),
+  title: _clor2["default"].bold.yellow("%s"),
   error: _clor2["default"].bold.red("%s"),
   path: _clor2["default"].underline.cyan("%s"),
   warn: _clor2["default"].bold.magenta("%s"),
