@@ -1,6 +1,6 @@
 <div align="center">
   <a href="http://github.com/flyjs/fly">
-    <img width=100px  src="https://cloud.githubusercontent.com/assets/8317250/8430194/35c6043a-1f6a-11e5-8cbd-af6cc86baa84.png">
+    <img width=120px  src="https://cloud.githubusercontent.com/assets/8317250/8430194/35c6043a-1f6a-11e5-8cbd-af6cc86baa84.png">
   </a>
 </div>
 
@@ -36,31 +36,32 @@ If your issue is related to a specific _existing_ package, open an issue on that
 
 ## Commit Messages
 
-+ Use the [present tense](https://simple.wikipedia.org/wiki/Present_tense) ("Add awesome-plugin" not "Added ...")
++ Use the [present tense](https://simple.wikipedia.org/wiki/Present_tense) ("add awesome-plugin" not "added ...")
 
-+ Less than 72 characters or less for the first line of your commit. After that is up to you.
++ Less than 72 characters or less for the first line of your commit.
 
-+ Use of [emoji](http://www.emoji-cheat-sheet.com/) is definitely encouraged.
++ Use of [emoji](http://www.emoji-cheat-sheet.com/) is definitely encouraged. :beer:
 
 ## Code Style
 
-Start reading our code and you'll get the hang of it. No particular style is better, but consistency is sanity.
+Start reading our code and you'll get the hang of it. No particular style is better, but consistency `===` sanity.
 
 + [No semicolons](http://blog.izs.me/post/2353458699/an-open-letter-to-javascript-leaders-regarding).
 
-+ ~80 characters per line.
++ Max of 80 characters per line.
 
 + Space before function parenthesis, _but_ not before function calls.
 
 ```js
-function make (arg) {
-}
+function make (arg) { }
 
 make(arg)
 ```
 
-+ Do you really need that variable? You can initialize a constant, but let's avoid mutation if possible.
++ Do you really need a variable? You can initialize a constant. _Let's_ avoid mutation if possible.
 
-+ 150 lines of code per file is too many LOC to keep in the average head.
++ 150 lines of code per file is too many LOC. Divide and conquer.
 
-> Fly is still a work in progress and these rules are not written in stone. Feel free to open an issue with suggestions / feedback.
+> These rules are not set in stone. Feel free to open an issue with suggestions and/or feedback.
+
+:heart:

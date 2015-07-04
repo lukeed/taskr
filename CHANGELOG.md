@@ -1,15 +1,37 @@
 <div align="center">
   <a href="http://github.com/flyjs/fly">
-    <img width=100px  src="https://cloud.githubusercontent.com/assets/8317250/8430194/35c6043a-1f6a-11e5-8cbd-af6cc86baa84.png">
+    <img width=120px  src="https://cloud.githubusercontent.com/assets/8317250/8430194/35c6043a-1f6a-11e5-8cbd-af6cc86baa84.png">
   </a>
 </div>
 
 # Changelog
-+ [v0.0.1](#*~0.0.4)
++ [v0.1.1](#v0.1.1)
 + [v0.1.0](#v0.1.0)
   + [Multi-Flyfile Support](multi-flyfile-support)
   + [Plugins API update](plugins-api-update)
   + [`watch` API update](watch-api-update)
++ [v0.0.1](#0.0.1)
+
+## v0.1.1
+
++ Now Fly uses Fly to build itself. See `Flyfile.babel.js` at the root of the proejct.
+
++ Improved error tracing.
+
+  > This should be useful during development. In the future advanced error tracing should be configurable via `process.env.DEVELOPMENT `.
+
+  <img width=600px src="https://cloud.githubusercontent.com/assets/8317250/8506916/db8b2eaa-2266-11e5-8395-74ba0c63da24.png">
+
+
++ Add consistent support for multiple Node versions.
+
++ Support Flyfile, flyfile, Flypath and flypath mapped to all the available `jsVariant` [extensions](https://github.com/tkellen/js-interpret#extensions) by default when you run `fly` on the command line.
+
+Before you had to use `fly -f path/to/file` in order to run a specific Flyfile. You can still use `-f`, but _now_ Fly will automatically attempt to load Flyfiles based in the extension autoamtically. 
+
++ Improve handling of globs by allowing nested arrays (See `util.flatten`).
+
++ Improve documentation and revise CONTRIBUTING.md
 
 ## v0.1.0
 

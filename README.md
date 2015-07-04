@@ -50,7 +50,7 @@ npm install fly
 
 ### _Flyfile_
 
-> Flyfiles can be written in ES5/[6](/examples/Flyfile.babel.js)/[7](/examples/Flyfile7.babel.js) and [other](https://github.com/jashkenas/coffeescript/wiki/List-of-languages-that-compile-to-JS) JavaScript variants.
+> Flyfiles can be written in ES5/[6](/examples/Flyfile.babel.js)/[7](/examples/Flyfile7.babel.js) or [other](https://github.com/jashkenas/coffeescript/wiki/List-of-languages-that-compile-to-JS) JavaScript variants.
 
 ```js
 const paths = {
@@ -80,15 +80,12 @@ Contributions are absolutely welcome. Check out our [contribution guide](/CONTRI
 
 + Proper tests.
 + Configuration options.
-+ Fly's build should be written in Fly.
 + Optimize stream operations using [CSP channels](https://en.wikipedia.org/wiki/Communicating_sequential_processes).  
 
 # License
 
 
 [MIT](http://opensource.org/licenses/MIT) © [Jorge Bucaran][Author] et [al](https://github.com/flyjs/fly/graphs/contributors)
-
-
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/flyjs/fly/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
