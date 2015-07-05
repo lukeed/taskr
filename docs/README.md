@@ -26,7 +26,6 @@ _Fly_ is written from the ground up to take advantage of ES6 [new features](http
 
 Similar to gulp, _Fly_ favors code over configuration, but aims to provide a *definitive* simpler way to describe and compose tasks and plugins.
 
-
 ## Features
 
 * Fly shuns the [stream](https://nodejs.org/api/stream.html)-based implementation common in other build systems and favors promises and generator based flow-control via [co-routines](https://github.com/tj/co). The result is a modern and concise API.
@@ -40,7 +39,21 @@ Similar to gulp, _Fly_ favors code over configuration, but aims to provide a *de
     yield this.task.deploy()
   }
   ```
-+ Fly allows tasks to cascade results in a series. A task's return value will be the argument of the next task in the running sequence.
++ Fly allows tasks to cascade results in a series. A task's return value will be the argument of the next task in a running sequence.
+
+```js
+export function* first () {
+  return { secret: 42 }
+}
+
+export function* second ({ secret }) {
+  this.log(`The secret is ${secret}`)
+}
+
+export default function* () {
+  yield this.start(["first", "second"])
+}
+```
 
 + Fly lets you compose [_pipeline_](https://www.google.com/search?q=pipeline+code&espv=2&biw=1186&bih=705&source=lnms&tbm=isch&sa=X&ei=L7-SVde6JqPpmQXHyrLIBg&ved=0CAcQ_AUoAg&dpr=2#tbm=isch&q=pipeline+build+system&imgrc=923J2oOnaU_VXM%3A)-like sequences.
 
