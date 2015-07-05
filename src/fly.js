@@ -9,10 +9,10 @@ import * as _ from "./util"
 
 export default class Fly extends Emitter {
   /**
-    Create a new instance of Fly. Use fly.start(...) to run tasks.
-    @param {Object} Flyfile, also known as host
-    @param {String} relative base path / root
-    @param {Array} list of plugins to load.
+   * Create a new instance of Fly. Use fly.start(...) to run tasks.
+   * @param {Object} Flyfile, also known as host
+   * @param {String} relative base path / root
+   * @param {Array} list of plugins to load.
    */
   constructor ({ host, root = "./", plugins = [] }) {
     super()
@@ -28,24 +28,24 @@ export default class Fly extends Emitter {
     plugins.forEach((plugin) => plugin.call(this))
   }
   /**
-    Log a message with a time stamp as defined in /fmt.
+   * Log a message with a time stamp as defined in /fmt.
    */
   log (...args) {
     _.log(`[${fmt.time}] ${args}`)
     return this
   }
   /**
-    Clear each specified directory. Wraps rimraf.
-    @param {...String} paths
+   * Clear each specified directory. Wraps rimraf.
+   * @param {...String} paths
    */
   clear (...paths) {
     const _clear = this.defer(rimraf)
     return paths.map((path) => _clear(path))
   }
   /**
-    Concatenates files read via source.
-    @param {String} name of the concatenated file
-    @TODO: by default this operation should clear the target file to concat
+   * Concatenates files read via source.
+   * @param {String} name of the concatenated file
+   * @TODO: by default this operation should clear the target file to concat
    */
   concat (name) {
     this._writers.push(({ dest, data }) => {
@@ -55,13 +55,12 @@ export default class Fly extends Emitter {
     return this
   }
   /**
-    Add a filter to be applied when unwrapping the source promises.
-    @param {
-      {String} name of the filter.
-      {Object} { filter, options } object.
-      {Function} filter function.
-    }
-    @param [{Function}] filter function.
+   * Add a filter to be applied when unwrapping the source promises.
+   * @param
+   *   {String} name of the filter.
+   *   {Object} { filter, options } object.
+   *   {Function} filter function.
+   * @param [{Function}] filter function.
    */
   filter (name, filter) {
     if (name instanceof Function) {
@@ -76,23 +75,30 @@ export default class Fly extends Emitter {
     return this
   }
   /**
-    Watch for changes on globs and run each of the specified tasks.
-    @param {Array:String} glob patterns to observe for changes
-    @param {Array:String} list of tasks to run on changes
+   * Watch for changes on globs and run each of the specified tasks.
+   * @param {Array:String} glob patterns to observe for changes
+   * @param {Array:String} list of tasks to run on changes
    */
   watch (globs, tasks) {
     this.notify("fly_watch").start(tasks)
-    _.watch(globs, { ignoreInitial: true }).on("all", () => this.start(tasks))
+      .then(() => _.watch(globs, { ignoreInitial: true })
+        .on("all", () => this.start(tasks)))
     return this
   }
+
   /**
-    Runs the specified tasks.
-    @param {Array} list of tasks to run
+   * Runs the specified tasks. This method can be yielded inside a task.
+   * The return value of each task (after the first) is passed on to the
+   * next task in the series.
+   * @param {Array} list of tasks to run
+   * @return {Promise}
    */
   start (tasks = []) {
+    /** @deprecated default tasks will revert to `default`in 0.2.0 */
     if (tasks.length === 0) tasks.push(this.host.default ? "default" : "main")
-    co.call(this, function* () {
-      for (let task of [].concat(tasks)
+    return co.call(this, function* (ret) {
+      for (const task of []
+        .concat(tasks)
         .filter((task) => {
           return ~Object.keys(this.host).indexOf(task)
           || !this.notify("task_not_found", { task })
@@ -100,24 +106,21 @@ export default class Fly extends Emitter {
         const start = new Date()
         this.notify("task_start", { task })
         try {
-          yield this.tasks[task].call(this)
+          ret = yield this.tasks[task].call(this, ret)
           this.notify("task_complete", {
             task, duration: (new Date()).getTime() - start
           })
-        } catch (error) {
-          this.notify("task_error", { task, error })
-        }
+        } catch (error) { this.notify("task_error", { task, error }) }
       }
     })
-    return this
   }
   /**
-    Creates an array of promises with read sources from a list of globs.
-    When a promise resolved, the data source is reduced applying each of
-    the existing filters.
-    @param {...String} glob patterns
-    @return Fly instance. Promises resolve to { file, data }
-  */
+   * Creates an array of promises with read sources from a list of globs.
+   * When a promise resolved, the data source is reduced applying each of
+   * the existing filters.
+   * @param {...String} glob patterns
+   * @return Fly instance. Promises resolve to { file, data }
+   */
   source (...globs) {
     this._source = []
     this._filters = []
@@ -143,9 +146,9 @@ export default class Fly extends Emitter {
     return this
   }
   /**
-    Resolves an array of promises an return a new promise with the result.
-    By default resolves the current promise sources.
-    @param {Array:Promise} source
+   * Resolve an array of promises an return a new promise with the result.
+   * By default resolves the current promise sources.
+   * @param {Array:Promise} source
    */
   unwrap (source = this._source) {
     return new Promise((resolve) => {
@@ -153,8 +156,8 @@ export default class Fly extends Emitter {
     })
   }
   /**
-    Resolves all source promises and writes to each destination path.
-    @param {...String} destination paths
+   * Resolves all source promises and writes to each destination path.
+   * @param {...String} destination paths
    */
   target (...dest) {
     return Promise.all(_.flatten(dest).map((dest) => {

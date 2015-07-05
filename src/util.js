@@ -7,19 +7,12 @@ import { join } from "path"
 import { jsVariants } from "interpret"
 import updateNotifier from "update-notifier"
 
-/** console.log wrapper */
-export function log (...args) {
-  console.log.apply(console, args)
-}
-
-/** console.error wrapper */
-export function error (...args) {
-  console.error.apply(console, args)
-}
+export const log = console.log.bind(console)
+export const error = console.error.bind(console)
 
 /**
-  Pretty print error.
-  @param {Object}
+ * Wrapper for prettyjson and other stack tracing improvements.
+ * @param {Object} error object
  */
 export function trace (e) {
   error(pretty.render(e)
@@ -31,9 +24,9 @@ export function trace (e) {
 }
 
 /**
-  Promisify an async function.
-  @param {Function} async function to promisify
-  @return {Function} function that returns a promise
+ * Promisify an async function.
+ * @param {Function} async function to promisify
+ * @return {Function} function that returns a promise
  */
 export function defer (asyncFunc) {
   return (...args) => new Promise((resolve, reject) =>
@@ -42,8 +35,8 @@ export function defer (asyncFunc) {
 }
 
 /**
-  Flattens a nested array recursively.
-  @return [[a],[b],[c]] -> [a,b,c]
+ * Flatten a nested array recursively.
+ * @return [[a],[b],[c]] -> [a,b,c]
  */
 export function flatten (array) {
   return array.reduce((flat, next) =>
@@ -51,10 +44,10 @@ export function flatten (array) {
 }
 
 /**
-  Search `fly-*` plugins listed in package.json dependencies.
-  @param {Package} project's package.json
-  @param {Array} blacklisted plugins
-  @return {Array} list of loadable fly deps
+ * Search `fly-*` plugins listed in package.json dependencies.
+ * @param {Package} project's package.json
+ * @param {Array} blacklisted plugins
+ * @return {Array} list of loadable fly deps
  */
 export function searchPlugins ({ pkg, blacklist = []}) {
   if (!pkg) return []
@@ -66,63 +59,62 @@ export function searchPlugins ({ pkg, blacklist = []}) {
 }
 
 /**
-  Expand a glob pattern and runs a handler for each expanded glob.
-  @param pattern {String} Pattern to be matched
-  @param handler {Function} Function to run for each unwrapped glob promise.
-  @return {Promise}
+ * Expand a glob pattern and runs a handler for each expanded glob.
+ * @param pattern {String} Pattern to be matched
+ * @param handler {Function} Function to run for each unwrapped glob promise.
+ * @return {Promise}
  */
 export function expand (pattern, handler) {
   return new Promise((resolve, reject) => {
     glob(pattern, {}, (error, files) =>
       error
         ? reject(error)
-        : Promise.all(handler(files)).then((files) =>
-          resolve(files)).catch((error) => { throw error }))
+        : Promise.all(handler(files))
+          .then((files) => resolve(files))
+          .catch((error) => { throw error }))
   })
 }
 
 /**
-  Wrapper for chokidar.watch. Array of globs are flattened.
-  @param {Array:String} globs
-  @param {...String} tasks Tasks to run
-  @return {chokidar.FSWatcher}
+ * Wrapper for chokidar.watch. Array of globs are flattened.
+ * @param {Array:String} globs to watch
+ * @param {Object} chokidar options
+ * @return {chokidar.FSWatcher}
  */
-export function watch (globs, opts) {
-  return chokidar.watch(flatten([globs]), opts)
+export function watch (globs, options) {
+  return chokidar.watch(flatten([globs]), options)
 }
 
 /**
-  Wrapper for update-notifier.
-  @param {Array} options
+ * Wrap update-notifier notify.
+ * @param {Array} options
  */
 export function notifyUpdates (options) {
   updateNotifier(options).notify()
 }
 
 /**
-  Resolve the Flyfile path. Check the file extension and attempt to load
-  every possible JavaScript variant if `file` is a directory.
-  @param {String} file or path to the Flyfile
-  @param [{String}] Flyfile variant name
-  @return {String} path to the Flyfile
+ * Resolve the Flyfile path. Check the file extension and attempt to load
+ * every possible JavaScript variant if file is a directory.
+ * @param String file or path to the Flyfile
+ * @param String:Array Flyfile variant name
+ * @return {String} path to the Flyfile
  */
-export function* findFlypath ({ file, names = ["Flyfile", "Flypath"] }) {
-  const root = join(process.cwd(), file)
-  return hook(require, (yield fs.stat(file)).isDirectory()
+export function* findFlypath (path, names = ["Flyfile", "Flypath"]) {
+  const root = join(process.cwd(), path)
+  return hook(require, (yield fs.stat(path)).isDirectory()
     ? yield resolve(match(
         names.concat(names.map((name) => name.toLowerCase()))
           .map((name) => join(root, name)),
         Object.keys(jsVariants)
       ))
     : root)
-
   /**
-    Add require hook so that subsequent calls to require transform the
-    JavaScript source variant (ES7, CoffeeScript, etc.) in the fly.
-    @param {Function} require function to load selected module
-    @param {String} path to Flyfile
-    @return {String} path to Flyfile
-    @private
+   * Add require hook so that subsequent calls to require transform the
+   * JavaScript source variant (ES7, CoffeeScript, etc.) in the fly.
+   * @param {Function} require function to load selected module
+   * @param {String} path to Flyfile
+   * @return {String} path to Flyfile
    */
   function hook (require, path) {
     const js = jsVariants[`.${path.split(".").slice(1).join(".") || "js"}`]
@@ -140,10 +132,9 @@ export function* findFlypath ({ file, names = ["Flyfile", "Flypath"] }) {
   }
 
   /**
-    Resolve to the first existing file in paths.
-    @param {Array:String} list of paths to search
-    @return {String} path of an existing file
-    @private
+   * Find the first existing file in paths.
+   * @param {Array:String} list of paths to search
+   * @return {String} path of an existing file
    */
   function* resolve (paths) {
     if (paths.length === 0) throw { code: "ENOENT" }
@@ -153,11 +144,10 @@ export function* findFlypath ({ file, names = ["Flyfile", "Flypath"] }) {
   }
 
   /**
-    Match files and extensions.
-    @param {Array:String} List of files to match
-    @param {Array:String} List of extensions to match
-    @return {Array} Product of matched files * extensions
-    @private
+   * Match files and extensions.
+   * @param {Array:String} List of files to match
+   * @param {Array:String} List of extensions to match
+   * @return {Array} Product of matched files * extensions
    */
   function match (files, exts) {
     return files.length === 1
