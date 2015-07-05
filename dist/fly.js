@@ -58,10 +58,10 @@ var _ = _interopRequireWildcard(_util);
 
 var Fly = (function (_Emitter) {
   /**
-    Create a new instance of Fly. Use fly.start(...) to run tasks.
-    @param {Object} Flyfile, also known as host
-    @param {String} relative base path / root
-    @param {Array} list of plugins to load.
+   * Create a new instance of Fly. Use fly.start(...) to run tasks.
+   * @param {Object} Flyfile, also known as host
+   * @param {String} relative base path / root
+   * @param {Array} list of plugins to load.
    */
 
   function Fly(_ref) {
@@ -96,7 +96,7 @@ var Fly = (function (_Emitter) {
     key: "log",
 
     /**
-      Log a message with a time stamp as defined in /fmt.
+     * Log a message with a time stamp as defined in /fmt.
      */
     value: function log() {
       for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
@@ -110,8 +110,8 @@ var Fly = (function (_Emitter) {
     key: "clear",
 
     /**
-      Clear each specified directory. Wraps rimraf.
-      @param {...String} paths
+     * Clear each specified directory. Wraps rimraf.
+     * @param {...String} paths
      */
     value: function clear() {
       var _clear = this.defer(_rimraf2["default"]);
@@ -128,9 +128,9 @@ var Fly = (function (_Emitter) {
     key: "concat",
 
     /**
-      Concatenates files read via source.
-      @param {String} name of the concatenated file
-      @TODO: by default this operation should clear the target file to concat
+     * Concatenates files read via source.
+     * @param {String} name of the concatenated file
+     * @TODO: by default this operation should clear the target file to concat
      */
     value: function concat(name) {
       var _this2 = this;
@@ -148,13 +148,12 @@ var Fly = (function (_Emitter) {
     key: "filter",
 
     /**
-      Add a filter to be applied when unwrapping the source promises.
-      @param {
-        {String} name of the filter.
-        {Object} { filter, options } object.
-        {Function} filter function.
-      }
-      @param [{Function}] filter function.
+     * Add a filter to be applied when unwrapping the source promises.
+     * @param
+     *   {String} name of the filter.
+     *   {Object} { filter, options } object.
+     *   {Function} filter function.
+     * @param [{Function}] filter function.
      */
     value: function filter(name, _filter) {
       var _this3 = this;
@@ -175,16 +174,17 @@ var Fly = (function (_Emitter) {
     key: "watch",
 
     /**
-      Watch for changes on globs and run each of the specified tasks.
-      @param {Array:String} glob patterns to observe for changes
-      @param {Array:String} list of tasks to run on changes
+     * Watch for changes on globs and run each of the specified tasks.
+     * @param {Array:String} glob patterns to observe for changes
+     * @param {Array:String} list of tasks to run on changes
      */
     value: function watch(globs, tasks) {
       var _this4 = this;
 
-      this.notify("fly_watch").start(tasks);
-      _.watch(globs, { ignoreInitial: true }).on("all", function () {
-        return _this4.start(tasks);
+      this.notify("fly_watch").start(tasks).then(function () {
+        return _.watch(globs, { ignoreInitial: true }).on("all", function () {
+          return _this4.start(tasks);
+        });
       });
       return this;
     }
@@ -192,14 +192,18 @@ var Fly = (function (_Emitter) {
     key: "start",
 
     /**
-      Runs the specified tasks.
-      @param {Array} list of tasks to run
+     * Runs the specified tasks. This method can be yielded inside a task.
+     * The return value of each task (after the first) is passed on to the
+     * next task in the series.
+     * @param {Array} list of tasks to run
+     * @return {Promise}
      */
     value: function start() {
       var tasks = arguments[0] === undefined ? [] : arguments[0];
 
+      /** @deprecated default tasks will revert to `default`in 0.2.0 */
       if (tasks.length === 0) tasks.push(this.host["default"] ? "default" : "main");
-      _co2["default"].call(this, _regeneratorRuntime.mark(function callee$2$0() {
+      return _co2["default"].call(this, _regeneratorRuntime.mark(function callee$2$0(ret) {
         var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, task, start;
 
         return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
@@ -217,7 +221,7 @@ var Fly = (function (_Emitter) {
 
             case 5:
               if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                context$3$0.next = 21;
+                context$3$0.next = 22;
                 break;
               }
 
@@ -227,78 +231,78 @@ var Fly = (function (_Emitter) {
               this.notify("task_start", { task: task });
               context$3$0.prev = 9;
               context$3$0.next = 12;
-              return this.tasks[task].call(this);
+              return this.tasks[task].call(this, ret);
 
             case 12:
+              ret = context$3$0.sent;
+
               this.notify("task_complete", {
                 task: task, duration: new Date().getTime() - start
               });
-              context$3$0.next = 18;
+              context$3$0.next = 19;
               break;
 
-            case 15:
-              context$3$0.prev = 15;
+            case 16:
+              context$3$0.prev = 16;
               context$3$0.t0 = context$3$0["catch"](9);
-
               this.notify("task_error", { task: task, error: context$3$0.t0 });
 
-            case 18:
+            case 19:
               _iteratorNormalCompletion = true;
               context$3$0.next = 5;
               break;
 
-            case 21:
-              context$3$0.next = 27;
+            case 22:
+              context$3$0.next = 28;
               break;
 
-            case 23:
-              context$3$0.prev = 23;
+            case 24:
+              context$3$0.prev = 24;
               context$3$0.t1 = context$3$0["catch"](3);
               _didIteratorError = true;
               _iteratorError = context$3$0.t1;
 
-            case 27:
-              context$3$0.prev = 27;
+            case 28:
               context$3$0.prev = 28;
+              context$3$0.prev = 29;
 
               if (!_iteratorNormalCompletion && _iterator["return"]) {
                 _iterator["return"]();
               }
 
-            case 30:
-              context$3$0.prev = 30;
+            case 31:
+              context$3$0.prev = 31;
 
               if (!_didIteratorError) {
-                context$3$0.next = 33;
+                context$3$0.next = 34;
                 break;
               }
 
               throw _iteratorError;
 
-            case 33:
-              return context$3$0.finish(30);
-
             case 34:
-              return context$3$0.finish(27);
+              return context$3$0.finish(31);
 
             case 35:
+              return context$3$0.finish(28);
+
+            case 36:
             case "end":
               return context$3$0.stop();
           }
-        }, callee$2$0, this, [[3, 23, 27, 35], [9, 15], [28,, 30, 34]]);
+        }, callee$2$0, this, [[3, 24, 28, 36], [9, 16], [29,, 31, 35]]);
       }));
-      return this;
     }
   }, {
     key: "source",
 
     /**
-      Creates an array of promises with read sources from a list of globs.
-      When a promise resolved, the data source is reduced applying each of
-      the existing filters.
-      @param {...String} glob patterns
-      @return Fly instance. Promises resolve to { file, data }
-    */
+     * Creates an array of promises with read sources from a list of globs.
+     * When a promise resolved, the data source is reduced applying each of
+     * the existing filters.
+     * @param {...String} glob patterns
+     * @return Fly instance. Promises resolve to { file, data }
+     */
     value: function source() {
       var _this6 = this;
 
@@ -347,9 +351,9 @@ var Fly = (function (_Emitter) {
     key: "unwrap",
 
     /**
-      Resolves an array of promises an return a new promise with the result.
-      By default resolves the current promise sources.
-      @param {Array:Promise} source
+     * Resolve an array of promises an return a new promise with the result.
+     * By default resolves the current promise sources.
+     * @param {Array:Promise} source
      */
     value: function unwrap() {
       var _this8 = this;
@@ -366,8 +370,8 @@ var Fly = (function (_Emitter) {
     key: "target",
 
     /**
-      Resolves all source promises and writes to each destination path.
-      @param {...String} destination paths
+     * Resolves all source promises and writes to each destination path.
+     * @param {...String} destination paths
      */
     value: function target() {
       var _this9 = this;
