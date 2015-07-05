@@ -18,9 +18,12 @@ export default class Fly extends Emitter {
     super()
     this.defer = _.defer
     this.encoding = process.env.ENCODING
-    this.host = this.tasks = {}
+    this.host = this.tasks = host instanceof Function
+      ? Object.assign(host, { default: host }) : host
+
     Object.keys(host).forEach((task) =>
       this.tasks[task] = this.host[task] = host[task].bind(this))
+
     process.chdir(this.root = root)
     plugins.forEach((plugin) => plugin.call(this))
   }
