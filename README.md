@@ -4,12 +4,10 @@
 [![][dl-badge]][npm-pkg-link]
 ![][mit-badge]
 [![][TravisLogo]][Travis]
-[![][codeclimate-badge]][codeclimate]
-
 
 <p align="center">
   <a href="http://github.com/flyjs/fly">
-    <img width=300px  src="https://cloud.githubusercontent.com/assets/8317250/8430194/35c6043a-1f6a-11e5-8cbd-af6cc86baa84.png">
+    <img width=280px  src="https://cloud.githubusercontent.com/assets/8317250/8430194/35c6043a-1f6a-11e5-8cbd-af6cc86baa84.png">
   </a>
 </p>
 
@@ -32,15 +30,13 @@
   </p>
 </p>
 
-
 <br>
-
 
 ## About
 
 _Fly_ is a [build system](https://en.wikipedia.org/wiki/Build_automation) for [Node](https://nodejs.org/) based in [_co_-routines](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127), [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that aims to be simple and elegant to write.
 
-See the [Documentation](/docs/README.md) page to learn more about how to use Fly and write your own [plugins](/docs/README.md#plugins).
+See the [Documentation](/docs/README.md) to learn more about how to use Fly and write your own [plugins](/docs/README.md#plugins).
 
 ## Usage
 ### Install
@@ -51,14 +47,14 @@ npm install fly
 
 ### _Flyfile_
 
-> Flyfiles can be written in ES5/[6](/examples/Flyfile.babel.js)/[7](/examples/Flyfile7.babel.js) or [other](https://github.com/jashkenas/coffeescript/wiki/List-of-languages-that-compile-to-JS) JavaScript variants.
+> Flyfiles can be written in ES5/[6](/examples/Flyfile.babel.js)/[7](/examples/Flyfile7.babel.js) or [other](https://github.com/jashkenas/coffeescript/wiki/List-of-languages-that-compile-to-JS) variants.
 
 ```js
 const paths = {
   scripts: ["src/**/*.js", "!src/ignore/**/*.js"]
 }
 
-export function* main () {
+export default function* () {
   yield this.clear("build")
   this.watch([paths.scripts], ["scripts"])
 }
@@ -66,8 +62,8 @@ export function* main () {
 export function* scripts () {
   yield this
     .source(paths.scripts)
-    .babel({/*...*/})
-    .uglify({/*...*/})
+    .babel({ stage: 0 })
+    .uglify()
     .concat("all.min.js")
     .target("build/js")
 }
@@ -85,10 +81,9 @@ Contributions are absolutely welcome. Check out our [contribution guide](/CONTRI
 
 # License
 
-
 [MIT](http://opensource.org/licenses/MIT) © [Jorge Bucaran][Author] et [al](https://github.com/flyjs/fly/graphs/contributors)
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/flyjs/fly/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+[![][codeclimate-badge]][codeclimate]
 
 
 [author]: http://about.bucaran.me
