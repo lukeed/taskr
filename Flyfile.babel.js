@@ -3,6 +3,10 @@ const paths = {
   dist: "dist"
 }
 
+export default function* () {
+  this.log("This the default task.")
+}
+
 export function* main () {
   yield this
     .source(paths.src).eslint()

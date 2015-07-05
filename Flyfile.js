@@ -3,7 +3,7 @@ const paths = {
   dist: "dist"
 }
 
-exports.main = function* () {
+module.exports = function* () {
   yield this
     .source(paths.src).eslint()
   yield this
