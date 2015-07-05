@@ -132,7 +132,7 @@ export function* findFlypath ({ file, names = ["Flyfile", "Flypath"] }) {
         try {
           require(modules[0].module
             ? modules[0].module
-            : modules[0])
+            : modules[0])({ stage: 0 })
         } catch (_) { reduce(modules.slice(1)) }
       }(js))
     } else if (js) { require(js) }
