@@ -50,7 +50,7 @@ exports.test = function* () {
 }
 
 exports.styles = function* () {
-  /** @desc Hello */
+  /** @desc Compile stylus style sheets. */
   yield this
     .source("styles/*.styl")
     .stylus()
