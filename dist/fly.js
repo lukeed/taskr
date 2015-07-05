@@ -8,6 +8,8 @@ var _createClass = require("babel-runtime/helpers/create-class")["default"];
 
 var _classCallCheck = require("babel-runtime/helpers/class-call-check")["default"];
 
+var _Object$assign = require("babel-runtime/core-js/object/assign")["default"];
+
 var _Object$keys = require("babel-runtime/core-js/object/keys")["default"];
 
 var _regeneratorRuntime = require("babel-runtime/regenerator")["default"];
@@ -76,10 +78,12 @@ var Fly = (function (_Emitter) {
     _get(Object.getPrototypeOf(Fly.prototype), "constructor", this).call(this);
     this.defer = _.defer;
     this.encoding = process.env.ENCODING;
-    this.host = this.tasks = {};
+    this.host = this.tasks = host instanceof Function ? _Object$assign(host, { "default": host }) : host;
+
     _Object$keys(host).forEach(function (task) {
       return _this.tasks[task] = _this.host[task] = host[task].bind(_this);
     });
+
     process.chdir(this.root = root);
     plugins.forEach(function (plugin) {
       return plugin.call(_this);

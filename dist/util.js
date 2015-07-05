@@ -252,7 +252,7 @@ function findFlypath(_ref2) {
             (function reduce(modules) {
               if (modules.length === 0) return;
               try {
-                require(modules[0].module ? modules[0].module : modules[0]);
+                require(modules[0].module ? modules[0].module : modules[0])({ stage: 0 });
               } catch (_) {
                 reduce(modules.slice(1));
               }
