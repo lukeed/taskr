@@ -1,6 +1,6 @@
 {
   "name": "fly",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Fly Build System",
   "main": "dist/index.js",
   "bin": {
@@ -26,8 +26,6 @@
     "babel": "^5.6.14",
     "babel-eslint": "^3.1.9",
     "coffee-script": "^1.9.3",
-    "earlgrey": "0.0.8",
-    "earlgrey-runtime": "0.0.8",
     "eslint": "^0.21.2",
     "fly-babel": "0.0.4",
     "fly-eslint": "0.0.2",
