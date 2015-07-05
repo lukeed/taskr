@@ -11,8 +11,6 @@ var _interopRequireDefault = require("babel-runtime/helpers/interop-require-defa
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.log = log;
-exports.error = error;
 exports.trace = trace;
 exports.defer = defer;
 exports.flatten = flatten;
@@ -51,29 +49,14 @@ var _updateNotifier = require("update-notifier");
 
 var _updateNotifier2 = _interopRequireDefault(_updateNotifier);
 
-/** console.log wrapper */
+var log = console.log.bind(console);
+exports.log = log;
+var error = console.error.bind(console);
 
-function log() {
-  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-    args[_key] = arguments[_key];
-  }
-
-  console.log.apply(console, args);
-}
-
-/** console.error wrapper */
-
-function error() {
-  for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-    args[_key2] = arguments[_key2];
-  }
-
-  console.error.apply(console, args);
-}
-
+exports.error = error;
 /**
-  Pretty print error.
-  @param {Object}
+ * Wrapper for prettyjson and other stack tracing improvements.
+ * @param {Object} error object
  */
 
 function trace(e) {
@@ -81,23 +64,23 @@ function trace(e) {
 }
 
 /**
-  Promisify an async function.
-  @param {Function} async function to promisify
-  @return {Function} function that returns a promise
+ * Promisify an async function.
+ * @param {Function} async function to promisify
+ * @return {Function} function that returns a promise
  */
 
 function defer(asyncFunc) {
   var _this = this;
 
   return function () {
-    for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-      args[_key3] = arguments[_key3];
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
     }
 
     return new _Promise(function (resolve, reject) {
       return asyncFunc.apply(_this, args.concat(function (err) {
-        for (var _len4 = arguments.length, args = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
-          args[_key4 - 1] = arguments[_key4];
+        for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+          args[_key2 - 1] = arguments[_key2];
         }
 
         return err ? reject(err) : resolve(args);
@@ -107,8 +90,8 @@ function defer(asyncFunc) {
 }
 
 /**
-  Flattens a nested array recursively.
-  @return [[a],[b],[c]] -> [a,b,c]
+ * Flatten a nested array recursively.
+ * @return [[a],[b],[c]] -> [a,b,c]
  */
 
 function flatten(array) {
@@ -118,10 +101,10 @@ function flatten(array) {
 }
 
 /**
-  Search `fly-*` plugins listed in package.json dependencies.
-  @param {Package} project's package.json
-  @param {Array} blacklisted plugins
-  @return {Array} list of loadable fly deps
+ * Search `fly-*` plugins listed in package.json dependencies.
+ * @param {Package} project's package.json
+ * @param {Array} blacklisted plugins
+ * @return {Array} list of loadable fly deps
  */
 
 function searchPlugins(_ref) {
@@ -142,10 +125,10 @@ function searchPlugins(_ref) {
 }
 
 /**
-  Expand a glob pattern and runs a handler for each expanded glob.
-  @param pattern {String} Pattern to be matched
-  @param handler {Function} Function to run for each unwrapped glob promise.
-  @return {Promise}
+ * Expand a glob pattern and runs a handler for each expanded glob.
+ * @param pattern {String} Pattern to be matched
+ * @param handler {Function} Function to run for each unwrapped glob promise.
+ * @return {Promise}
  */
 
 function expand(pattern, handler) {
@@ -161,19 +144,19 @@ function expand(pattern, handler) {
 }
 
 /**
-  Wrapper for chokidar.watch. Array of globs are flattened.
-  @param {Array:String} globs
-  @param {...String} tasks Tasks to run
-  @return {chokidar.FSWatcher}
+ * Wrapper for chokidar.watch. Array of globs are flattened.
+ * @param {Array:String} globs to watch
+ * @param {Object} chokidar options
+ * @return {chokidar.FSWatcher}
  */
 
-function watch(globs, opts) {
-  return _chokidar2["default"].watch(flatten([globs]), opts);
+function watch(globs, options) {
+  return _chokidar2["default"].watch(flatten([globs]), options);
 }
 
 /**
-  Wrapper for update-notifier.
-  @param {Array} options
+ * Wrap update-notifier notify.
+ * @param {Array} options
  */
 
 function notifyUpdates(options) {
@@ -181,17 +164,15 @@ function notifyUpdates(options) {
 }
 
 /**
-  Resolve the Flyfile path. Check the file extension and attempt to load
-  every possible JavaScript variant if `file` is a directory.
-  @param {String} file or path to the Flyfile
-  @param [{String}] Flyfile variant name
-  @return {String} path to the Flyfile
+ * Resolve the Flyfile path. Check the file extension and attempt to load
+ * every possible JavaScript variant if file is a directory.
+ * @param String file or path to the Flyfile
+ * @param String:Array Flyfile variant name
+ * @return {String} path to the Flyfile
  */
 
-function findFlypath(_ref2) {
-  var file = _ref2.file;
-  var _ref2$names = _ref2.names;
-  var names = _ref2$names === undefined ? ["Flyfile", "Flypath"] : _ref2$names;
+function findFlypath(path) {
+  var names = arguments[1] === undefined ? ["Flyfile", "Flypath"] : arguments[1];
   var marked1$0, root, hook, resolve, match;
   return _regeneratorRuntime.wrap(function findFlypath$(context$1$0) {
     while (1) switch (context$1$0.prev = context$1$0.next) {
@@ -264,10 +245,10 @@ function findFlypath(_ref2) {
         };
 
         marked1$0 = [resolve].map(_regeneratorRuntime.mark);
-        root = (0, _path.join)(process.cwd(), file);
+        root = (0, _path.join)(process.cwd(), path);
         context$1$0.t0 = require;
         context$1$0.next = 8;
-        return _mzFs2["default"].stat(file);
+        return _mzFs2["default"].stat(path);
 
       case 8:
         if (!context$1$0.sent.isDirectory()) {
@@ -302,25 +283,22 @@ function findFlypath(_ref2) {
 }
 
 /**
-  Add require hook so that subsequent calls to require transform the
-  JavaScript source variant (ES7, CoffeeScript, etc.) in the fly.
-  @param {Function} require function to load selected module
-  @param {String} path to Flyfile
-  @return {String} path to Flyfile
-  @private
+ * Add require hook so that subsequent calls to require transform the
+ * JavaScript source variant (ES7, CoffeeScript, etc.) in the fly.
+ * @param {Function} require function to load selected module
+ * @param {String} path to Flyfile
+ * @return {String} path to Flyfile
  */
 
 /**
-  Resolve to the first existing file in paths.
-  @param {Array:String} list of paths to search
-  @return {String} path of an existing file
-  @private
+ * Find the first existing file in paths.
+ * @param {Array:String} list of paths to search
+ * @return {String} path of an existing file
  */
 
 /**
-  Match files and extensions.
-  @param {Array:String} List of files to match
-  @param {Array:String} List of extensions to match
-  @return {Array} Product of matched files * extensions
-  @private
+ * Match files and extensions.
+ * @param {Array:String} List of files to match
+ * @param {Array:String} List of extensions to match
+ * @return {Array} Product of matched files * extensions
  */
