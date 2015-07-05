@@ -2,8 +2,8 @@
 
 [![][fly-badge]][fly]
 [![][dl-badge]][npm-pkg-link]
-![][mit-badge]
 [![][TravisLogo]][Travis]
+![][mit-badge]
 
 <p align="center">
   <a href="http://github.com/flyjs/fly">
@@ -47,7 +47,7 @@ npm install fly
 
 ### _Flyfile_
 
-> Flyfiles can be written in ES5/[6](/examples/Flyfile.babel.js)/[7](/examples/Flyfile7.babel.js) or [other](https://github.com/jashkenas/coffeescript/wiki/List-of-languages-that-compile-to-JS) variants.
+> Flyfiles can be written in ES5/[6](/examples/Flyfile.babel.js)/[7](/examples/Flyfile7.babel.js) and [other](https://github.com/jashkenas/coffeescript/wiki/List-of-languages-that-compile-to-JS) variants.
 
 ```js
 const paths = {
@@ -71,13 +71,12 @@ export function* scripts () {
 
 # Contributing
 
-Contributions are absolutely welcome. Check out our [contribution guide](/CONTRIBUTING.md).
+Contributions are _absolutely_ welcome. Check out our [contribution guide](/CONTRIBUTING.md).
 
 # Roadmap ✈
 
-+ Proper tests.
-+ Configuration options.
-+ Optimize stream operations using [CSP channels](https://en.wikipedia.org/wiki/Communicating_sequential_processes).  
++ Proper testing.
++ Optimize stream operations using [CSP channels](https://en.wikipedia.org/wiki/Communicating_sequential_processes).
 
 # License
 

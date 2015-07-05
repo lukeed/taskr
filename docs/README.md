@@ -19,7 +19,6 @@
 <b><a href="README.jp.md">日本語</a></b>
 
 
-
 # Documentation
 _Fly_ is a task automation tool, very much in the same vein of  [gulp](http://gulpjs.com/), [Grunt](http://gruntjs.com/), [etc](https://gist.github.com/callumacrae/9231589).
 
@@ -41,8 +40,9 @@ Similar to gulp, _Fly_ favors code over configuration, but aims to provide a *de
     yield this.task.deploy()
   }
   ```
++ Fly allows tasks to cascade results in a series. A task's return value will be the argument of the next task in the running sequence.
 
-* Fly lets you compose [_pipeline_](https://www.google.com/search?q=pipeline+code&espv=2&biw=1186&bih=705&source=lnms&tbm=isch&sa=X&ei=L7-SVde6JqPpmQXHyrLIBg&ved=0CAcQ_AUoAg&dpr=2#tbm=isch&q=pipeline+build+system&imgrc=923J2oOnaU_VXM%3A)-like sequences, however it's not constrained to the stream metaphor.
++ Fly lets you compose [_pipeline_](https://www.google.com/search?q=pipeline+code&espv=2&biw=1186&bih=705&source=lnms&tbm=isch&sa=X&ei=L7-SVde6JqPpmQXHyrLIBg&ved=0CAcQ_AUoAg&dpr=2#tbm=isch&q=pipeline+build+system&imgrc=923J2oOnaU_VXM%3A)-like sequences.
 
   ```js
   exports.scripts = function* () {
@@ -54,9 +54,9 @@ Similar to gulp, _Fly_ favors code over configuration, but aims to provide a *de
       .target("dist/js")
   }
   ```
-> Examples of tasks that do not fit the stream metaphor very well are code analysis, linting, testing, etc.
 
-* Fly requires at least node `>=0.11` to support [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
+
++ Fly it's not constrained to the stream metaphor. Examples of tasks that do not fit this paradigm as well as pipe transformations are code analysis, linting, testing, etc.
 
 + Creating filter / transform plugins is as simple as adding your own filter function into the pipeline via `Fly.prototype.filter`, hence plugins are often 4 or 5 LOC.
 
@@ -71,6 +71,9 @@ Similar to gulp, _Fly_ favors code over configuration, but aims to provide a *de
     /** @desc Does something. */
   }
   ```
+
++ Fly requires at least node `>=0.11` to support [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
+
 
 ## _Flyfiles_
 
@@ -170,19 +173,21 @@ You can pass a Function as the first argument, and Fly will correctly add it to 
 
 Run the specified tasks when a change is detected in any of the paths expanded from `globs`.
 
-#### `Fly.prototype.start (tasks)`
+#### `Fly.prototype.start ([tasks])`
 
-Run all tasks specified in `tasks` or the `default` / `main` if `tasks.length === 0`.
+Run all tasks specified in `tasks` or the `default` / `main` if `tasks.length === 0`. This method returns a promise which can be yielded inside any task. The return value of each task (after the first) is passed on to the next task in the series.
 
-### `source (...globs)`
+### `Fly.prototype.source (...globs)`
+
 Adds one or more read operations to the promise-pipeline.
 
 Each file is mapped to a read file promise that resolves in a recursive
-filter where each existing filter is applied and eventually yields a `{ file, data }` object.
+filter where each filter / transform is applied yielding a `{ file, data }` object.
 
 `globs` can be both comma separated or a single array of globs.
 
 #### `Fly.prototype.unwrap (promises)`
+
 Resolves an array of promises an returns a new promise with the result.
 
 This method can be used when creating plugins that need to read the source promises before the pipeline is resolved in `Fly.prototype.target`. Examples of plugins that can use this method are lint and test plugins.

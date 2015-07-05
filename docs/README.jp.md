@@ -20,13 +20,14 @@
 
 
 # Documentation
-Flyは、[gulp](http://gulpjs.com/)や[Grunt](http://gruntjs.com/)など（[etc](https://gist.github.com/callumacrae/9231589)）と似た手法でタスクを自動化するツールです。
 
-Gulpのように、Flyは設定よりもコードを優先しますが、タスクを記述し構成するための、よりシンプルで決定的な方法を提供することがねらいです。<br>
+Flyは、[gulp](http://gulpjs.com/)や[Grunt](http://gruntjs.com/) [等](https://gist.github.com/callumacrae/9231589)と似た手法でタスクを自動化するツールです。
+
+gulpのように、Flyは設定よりもコードを優先しますが、タスクを記述し構成するための、よりシンプルで決定的な方法を提供することがねらいです。<br>
 
 # 概要
 
-Flyはほかのビルドシステムによくある、[stream](https://nodejs.org/api/stream.html)がベースのインプリメンテーションを回避し、約束と[co-routines](https://github.com/tj/co)によるフロウコントロールがベースのジェネレーターを優先します。
+Flyはほかのビルドシステムによくある、[stream](https://nodejs.org/api/stream.html)ベースのインプリメンテーションを回避し、promiseと[co-routines](https://github.com/tj/co)によるフロウコントロールベースのジェネレーターを優先します。
 
 Flyは ES6で書かれていますが、モジュールは ES6で書く必要はありません。<br>
 Flyは[pipeline](https://www.google.co.jp/search?q=pipeline+code&espv=2&biw=1186&bih=705&source=lnms&tbm=isch&sa=X&ei=L7-SVde6JqPpmQXHyrLIBg&ved=0CAcQ_AUoAg&dpr=2&gws_rd=cr#tbm=isch&q=pipeline+build+system&imgrc=923J2oOnaU_VXM%3A)の順序で構成するものですが、streamを強制するものではありません。
@@ -44,30 +45,32 @@ exports.scripts = function* () {
 ```
 *streamにあまり当てはまらないタスクの例は、コード分析、ユニットテスト、リンティング(静的コードチェック)など。*
 
-・Flyは[generator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*)と[promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) supportの為に少なくともNode 0.11 以上が必要です。
++ Flyは[generator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*)と[promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) supportの為に、少なくともNode 0.11 以上が必要です。
 
-・フィルタ系プラグインを作成する際には、`Fly.prototype.filter`を使いながら、パイプラインに簡単に自分のトランスフォーム関数をつなぐことができます。
++ フィルタ系プラグインを作成する際には、`Fly.prototype.filter`を使いながら、パイプラインに簡単に自分のトランスフォーム関数をつなぐことができます。
 
-・Asyncのサブプロセスはbuilt-in methodに
++ Asyncのサブプロセスはbuilt-in methodに
 `Fly.prototype.defer`を使うと、promiseに自動的に送ることができます。
 
-・タスクはgenerator functionsで記述されており、promiseを返すオペレーションは[yield](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield)で作成されています。
++ タスクはgenerator functionsで記述されており、promiseを返すオペレーションは[yield](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield)で作成されています。
 
 ```js
 exports.task = function* () {
   yield this.task.deploy()
 }
 ```
-・Pluginsは自動的に要求され、タスクの`node_modules` directoryにあるものや、
-リストされている`package.json` dependencies, devDependencies,など）の中の`this.pluginName`を使用することができます。
 
-・JSDoc syntax `/** @desc description */`を使ってタスク記述を追加することができる。
++ Pluginsは自動的に要求され、タスクの中で、`this.pluginName`のような形で作動する。その際は`node_modules` 、`package.json` の設定が必要です。
 
-```
-exports.task = function* () {
-  /** @desc Does something. */
-}
-```
++ `npm i fly-*`をするだけで、Flyが実行する時に、求められたプラグインを使うことができます。
+
++ JSDoc syntax `/** @desc description */`を使ってタスク記述を追加することができる。
+
+	```js
+	exports.task = function* () {
+	  /** @desc Does something. */
+	}
+	```
 
 #Flyfiles
 
@@ -79,7 +82,8 @@ exports.myTask = function* () {
   yield this.source("a").target("b")
 }
 ```
-Flyfileのサンプルは、 `examples/` を参照にしてください。
+
+Flyfileのサンプルは、`examples/` を参照にしてください。
 
 #CLI
 Flyをインストールすると、ターミナルで `fly [options] [tasks]` を使ってCLIにアクセスすることができます。
@@ -88,62 +92,89 @@ Flyをインストールすると、ターミナルで `fly [options] [tasks]` �
 fly task1 task2 ...
 ```
 
-Flyは現在以下のflagsをサポートしています。
+Flyの現在のサポートは以下の通りです。
 
-###`-h --help`
+### `-h --help`
 
 helpを表示します。
 
-###`-f --file` `<path>`
+### `-f --file` `<path>`
 
 Flyfileを交互に使用します。
 
-```fly -f examples/```
+`fly -f examples/`
 
-もしくは、
+もしくは、`fly -f path/to/Flyfile`
 
-```fly -f path/to/Flyfile```
-
-###`-l --list``[=simple]`
+### `-l --list``[=simple]`
 
 使用可能なタスクを表示します。タスクをクリーンに見るには`--list=simple` を使用します。
 
->shell completionsを書くときに便利です。
+> shell completionsを書くときに便利です。
 
-###`-v --version`
+### `-v --version`
 
 Flyfileがあれば、version numberを表示します。
 
 
-#API
+# API
 
-Flyはビルトインタスク、`clear`、`concat` 、 `filter`のように、クリエイティブに、実際に操作できる多くのメソッドを提供します。
+Flyはビルトインタスク`clear`、`concat`、`filter`のように、クリエイティブに、実際に操作できる多くのメソッドを提供します。
 
 
-###`Fly.prototype.constructor`
+### `Fly.prototype.constructor`
 
-新しいFlyの事例を作ります。
+新しいFlyのインスタンスを作ります。
 
-###Options
+### Options
 
-###・`host`
-
+##### `host`
 
 ロードされた*Flyfile*。
 
-###・`root`
+##### `root`
 
-base path / rootの比較。
+関連性のあるbase path / rootの比較。
 
-###・`plugins`
+##### `plugins`
 
 ロードするpluginのリスト。
 
-###`Fly.prototype.log (...args)`
+### `Fly.prototype.log (...args)`
 
 timestampを使ってメッセージをログします。
 
-###`Fly.prototype.reset ()`
+### `Fly.prototype.concat (name)`
+
+`Fly.prototype.source`を使ってファイルを連結します。
+
+### `Fly.prototype.filter (name, filter)`
+
+sync filterを追加、promise-pipelineに変換します。
+async filtersの為には、`Fly.prototype.defer` もしくは自身で関数を用いて、ファンクションをpromiseに変える必要があります。
+
+まず、ファンクションを通過することができ、そしてFlyはそれを正確に
+フィルターコレクションに追加します。
+
+### `Fly.prototype.watch ([globs], [tasks])`
+
+`glob`から拡張された行程で変更が検出された時、指定のタスクを動します。
+
+### `Fly.prototype.start (tasks)`
+
+もし`tasks.length === 0`ならば`tasks` もしくは`default` / `main` 内で指定された全てのタスクを作動させます。
+
+### `Fly.prototype.source (...globs)`
+
+1つもしくはそれ以上のオペレーションを、promise-pipelineへ追加します。
+
+それぞれのファイルは、再帰フィルターで解決されるpromiseへと誘導されている。各再帰フィルターは応用され、その後`{ file, data }` オブジェクトを作り出す。
+`globs`は分割されたふたつのコンマ、もしくは行となります。
+
+`globs` はは分割されたふたつのコンマ、もしくはglobsの一行となります。
+
+
+### `Fly.prototype.reset ()`
 
 Fly instanceの内部ステートをリセットします。
 
@@ -163,47 +194,28 @@ sync filterを追加する。promise-pipelineに変えます。<br>
 async filtersは、`Fly.prototype.defer` を例のように使ってfunctionをpromiseへwrapする必要があります。
 
 
-###`Fly.prototype.watch ([globs], [tasks])`
-
-`glob`から拡張された行程で変更が検出された時、指定のタスクを動します。
-
-###`Fly.prototype.start (tasks = [])`
+### `Fly.prototype.start (tasks = [])`
 
 指定された全てのタスク、`tasks` 、`the default`、`tasks.length === 0`を実行します。
 
-###`source (...globs)`
 
-1つもしくはそれ以上のオペレーションを、promise-pipelineへ追加します。
-
-それぞれのファイルは解決されているread file　promiseへ示されてします。
-
-
-` { file, data } `
-
-sourcesファイルはIOプロミスになり、プロミスシークエンスが解かれる際に、一個づつ現在のフィルターに実行されます。最後に、`{ field, data }`のオブジェクトがyieldされます.
-`globs` はは分割されたふたつのコンマ、もしくはglobsの一行となります。
-
-###`Fly.prototype.unwrap (source = this._src)`
+### `Fly.prototype.unwrap (promises)`
 
 promiseの配列の解決は結果をもって新しいpromiseに戻ります。
-
 このメソッドはpluginを作るときにも使えます。
+このメソッドは、プロミスソースが`Fly.prototype.target`で解かれる前に読みこむ事が必要なプラグインを作成する際に、使うことができます。例えばコード分析やlintingやtesting等です。
 
 
-このメソッドは、プロミスソースが`Fly.prototype.target`で解かれる前に読みこむ事が必要なプラグインを作成する際に、使うことができます。
-例えばコード分析やlintingやtesting等。
-
-
-###`Fly.prototype.target (...dest)`
+### `Fly.prototype.target (...dest)`
 
 すべてのsource promisesの解決し、それぞれの進路の到着点を書きます。
-`dest` は分割されたふたつのコンマ、もしくは進路の到着点の一行となります。
+`dest` は分割されたふたつのコンマ、もしくは進路の到着点の行となります。
 
-# Plugins
+# プラグイン
 
->pluginのリストのために[wiki](https://github.com/flyjs/fly/wiki)を見る、もしくは新しい[packages](https://www.npmjs.com/search?q=fly-)のためにレジストリを探す。
+> pluginのリストのために[wiki](https://github.com/flyjs/fly/wiki)を見る、もしくは新しい[packages](https://www.npmjs.com/search?q=fly-)のためにレジストリを探す。
 
->この [gist](https://gist.github.com/bucaran/f018ade8dee8ae189407) はFly pluginsのREADMEテンプレートです。
+> この [gist](https://gist.github.com/bucaran/f018ade8dee8ae189407) はFly pluginsのREADMEテンプレートです。
 
 
 Pluginはひとつのデフォルトメソッドを出力する定例のnodeモジュールです。このメソッドは新しいFlyの実例が作られた時、自動的に作動します。
@@ -218,10 +230,10 @@ module.exports = function () {
 ```
 
 
->もしメソッドが`source..target`pipeline (上記の例, すでに返っている`Fly.prototype.filter` ）でコンポーズされるべき場合、このように返ることを確実にします。
+> もしメソッドが`source..target`pipeline (上記の例, すでに返っている`Fly.prototype.filter` ）でコンポーズされるべき場合、このように返ることを確実にします。
 
 
-もしメソッドがタスクの中で*yielded* されるべきならば、promiseを返す必要があります。
+もしメソッドがタスクの中で *yield* されるべきならば、promiseを返す必要があります。
 
 
 ```js
