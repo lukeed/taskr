@@ -140,7 +140,7 @@ Display available tasks. Use `--list=simple` to get a clean print of the tasks.
 
 Display the version number.
 
-## API
+## API [![][codeclimate-badge]][codeclimate]
 
 Fly exposes a number of methods that let you create and manipulate Fly instances, as well as built-in tasks such as `clear`, `concat` and `filter`.
 
@@ -226,3 +226,6 @@ module.exports = function () {
   }
 }
 ```
+
+[codeclimate-badge]: https://codeclimate.com/github/flyjs/fly/badges/gpa.svg
+[codeclimate]: https://codeclimate.com/github/flyjs/fly

@@ -1,9 +1,11 @@
 > New Generation Build System
 
 [![][fly-badge]][fly]
+[![npm package][npm-ver-link]][fly]
 [![][dl-badge]][npm-pkg-link]
 [![][TravisLogo]][Travis]
 ![][mit-badge]
+
 
 <p align="center">
   <a href="http://github.com/flyjs/fly">
@@ -82,8 +84,6 @@ Contributions are _absolutely_ welcome. Check out our [contribution guide](/CONT
 
 [MIT](http://opensource.org/licenses/MIT) © [Jorge Bucaran][Author] et [al](https://github.com/flyjs/fly/graphs/contributors)
 
-[![][codeclimate-badge]][codeclimate]
-
 
 [author]: http://about.bucaran.me
 
@@ -94,10 +94,9 @@ Contributions are _absolutely_ welcome. Check out our [contribution guide](/CONT
 
 [npm-pkg-link]: https://www.npmjs.org/package/fly
 
+[npm-ver-link]: https://img.shields.io/npm/v/fly.svg?style=flat-square
+
 [dl-badge]: http://img.shields.io/npm/dm/fly.svg?style=flat-square
 
 [TravisLogo]: http://img.shields.io/travis/flyjs/fly.svg?style=flat-square
 [Travis]: https://travis-ci.org/flyjs/fly
-
-[codeclimate-badge]: https://codeclimate.com/github/flyjs/fly/badges/gpa.svg
-[codeclimate]: https://codeclimate.com/github/flyjs/fly
