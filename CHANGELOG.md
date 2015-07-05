@@ -5,6 +5,8 @@
 </div>
 
 # Changelog
++ [v0.1.7](#v0.1.7)
+  + [Cascading Tasks](cascading-tasks)
 + [v0.1.6](#v0.1.6)
 + [v0.1.5](#v0.1.5)
 + [v0.1.4](#v0.1.4)
@@ -16,6 +18,47 @@
   + [Plugins API update](plugins-api-update)
   + [`watch` API update](watch-api-update)
 + [v0.0.1](#0.0.1)
+
+## v0.1.7
+
++ __Important__: Default tasks named as `main` will be __deprecated__ in `0.2.0`. Please update your code accordingly. (This "feature" was originally introduced in `v0.1.0`)
+
+### Cascading Tasks
+> Inpired by Koa.js [cascading middleware](http://koajs.com/#cascading).
+
++ Now it's possible to return a value from a task and receive it in the task executing right after. This opens the door to other ways for tasks to interact with each other.
+
+This change is possible without breaking the API and easily by making `Fly.prototype.start([tasks])` return a promise. Up until now `start` was used in by the CLI engine in `/index.js` and by `Fly.prototype.watch()` to run tasks without checking on the return value.
+
+This change also fixes a bug that was causing the reporter to incorrectly display the `default` task as _finished_ before time sometimes.
+
+Basically it works as follows:
+
+```js
+export function* first () {
+  return { secret: 42 }
+}
+
+export function* second ({ secret }) {
+  this.log(`The secret is ${secret}`)
+}
+
+export default function* () {
+  yield this.start(["first", "second"])
+}
+```
+
+See `examples/Flyfile-Start.babel.js`.
+
+
++ Code refactoring and comments improvement in `fly.js`, `index.js`, `util.js`
+  + The `co`-routine used in the CLI is no longer required in `bin/index.js` and this it is now encapsulated in `index.js`
+
++ Now `util` just exports `console.log.bind(console)` and `console.error.bind(console)`, this may change in the future if Fly needs to provide a different low level logging mechanism.
+
++ Updated documentation in English and 日本語.
+
++ Earl Gray's dependencies were removed. Please `npm i earlgrey earlgrey-runtime` if you are writing Flyfiles in [Earl Gray](https://github.com/breuleux/earl-grey).
 
 ## v0.1.6
 
@@ -58,6 +101,7 @@ require(modules[0].module
 ## v0.1.3
 
 + Revise CLI engine, minor refactoring.
+
 + Fixed critical bug in `util.plugins` where CLI engine was failing to load if there were no listed plugins.
 
 ## v0.1.2
@@ -73,7 +117,6 @@ require(modules[0].module
   > This should be useful during development. In the future advanced error tracing should be configurable via `process.env.DEVELOPMENT `.
 
   <img width=600px src="https://cloud.githubusercontent.com/assets/8317250/8506916/db8b2eaa-2266-11e5-8395-74ba0c63da24.png">
-
 
 + Add consistent support for multiple Node versions.
 
@@ -156,4 +199,6 @@ Before you had to use `fly -f path/to/file` in order to run a specific Flyfile. 
 
 ## v0.0.1
 
-+ Fly initial commit
++ Fly initial commit.
+
++ Commits between `0.0.1` and `0.0.4` consisted of adding comments, creating the CHANGELOG, adding examples, and other refactorings. Refer to [this issue](https://github.com/flyjs/fly/issues/12) regarding the jump from `0.5.0` to `0.1.0`.
