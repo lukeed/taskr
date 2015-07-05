@@ -5,6 +5,7 @@
 </div>
 
 # Changelog
++ [v0.1.6](#v0.1.6)
 + [v0.1.5](#v0.1.5)
 + [v0.1.4](#v0.1.4)
 + [v0.1.3](#v0.1.3)
@@ -15,6 +16,26 @@
   + [Plugins API update](plugins-api-update)
   + [`watch` API update](watch-api-update)
 + [v0.0.1](#0.0.1)
+
+## v0.1.6
+
++ Fly now uses your module _actual_ default export as its `default` task. Before you needed to name your task `default` explicitly which is fine the CommonJS syntax:
+
+```js
+exports.default = function* () {}
+```
+
+But was problematic in the ES6~ syntax since `default` is a reserved word in JavaScript. Now it's _also_ possible to do:
+
+```js
+module.exports = function* () {}
+```
+
+Which is specially useful if you write your Flyfiles in the ES6/7 syntax:
+
+```js
+export default function* () {}
+```
 
 ## v0.1.5
 
