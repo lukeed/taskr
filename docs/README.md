@@ -41,19 +41,19 @@ Similar to gulp, _Fly_ favors code over configuration, but aims to provide a *de
   ```
 + Fly allows tasks to cascade results in a series. A task's return value will be the argument of the next task in a running sequence.
 
-```js
-export function* first () {
-  return { secret: 42 }
-}
+  ```js
+  export default function* () {
+    yield this.start(["first", "second"])
+  }
+  
+  export function* first () {
+    return { secret: 42 }
+  }
 
-export function* second ({ secret }) {
-  this.log(`The secret is ${secret}`)
-}
-
-export default function* () {
-  yield this.start(["first", "second"])
-}
-```
+  export function* second ({ secret }) {
+    this.log(`The secret is ${secret}`)
+  }
+  ```
 
 + Fly lets you compose [_pipeline_](https://www.google.com/search?q=pipeline+code&espv=2&biw=1186&bih=705&source=lnms&tbm=isch&sa=X&ei=L7-SVde6JqPpmQXHyrLIBg&ved=0CAcQ_AUoAg&dpr=2#tbm=isch&q=pipeline+build+system&imgrc=923J2oOnaU_VXM%3A)-like sequences.
 
