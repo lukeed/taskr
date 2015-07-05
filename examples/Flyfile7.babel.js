@@ -2,7 +2,7 @@ export async function log () {
   this.log("Yay!")
 }
 
-export default async function main () {
+export default async function () {
   await this.clear("coffee/dist")
   this.watch(
     ["babel/src/*.js", "map/src/*", "coffee/src/**/*.coffee"],

@@ -1,4 +1,4 @@
-exports.main = ->
+exports.default = ->
   yield @clear "coffee/dist"
   @watch(
     ["babel/src/*.js", "map/src/*", "coffee/src/**/*.coffee"],
