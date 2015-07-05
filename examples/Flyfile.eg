@@ -1,6 +1,8 @@
-paths = {scripts = {
-   "earl/src/**/*.eg"
-}}
+paths = {
+   scripts = {
+      "earl/src/**/*.eg"
+   }
+}
 
 provide: main, clear, scripts
 

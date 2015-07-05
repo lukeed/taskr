@@ -2,7 +2,7 @@ export function* log () {
   this.log("Yay!")
 }
 
-export function* main () {
+export default function* () {
   this.watch(
     ["babel/src/*.js", "map/src/*", "coffee/src/**/*.coffee"],
     ["lint", "test", "clear", "grind", "map", "babel"])
