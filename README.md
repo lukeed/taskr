@@ -36,11 +36,13 @@
 
 ## About
 
-_Fly_ is a [build system](https://en.wikipedia.org/wiki/Build_automation) for [Node](https://nodejs.org/) based in [_co_-routines](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127), [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that aims to be simple and elegant to write.
+_Fly_ is a modern [build system](https://en.wikipedia.org/wiki/Build_automation) for [Node](https://nodejs.org/) based in [_co_-routines](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127), [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that aims to be simple and elegant to write.
 
-See [why fly ?](https://github.com/flyjs/fly/issues/3) is not *yet another build system*.
+Fly features [robust error handling](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127), [callback _heaven_](http://jakearchibald.com/2014/es7-async-functions/), [cascading tasks](https://github.com/flyjs/fly/blob/master/CHANGELOG.md#cascading-tasks) and a simple, yet flexible [API](https://github.com/flyjs/fly/blob/master/docs/README.md#api).
 
-See the [Documentation](/docs/README.md) to learn more about how to use Fly and write your own [plugins](/docs/README.md#plugins).
+Read our rationale [here](https://github.com/flyjs/fly/issues/3).
+
+See the [documentation](/docs/README.md) to learn more about how to use Fly and write your own [plugins](/docs/README.md#plugins).
 
 ## Usage
 ### Install
@@ -77,15 +79,15 @@ export function* scripts () {
 
 Contributions are _absolutely_ welcome. Check out our [contribution guide](/CONTRIBUTING.md).
 
-# Roadmap ✈
+# Roadmap :tram:
 
 + Proper testing.
-+ Optimize stream operations using [CSP channels](https://en.wikipedia.org/wiki/Communicating_sequential_processes).
++ Optimize stream operations via [CSP channels](https://en.wikipedia.org/wiki/Communicating_sequential_processes).
 
 # License
 
 [MIT](http://opensource.org/licenses/MIT) © [Jorge Bucaran][Author] et [al](https://github.com/flyjs/fly/graphs/contributors)
-
+:heart:
 
 [author]: http://about.bucaran.me
 

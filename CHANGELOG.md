@@ -6,7 +6,7 @@
 
 # Changelog
 + [v0.1.7](#v0.1.7)
-  + [Cascading Tasks](cascading-tasks)
+  + [Cascading Tasks](#cascading-tasks)
 + [v0.1.6](#v0.1.6)
 + [v0.1.5](#v0.1.5)
 + [v0.1.4](#v0.1.4)
@@ -14,9 +14,9 @@
 + [v0.1.2](#v0.1.2)
 + [v0.1.1](#v0.1.1)
 + [v0.1.0](#v0.1.0)
-  + [Multi-Flyfile Support](multi-flyfile-support)
-  + [Plugins API update](plugins-api-update)
-  + [`watch` API update](watch-api-update)
+  + [Multi-Flyfile Support](#multi-flyfile-support)
+  + [Plugins API update](#plugins-api-update)
+  + [`watch` API update](#watch-api-update)
 + [v0.0.1](#0.0.1)
 
 ## v0.1.7
