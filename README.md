@@ -38,6 +38,8 @@
 
 _Fly_ is a [build system](https://en.wikipedia.org/wiki/Build_automation) for [Node](https://nodejs.org/) based in [_co_-routines](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127), [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that aims to be simple and elegant to write.
 
+See [why fly ?](https://github.com/flyjs/fly/issues/3) is not *yet another build system*.
+
 See the [Documentation](/docs/README.md) to learn more about how to use Fly and write your own [plugins](/docs/README.md#plugins).
 
 ## Usage
