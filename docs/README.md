@@ -45,7 +45,7 @@ Similar to gulp, _Fly_ favors code over configuration, but aims to provide a *de
   export default function* () {
     yield this.start(["first", "second"])
   }
-  
+
   export function* first () {
     return { secret: 42 }
   }
@@ -153,7 +153,8 @@ Display available tasks. Use `--list=simple` to get a clean print of the tasks.
 
 Display the version number.
 
-## API [![][codeclimate-badge]][codeclimate]
+## API
+[![][codeclimate-badge]][codeclimate]
 
 Fly exposes a number of methods that let you create and manipulate Fly instances, as well as built-in tasks such as `clear`, `concat` and `filter`.
 
@@ -215,7 +216,7 @@ Resolves all source promises and writes to each of the destination paths.
 
 > See the [Wiki](https://github.com/flyjs/fly/wiki) for the list of plugins. Or search the registry for new [packages](https://www.npmjs.com/search?q=fly-).
 
-> See [this gist](https://gist.github.com/bucaran/f018ade8dee8ae189407) for a README template for Fly plugins.
+> Please Use our [generator](https://github.com/flyjs/generator-fly) to scaffold new plugins.
 
 Plugins are regular node modules that export a single default method. This method is automatically run when a new Fly instance is created.
 
