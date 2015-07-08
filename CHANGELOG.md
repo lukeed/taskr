@@ -6,6 +6,7 @@
 
 # Changelog
 
++ [v0.1.9](#v0.1.9)
 + [v0.1.8](#v0.1.8)
 + [v0.1.7](#v0.1.7)
   + [Cascading Tasks](#cascading-tasks)
@@ -20,6 +21,10 @@
   + [Plugins API update](#plugins-api-update)
   + [`watch` API update](#watch-api-update)
 + [v0.0.1](#0.0.1)
+
+## v0.1.9
+
++ Improve deploy script to add pushing to the origin as well.
 
 ## v0.1.8
 
