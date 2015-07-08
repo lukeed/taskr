@@ -33,11 +33,12 @@
     "tape": "^4.0.0"
   },
   "scripts": {
-    "setup": "npm install && npm run build",
-    "build": "npm test && babel --optional runtime src/ -d ./dist",
+    "lint": "eslint src/**/*.js",
     "tape": "tape test/*.js",
     "test": "npm run lint && npm run tape | tspec",
-    "lint": "eslint src/**/*.js"
+    "build": "npm test && babel --modules common --optional runtime src/ -d ./dist",
+    "setup": "npm install && npm run build",
+    "deploy": "npm run build && npm publish"
   },
   "repository": {
     "type": "git",
