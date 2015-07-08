@@ -12,6 +12,6 @@ export function* main () {
     .source(paths.src).eslint()
   yield this
     .source(paths.src)
-    .babel({ optional: ["runtime"] })
+    .babel({ optional: ["runtime"], modules: "common" })
     .target(paths.dist)
 }
