@@ -5,6 +5,8 @@
 </div>
 
 # Changelog
+
++ [v0.1.8](#v0.1.8)
 + [v0.1.7](#v0.1.7)
   + [Cascading Tasks](#cascading-tasks)
 + [v0.1.6](#v0.1.6)
@@ -18,6 +20,12 @@
   + [Plugins API update](#plugins-api-update)
   + [`watch` API update](#watch-api-update)
 + [v0.0.1](#0.0.1)
+
+## v0.1.8
+
++ Bugfix: Fly was not correctly transpiling ES6/ES7 Flyfiles using the `export` keyword in new installations. The cause was the npm build script was missing the  `--modules common` flag.
+
++ Add deploy script to `package.json` to simplify publishing to the registry. Make sure to bump Fly's version (`npm version *.*.*`) before running `npm run deploy`.
 
 ## v0.1.7
 
