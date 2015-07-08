@@ -6,21 +6,29 @@
 
 # Changelog
 
-+ [v0.1.9](#v0.1.9)
-+ [v0.1.8](#v0.1.8)
-+ [v0.1.7](#v0.1.7)
+
++ [v0.1.10](#v0110)
++ [v0.1.9](#v019)
++ [v0.1.8](#v018)
++ [v0.1.7](#v017)
   + [Cascading Tasks](#cascading-tasks)
-+ [v0.1.6](#v0.1.6)
-+ [v0.1.5](#v0.1.5)
-+ [v0.1.4](#v0.1.4)
-+ [v0.1.3](#v0.1.3)
-+ [v0.1.2](#v0.1.2)
-+ [v0.1.1](#v0.1.1)
-+ [v0.1.0](#v0.1.0)
++ [v0.1.6](#v016)
++ [v0.1.5](#v015)
++ [v0.1.4](#v014)
++ [v0.1.3](#v013)
++ [v0.1.2](#v012)
++ [v0.1.1](#v011)
++ [v0.1.0](#v010)
   + [Multi-Flyfile Support](#multi-flyfile-support)
   + [Plugins API update](#plugins-api-update)
   + [`watch` API update](#watch-api-update)
-+ [v0.0.1](#0.0.1)
++ [v0.0.1](#001)
+
+## v0.1.10
+
++ Bugfix: Same bug as [v0.1.8](#v018), but this is correctly fixed by adding `babel-core` to dependencies. `babel` is still kept in `devDependencies` as you will need it to compile Fly during development.
+
++ Fix links in `CHANGELOG.md` versions.
 
 ## v0.1.9
 
