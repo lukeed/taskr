@@ -7,6 +7,7 @@
 # Changelog
 
 
++ [v0.1.11](#v0111)
 + [v0.1.10](#v0110)
 + [v0.1.9](#v019)
 + [v0.1.8](#v018)
@@ -23,6 +24,10 @@
   + [Plugins API update](#plugins-api-update)
   + [`watch` API update](#watch-api-update)
 + [v0.0.1](#001)
+
+## v0.1.10
+
++ Bump interpret version with correct support for Earl Gray.
 
 ## v0.1.10
 
