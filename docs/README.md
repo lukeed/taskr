@@ -16,7 +16,7 @@
 |
 <b><a href="#plugins-1">Plugins</a></b>
 |
-<b><a href="README.jp.md">日本語</a></b>
+<b><a href="README.ja.md">日本語</a></b>
 
 
 # Documentation
