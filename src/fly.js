@@ -72,7 +72,7 @@ export default class Fly extends Emitter {
    *   {Function} filter function.
    * @param [{Function}] filter function.
    */
-  filter (name, filter, ext = "") {
+  filter (name, filter, { ext = "" } = {}) {
     if (name instanceof Function) {
       this.filter({ filter: name })
     } else if (typeof name === "object") {
