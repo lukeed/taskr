@@ -180,7 +180,10 @@ var Fly = (function (_Emitter) {
     value: function filter(name, _filter) {
       var _this2 = this;
 
-      var ext = arguments[2] === undefined ? "" : arguments[2];
+      var _ref3 = arguments[2] === undefined ? {} : arguments[2];
+
+      var _ref3$ext = _ref3.ext;
+      var ext = _ref3$ext === undefined ? "" : _ref3$ext;
 
       if (name instanceof Function) {
         this.filter({ filter: name });
@@ -361,8 +364,8 @@ var Fly = (function (_Emitter) {
      * @param {Boolean} apply filters to each glob pattern in parallel
      */
     value: _regeneratorRuntime.mark(function target(dest) {
-      var _ref3,
-          _ref3$parallel,
+      var _ref4,
+          _ref4$parallel,
           parallel,
           go,
           _iteratorNormalCompletion4,
@@ -378,9 +381,9 @@ var Fly = (function (_Emitter) {
 
         while (1) switch (context$2$0.prev = context$2$0.next) {
           case 0:
-            _ref3 = args$2$0[1] === undefined ? {} : args$2$0[1];
-            _ref3$parallel = _ref3.parallel;
-            parallel = _ref3$parallel === undefined ? false : _ref3$parallel;
+            _ref4 = args$2$0[1] === undefined ? {} : args$2$0[1];
+            _ref4$parallel = _ref4.parallel;
+            parallel = _ref4$parallel === undefined ? false : _ref4$parallel;
 
             go = function go(glob, dest) {
               var base = (function (_) {
@@ -435,9 +438,9 @@ var Fly = (function (_Emitter) {
                                               })((0, _path.parse)(file));
 
                                               if (!this._writers.length) {
-                                                this.write(_regeneratorRuntime.mark(function callee$7$0(_ref4) {
-                                                  var target = _ref4.target;
-                                                  var source = _ref4.source;
+                                                this.write(_regeneratorRuntime.mark(function callee$7$0(_ref5) {
+                                                  var target = _ref5.target;
+                                                  var source = _ref5.source;
                                                   return _regeneratorRuntime.wrap(function callee$7$0$(context$8$0) {
                                                     while (1) switch (context$8$0.prev = context$8$0.next) {
                                                       case 0:
