@@ -1,7 +1,6 @@
 import fmt from "./fmt"
-import { log } from "./util"
+import { log } from "fly-util"
 
-/** @desc Bound to an emitter (fly) object observing triggered events */
 export default function () {
   this.on("fly_run", ({ path }) =>
     log(`[${fmt.time}] Flying with ${fmt.path}...`, path))
