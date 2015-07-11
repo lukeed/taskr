@@ -6,7 +6,8 @@
 
 # Changelog
 
-
++ [v0.2.0](#v020)
+  + [Async Transformers](#async-transformers)
 + [v0.1.11](#v0111)
 + [v0.1.10](#v0110)
 + [v0.1.9](#v019)
@@ -25,9 +26,61 @@
   + [`watch` API update](#watch-api-update)
 + [v0.0.1](#001)
 
+## v0.2.0
+
+### Async Transformers
+
++ This version introduces direct API support to work with async transformers. For example, if you have a filter such as `myFilter(source, cb)`, where `cb` is a callback run by `myFilter` when it's finished transforming the source, you can plug this functionality into Fly as follows:
+
+```js
+this.filter("myPlugin", (source, options) => {
+  return this.defer(myFilter).call(this, source, options)
+  //or→ return this.defer(myFilter)(source, options)
+})
+```
+
+If you need more advanced error handling you can return a promise yourself:
+
+```js
+this.filter("myPlugin", function (source, options) {
+  return new Promise((resolve, reject) => {
+    myFilter(source, function (data, error) {
+      // advanced error handling
+      else resolve(data)
+    })
+  })
+})
+```
+
+Before this landed only sync transformers were supported by plugins.
+
++ Now plugins can specify the file extension transformed files should have.
+
+```js
+this.filter("myFilter", (source, options) => {}, {
+  extension: ".html"
+})
+```
+
++ Fix a bug in the `npm` scripts that was causing the build to fail due to the tests not being able to find the `dist/` directory. Now `npm run build` only compiles the project.
+
++ Default tasks named `main` will no longer work as the _default_ task, please rename to `default` or export a default task.
+
+ES5
+```js
+module.exports = function* () { ... }
+```
+
+ES6~
+```js
+export default function* () { ... }
+```
+
++ We are now back to using `co` at the CLI bootstraper `bin/index.js` and having `src/index.js` simply export a generator.
+
 ## v0.1.10
 
-+ Bump interpret version with correct support for Earl Gray.
++ Bump interpret version with correct support for Earl Grey.
 
 ## v0.1.10
 
