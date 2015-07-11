@@ -36,7 +36,7 @@
 
 ## About
 
-_Fly_ is a modern [build system](https://en.wikipedia.org/wiki/Build_automation) for [Node](https://nodejs.org/) based in [_co_-routines](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127), [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that aims to be simple and elegant to write.
+_Fly_ is a modern [build system](https://en.wikipedia.org/wiki/Build_automation) for [Node](https://nodejs.org/) based in [_co_-routines](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127), [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
 
 Fly features [robust error handling](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127), [callback _heaven_](http://jakearchibald.com/2014/es7-async-functions/), [cascading tasks](https://github.com/flyjs/fly/blob/master/CHANGELOG.md#cascading-tasks) and a simple, yet flexible [API](https://github.com/flyjs/fly/blob/master/docs/README.md#api).
 
@@ -86,21 +86,16 @@ Contributions are _absolutely_ welcome. Check out our [contribution guide](/CONT
 
 # License
 
-[MIT](http://opensource.org/licenses/MIT) © [Jorge Bucaran][Author] et [al](https://github.com/flyjs/fly/graphs/contributors)
+[MIT](http://opensource.org/licenses/MIT) © [Jorge Bucaran][Author] et [al][contributors]
 :heart:
 
 [author]: http://about.bucaran.me
-
 [fly]: https://www.github.com/flyjs/fly
-
 [fly-badge]: https://img.shields.io/badge/fly-JS-05B3E1.svg?style=flat-square
 [mit-badge]: https://img.shields.io/badge/license-MIT-444444.svg?style=flat-square
-
 [npm-pkg-link]: https://www.npmjs.org/package/fly
-
 [npm-ver-link]: https://img.shields.io/npm/v/fly.svg?style=flat-square
-
 [dl-badge]: http://img.shields.io/npm/dm/fly.svg?style=flat-square
-
 [TravisLogo]: http://img.shields.io/travis/flyjs/fly.svg?style=flat-square
 [Travis]: https://travis-ci.org/flyjs/fly
+[contributors]: https://github.com/flyjs/fly/graphs/contributors
