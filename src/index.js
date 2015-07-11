@@ -1,9 +1,10 @@
 import Parsec from "parsec"
-import { notifyUpdates as notify, findFlypath as find } from "./util"
+import { notifyUpdates, findFlypath as find } from "fly-util"
 import reporter from "./reporter"
 import cli from "./cli/"
 import pkg from "../package"
-import go from "co"
+
+notifyUpdates({ pkg })
 
 let { help, list, file, version, _: tasks } =
   Parsec.parse(process.argv)
@@ -12,9 +13,7 @@ let { help, list, file, version, _: tasks } =
     .options("help")
     .options("version")
 
-notify({ pkg })
-
-export default go(function* () {
+export default function* () {
   if (help) {
     cli.help()
   } else if (version) {
@@ -30,4 +29,4 @@ export default go(function* () {
         .start(tasks)
     }
   }
-})
+}
