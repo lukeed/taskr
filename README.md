@@ -36,11 +36,9 @@
 
 ## About
 
-_Fly_ is a modern [build system](https://en.wikipedia.org/wiki/Build_automation) for [Node](https://nodejs.org/) based in [_co_-routines](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127), [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
+_Fly_ is a modern [build system](https://en.wikipedia.org/wiki/Build_automation) for [Node](https://nodejs.org/) based in [_co_-routines](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127), [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise). See [why](https://github.com/flyjs/fly/issues/3) _Fly_ is good.
 
-Fly features [robust error handling](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127), [callback _heaven_](http://jakearchibald.com/2014/es7-async-functions/), [cascading tasks](https://github.com/flyjs/fly/blob/master/CHANGELOG.md#cascading-tasks) and a simple, yet flexible [API](https://github.com/flyjs/fly/blob/master/docs/README.md#api).
-
-Read our rationale [here](https://github.com/flyjs/fly/issues/3).
+_Fly_ has [robust error handling](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127), [callback _heaven_](http://jakearchibald.com/2014/es7-async-functions/), [cascading tasks](https://github.com/flyjs/fly/blob/master/CHANGELOG.md#cascading-tasks), [parallel execution](https://github.com/flyjs/fly/blob/master/docs/README.md#features) and a simple [API](https://github.com/flyjs/fly/blob/master/docs/README.md#api).
 
 See the [documentation](/docs/README.md) to learn more about how to use Fly and write your own [plugins](/docs/README.md#plugins).
 
@@ -82,7 +80,7 @@ Contributions are _absolutely_ welcome. Check out our [contribution guide](/CONT
 # Roadmap :tram:
 
 + Proper testing.
-+ Optimize stream operations via [CSP channels](https://en.wikipedia.org/wiki/Communicating_sequential_processes).
++ Optimize streamy operations via [CSP channels](https://en.wikipedia.org/wiki/Communicating_sequential_processes).
 
 # License
 
