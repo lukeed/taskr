@@ -1,5 +1,5 @@
 import fmt from "../fmt"
-import { log } from "../util"
+import { log } from "fly-util"
 
 /**
   List all tasks available in the flyfile
