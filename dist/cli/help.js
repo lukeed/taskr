@@ -10,10 +10,10 @@ var _fmt = require("../fmt");
 
 var _fmt2 = _interopRequireDefault(_fmt);
 
-var _util = require("../util");
+var _flyUtil = require("fly-util");
 
 exports["default"] = function () {
-  (0, _util.log)("\nUsage\n  fly [options] [tasks]\n\nOptions\n  -h  --help      Display this help.\n  -f  --file      Use an alternate Flyfile.\n  -l  --list      Display available tasks.\n  -v  --version   Display version.\n  ".replace(/(\s--)(.*?)\s/g, "" + _fmt2["default"].dim.bold("$1") + _fmt2["default"].bold("$2")).replace(/(-)(.\s)/g, "" + _fmt2["default"].dim.bold("$1") + _fmt2["default"].bold("$2")).replace(/(^Options|^Usage)/gm, "" + _fmt2["default"].dim.bold("$1")).replace(/([_\/\\]|[_,])/gm, "" + _fmt2["default"].dim.bold("$1")));
+  (0, _flyUtil.log)("\nUsage\n  fly [options] [tasks]\n\nOptions\n  -h  --help      Display this help.\n  -f  --file      Use an alternate Flyfile.\n  -l  --list      Display available tasks.\n  -v  --version   Display version.\n  ".replace(/(\s--)(.*?)\s/g, "" + _fmt2["default"].dim.bold("$1") + _fmt2["default"].bold("$2")).replace(/(-)(.\s)/g, "" + _fmt2["default"].dim.bold("$1") + _fmt2["default"].bold("$2")).replace(/(^Options|^Usage)/gm, "" + _fmt2["default"].dim.bold("$1")).replace(/([_\/\\]|[_,])/gm, "" + _fmt2["default"].dim.bold("$1")));
 };
 
 module.exports = exports["default"];
