@@ -200,11 +200,11 @@ Compose a yieldable sequence. Initialize globs, filters and writers.
 
 `globs` can be both comma separated or a single array of globs.
 
-#### `Fly.prototype.unwrap (promises)`
+#### `Fly.prototype.unwrap (onFulfilled, onRejected)`
 
-Resolves an array of promises an returns a new promise with the result.
+Unwrap the source globs.
 
-This method can be used when creating plugins that need to read the source promises before the pipeline is resolved in `Fly.prototype.target`. Examples of plugins that can use this method are lint and test plugins.
+This method can be used when creating plugins that need to resolve the source globs and process the data before any IO. Plugins that can benefit from this method are linting and testing plugins.
 
 #### `Fly.prototype.target ([dest], { parallel })`
 
