@@ -12,7 +12,7 @@ var _fly = require("../fly");
 
 var _fly2 = _interopRequireDefault(_fly);
 
-var _util = require("../util");
+var _flyUtil = require("fly-util");
 
 var _path = require("path");
 
@@ -44,7 +44,7 @@ exports["default"] = _regeneratorRuntime.mark(function callee$0$0(flypath) {
           } catch (_) {}
         })();
 
-        plugins = (0, _util.searchPlugins)({ pkg: pkg }).reduce(function (prev, next) {
+        plugins = (0, _flyUtil.searchPlugins)(pkg).reduce(function (prev, next) {
           return prev.concat(load("node_modules", next));
         }, []);
         return context$1$0.abrupt("return", new _fly2["default"]({ host: host, root: root, plugins: plugins }));

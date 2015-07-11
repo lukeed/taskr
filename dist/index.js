@@ -12,7 +12,7 @@ var _parsec = require("parsec");
 
 var _parsec2 = _interopRequireDefault(_parsec);
 
-var _util = require("./util");
+var _flyUtil = require("fly-util");
 
 var _reporter = require("./reporter");
 
@@ -26,9 +26,7 @@ var _package = require("../package");
 
 var _package2 = _interopRequireDefault(_package);
 
-var _co = require("co");
-
-var _co2 = _interopRequireDefault(_co);
+(0, _flyUtil.notifyUpdates)({ pkg: _package2["default"] });
 
 var _Parsec$parse$options$options$options$options = _parsec2["default"].parse(process.argv).options("file", { "default": "./" }).options("list").options("help").options("version");
 
@@ -37,10 +35,7 @@ var list = _Parsec$parse$options$options$options$options.list;
 var file = _Parsec$parse$options$options$options$options.file;
 var version = _Parsec$parse$options$options$options$options.version;
 var tasks = _Parsec$parse$options$options$options$options._;
-
-(0, _util.notifyUpdates)({ pkg: _package2["default"] });
-
-exports["default"] = (0, _co2["default"])(_regeneratorRuntime.mark(function callee$0$0() {
+exports["default"] = _regeneratorRuntime.mark(function callee$0$0() {
   var path;
   return _regeneratorRuntime.wrap(function callee$0$0$(context$1$0) {
     while (1) switch (context$1$0.prev = context$1$0.next) {
@@ -66,7 +61,7 @@ exports["default"] = (0, _co2["default"])(_regeneratorRuntime.mark(function call
 
       case 8:
         context$1$0.next = 10;
-        return (0, _util.findFlypath)(file);
+        return (0, _flyUtil.findFlypath)(file);
 
       case 10:
         path = context$1$0.sent;
@@ -96,5 +91,5 @@ exports["default"] = (0, _co2["default"])(_regeneratorRuntime.mark(function call
         return context$1$0.stop();
     }
   }, callee$0$0, this);
-}));
+});
 module.exports = exports["default"];

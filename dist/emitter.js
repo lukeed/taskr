@@ -1,4 +1,3 @@
-/** @desc Simple pub/sub pattern class */
 "use strict";
 
 var _createClass = require("babel-runtime/helpers/create-class")["default"];
@@ -19,7 +18,11 @@ var Emitter = (function () {
   _createClass(Emitter, [{
     key: "on",
 
-    /** @desc Subscribe to event. */
+    /**
+     * Subscribe to event.
+     * @param {String} name of event to observe
+     * @param {Function} handler
+     */
     value: function on(name, cb) {
       (this.events[name] = this.events[name] || []).push(cb);
       return this;
@@ -27,7 +30,11 @@ var Emitter = (function () {
   }, {
     key: "notify",
 
-    /** @desc Notify subscribers. */
+    /**
+     * Notify subscribers.
+     * @param {String} name of event to emit
+     * @param {Object} data to send
+     */
     value: function notify(name, obj) {
       var _this = this;
 
