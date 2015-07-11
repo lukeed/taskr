@@ -3,7 +3,7 @@
 
 if (!require("yieldables")) throw new Error("Fly requires node >= 0.11")
 
-require("../dist").catch(function (e) {
+require("co")(require("../dist")).catch(function (e) {
   if (e.code === "ENOENT") {
     console.error(
       "Your project is missing a Flyfile. For more info about\n" +
