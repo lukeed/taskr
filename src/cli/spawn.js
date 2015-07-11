@@ -1,5 +1,5 @@
 import Fly from "../fly"
-import { searchPlugins as search } from "../util"
+import { searchPlugins as search } from "fly-util"
 import path from "path"
 
 /**
@@ -15,7 +15,7 @@ export default function* (flypath) {
       return load("package")
     } catch (_) {}
   }()
-  const plugins = search({ pkg }).reduce((prev, next) =>
+  const plugins = search(pkg).reduce((prev, next) =>
     prev.concat(load("node_modules", next)), [])
 
   return new Fly({ host, root, plugins })

@@ -1,5 +1,5 @@
 import fmt from "../fmt"
-import { log } from "../util"
+import { log } from "fly-util"
 
 export default function () {
   log(`
