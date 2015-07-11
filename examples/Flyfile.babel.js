@@ -5,7 +5,7 @@ export function* log () {
 export default function* () {
   this.watch(
     ["babel/src/*.js", "map/src/*", "coffee/src/**/*.coffee"],
-    ["lint", "test", "clear", "grind", "map", "babel"])
+    [ "lint", "test", "clear", "grind", "map", "babel"])
 }
 
 export function* clear () {
@@ -47,4 +47,20 @@ export function* test () {
   yield this
     .source("spec/*Spec.js")
     .mocha({ reporter: "list" })
+}
+
+export function* jade () {
+  this.log("hi")
+  yield this
+    .source("jade/*.jade")
+    .jade()
+    .target(["jade/dist"], { parallel: true })
+  // yield this
+  //   .options({ parallel: false })
+  //   .source2("plain/*.x", "plain/*.y")
+  //   .filter((s) => "|||||" + s.toUpperCase())
+  //   .filter((s) => "*****" + s)
+  //   .jade(42)
+  //   .concat("all.min")
+  //   .target2("plain/dist")//.jade().target("jade/dist")
 }
