@@ -1,8 +1,8 @@
 "use strict";
 
-var _inherits = require("babel-runtime/helpers/inherits")["default"];
-
 var _get = require("babel-runtime/helpers/get")["default"];
+
+var _inherits = require("babel-runtime/helpers/inherits")["default"];
 
 var _createClass = require("babel-runtime/helpers/create-class")["default"];
 
@@ -78,8 +78,12 @@ var Fly = (function (_Emitter) {
     _classCallCheck(this, Fly);
 
     _get(Object.getPrototypeOf(Fly.prototype), "constructor", this).call(this);
-    this.defer = _.defer;
     this.encoding = process.env.ENCODING || "utf8";
+    _Object$assign(this, {
+      log: _.log,
+      defer: _.defer,
+      error: _.error
+    });
     this.host = this.tasks = host instanceof Function ? _Object$assign(host, { "default": host }) : host;
 
     _Object$keys(host).forEach(function (task) {
@@ -95,20 +99,6 @@ var Fly = (function (_Emitter) {
   _inherits(Fly, _Emitter);
 
   _createClass(Fly, [{
-    key: "log",
-
-    /**
-     * Log a message with a time stamp.
-     */
-    value: function log() {
-      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-
-      _.log("[" + _fmt2["default"].time + "] " + args);
-      return this;
-    }
-  }, {
     key: "clear",
 
     /**
@@ -118,8 +108,8 @@ var Fly = (function (_Emitter) {
     value: function clear() {
       var _clear = this.defer(_rimraf2["default"]);
 
-      for (var _len2 = arguments.length, paths = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        paths[_key2] = arguments[_key2];
+      for (var _len = arguments.length, paths = Array(_len), _key = 0; _key < _len; _key++) {
+        paths[_key] = arguments[_key];
       }
 
       return paths.map(function (path) {
@@ -180,7 +170,7 @@ var Fly = (function (_Emitter) {
     value: function filter(name, _filter) {
       var _this2 = this;
 
-      var _ref3 = arguments[2] === undefined ? {} : arguments[2];
+      var _ref3 = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 
       var _ref3$ext = _ref3.ext;
       var ext = _ref3$ext === undefined ? "" : _ref3$ext;
@@ -225,7 +215,7 @@ var Fly = (function (_Emitter) {
      * @return {Promise}
      */
     value: function start() {
-      var tasks = arguments[0] === undefined ? [] : arguments[0];
+      var tasks = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
 
       if (tasks.length === 0) tasks.push("default");
       return _co2["default"].call(this, _regeneratorRuntime.mark(function callee$2$0(ret) {
@@ -327,8 +317,8 @@ var Fly = (function (_Emitter) {
      * @return Fly instance. Promises resolve to { file, source }
      */
     value: function source() {
-      for (var _len3 = arguments.length, globs = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-        globs[_key3] = arguments[_key3];
+      for (var _len2 = arguments.length, globs = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        globs[_key2] = arguments[_key2];
       }
 
       this._globs = _.flatten(globs);
@@ -381,7 +371,7 @@ var Fly = (function (_Emitter) {
 
         while (1) switch (context$2$0.prev = context$2$0.next) {
           case 0:
-            _ref4 = args$2$0[1] === undefined ? {} : args$2$0[1];
+            _ref4 = args$2$0.length <= 1 || args$2$0[1] === undefined ? {} : args$2$0[1];
             _ref4$parallel = _ref4.parallel;
             parallel = _ref4$parallel === undefined ? false : _ref4$parallel;
 
@@ -408,7 +398,7 @@ var Fly = (function (_Emitter) {
                             case 0:
                               file = _step2.value;
                               context$5$0.t0 = _regeneratorRuntime.mark(function reduce(source, filters) {
-                                var ext = arguments[2] === undefined ? "" : arguments[2];
+                                var ext = arguments.length <= 2 || arguments[2] === undefined ? "" : arguments[2];
 
                                 var _iteratorNormalCompletion3, _didIteratorError3, _iteratorError3, _loop2, _iterator3, _step3, _2;
 
