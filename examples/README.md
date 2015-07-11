@@ -6,29 +6,34 @@
 
 # Examples
 
-Flyfiles at the root of this directory are written in different JavaScript variants, but describe the same tasks.
-
-The directories `babel`, `coffee`, `lint`, `map`, `spec`, etc., contain dummy files and sub directories to illustrate basic IO transformations and code analysis with Fly.
-
 ## Instructions
 
-To run the examples:
+To run the examples please build the `examples` project first.
 
 ```
 fly -f examples/
 ```
 
-The above will automatically search the specified directory for the first valid JavaScript variant, in this case `Flyfile.js`. You can specify other Flyfiles as well:
+The above will automatically search `examples/` for the first valid Flyfile. This installs the necessary node packages and illustrates a simple task example.
+
+> The above may take a few minutes to finish. If you encounter any problems, just try `npm i` inside `examples`
+
+
+## Where do I start?
+
+Inside `examples/` you will find several directories, each containing one or more Flyfiles.
+
+To run a specific `Flyfile`:
 
 ```
-fly -f examples/Flyfile.babel.js
+fly -f examples/path/to/Flyfile.ext
 ```
 
 In practice, just typing `fly` is often enough.
 
-## Other Formats
+## JavaScript Variants
 
-In order to succesfuly run `Flyfile.coffee` or your own `Flyfile.xxx` you will need to download the appropriate npm package to _transpile_ your Flyfile on the _fly_.
+In order to run Flyfiles written in other JavaScript variants, you need to download the appropriate npm package to _transpile_ your Flyfile on the _fly_.
 
 For example, `npm i coffee-script` for coffee script.
 
