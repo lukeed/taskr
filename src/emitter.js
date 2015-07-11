@@ -1,14 +1,21 @@
-/** @desc Simple pub/sub pattern class */
 export default class Emitter {
   constructor () {
     this.events = []
   }
-  /** @desc Subscribe to event. */
+  /**
+   * Subscribe to event.
+   * @param {String} name of event to observe
+   * @param {Function} handler
+   */
   on (name, cb) {
     (this.events[name] = this.events[name] || []).push(cb)
     return this
   }
-  /** @desc Notify subscribers. */
+  /**
+   * Notify subscribers.
+   * @param {String} name of event to emit
+   * @param {Object} data to send
+   */
   notify (name, obj) {
     (this.events[name] || []).forEach((event) => event.call(this, obj))
     return this
