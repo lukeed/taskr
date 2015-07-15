@@ -1,12 +1,11 @@
 import fmt from "../fmt"
-import { log } from "fly-util"
-
+const log = console.log.bind(console)
 /**
   List all tasks available in the flyfile
   @param {Object} flyfile
   @param {Object} opts.simple Simple task listing.
  */
-export default function (flyfile, { simple }) {
+export function list (flyfile, { simple }) {
   const host = require(flyfile)
   if (!simple) log(`\n${fmt.dim.bold("Available tasks")}`)
 

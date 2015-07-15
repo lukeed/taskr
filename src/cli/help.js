@@ -1,8 +1,7 @@
 import fmt from "../fmt"
-import { log } from "fly-util"
 
-export default function () {
-  log(`
+export function help () {
+  console.log(`
 Usage
   fly [options] [tasks]
 
