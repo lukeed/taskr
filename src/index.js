@@ -2,7 +2,7 @@ import Fly from "./fly"
 import Parsec from "parsec"
 import reporter from "./reporter"
 import * as cli from "./cli/"
-import { trace, notifyUpdates, findPath as find } from "fly-util"
+import { notifyUpdates, findPath as find } from "fly-util"
 import pkg from "../package"
 
 notifyUpdates({ pkg })
