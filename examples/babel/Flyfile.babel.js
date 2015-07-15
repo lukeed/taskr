@@ -1,70 +1,16 @@
-export function* log () {
-  this.log("Yay!")
+const paths = {
+  dist: "dist",
+  scripts: ["src/*.babel.js", "src/*.js"]
 }
 
 export default function* () {
-  this.watch(
-    ["babel/src/*.js", "map/src/*", "coffee/src/**/*.coffee"],
-    [ "lint", "test", "clear", "grind", "map", "babel"])
+  this.watch(paths.scripts, ["build"])
 }
 
-export function* clear () {
-  yield this.clear("coffee/dist")
-}
-
-export function* map () {
+export function* build () {
+  yield this.clear(paths.dist)
   yield this
-    .source("map/src/*")
-    .filter((s) => s.toUpperCase())
-    .filter((s) => s.split("").reverse().join(""))
-    .target("map/dist")
-}
-
-export function* babel () {
-  yield this
-    .source("babel/src/*.js")
+    .source(paths.scripts)
     .babel({ stage: 0 })
-    .target("babel/dist")
-}
-
-export function* grind () {
-  yield this.clear("coffee/dist")
-  yield this
-    .source("coffee/src/**/*.coffee")
-    .coffee()
-    .uglify()
-    .concat("all.min.js")
-    .target("coffee/dist/")
-}
-
-export function* lint () {
-  yield this
-    .source("lint/*.js")
-    .eslint()
-}
-
-export function* test () {
-  yield this
-    .source("spec/*Spec.js")
-    .mocha({ reporter: "list" })
-}
-
-export function* jade () {
-  this.log("hi")
-  yield this
-    .source("jade/*.jade")
-    .jade()
-    .target(["jade/dist"], { parallel: true })
-  // yield this
-  //   .options({ parallel: false })
-  //   .source2("plain/*.x", "plain/*.y")
-  //   .filter((s) => "|||||" + s.toUpperCase())
-  //   .filter((s) => "*****" + s)
-  //   .jade(42)
-  //   .concat("all.min")
-  //   .target2("plain/dist")//.jade().target("jade/dist")
-}
-
-export function* move () {
-  yield this.source("plain/a.x").target("plain/dump")
+    .target(paths.dist)
 }

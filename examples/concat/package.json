@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "fly-babel": "^0.2.1",
+    "fly-uglify": "^0.2.0"
+  }
+}
