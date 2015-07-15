@@ -6,8 +6,8 @@ if (!require("yieldables")) throw new Error("Fly requires node >= 0.11")
 require("co")(require("../dist")).catch(function (e) {
   if (e.code === "ENOENT") {
     console.error(
-      "Your project is missing a Flyfile. For more info about\n" +
-      "running Fly, see the Fly Start guide: git.io/fly-start")
+      "Got Flyfile? For more info about running Fly," + 
+      "see the Quickstart guide → git.io/fly-quick")
   } else {
     require("../dist/util").trace(e)
   }
