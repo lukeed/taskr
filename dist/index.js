@@ -46,68 +46,58 @@ exports["default"] = _regeneratorRuntime.mark(function callee$0$0() {
   return _regeneratorRuntime.wrap(function callee$0$0$(context$1$0) {
     while (1) switch (context$1$0.prev = context$1$0.next) {
       case 0:
-        context$1$0.prev = 0;
-
         if (!help) {
-          context$1$0.next = 5;
+          context$1$0.next = 4;
           break;
         }
 
         cli.help();
-        context$1$0.next = 25;
+        context$1$0.next = 24;
         break;
 
-      case 5:
+      case 4:
         if (!version) {
-          context$1$0.next = 9;
+          context$1$0.next = 8;
           break;
         }
 
         cli.version(_package2["default"]);
-        context$1$0.next = 25;
+        context$1$0.next = 24;
         break;
 
-      case 9:
-        context$1$0.next = 11;
+      case 8:
+        context$1$0.next = 10;
         return (0, _flyUtil.findPath)(file);
 
-      case 11:
+      case 10:
         path = context$1$0.sent;
 
         if (!list) {
-          context$1$0.next = 16;
+          context$1$0.next = 15;
           break;
         }
 
         cli.list(path, { simple: list === "simple" });
-        context$1$0.next = 25;
+        context$1$0.next = 24;
         break;
 
-      case 16:
+      case 15:
         context$1$0.t0 = _reporter2["default"];
         context$1$0.t1 = _fly2["default"];
-        context$1$0.next = 20;
+        context$1$0.next = 19;
         return cli.spawn(path);
 
-      case 20:
+      case 19:
         context$1$0.t2 = context$1$0.sent;
         context$1$0.t3 = new context$1$0.t1(context$1$0.t2);
         context$1$0.t4 = { path: path };
         context$1$0.t5 = tasks;
         return context$1$0.abrupt("return", context$1$0.t0.call.call(context$1$0.t0, context$1$0.t3).emit("fly_run", context$1$0.t4).start(context$1$0.t5));
 
-      case 25:
-        context$1$0.next = 30;
-        break;
-
-      case 27:
-        context$1$0.prev = 27;
-        context$1$0.t6 = context$1$0["catch"](0);
-        (0, _flyUtil.trace)(context$1$0.t6);
-      case 30:
+      case 24:
       case "end":
         return context$1$0.stop();
     }
-  }, callee$0$0, this, [[0, 27]]);
+  }, callee$0$0, this);
 });
 module.exports = exports["default"];
