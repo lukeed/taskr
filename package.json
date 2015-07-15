@@ -4,22 +4,21 @@
   "description": "Modern Build System",
   "main": "dist/index.js",
   "bin": {
-    "fly": "./bin/index.js"
+    "fly": "./bin/index"
   },
   "dependencies": {
-    "babel-core": "^5.6.15",
-    "babel-runtime": "^5.4.7",
+    "babel-core": "^5.6.18",
+    "babel-runtime": "^5.6.18",
     "clor": "^1.0.0",
     "co": "^4.5.4",
-    "dateformat": "^1.0.11",
-    "fly-util": "^2.0.0",
+    "fly-util": "^3.3.0",
     "glob": "^5.0.13",
     "mkdirp": "^0.5.1",
     "mz": "^2.0.0",
     "parsec": "^0.0.8",
     "prettyjson": "^1.1.2",
     "rimraf": "^2.4.0",
-    "yieldables": "^0.2.0"
+    "yieldables": "^1.2.0"
   },
   "devDependencies": {
     "babel": "^5.6.14",
@@ -37,7 +36,9 @@
     "test": "npm run build && npm run lint && npm run harmony-test | tspec",
     "build": "babel --optional runtime src/ -d ./dist",
     "deploy": "npm run test && git push origin master && npm publish",
-    "harmony-test": "node --harmony --harmony_arrow_functions ./node_modules/tape/bin/tape test/*.js"
+    "harmony-test": "node --harmony --harmony_arrow_functions ./node_modules/tape/bin/tape test/*.js",
+    "rebuild": "rm -rf node_modules && npm run setup",
+    "samples": "./bin/index.js -f examples"
   },
   "repository": {
     "type": "git",
