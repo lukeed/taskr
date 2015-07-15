@@ -1,7 +1,8 @@
+import Fly from "./fly"
 import Parsec from "parsec"
-import { notifyUpdates, findFlypath as find } from "fly-util"
 import reporter from "./reporter"
-import cli from "./cli/"
+import * as cli from "./cli/"
+import { trace, notifyUpdates, findPath as find } from "fly-util"
 import pkg from "../package"
 
 notifyUpdates({ pkg })
@@ -14,19 +15,21 @@ let { help, list, file, version, _: tasks } =
     .options("version")
 
 export default function* () {
-  if (help) {
-    cli.help()
-  } else if (version) {
-    cli.version(pkg)
-  } else {
-    const path = yield find(file)
-    if (list) {
-      cli.list(path, { simple: list === "simple" })
+  try {
+    if (help) {
+      cli.help()
+    } else if (version) {
+      cli.version(pkg)
     } else {
-      reporter
-        .call(yield cli.spawn(path))
-        .notify("fly_run", { path })
-        .start(tasks)
+      const path = yield find(file)
+      if (list) {
+        cli.list(path, { simple: list === "simple" })
+      } else {
+       return reporter
+          .call(new Fly(yield cli.spawn(path)))
+          .emit("fly_run", { path })
+          .start(tasks)
+      }
     }
-  }
+  } catch (e) { trace(e) }
 }
