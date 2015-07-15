@@ -6,6 +6,7 @@
 
 # Changelog
 
++ [v0.3.1](#v031)
 + [v0.3.0](#v030)
   + [Multitasking](#multitasking)
   + [New Examples](#new-examples)
@@ -28,6 +29,10 @@
   + [Plugins API update](#plugins-api-update)
   + [`watch` API update](#watch-api-update)
 + [v0.0.1](#v001)
+
+## v0.3.1
+
++ Bugfix: `package.json` was exporting `bin/index`, but it should have been `bin/index.js`
 
 ## v0.3.0
 
