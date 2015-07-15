@@ -7,24 +7,23 @@ var _interopRequireDefault = require("babel-runtime/helpers/interop-require-defa
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _fly = require("../fly");
-
-var _fly2 = _interopRequireDefault(_fly);
-
-var _flyUtil = require("fly-util");
+exports.spawn = spawn;
+var marked0$0 = [spawn].map(_regeneratorRuntime.mark);
 
 var _path = require("path");
 
 var _path2 = _interopRequireDefault(_path);
 
+var _flyUtil = require("fly-util");
+
 /**
   Resolve flyfile using flypath and create a new Fly instance.
   @param {String} flypath Path to a flyfile
  */
-exports["default"] = _regeneratorRuntime.mark(function callee$0$0(flypath) {
+
+function spawn(flypath) {
   var host, root, load, plugins;
-  return _regeneratorRuntime.wrap(function callee$0$0$(context$1$0) {
+  return _regeneratorRuntime.wrap(function spawn$(context$1$0) {
     while (1) switch (context$1$0.prev = context$1$0.next) {
       case 0:
         host = require(flypath);
@@ -38,22 +37,41 @@ exports["default"] = _regeneratorRuntime.mark(function callee$0$0(flypath) {
           return require(_path2["default"].join.apply(_path2["default"], [root].concat(file)));
         };
 
-        plugins = (function () {
-          try {
-            return (0, _flyUtil.searchPlugins)(load("package")).reduce(function (prev, next) {
-              return prev.concat(load("node_modules", next));
-            }, []);
-          } catch (e) {
-            (0, _flyUtil.error)("" + e);
-          }
+        context$1$0.next = 5;
+        return _regeneratorRuntime.mark(function callee$1$0() {
+          return _regeneratorRuntime.wrap(function callee$1$0$(context$2$0) {
+            while (1) switch (context$2$0.prev = context$2$0.next) {
+              case 0:
+                context$2$0.prev = 0;
+                context$2$0.next = 3;
+                return (0, _flyUtil.findPlugins)(load("package"));
+
+              case 3:
+                context$2$0.t0 = function (prev, next) {
+                  return prev.concat(load("node_modules", next));
+                };
+
+                context$2$0.t1 = [];
+                return context$2$0.abrupt("return", context$2$0.sent.reduce(context$2$0.t0, context$2$0.t1));
+
+              case 8:
+                context$2$0.prev = 8;
+                context$2$0.t2 = context$2$0["catch"](0);
+                (0, _flyUtil.warn)("" + context$2$0.t2.message);
+              case 11:
+              case "end":
+                return context$2$0.stop();
+            }
+          }, callee$1$0, this, [[0, 8]]);
         })();
 
-        return context$1$0.abrupt("return", new _fly2["default"]({ host: host, root: root, plugins: plugins }));
-
       case 5:
+        plugins = context$1$0.sent;
+        return context$1$0.abrupt("return", { host: host, root: root, plugins: plugins });
+
+      case 7:
       case "end":
         return context$1$0.stop();
     }
-  }, callee$0$0, this);
-});
-module.exports = exports["default"];
+  }, marked0$0[0], this);
+}

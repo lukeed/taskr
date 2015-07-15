@@ -4,15 +4,19 @@ var _regeneratorRuntime = require("babel-runtime/regenerator")["default"];
 
 var _interopRequireDefault = require("babel-runtime/helpers/interop-require-default")["default"];
 
+var _interopRequireWildcard = require("babel-runtime/helpers/interop-require-wildcard")["default"];
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _fly = require("./fly");
+
+var _fly2 = _interopRequireDefault(_fly);
+
 var _parsec = require("parsec");
 
 var _parsec2 = _interopRequireDefault(_parsec);
-
-var _flyUtil = require("fly-util");
 
 var _reporter = require("./reporter");
 
@@ -20,7 +24,9 @@ var _reporter2 = _interopRequireDefault(_reporter);
 
 var _cli = require("./cli/");
 
-var _cli2 = _interopRequireDefault(_cli);
+var cli = _interopRequireWildcard(_cli);
+
+var _flyUtil = require("fly-util");
 
 var _package = require("../package");
 
@@ -40,56 +46,68 @@ exports["default"] = _regeneratorRuntime.mark(function callee$0$0() {
   return _regeneratorRuntime.wrap(function callee$0$0$(context$1$0) {
     while (1) switch (context$1$0.prev = context$1$0.next) {
       case 0:
+        context$1$0.prev = 0;
+
         if (!help) {
-          context$1$0.next = 4;
+          context$1$0.next = 5;
           break;
         }
 
-        _cli2["default"].help();
-        context$1$0.next = 22;
+        cli.help();
+        context$1$0.next = 25;
         break;
 
-      case 4:
+      case 5:
         if (!version) {
-          context$1$0.next = 8;
+          context$1$0.next = 9;
           break;
         }
 
-        _cli2["default"].version(_package2["default"]);
-        context$1$0.next = 22;
+        cli.version(_package2["default"]);
+        context$1$0.next = 25;
         break;
 
-      case 8:
-        context$1$0.next = 10;
-        return (0, _flyUtil.findFlypath)(file);
+      case 9:
+        context$1$0.next = 11;
+        return (0, _flyUtil.findPath)(file);
 
-      case 10:
+      case 11:
         path = context$1$0.sent;
 
         if (!list) {
-          context$1$0.next = 15;
+          context$1$0.next = 16;
           break;
         }
 
-        _cli2["default"].list(path, { simple: list === "simple" });
-        context$1$0.next = 22;
+        cli.list(path, { simple: list === "simple" });
+        context$1$0.next = 25;
         break;
 
-      case 15:
+      case 16:
         context$1$0.t0 = _reporter2["default"];
-        context$1$0.next = 18;
-        return _cli2["default"].spawn(path);
+        context$1$0.t1 = _fly2["default"];
+        context$1$0.next = 20;
+        return cli.spawn(path);
 
-      case 18:
-        context$1$0.t1 = context$1$0.sent;
-        context$1$0.t2 = { path: path };
-        context$1$0.t3 = tasks;
-        context$1$0.t0.call.call(context$1$0.t0, context$1$0.t1).notify("fly_run", context$1$0.t2).start(context$1$0.t3);
+      case 20:
+        context$1$0.t2 = context$1$0.sent;
+        context$1$0.t3 = new context$1$0.t1(context$1$0.t2);
+        context$1$0.t4 = { path: path };
+        context$1$0.t5 = tasks;
+        return context$1$0.abrupt("return", context$1$0.t0.call.call(context$1$0.t0, context$1$0.t3).emit("fly_run", context$1$0.t4).start(context$1$0.t5));
 
-      case 22:
+      case 25:
+        context$1$0.next = 30;
+        break;
+
+      case 27:
+        context$1$0.prev = 27;
+        context$1$0.t6 = context$1$0["catch"](0);
+        (0, _flyUtil.trace)(context$1$0.t6);
+      case 30:
       case "end":
         return context$1$0.stop();
     }
-  }, callee$0$0, this);
+  }, callee$0$0, this, [[0, 27]]);
 });
 module.exports = exports["default"];
