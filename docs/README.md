@@ -20,29 +20,35 @@
 
 
 # Documentation
-_Fly_ is a task automation tool, very much in the same vein of  [gulp](http://gulpjs.com/), [Grunt](http://gruntjs.com/), [etc](https://gist.github.com/callumacrae/9231589).
+_Fly_ is a task automation tool, very much in the same vein of [gulp](http://gulpjs.com/), [Grunt](http://gruntjs.com/), [etc](https://gist.github.com/callumacrae/9231589).
 
-_Fly_ is written from the ground up to take advantage of ES6 [new features](https://github.com/lukehoban/es6features).
+_Fly_ is written from the ground up to take advantage of ES6 [new features](https://github.com/lukehoban/es6features) such as generators and promises.
 
-Similar to gulp, _Fly_ favors code over configuration, but aims to provide a *definitive* simpler way to describe and compose tasks and plugins.
+Similar to gulp, _Fly_ favors _code_ over configuration, but aims to provide a simpler way to describe tasks and plugins.
 
 ## Features
 
-
 > Fly requires at least node `>=0.11` to support [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
 
-* Fly shuns the [stream](https://nodejs.org/api/stream.html)-based implementation common in other build systems and favors promises and generator based flow-control via [co-routines](https://github.com/tj/co). The result is a modern and concise API.
+* Fly shuns the [stream](https://nodejs.org/api/stream.html)-based implementation common in other build systems and favors promises and generator based flow-control via [co-routines](https://github.com/tj/co).
 
-* Fly is written in ES6, but tasks can be written in [other](https://github.com/tkellen/js-interpret#extensions) languages as well.
+* Fly is itself written in ES6, but tasks can be written in [other languages](https://github.com/tkellen/js-interpret#extensions).
 
-+ Tasks are described using generator functions and operations returning a promise are yielded with [`yield`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield):
++ Tasks are described using ES6 [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) or ES7 [async](http://jakearchibald.com/2014/es7-async-functions/) functions and async flow is controlled via [`yield`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield):
 
   ```js
-  exports.task = function* () {
-    yield this.task.deploy()
+  export function* task () {
+    yield this.tasks.write("awesome")
   }
   ```
-+ Fly allows tasks to cascade results in a series. A task's return value will be the argument of the next task in a running sequence.
+
+  ```js
+  export async function task () {
+    await this.tasks.write("awesome")
+  }
+  ```
+
++ Fly allows tasks to cascade results. A task's return value is the argument of the next task in a running sequence.
 
   ```js
   export default function* () {
@@ -58,60 +64,65 @@ Similar to gulp, _Fly_ favors code over configuration, but aims to provide a *de
   }
   ```
 
-+ Fly lets you compose [_pipeline_](https://www.google.com/search?q=pipeline+code&espv=2&biw=1186&bih=705&source=lnms&tbm=isch&sa=X&ei=L7-SVde6JqPpmQXHyrLIBg&ved=0CAcQ_AUoAg&dpr=2#tbm=isch&q=pipeline+build+system&imgrc=923J2oOnaU_VXM%3A)-like sequences.
++ Fly API takes the pipeline metaphor to the next level:
 
   ```js
-  exports.scripts = function* () {
+  export default function* () {
     yield this
-      .source("src/**/*.coffee")
-      .coffee({/* ... */})
-      .uglify({/* ... */})
+      .source("src/**/*.babel.js")
+      .babel()
+      .uglify()
       .concat("all.min.js")
-      .target("dist/js")
+      .target("dist")
   }
   ```
 
-
-+ Fly it's not constrained to the stream metaphor. Examples of tasks that do not fit this paradigm as well as pipe transformations are code analysis, linting, testing, etc.
-
-+ Creating filter / transform plugins is as simple as adding your own filter function into the pipeline via `Fly.prototype.filter`, hence plugins are often 4 or 5 LOC.
-
-+ Async processes can be wrapped into a promise using the  `Fly.prototype.defer` built-in method. You can promisify functions yourself using other libraries as well.
-
-+ A task usually works with a set of globs that expand to multiple files / paths. In Fly was set of expanded globs can be run through the pipeline filter in parallel using the `Fly.prototype.target (dest, { parallel })`
-
-+ Plugins are automatically required and available via `this.pluginName` inside tasks granted they _exist_ inside your `node_modules` directory and listed in your `package.json` dependencies, devDependencies, etc. `npm i fly-*` the plugin you need and it will be available when _Fly_ runs.
-
-+ You can label tasks using JSDoc syntax `/** @desc description */`. This description is displayed when listing tasks on the terminal with `fly -l`.
++ Fly supports concurrent tasks via `Fly.prototype.start([tasks], { parallel: true })`:
 
   ```js
-  exports.task = function* () {
+  export default function* () {
+    yield this.start(["task1", "task2", "task3"], { parallel: true })
+  }
+  ```
+
++ Use `Fly.prototype.filter(Function)` to add a transform in the sequence. If your function is async wrap it with `Fly.prototype.defer` and Fly will handle it as expected.
+
++ Plugins are autoloaded, just make sure to include it in your `package.json` and under `node_modules`.
+
++ Use JSDoc's `/** @desc description */` to describe tasks. The text is displayed when listing tasks on the terminal with `fly -l`.
+
+  ```js
+  export function* task () {
     /** @desc Does something hip. */
   }
   ```
 
-
 ## _Flyfiles_
 
-Similar to other build systems, _Fly_ reads a Flyfile to load and run tasks. A _Flypath_ is also a valid file name.
+Similar to other build systems, _Fly_ reads a Flyfile to load and run your tasks. _Flypath_ is also a valid file name.
 
-Flyfiles written in ES5, ES6 and ES7 are supported out of the box. Flyfiles written in other JavaScript variants require downloading the corresponding module to transpile them.
+Flyfiles written in ES5, ES6 and ES7 are supported out of the box. Flyfiles written in other JavaScript variants require downloading the corresponding module to transpile them in the _fly_.
 
-> For example `coffee-script` for CoffeeScript.
-
-A Flyfile exports its tasks as generator functions:
+A Flyfile exports its tasks as generators / async functions:
 
 _ES5_:
 ```js
-exports.myTask = function* () {
-  yield this.source("a").target("b")
+exports.default = function* () {
+  yield this.source("*")...target("./")
 }
 ```
 
 _ES6_:
 ```js
-export function* main () {
-  yield this.source("a").target("b")
+export default function* () {
+  yield this.source("*")...target("./")
+}
+```
+
+_ES7_:
+```js
+export default async function () {
+  yield this.source("*")...target("./")
 }
 ```
 
@@ -119,13 +130,13 @@ See inside `examples/` for Flyfile samples.
 
 ## CLI
 
-After you install Fly, you can access the CLI via `fly [options] [tasks]` in your terminal:
+You can access the CLI via `fly [options] [tasks]` in your terminal after installing Fly:
 
 ```
 fly task1 task2 ...
 ```
 
-Fly currently supports the following flags:
+Fly supports the following flags:
 
 #### `-h  --help`
 
@@ -159,9 +170,7 @@ Display the version number.
 ## API
 [![][codeclimate-badge]][codeclimate]
 
-Fly exposes a number of methods that let you create and manipulate Fly instances, as well as built-in tasks such as `clear`, `concat` and `filter`.
-
-### `Fly.prototype.constructor`
+### `Fly.prototype.constructor({ host, root, plugins })`
 Creates a new Fly instance.
 
 #### Options
@@ -175,75 +184,168 @@ Relative base path / root.
 * #### `plugins`
 List of plugins to load.
 
-### `Fly.prototype.log (...args)`
-Log a message with a time stamp.
 
-### `Fly.prototype.concat (name)`
-Concatenate files read with `Fly.prototype.source`.
+### `Fly.prototype.source (...globs)`
 
-### `Fly.prototype.filter (name, filter)`
-Add a sync/async transform function to the sequence. For async filters, you must wrap the function into a promise using `Fly.prototype.defer` or promisify it yourself.
+Begin a yieldable sequence. Initialize globs, filters and writers.
 
-You can pass a Function as the first argument, and Fly will also add it to the filters collection.
+```js
+export default function* () {
+  yield this.source(["styles/*.scss", "styles/.sass"])...
+}
+```
+
+#### `Fly.prototype.target ([dest])`
+> `dest` can be both comma separated or a single array of paths.
+
+Resolve a yieldable sequence. Reduce source applying available filters.
+
+```js
+export default function* () {
+  yield this
+    .source("*")
+    ...
+    .target("dist", "build", "test")
+}
+```
+
+
+#### `Fly.prototype.start ([tasks], { parallel, value })`
+
+Run all tasks specified by `tasks` (or the `default` one if `tasks.length === 0`).
+
+  + Can be yielded inside other tasks.
+
+  ```js
+  export default function* () {
+    yield this.start(["lint", "test", "build"])
+  }
+  ```
+
+  + To pass a value into the first task use the `value` option. The return value is passed on to the next task in a series.
+
+  ```js
+  export default function* () {
+    yield this.start(["a", "b", "c"])
+    ...
+    return secret
+  }
+  export default function* (secret) {
+    ...
+  }
+  ```
+
+  + To run tasks in parallel use `parallel: true`.
+
+  ```js
+  export default function* () {
+    yield this.start(["dev", "staging", "server"], { parallel: true })
+  }
+  ```
+
+### `Fly.prototype.filter (filter)`
+Add a sync/async transform function into the sequence. Use `Fly.prototype.defer (Function)` to promisify async filters.
+
+You can also specify the name of the filter as `Fly.prototype.filter (name, filter)` and a new method will be added to Fly. This feature is used by plugins to inject functionality into the running instance.
+
+```js
+export default function* () {
+  yield this
+    .source("*.txt")
+    .filter((s) => s.replace(/(\w+)\s(\w+)/g, "$2 $1"))
+    .target("swap")
+}
+```
 
 #### `Fly.prototype.watch ([globs], [tasks])`
 
 Run the specified tasks when a change is detected in any of the paths expanded from `globs`.
 
-#### `Fly.prototype.start ([tasks])`
 
-Run all tasks specified in `tasks` or the `default` / `main` if `tasks.length === 0`. This method returns a promise which can be yielded inside any task. The return value of each task (after the first) is passed on to the next task in the series.
+### `Fly.prototype.concat (name)`
+> `globs` can be both comma separated or a single array of globs.
 
-### `Fly.prototype.source (...globs)`
+Concatenate files read with `Fly.prototype.source`.
 
-Compose a yieldable sequence. Initialize globs, filters and writers.
-
-`globs` can be both comma separated or a single array of globs.
 
 #### `Fly.prototype.unwrap (onFulfilled, onRejected)`
 
 Unwrap the source globs.
 
-This method can be used when creating plugins that need to resolve the source globs and process the data before any IO. Plugins that can benefit from this method are linting and testing plugins.
+This method can be used when creating plugins that need to resolve the source globs to bypass / enhance IO operations, etc. Linting and testing plugins are common use cases for this method.
 
-#### `Fly.prototype.target ([dest], { parallel })`
-
-Yield the expanded glob promises and filter-reduce sources.
-
-`dest` can be both comma separated or a single array of destination paths.
-
-## Plugins
-
-> See the [Wiki](https://github.com/flyjs/fly/wiki) for the list of plugins. Or search the registry for new [packages](https://www.npmjs.com/search?q=fly-).
-
-> Please Use our [generator](https://github.com/flyjs/generator-fly) to scaffold new plugins.
-
-Plugins are regular node modules that export a single default method. This method is automatically run when a new Fly instance is created.
 
 ```js
-module.exports = function () {
-  return this.filter("myPlugin", (src, opts) => {
-    try { return ... }
-    catch (e) { throw e }
-  })
+export default function () {
+  this.myLint = function (options) {
+    const lint = createLinter(options)
+    return this.unwrap((files) => files.forEach(file => lint(file)))
+  }
 }
 ```
 
-> Make sure your method returns `this` to allow method calls to be composed in chain.
+#### `Fly.prototype.write (writer Function)`
+
+Add a writer function to the collection of writers. A _writer_ is the function that runs on each expanded glob and for each specified `destination` target and can result in an IO operation. Examples of method that inject writers into the Fly are `Fly.prototype.target` and `Fly.prototype.concat`.
+
+
+#### `Fly.prototype.clear (paths)`
+
+Clears / Deletes all paths including sub directories.
+
+
+### `Fly.prototype.log (...args)`
+Log a message with a time stamp.
+
+### `Fly.prototype.error (...args)`
+Log an error message with a time stamp.
+
+### `Fly.prototype.debug (...args)`
+Log a message with a time stamp only if `process.env.DEVELOPMENT` is truthy.
+
+
+## Plugins
+
+> Please use our [generator](https://github.com/flyjs/generator-fly) to scaffold new plugins.
+
+> Search the registry for new [plugins](https://www.npmjs.com/search?q=fly-).
+
+Plugins are node modules that export at least one default method. This method is automatically run when a new Fly instance is created.
+
+```js
+module.exports = function () {
+  return this.filter("myFilter", (source, options) => {
+    try {
+      return ...newSource
+    } catch (e) { throw e }
+  })
+}
+```
 
 If the method should be _yielded_ inside a task, you must return a promise.
 
 ```js
 module.exports = function () {
-  this.method = function (opts) {
+  this.myPlugin = function (options) {
     return new Promise((resolve, reject) => {...})
   }
 }
 ```
 
-### Async Transformers
+Plugins not in the categories described above should return `this` to allow chain composition.
 
-Inside the method pass to filter, wrap the async function with `this.defer(myFilter)`. `Fly.prototype.defer` creates a new function that returns a promise. Call this function with `source` and `options`.
+```js
+module.exports = function () {
+  this.notify = function (message) {
+    ...
+    return this
+  }
+}
+```
+
+### Async Functions
+
+Wrap async functions with `Fly.prototype.defer`. This creates a new function that returns a promise. Call this function with `source` and `options`.
 
 ```js
 this.filter("myPlugin", (source, options) => {
@@ -251,9 +353,10 @@ this.filter("myPlugin", (source, options) => {
 }, { ext: ".fly" })
 ```
 
-`Fly.prototype.filter` accepts a third argument with options:
++ `Fly.prototype.filter` accepts a third argument with options:
 
-+ `ext`: File extension.
+  + `ext`: File extension.
+
 
 [codeclimate-badge]: https://codeclimate.com/github/flyjs/fly/badges/gpa.svg
 [codeclimate]: https://codeclimate.com/github/flyjs/fly

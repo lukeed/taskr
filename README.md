@@ -59,11 +59,11 @@ const paths = {
 }
 
 export default function* () {
-  yield this.clear("build")
   this.watch([paths.scripts], ["scripts"])
 }
 
 export function* scripts () {
+  yield this.clear("build")
   yield this
     .source(paths.scripts)
     .babel({ stage: 0 })
@@ -86,6 +86,7 @@ Contributions are _absolutely_ welcome. Check out our [contribution guide](/CONT
 
 [MIT](http://opensource.org/licenses/MIT) © [Jorge Bucaran][Author] et [al][contributors]
 :heart:
+
 
 [author]: http://about.bucaran.me
 [fly]: https://www.github.com/flyjs/fly
