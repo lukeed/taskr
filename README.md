@@ -3,7 +3,7 @@
 [![][fly-badge]][fly]
 [![npm package][npm-ver-link]][fly]
 [![][dl-badge]][npm-pkg-link]
-[![][TravisLogo]][Travis]
+[![][travis-logo]][travis]
 ![][mit-badge]
 
 
@@ -36,7 +36,7 @@
 
 ## About
 
-_Fly_ is a modern [build system](https://en.wikipedia.org/wiki/Build_automation) for [Node](https://nodejs.org/) based in [_co_-routines](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127), [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise). See [why](https://github.com/flyjs/fly/issues/3) _Fly_ is good.
+_Fly_ is a modern [build system](https://en.wikipedia.org/wiki/Build_automation) for [Node](https://nodejs.org/) based in [_co_-routines](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127), [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise). See [_why_](https://github.com/flyjs/fly/issues/3).
 
 _Fly_ has [robust error handling](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127), [callback _heaven_](http://jakearchibald.com/2014/es7-async-functions/), [cascading tasks](https://github.com/flyjs/fly/blob/master/CHANGELOG.md#cascading-tasks), [parallel execution](https://github.com/flyjs/fly/blob/master/docs/README.md#features) and a simple [API](https://github.com/flyjs/fly/blob/master/docs/README.md#api).
 
@@ -51,7 +51,7 @@ npm install fly
 
 ### _Flyfile_
 
-> Flyfiles can be written in ES5/[6](/examples/Flyfile.babel.js)/[7](/examples/Flyfile7.babel.js) and [other](https://github.com/jashkenas/coffeescript/wiki/List-of-languages-that-compile-to-JS) variants.
+> Flyfiles can be written in ES5/[6][es6-example]/[7][es7-example] and [other](https://github.com/jashkenas/coffeescript/wiki/List-of-languages-that-compile-to-JS) variants.
 
 ```js
 const paths = {
@@ -95,6 +95,8 @@ Contributions are _absolutely_ welcome. Check out our [contribution guide](/CONT
 [npm-pkg-link]: https://www.npmjs.org/package/fly
 [npm-ver-link]: https://img.shields.io/npm/v/fly.svg?style=flat-square
 [dl-badge]: http://img.shields.io/npm/dm/fly.svg?style=flat-square
-[TravisLogo]: http://img.shields.io/travis/flyjs/fly.svg?style=flat-square
-[Travis]: https://travis-ci.org/flyjs/fly
+[travis-logo]: http://img.shields.io/travis/flyjs/fly.svg?style=flat-square
+[travis]: https://travis-ci.org/flyjs/fly
 [contributors]: https://github.com/flyjs/fly/graphs/contributors
+[es6-example]: https://github.com/flyjs/fly/blob/master/examples/Flyfile.babel.js
+[es7-example]: https://github.com/flyjs/fly/blob/master/examples/async/Flypath.babel.js
