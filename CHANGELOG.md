@@ -6,6 +6,7 @@
 
 # Changelog
 
++ [v0.3.2](#v032)
 + [v0.3.1](#v031)
 + [v0.3.0](#v030)
   + [Multitasking](#multitasking)
@@ -29,6 +30,11 @@
   + [Plugins API update](#plugins-api-update)
   + [`watch` API update](#watch-api-update)
 + [v0.0.1](#v001)
+
+## v0.3.2
+
++ Bugifx: New error handling was supressing the `No Flyfile found...` message.
+
 
 ## v0.3.1
 
