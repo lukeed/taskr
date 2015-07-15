@@ -1,9 +1,7 @@
 export default class Emitter {
-  constructor () {
-    this.events = []
-  }
+  constructor () { this.events = [] }
   /**
-   * Subscribe to event.
+   * Listen to an event.
    * @param {String} name of event to observe
    * @param {Function} handler
    */
@@ -12,11 +10,11 @@ export default class Emitter {
     return this
   }
   /**
-   * Notify subscribers.
+   * Emit an event to listeners.
    * @param {String} name of event to emit
    * @param {Object} data to send
    */
-  notify (name, obj) {
+  emit (name, obj) {
     (this.events[name] || []).forEach((event) => event.call(this, obj))
     return this
   }
