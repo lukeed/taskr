@@ -1,4 +1,3 @@
-// Async stuff
 "use strict";
 
 function later() {

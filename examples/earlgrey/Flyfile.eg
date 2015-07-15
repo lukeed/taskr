@@ -1,21 +1,11 @@
-paths = {
-   scripts = {
-      "earl/src/**/*.eg"
-   }
-}
+provide: default, build
 
-provide: main, clear, scripts
+gen default = ->
+   yield this.clear("dist")
+   yield this.tasks.build()
 
-gen main = ->
-   yield this.tasks.clear()
-   yield this.tasks.scripts()
-
-gen clear = ->
-   yield this.clear("build")
-
-gen scripts = ->
+gen build = ->
    yield chain this:
-      @source: paths.scripts[0]
-      @earl() ;;  with { es5 = false }
-      @concat("all.js")
-      @target("earl/build/js")
+      @source("src/*.eg")
+      @earl()
+      @target("dist")

@@ -3,9 +3,13 @@ export function* first () {
 }
 
 export function* second ({ secret }) {
+  return { secret }
+}
+
+export function* third ({ secret }) {
   this.log(`The secret is ${secret}`)
 }
 
 export default function* () {
-  yield this.start(["first", "second"])
+  yield this.start(["first", "second", "third"])
 }

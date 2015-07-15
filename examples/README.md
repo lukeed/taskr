@@ -8,33 +8,37 @@
 
 ## Instructions
 
-To run the examples please build the `examples` project first.
+To try any of the examples _please build_ the `examples` project first:
 
 ```
 fly -f examples/
 ```
 
-The above will automatically search `examples/` for the first valid Flyfile. This installs the necessary node packages and illustrates a simple task example.
+This will load Fly with `Flyfile.babel.js` and install the necessary node packages in each of the sample directories.
 
-> The above may take a few minutes to finish. If you encounter any problems, just try `npm i` inside `examples`
+> The above may take a few minutes to finish.
 
+## Where to start?
 
-## Where do I start?
+It's up to you. Inside `examples/` there are several directories, each containing one or more Flyfiles.
 
-Inside `examples/` you will find several directories, each containing one or more Flyfiles.
-
-To run a specific `Flyfile`:
+To run any sample:
 
 ```
-fly -f examples/path/to/Flyfile.ext
+fly -f examples/path/to/sample
 ```
 
-In practice, just typing `fly` is often enough.
+> ### Note
+Flyfiles written in ES7 have been saved as `Flypath.babel.js`. Use the full path to run them:
+
+```
+fly -f examples/path/to/sample/Flypath.babel.js
+```
 
 ## JavaScript Variants
 
-In order to run Flyfiles written in other JavaScript variants, you need to download the appropriate npm package to _transpile_ your Flyfile on the _fly_.
+In order to run Flyfiles written in other JavaScript variants, you need to download the appropriate `npm` package to _transpile_ your Flyfile on the _fly_.
 
-For example, `npm i coffee-script` for coffee script.
+For example, `coffee-script` for CoffeeScript.
 
-:heart:
+> Flyfiles written in ES6/7 work out of the box.
