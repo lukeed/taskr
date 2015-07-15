@@ -6,6 +6,9 @@
 
 # Changelog
 
++ [v0.3.0](#v030)
+  + [Multitasking](#multitasking)
+  + [New Examples](#new-examples)
 + [v0.2.0](#v020)
   + [Async Transformers](#async-transformers)
 + [v0.1.11](#v0111)
@@ -24,7 +27,44 @@
   + [Multi-Flyfile Support](#multi-flyfile-support)
   + [Plugins API update](#plugins-api-update)
   + [`watch` API update](#watch-api-update)
-+ [v0.0.1](#001)
++ [v0.0.1](#v001)
+
+## v0.3.0
+
++ Refactor: `fly.js` largely **rewritten**. Sharper code, cleaner syntax, don't overuse recursive reducers. 5~10% less LOC.
+
++ Bugifx: ES7 using `async/await` now works as expected.
+
++ Bugfix: `cli/spawn.js` was crashing if no plugins were found inside `node_modules`.
+
++ Improve: Better error handling and stack tracing across Fly. No more _silent_ crashes.
+
++ Update: `reporter.js` and `fmt.js` to latest `fly-util`
+
++ Remove: `Flyfile.js` from root and use `Flyfile.babel.js` instead.
+
++ Improve: Documentation and code comments.
+
+### Multitasking
+
++ Run tasks in parallel via `Fly.prototype.run([tasks], { parallel: true })`.
+
+  Imagine you have 10 functions that implement an asynchronous transformation on a data source, each taking about 1 minute to complete. Assume these functions are truly async by relying on native extensions or Node's IO API.
+
+  Assign each transform to a different task. If you run all tasks sequentially you will have to wait at least 10 minutes. If you run all tasks in parallel you will have to wait at least 1 minute.
+
+  + See `examples/multi` for examples.
+
+### New Examples
+
++ Examples are now organized in directories by category, such as `multi`, `async`, `maps`, `css`, `lint`, etc. Each directory contains one or more Flyfiles describing related tasks. To run the examples, install its dependencies first using _Fly_:
+
+  ```
+  fly -f examples/
+  ```
+
+  See [examples/README](https://github.com/flyjs/fly/blob/master/examples/README.md).
+
 
 ## v0.2.0
 
