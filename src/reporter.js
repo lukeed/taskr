@@ -29,8 +29,8 @@ export default function () {
      var duration = Math.round((duration / 1000) * 10) / 10;
       scale = "s";
     }
-    log(`Finished ${fmt.complete} in ${fmt.secs}`, task, duration, scale))
-  }
+    log(`Finished ${fmt.complete} in ${fmt.secs}`, task, duration, scale)
+  })
   .on("task_not_found", ({ task }) =>
     log(`${fmt.error} not found in Flyfile.`, task))
 
