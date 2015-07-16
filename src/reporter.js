@@ -25,7 +25,7 @@ export default function () {
 
   .on("task_complete", ({ task, duration }) => {
     var scale = "ms";
-    if (duration > 1000) {
+    if (duration >= 1000) {
      var duration = Math.round((duration / 1000) * 10) / 10;
       scale = "s";
     }
