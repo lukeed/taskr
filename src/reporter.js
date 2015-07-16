@@ -23,9 +23,14 @@ export default function () {
   .on("task_start", ({ task }) =>
     log(`Starting ${fmt.start}`, task))
 
-  .on("task_complete", ({ task, duration }) =>
-    log(`Finished ${fmt.complete} in ${fmt.secs}`, task, duration, "ms"))
-
+  .on("task_complete", ({ task, duration }) => {
+    var scale = "ms";
+    if (duration > 1000) {
+     var duration = Math.round((duration / 1000) * 10) / 10;
+      scale = "s";
+    }
+    log(`Finished ${fmt.complete} in ${fmt.secs}`, task, duration, scale))
+  }
   .on("task_not_found", ({ task }) =>
     log(`${fmt.error} not found in Flyfile.`, task))
 
