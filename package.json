@@ -7,15 +7,15 @@
     "fly": "./bin/index.js"
   },
   "dependencies": {
-    "babel-core": "^5.6.18",
+    "babel-core": "^5.7.4",
     "babel-runtime": "^5.6.18",
     "clor": "^1.0.0",
     "co": "^4.5.4",
-    "fly-util": "^3.3.0",
+    "fly-util": "^3.4.3",
     "glob": "^5.0.13",
     "mkdirp": "^0.5.1",
     "mz": "^2.0.0",
-    "parsec": "^0.0.8",
+    "parsec": "^0.1.0",
     "prettyjson": "^1.1.2",
     "rimraf": "^2.4.0",
     "yieldables": "^1.2.0"
@@ -24,6 +24,7 @@
     "babel": "^5.6.14",
     "babel-eslint": "^3.1.9",
     "coffee-script": "^1.9.3",
+    "earlgrey-runtime": "0.0.9",
     "eslint": "^0.21.2",
     "fly-babel": "0.2.0",
     "fly-eslint": "0.2.0",
@@ -31,14 +32,15 @@
     "tape": "^4.0.0"
   },
   "scripts": {
-    "setup": "npm i && npm run test",
+    "setup": "npm i && npm run test && npm run symlink",
     "lint": "eslint src/",
     "test": "npm run build && npm run lint && npm run harmony-test | tspec",
     "build": "babel --optional runtime src/ -d ./dist",
     "deploy": "npm run test && git push origin master && npm publish",
     "harmony-test": "node --harmony --harmony_arrow_functions ./node_modules/tape/bin/tape test/*.js",
     "rebuild": "rm -rf node_modules && npm run setup",
-    "samples": "./bin/index.js -f examples"
+    "samples": "./bin/index.js -f examples",
+    "symlink": "ln -s $PWD/bin/index.js  /usr/local/bin/fly"
   },
   "repository": {
     "type": "git",
