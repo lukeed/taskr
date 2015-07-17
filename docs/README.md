@@ -315,7 +315,7 @@ Log a message with a time stamp, _unless_ `process.env.SILENT` is truthy.
 
 > Please use our [generator](https://github.com/flyjs/generator-fly) to scaffold new plugins.
 
-> Search the registry for new plugins [here](https://www.npmjs.com/search?q=fly-).
+> Search the registry for new plugins by ["fly" keyword](https://www.npmjs.com/browse/keyword/fly).
 
 Plugins are node modules that export at least one default method. This method is automatically run when a new Fly instance is created and is bound to the Fly instance.
 
