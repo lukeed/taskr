@@ -9,7 +9,7 @@
 
 <p align="center">
   <a href="http://github.com/flyjs/fly">
-    <img width=280px  src="https://cloud.githubusercontent.com/assets/8317250/8430194/35c6043a-1f6a-11e5-8cbd-af6cc86baa84.png">
+    <img width=280px  src="https://cloud.githubusercontent.com/assets/8317250/8733685/0be81080-2c40-11e5-98d2-c634f076ccd7.png">
   </a>
 </p>
 
@@ -38,9 +38,9 @@
 
 _Fly_ is a modern [build system](https://en.wikipedia.org/wiki/Build_automation) for [Node](https://nodejs.org/) based in [_co_-routines](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127), [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
 
-_Fly_ has [robust error handling](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127), [callback _heaven_](http://jakearchibald.com/2014/es7-async-functions/), [cascading tasks](https://github.com/flyjs/fly/blob/master/CHANGELOG.md#cascading-tasks), [parallel execution](https://github.com/flyjs/fly/blob/master/docs/README.md#features) and a simple [API](https://github.com/flyjs/fly/blob/master/docs/README.md#api).
+_Fly_ has [callback _heaven_](http://jakearchibald.com/2014/es7-async-functions/), [concurrent tasks](https://github.com/flyjs/fly/blob/master/docs/README.md#features), [robust error handling](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127), [cascading tasks](https://github.com/flyjs/fly/blob/master/CHANGELOG.md#cascading-tasks) and a simple [API](https://github.com/flyjs/fly/blob/master/docs/README.md#api).
 
-See the [documentation](/docs/README.md) to learn more about how to use Fly and write your own [plugins](/docs/README.md#plugins).
+See the [documentation](/docs/README.md) to learn more about Fly.
 
 ## Usage
 ### Install
@@ -76,11 +76,6 @@ export function* scripts () {
 # Contributing
 
 Contributions are _absolutely_ welcome. Check out our [contribution guide](/CONTRIBUTING.md).
-
-# Roadmap :tram:
-
-+ Proper testing.
-+ Optimize streamy operations via [CSP channels](https://en.wikipedia.org/wiki/Communicating_sequential_processes).
 
 # License
 
