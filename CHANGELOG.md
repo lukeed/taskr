@@ -6,7 +6,7 @@
 
 # Changelog
 
-+ [v0.3.2](#v032)
++ [v0.3.4](#v034)
 + [v0.3.1](#v031)
 + [v0.3.0](#v030)
   + [Multitasking](#multitasking)
