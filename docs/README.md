@@ -202,7 +202,7 @@ export default function* () {
 }
 ```
 
-## `Fly.prototype.start ([tasks], { parallel, value })`
+## `Fly.prototype.start ([tasks], options)`
 
 Run the specified tasks (or the `default` one if `tasks.length === 0`).
 
@@ -213,6 +213,8 @@ Run the specified tasks (or the `default` one if `tasks.length === 0`).
     yield this.start(["lint", "test", "build"])
   }
   ```
+
+### Options
 
   + Use the `value` option to pass a value into the first task. Return values cascade on to subsequent tasks.
 
