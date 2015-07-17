@@ -1,6 +1,6 @@
 <div align="center">
   <a href="http://github.com/flyjs/fly">
-    <img width=120px  src="https://cloud.githubusercontent.com/assets/8317250/8430194/35c6043a-1f6a-11e5-8cbd-af6cc86baa84.png">
+    <img width=120px  src="https://cloud.githubusercontent.com/assets/8317250/8733685/0be81080-2c40-11e5-98d2-c634f076ccd7.png">
   </a>
 </div>
 
@@ -31,10 +31,31 @@
   + [`watch` API update](#watch-api-update)
 + [v0.0.1](#v001)
 
+## v0.3.4
+
++ New: Update to new logo:
+<span>
+<a href="http://github.com/flyjs/fly">
+  <img width=50px  src="https://cloud.githubusercontent.com/assets/8317250/8733685/0be81080-2c40-11e5-98d2-c634f076ccd7.png">
+</a>
+</span>
+
++ Change: Use `--list=bare` to display tasks without using terminal styles instead of `--list=simple`.
+
++ New: add `.codeclimate.yml`
+
++ Bugfix: `spawn.js` was yielding a non yieldable expression causing fears to be eaten out by darkness.
+
++ Improve: Documentation greatly revised and some parts rewritten :heart:
+
++ Bugfix: `bin/index.js` was not correctly loading `fly-util` causing some runtime errors to crash Fly silently.
+
++ New: Reporter displays ms/sec appropriately. [#33](https://github.com/flyjs/fly/issues/33).
+
+
 ## v0.3.2
 
 + Bugifx: New error handling was supressing the `No Flyfile found...` message.
-
 
 ## v0.3.1
 
