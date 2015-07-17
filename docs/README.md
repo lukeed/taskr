@@ -401,7 +401,7 @@ Run any of the examples:
 fly -f examples/babel
 ```
 
-To get started writing Flyfiles, check out our [quickstart guide](quickstart).
+To get started writing Flyfiles, check out our [quickstart guide][quickstart].
 
 Happy Hacking! :metal:
 
