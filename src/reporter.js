@@ -23,17 +23,17 @@ export default function () {
   .on("task_start", ({ task }) =>
     log(`Starting ${fmt.start}`, task))
 
- .on("task_complete", ({ task, duration }) => {
+  .on("task_complete", ({ task, duration }) => {
     const time = timeInfo(duration)
-    log(`Finished ${fmt.complete} in ${fmt.secs}`, task, time.duration, time.scale)
- })
+    log(`Finished ${fmt.complete} in ${fmt.secs}`,
+      task, time.duration, time.scale)
+  })
 
   .on("task_not_found", ({ task }) =>
     log(`${fmt.error} not found in Flyfile.`, task))
 
   return this
 }
-
 
 /**
  * conditionally format task duration
@@ -42,8 +42,7 @@ export default function () {
  * @return {Object} time information
  */
 function timeInfo (duration, scale = "ms") {
-  const time = duration >= 1000
+  return duration >= 1000
     ? { duration: Math.round((duration / 1000) * 10) / 10, scale: "s" }
     : { duration, scale }
-  return time
 }
