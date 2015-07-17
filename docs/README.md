@@ -14,7 +14,7 @@
 |
 <b><a href="#api">API</a></b>
 |
-<b><a href="#plugins-1">Plugins</a></b>
+<b><a href="#plugins">Plugins</a></b>
 |
 <b><a href="#hacking">Hacking</a></b>
 |
