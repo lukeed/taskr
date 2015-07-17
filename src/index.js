@@ -7,14 +7,14 @@ import pkg from "../package"
 
 notifyUpdates({ pkg })
 
-let { help, list, file, version, _: tasks } =
-  Parsec.parse(process.argv)
-    .options("file", { default: "./" })
-    .options("list")
-    .options("help")
-    .options("version")
-
 export default function* () {
+  let { help, list, file, version, _: tasks } =
+    Parsec.parse(process.argv)
+      .options("file", { default: "./" })
+      .options("list")
+      .options("help")
+      .options("version")
+
   if (help) {
     cli.help()
   } else if (version) {
@@ -22,12 +22,12 @@ export default function* () {
   } else {
     const path = yield find(file)
     if (list) {
-      cli.list(path, { simple: list === "simple" })
+      cli.list(path, { simple: list === "bare" })
     } else {
      return reporter
-        .call(new Fly(yield cli.spawn(path)))
-        .emit("fly_run", { path })
-        .start(tasks)
+      .call(new Fly(yield cli.spawn(path)))
+      .emit("fly_run", { path })
+      .start(tasks)
     }
   }
 }
