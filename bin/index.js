@@ -1,7 +1,8 @@
 #!/bin/sh
 ":" //# comment; exec /usr/bin/env node --harmony --harmony_arrow_functions "$0" "$@"
 
-if (!require("yieldables")) throw new Error("Fly requires node >= 0.11")
+if (!require("yieldables"))
+  throw new Error("Fly requires iojs || node >= 0.11")
 
 require("co")(require("../dist")).catch(function (e) {
   if (e.code === "ENOENT") {
@@ -9,6 +10,6 @@ require("co")(require("../dist")).catch(function (e) {
       "\nGot a Flyfile? For more info on running Fly," +
       "\nsee the Quickstart guide → git.io/fly-quick\n")
   } else {
-    require("../dist/util").trace(e)
+    require("fly-util").trace(e)
   }
 })
