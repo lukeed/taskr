@@ -173,7 +173,7 @@ Display the version number.
 ## API
 [![][codeclimate-badge]][codeclimate]
 
-## `Fly.prototype.source (...globs)`
+### `Fly.prototype.source (...globs)`
 
 Begin a _yieldable_ sequence. Initialize globs, filters and writers.
 
@@ -183,7 +183,7 @@ export default function* () {
 }
 ```
 
-## `Fly.prototype.target ([dest])`
+### `Fly.prototype.target ([dest])`
 > `dest` can be both comma separated or a single array of paths.
 
 Resolve a _yieldable_ sequence. Reduce the data source applying filters and writers.
@@ -202,7 +202,7 @@ export default function* () {
 }
 ```
 
-## `Fly.prototype.start ([tasks], options)`
+### `Fly.prototype.start ([tasks], options)`
 
 Run the specified tasks (or the `default` one if `tasks.length === 0`).
 
@@ -238,7 +238,7 @@ Run the specified tasks (or the `default` one if `tasks.length === 0`).
   }
   ```
 
-## `Fly.prototype.filter (filter)`
+### `Fly.prototype.filter (filter)`
 
 Add a sync/async function into the `source → target` sequence. Use `Fly.prototype.defer (Function)` to promisify async functions.
 
@@ -262,17 +262,17 @@ You can specify a name for the filter with `Fly.prototype.filter (name, filter)`
 > This feature is mostly used by filter plugins.
 
 
-## `Fly.prototype.watch ([globs], [tasks])`
+### `Fly.prototype.watch ([globs], [tasks])`
 
 Run the specified tasks when a change is detected in any of the paths expanded from `globs`.
 
 
-## `Fly.prototype.concat (name)`
+### `Fly.prototype.concat (name)`
 
 Concatenate files read with `Fly.prototype.source`.
 
 
-## `Fly.prototype.unwrap (onFulfilled, onRejected)`
+### `Fly.prototype.unwrap (onFulfilled, onRejected)`
 
 Unwrap the source globs.
 
@@ -288,26 +288,26 @@ export default function () {
 }
 ```
 
-## `Fly.prototype.write (writer Function)`
+### `Fly.prototype.write (writer Function)`
 
 Add a writer function to the collection of writers. A writer is the receiving end of the expanded glob source after all filters have been applied. It usually results in an IO operation, for example `Fly.prototype.target` and `Fly.prototype.concat`.
 
 
-## `Fly.prototype.clear (paths)`
+### `Fly.prototype.clear (paths)`
 
 Clears / Deletes all paths including sub directories.
 
 
-## `Fly.prototype.log (...args)`
+### `Fly.prototype.log (...args)`
 Log a message with a time stamp.
 
-## `Fly.prototype.error (...args)`
+### `Fly.prototype.error (...args)`
 Log an error message with a time stamp.
 
-## `Fly.prototype.debug (...args)`
+### `Fly.prototype.debug (...args)`
 Log a message with a time stamp _if_ `process.env.DEBUG` is truthy.
 
-## `Fly.prototype.warn (...args)`
+### `Fly.prototype.warn (...args)`
 Log a message with a time stamp, _unless_ `process.env.SILENT` is truthy.
 
 
