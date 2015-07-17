@@ -1,0 +1,5 @@
+engines:
+  eslint: true
+exclude_paths:
+- dist/**
+- docs/**
