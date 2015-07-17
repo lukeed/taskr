@@ -43,26 +43,19 @@ function spawn(flypath) {
             while (1) switch (context$2$0.prev = context$2$0.next) {
               case 0:
                 context$2$0.prev = 0;
-                context$2$0.next = 3;
-                return (0, _flyUtil.findPlugins)(load("package"));
-
-              case 3:
-                context$2$0.t0 = function (prev, next) {
+                return context$2$0.abrupt("return", (0, _flyUtil.findPlugins)(load("package")).reduce(function (prev, next) {
                   return prev.concat(load("node_modules", next));
-                };
+                }, []));
 
-                context$2$0.t1 = [];
-                return context$2$0.abrupt("return", context$2$0.sent.reduce(context$2$0.t0, context$2$0.t1));
-
-              case 8:
-                context$2$0.prev = 8;
-                context$2$0.t2 = context$2$0["catch"](0);
-                (0, _flyUtil.warn)("" + context$2$0.t2.message);
-              case 11:
+              case 4:
+                context$2$0.prev = 4;
+                context$2$0.t0 = context$2$0["catch"](0);
+                (0, _flyUtil.warn)("" + context$2$0.t0.message);
+              case 7:
               case "end":
                 return context$2$0.stop();
             }
-          }, callee$1$0, this, [[0, 8]]);
+          }, callee$1$0, this, [[0, 4]]);
         })();
 
       case 5:
