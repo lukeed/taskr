@@ -1,5 +1,4 @@
-#!/bin/sh
-":" //# comment; exec /usr/bin/env node --harmony --harmony_arrow_functions "$0" "$@"
+#!/usr/bin/env node --harmony
 
 if (!require("yieldables"))
   throw new Error("Fly requires iojs || node >= 0.11")
