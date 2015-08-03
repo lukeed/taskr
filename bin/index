@@ -1,2 +1,11 @@
-#!/usr/bin/env sh
-node --harmony --harmony_arrow_functions "dist" "$@"
+#!/usr/bin/env node
+const node = process.argv[0]
+const path = require("path").join(__dirname, "_index")
+const args = [ "--harmony", "--harmony_arrow_functions"]
+  .concat(path)
+  .concat(process.argv.slice(2))
+const opts = { stdio: "inherit" }
+/**
+ * @overview Launch a new node process with harmony flags and args.
+ */
+require("child_process").spawn(node, args, opts)
