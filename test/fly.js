@@ -93,13 +93,13 @@ test("✈  fly.watch", (t) => {
       }
     }
   })
-  fly.emit = function (event) {
+  fly.emit = (event) => {
     if (event === "fly_watch") t.ok(true, "notify watch event to observers")
     return fly
   }
   fly.watch(glob, "default", { value: 42 }).then((watcher) => {
     t.ok(watcher.unwatch !== undefined, "watch promise resolves to a watcher")
-    setTimeout(function () {
+    setTimeout(() =>{
     // hijack the task to test the watcher runs default when the glob changes
       fly.host.default = function* (data) {
         watcher.unwatch(glob)
