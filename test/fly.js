@@ -20,7 +20,7 @@ test("✈  fly", function (t) {
     "target",
     "emit"
   ]).forEach((method) => t.ok(method !== undefined,
-    `.${method} is defined`))
+    method + " is defined"))
   t.end()
 })
 
@@ -87,7 +87,7 @@ test("✈  fly.watch", (t) => {
   const fly = new Fly({
     file: path,
     host: {
-      *default (data) {
+      default: function* (data) {
         t.ok(true, "run tasks at least once")
         t.equal(data, 42, "pass options into task via start")
       }
@@ -99,13 +99,15 @@ test("✈  fly.watch", (t) => {
   }
   fly.watch(glob, "default", { value: 42 }).then((watcher) => {
     t.ok(watcher.unwatch !== undefined, "watch promise resolves to a watcher")
+    setTimeout(function () {
     // hijack the task to test the watcher runs default when the glob changes
-    fly.host.default = function* (data) {
-      watcher.unwatch(glob)
-      t.ok(true, "run given tasks when glob changes")
-      t.equal(data, 42, "pass options into task via start on change")
-    }
-    touch(path)
+      fly.host.default = function* (data) {
+        watcher.unwatch(glob)
+        t.ok(true, "run given tasks when glob changes")
+        t.equal(data, 42, "pass options into task via start on change")
+      }
+      touch(path)
+    }, 0)
   })
 })
 
@@ -132,7 +134,7 @@ test("✈  fly.*exec", (t) => {
   t.plan(4)
   const fly = new Fly({
     host: {
-      *task (data) {
+      task: function* (data) {
         t.ok(true, "run a task")
         t.equal(data, "rosebud", "pass an initial value to task")
       }
@@ -153,13 +155,13 @@ test("✈  fly.start", (t) => {
   const value = 42
   const fly = new Fly({
     host: {
-      *a (data) {
+      a: function* (data) {
         return data + 1
       },
-      *b (data) {
+      b: function* (data) {
         return data + 1
       },
-      *c (data) {
+      c: function* (data) {
         t.ok(true, "run a given list of tasks")
         t.equal(data, value + 2, "cascade return values")
         return data + 1
@@ -167,7 +169,7 @@ test("✈  fly.start", (t) => {
     }
   })
   co(function* () {
-    const result = yield fly.start(["a", "b", "c"], { value })
+    const result = yield fly.start(["a", "b", "c"], { value: value })
     t.equal(result, value + 3, "return last task value")
   })
 })
@@ -180,12 +182,12 @@ test("✈  fly.start (order)", (t) => {
     // when running in a sequence both b and c wait while a blocks.
     // when running in parallel, b and c run while a blocks. state
     // can only be 3 when each task runs in order.
-      *a () {
+      a: function* () {
         yield block()
         if (state === 0) state++
       },
-      *b () { state++ },
-      *c () { state++ }
+      b: function* () { state++ },
+      c: function* () { state++ }
     }
   })
   co(function* () {
