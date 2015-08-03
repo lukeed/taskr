@@ -59,17 +59,17 @@ const paths = {
 }
 
 export default function* () {
-  this.watch([paths.scripts], ["scripts"])
+  yield this.watch(paths.scripts, "build")
 }
 
-export function* scripts () {
-  yield this.clear("build")
+export function* build () {
+  yield this.clear("dist")
   yield this
     .source(paths.scripts)
     .babel({ stage: 0 })
     .uglify()
     .concat("all.min.js")
-    .target("build/js")
+    .target("dist")
 }
 ```
 

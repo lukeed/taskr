@@ -118,7 +118,6 @@ Flyfileがあれば、version numberを表示します。
 
 
 # API
-[![][codeclimate-badge]][codeclimate]
 
 Flyはビルトインタスク`clear`、`concat`、`filter`のように、クリエイティブに、実際に操作できる多くのメソッドを提供します。
 
@@ -244,6 +243,3 @@ module.exports = function () {
   }
 }
 ```
-
-[codeclimate-badge]: https://codeclimate.com/github/flyjs/fly/badges/gpa.svg
-[codeclimate]: https://codeclimate.com/github/flyjs/fly

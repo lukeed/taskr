@@ -171,7 +171,6 @@ Display available tasks.
 Display the version number.
 
 ## API
-[![][codeclimate-badge]][codeclimate]
 
 ### `Fly.prototype.source (...globs)`
 
@@ -262,9 +261,9 @@ You can specify a name for the filter with `Fly.prototype.filter (name, filter)`
 > This feature is mostly used by filter plugins.
 
 
-### `Fly.prototype.watch ([globs], [tasks])`
+### `Fly.prototype.watch (globs, tasks)`
 
-Run the specified tasks when a change is detected in any of the paths expanded from `globs`.
+Run the specified tasks when a change is detected in any of the paths expanded from `globs`. Returns a promise.
 
 
 ### `Fly.prototype.concat (name)`
@@ -274,7 +273,7 @@ Concatenate files read with `Fly.prototype.source`.
 
 ### `Fly.prototype.unwrap (onFulfilled, onRejected)`
 
-Unwrap the source globs.
+Unwrap the source globs and returns a promise.
 
 This method can be used when creating plugins that need to expand the source globs, usually to bypass IO operations, for example, linting / testing plugins.
 
@@ -407,6 +406,4 @@ Happy Hacking! :metal:
 
 
 
-[codeclimate-badge]: https://codeclimate.com/github/flyjs/fly/badges/gpa.svg
-[codeclimate]: https://codeclimate.com/github/flyjs/fly
 [quickstart]: https://github.com/flyjs/fly/wiki/Quickstart
