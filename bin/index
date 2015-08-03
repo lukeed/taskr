@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+node --harmony --harmony_arrow_functions "dist" "$@"
