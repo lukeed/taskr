@@ -2,8 +2,8 @@ const test = require("tape").test
 const reporter = require("../dist/reporter")
 
 const fakeEmitter = (event, t) => ({
-  on(e) {
-    if (e === event) t.ok(true, `notify ${event} events`)
+  on: function (e) {
+    if (e === event) t.ok(true, "notify " + event + " events")
     return this
   }
 })
