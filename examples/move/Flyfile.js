@@ -1,4 +1,4 @@
-exports.default = function* () {
+export default function* () {
   yield this
     .source("fly")
     .filter(s => s.toUpperCase())

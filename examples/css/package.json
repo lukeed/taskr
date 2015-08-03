@@ -1,7 +1,7 @@
 {
   "dependencies": {
-    "fly-less": "^0.1.0",
+    "fly-less": "^0.1.2",
     "fly-sass": "^0.2.0",
-    "fly-stylus": "^0.3.1"
+    "fly-stylus": "^0.3.2"
   }
 }

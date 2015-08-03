@@ -1,13 +1,7 @@
 {
   "name": "fly-examples",
   "description": "Fly Examples",
-  "version": "0.0.1",
-  "scripts": {
-    "setup": "../bin/index.js"
-  },
+  "version": "0.4.0",
   "author": "Jorge Bucaran",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/flyjs/fly/issues"
-  }
+  "license": "MIT"
 }
