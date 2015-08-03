@@ -35,7 +35,7 @@ var _package2 = _interopRequireDefault(_package);
     while (1) switch (context$1$0.prev = context$1$0.next) {
       case 0:
         (0, _flyUtil.notifyUpdates)({ pkg: _package2["default"] });
-        _Parsec$options$options$options$options$parse = _parsec2["default"].options("file").options("list").options("help").options("version").parse(process.argv, { strictMode: true });
+        _Parsec$options$options$options$options$parse = _parsec2["default"].options("file", { "default": "." }).options("list").options("help").options("version").parse(process.argv, { strictMode: true });
         help = _Parsec$options$options$options$options$parse.help;
         list = _Parsec$options$options$options$options$parse.list;
         file = _Parsec$options$options$options$options$parse.file;

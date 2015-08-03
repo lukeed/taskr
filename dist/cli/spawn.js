@@ -24,13 +24,13 @@ var _flyUtil = require("fly-util");
   @return {Fly} fly instance ✈
  */
 
-function spawn(flypath) {
+function spawn(path) {
   var file;
   return _regeneratorRuntime.wrap(function spawn$(context$1$0) {
     while (1) switch (context$1$0.prev = context$1$0.next) {
       case 0:
         context$1$0.next = 2;
-        return (0, _flyUtil.find)(flypath, _flyUtil.bind);
+        return (0, _flyUtil.find)(path, _flyUtil.bind);
 
       case 2:
         file = context$1$0.sent;
