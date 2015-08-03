@@ -1,14 +1,11 @@
-const options = [{
-  parallel: false,
-  value: { dist: "dist/seq" }
-}, {
-  parallel: true,
-  value: { dist: "dist/con" }
-}]
+const options = [
+  { value: { dist: "dist/seq" } },
+  { parallel: true, value: { dist: "dist/con" } }
+]
 
 export default function* () {
   yield this.clear("dist")
-  for (const opt of options)
+  for (let opt of options)
     yield this.start(["first", "second", "third"], opt)
 }
 

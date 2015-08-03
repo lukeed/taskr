@@ -4,7 +4,7 @@ const paths = {
 }
 
 export default function* () {
-  this.watch(paths.scripts, ["build"])
+  yield this.watch(paths.scripts, ["build"])
 }
 
 export function* build () {

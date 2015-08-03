@@ -1,8 +1,8 @@
 exports.default = ->
-  yield @clear "dist"
-  @watch "src/**/*.coffee", ["grind"]
+  yield @watch "src/**/*.coffee", "grind"
 
 exports.grind = ->
+  yield @clear "dist"
   yield
     @source "src/**/*.coffee"
     .coffee {}
