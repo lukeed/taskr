@@ -4,43 +4,51 @@
   "description": "Modern Build System",
   "main": "dist/index.js",
   "bin": {
-    "fly": "./bin/index.js"
+    "fly": "./bin/index"
   },
   "dependencies": {
-    "babel-core": "^5.7.4",
-    "babel-runtime": "^5.6.18",
-    "clor": "^1.0.0",
+    "babel-core": "^5.8.9",
+    "babel-runtime": "^5.8.9",
+    "chokidar": "^1.0.5",
+    "clor": "^1.0.2",
     "co": "^4.5.4",
-    "fly-util": "^3.4.3",
+    "debug": "^2.2.0",
+    "fly-util": "^4.0.1",
     "glob": "^5.0.13",
+    "interpret": "^0.6.5",
     "mkdirp": "^0.5.1",
     "mz": "^2.0.0",
-    "parsec": "^0.1.0",
+    "parsec": "^0.2.1",
     "prettyjson": "^1.1.2",
-    "rimraf": "^2.4.0",
+    "rimraf": "^2.4.2",
     "yieldables": "^1.2.0"
   },
   "devDependencies": {
     "babel": "^5.6.14",
-    "babel-eslint": "^3.1.9",
+    "babel-eslint": "^4.0.5",
     "coffee-script": "^1.9.3",
     "earlgrey": "0.0.9",
-    "eslint": "^0.21.2",
+    "eslint": "^1.0.0",
+    "faucet": "0.0.1",
     "fly-babel": "0.2.0",
     "fly-eslint": "0.2.0",
+    "tap-nyan": "0.0.2",
     "tap-spec": "^4.0.2",
-    "tape": "^4.0.0"
+    "tape": "^4.0.0",
+    "touch": "^1.0.0"
   },
   "scripts": {
     "setup": "npm i && npm run test && npm run symlink",
     "lint": "eslint src/",
-    "test": "npm run build && npm run lint && npm run harmony-test | tspec",
+    "test": "npm run build && npm run lint && npm run harmony-test",
+    "spec": "npm run test | tspec",
+    "nyan": "npm run test | tnyan",
     "build": "babel --optional runtime src/ -d ./dist",
     "deploy": "npm run test && git push origin master && npm publish",
     "harmony-test": "node --harmony --harmony_arrow_functions ./node_modules/tape/bin/tape test/*.js",
     "rebuild": "rm -rf node_modules && npm run setup",
-    "samples": "./bin/index.js -f examples",
-    "symlink": "ln -s $PWD/bin/index.js  /usr/local/bin/fly"
+    "samples": "./bin/index -f examples",
+    "symlink": "ln -s $PWD/bin/index /usr/local/bin/fly"
   },
   "repository": {
     "type": "git",
@@ -58,8 +66,8 @@
     "url": "https://github.com/flyjs/fly/issues"
   },
   "engines": {
-    "node": ">= 0.11.16",
-    "iojs": ">= 1.0.0"
+    "iojs": ">= 1.0.0",
+    "node": ">= 0.12.0"
   },
   "homepage": "https://github.com/flyjs/fly"
 }
