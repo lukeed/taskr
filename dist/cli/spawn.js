@@ -10,7 +10,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.spawn = spawn;
 var marked0$0 = [spawn].map(_regeneratorRuntime.mark);
 
-var _fly = require("./../fly");
+var _fly = require("../fly");
 
 var _fly2 = _interopRequireDefault(_fly);
 
