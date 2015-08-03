@@ -1,0 +1,2 @@
+# include our fake node_modules in the repo
+!node_modules

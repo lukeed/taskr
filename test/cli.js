@@ -57,7 +57,6 @@ test("✈  cli.list", (t) => {
 })
 
 test("✈  cli.spawn", (t) => {
-  process.env.SILENT = true
   t.plan(4)
   Array.prototype.concat([
     join("test", "fixtures", "alt"),
