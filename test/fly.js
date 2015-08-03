@@ -1,0 +1,257 @@
+const co = require("co")
+const read = require("mz/fs").readFile
+const test = require("tape").test
+const Fly = require("../dist/fly")
+const join = require("path").join
+const touch = require("touch")
+
+test("✈  fly", function (t) {
+  t.ok(Fly !== undefined, "is defined")
+  Array.prototype.concat([
+    "source",
+    "filter",
+    "watch",
+    "unwrap",
+    "exec",
+    "start",
+    "write",
+    "clear",
+    "concat",
+    "target",
+    "emit"
+  ]).forEach((method) => t.ok(method !== undefined,
+    `.${method} is defined`))
+  t.end()
+})
+
+test("✈  fly.constructor", (t) => {
+  const fly = new Fly({
+    file: join(__dirname, "fixtures", "flyfile.js"),
+    host: {
+      task: function () {
+        t.equal(fly, this, "bind tasks to fly instance")
+      }
+    }
+  })
+  t.ok(fly !== undefined, "create fly instance")
+  t.ok(fly.tasks.task !== undefined, "load task from host")
+  fly.tasks.task()
+  t.equal(fly.encoding, "utf8", "set default encoding to utf8")
+  t.deepEqual(fly.plugins, [], "no default plugins")
+  t.equal(process.cwd(), join(__dirname, "fixtures"),
+    "switch current working directory")
+  t.equal(fly.file, join(__dirname, "fixtures", "flyfile.js"),
+    "set file to path specified in the constructor")
+  t.end()
+})
+
+test("✈  fly.source", (t) => {
+  const fly = new Fly()
+  fly.source([[[[["*.a", ["*.b"]]], ["*.c"]]]])
+  t.deepEqual(fly._globs, ["*.a", "*.b", "*.c"], "flatten globs")
+  t.deepEqual(fly._writers, [], "init empty writer list")
+  t.deepEqual(fly._filters, [], "init empty filter list")
+  t.end()
+})
+
+test("✈  fly.filter", (t) => {
+  const fly = new Fly()
+  fly.filter((src) => src.toLowerCase())
+
+  t.equal(fly._filters.length, 1, "add filter to filter collection")
+  t.equal(fly._filters[0].transform("FLY"), "fly",
+    "add transform for anonymous filters")
+
+  fly.filter("myFilter", (src) => src.toUpperCase(), { ext: ".foo" })
+  t.ok(fly.myFilter instanceof Function,
+    "add transform to fly instance for named filters")
+  fly.myFilter({ secret: 42 })
+  t.equal(fly._filters[1].transform("fly"), "FLY",
+    "create transform function for named filter")
+  t.equal(fly._filters[1].options.secret, 42, "read options from filter")
+  t.equal(fly._filters[1].ext, ".foo", "read extension from filter")
+
+  try { fly.filter("myFilter")
+  } catch (e) { t.ok(true, "throw an error if filter already exists") }
+
+  fly.source("")
+  t.deepEqual(fly._filters, [], "reset filter each time source is called")
+
+  t.end()
+})
+
+test("✈  fly.watch", (t) => {
+  t.plan(6)
+  const glob = "flyfile.js"
+  const path = join(__dirname, "fixtures", "flyfile.js")
+  const fly = new Fly({
+    file: path,
+    host: {
+      *default (data) {
+        t.ok(true, "run tasks at least once")
+        t.equal(data, 42, "pass options into task via start")
+      }
+    }
+  })
+  fly.emit = function (event) {
+    if (event === "fly_watch") t.ok(true, "notify watch event to observers")
+    return fly
+  }
+  fly.watch(glob, "default", { value: 42 }).then((watcher) => {
+    t.ok(watcher.unwatch !== undefined, "watch promise resolves to a watcher")
+    // hijack the task to test the watcher runs default when the glob changes
+    fly.host.default = function* (data) {
+      watcher.unwatch(glob)
+      t.ok(true, "run given tasks when glob changes")
+      t.equal(data, 42, "pass options into task via start on change")
+    }
+    touch(path)
+  })
+})
+
+test("✈  fly.unwrap", (t) => {
+  t.plan(2)
+  const files = ["a.x", "b.x", "c.x"]
+  const paths = files.map((file) => {
+    const path = join(__dirname, "fixtures", file)
+    touch(path)
+    return path
+  })
+  const fly = new Fly()
+  co(function* () {
+    const result = yield fly.source("*.x").unwrap((f) => {
+      t.deepEqual(f, files, "unwrap source globs")
+      return 42
+    })
+    t.equal(result, 42, "result is the return value from fulfilled handler")
+    yield fly.clear(files)
+  })
+})
+
+test("✈  fly.*exec", (t) => {
+  t.plan(4)
+  const fly = new Fly({
+    host: {
+      *task (data) {
+        t.ok(true, "run a task")
+        t.equal(data, "rosebud", "pass an initial value to task")
+      }
+    }
+  })
+  fly.emit = function (event, options) {
+    if (event === "task_start")
+      t.ok(true, "notify start event to observers")
+    if (event === "task_complete")
+      t.ok(true, "notify complete event to observers")
+    return fly
+  }
+  co(fly.exec.bind(fly), "task", "rosebud")
+})
+
+test("✈  fly.start", (t) => {
+  t.plan(3)
+  const value = 42
+  const fly = new Fly({
+    host: {
+      *a (data) {
+        return data + 1
+      },
+      *b (data) {
+        return data + 1
+      },
+      *c (data) {
+        t.ok(true, "run a given list of tasks")
+        t.equal(data, value + 2, "cascade return values")
+        return data + 1
+      }
+    }
+  })
+  co(function* () {
+    const result = yield fly.start(["a", "b", "c"], { value })
+    t.equal(result, value + 3, "return last task value")
+  })
+})
+
+test("✈  fly.start (order)", (t) => {
+  t.plan(2)
+  var state = 0
+  const fly = new Fly({
+    host: {
+    // when running in a sequence both b and c wait while a blocks.
+    // when running in parallel, b and c run while a blocks. state
+    // can only be 3 when each task runs in order.
+      *a () {
+        yield block()
+        if (state === 0) state++
+      },
+      *b () { state++ },
+      *c () { state++ }
+    }
+  })
+  co(function* () {
+    yield fly.start(["a", "b", "c"], { parallel: false })
+    t.ok(state === 3, "run tasks in sequence")
+    state = 0 // reset
+    yield fly.start(["a", "b", "c"], { parallel: true })
+    t.ok(state !== 3, "run tasks in parallel")
+  })
+  function block () {
+    return new Promise((resolve) => {
+      setTimeout(function () {
+        resolve()
+      }, 200)
+    })
+  }
+})
+
+test("✈  fly.write", (t) => {
+  t.plan(2)
+  const fly = new Fly()
+  fly.write(function () {
+    t.ok(fly === this, "bind writer to fly instance")
+  })
+  t.ok(fly._writers.length === 1, "add writer function to writer list")
+  fly._writers[0]()
+})
+
+test("✈  fly.clear", (t) => {
+  t.plan(1)
+  const paths = Array.prototype.concat(["tmp1", "tmp2", "tmp3"])
+  .map((file) => {
+    const path = join(__dirname, "fixtures", file)
+    touch(path)
+    return path
+  })
+  const fly = new Fly()
+  co(function* () {
+    yield fly.clear(paths)
+    t.ok(true, "clear files from a given list of paths")
+  })
+})
+
+test("✈  fly.concat", (t) => {
+  const fly = new Fly()
+  fly.concat("f")
+  t.ok(fly._writers.length === 1, "add concat writer to writer collection")
+  t.end()
+})
+
+test("✈  fly.target", (t) => {
+  t.plan(1)
+  co(function* () {
+    process.chdir(join(__dirname, "fixtures"))
+    const fly = new Fly()
+    yield fly
+      .source("*.txt")
+      .filter((src) => src.toUpperCase())
+      .target(".")
+
+    yield fly
+      .source("*.txt")
+      .filter((src) => {
+        t.ok(src === "FOO BAR\n", "resolve source, filters and writers")
+        return src.toLowerCase()
+      })
+      .target(".")
+  })
+})
