@@ -8,7 +8,7 @@ import pkg from "../package"
 co(function* () {
   notifyUpdates({ pkg })
   const { help, list, file, version, _: tasks } = Parsec
-    .options("file")
+    .options("file", { default: "." })
     .options("list")
     .options("help")
     .options("version")
