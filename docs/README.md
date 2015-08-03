@@ -36,7 +36,7 @@ Similar to gulp, _Fly_ favors _code_ over configuration.
 
 * Fly is itself written in ES6, but tasks can be written in [other languages](https://github.com/tkellen/js-interpret#extensions).
 
-+ Tasks are described using ES6 [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) or ES7 [async](http://jakearchibald.com/2014/es7-async-functions/) functions and async flow is controlled via [`yield`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield):
++ Tasks are described using ES6 [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) or ES7 [async](http://jakearchibald.com/2014/es7-async-functions/) functions and async flow is controlled with [`yield`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield):
 
   ```js
   export function* task () {
@@ -66,7 +66,7 @@ Similar to gulp, _Fly_ favors _code_ over configuration.
   }
   ```
 
-+ Fly API takes the pipeline metaphor to the next level:
++ Fly API allows you to compose tasks similar to a pipeline, but it's not limited to the stream metaphor.
 
   ```js
   export default function* () {
@@ -87,7 +87,7 @@ Similar to gulp, _Fly_ favors _code_ over configuration.
   }
   ```
 
-+ Use `Fly.prototype.filter(Function)` to add a transform in the sequence. If your function is async wrap it with `Fly.prototype.defer` and Fly will handle it as expected.
++ Use `Fly.prototype.filter(Function)` to add a transform in the sequence. If your function is async wrap it with `Fly.prototype.defer`.
 
 + Plugins are autoloaded, just make sure to include it in your `package.json` and under `node_modules`.
 
@@ -101,9 +101,9 @@ Similar to gulp, _Fly_ favors _code_ over configuration.
 
 ## _Flyfiles_
 
-Similar to other build systems, _Fly_ reads a Flyfile or Flypath to run your tasks.
+Similar to other build systems, _Fly_ reads a `flyfile` (case insensitive) to run your tasks.
 
-Flyfiles must include the extension of the language they are written in, `.js` for ES5, `.babel.js` for ES6/7, `.coffee` for CoffeeScript, etc.
+Flyfiles must include the extension of the language they are written in, `.js` for ES5/6/7, `.coffee` for CoffeeScript, etc.
 
 > ES6/7 is supported out of the box. Other JavaScript variants require the corresponding module to transpile them on the _fly_.
 
@@ -172,20 +172,24 @@ Display the version number.
 
 ## API
 
-### `Fly.prototype.source (...globs)`
+### IO
 
-Begin a _yieldable_ sequence. Initialize globs, filters and writers.
+#### `Fly.prototype.source (...globs)`
+
+Begin a _yieldable_ sequence.
 
 ```js
 export default function* () {
-  yield this.source(["styles/*.scss", "styles/.sass"])...
+  yield this.source(["styles/*.scss", "styles/*.sass"])...
 }
 ```
 
-### `Fly.prototype.target ([dest])`
+#### `Fly.prototype.target ([dest])`
 > `dest` can be both comma separated or a single array of paths.
 
 Resolve a _yieldable_ sequence. Reduce the data source applying filters and writers.
+
+A writer is the receiving end of the expanded glob source after all filters are applied.
 
 ```js
 export default function* () {
@@ -201,43 +205,22 @@ export default function* () {
 }
 ```
 
-### `Fly.prototype.start ([tasks], options)`
+#### `Fly.prototype.write (writer Function)`
 
-Run the specified tasks (or the `default` one if `tasks.length === 0`).
+Add a writer function to the collection of writers. For example `Fly.prototype.target` and `Fly.prototype.concat`.
 
-  + Can be yielded inside other tasks.
+#### `Fly.prototype.concat (name)`
 
-  ```js
-  export default function* () {
-    yield this.start(["lint", "test", "build"])
-  }
-  ```
+Concatenate files read with `Fly.prototype.source`.
 
-### Options
+#### `Fly.prototype.clear (paths)`
 
-  + Use the `value` option to pass a value into the first task. Return values cascade on to subsequent tasks.
+Clears / Deletes all paths including sub directories.
 
-  ```js
-  export default function* () {
-    yield this.start(["a", "b", "c"])
-    ...
-    return 42
-  }
 
-  export default function* (secret) {
-    this.log(`The secret is ${secret}`) // The secret is 42
-  }
-  ```
+### Filters
 
-  + To run tasks in parallel use `parallel: true`. The following causes `dev`, `stage` and `server` tasks to start at the same time.
-
-  ```js
-  export default function* () {
-    yield this.start(["dev", "stage", "server"], { parallel: true })
-  }
-  ```
-
-### `Fly.prototype.filter (filter)`
+#### `Fly.prototype.filter (filter)`
 
 Add a sync/async function into the `source → target` sequence. Use `Fly.prototype.defer (Function)` to promisify async functions.
 
@@ -261,17 +244,51 @@ You can specify a name for the filter with `Fly.prototype.filter (name, filter)`
 > This feature is mostly used by filter plugins.
 
 
-### `Fly.prototype.watch (globs, tasks)`
+### Tasks
+
+#### `Fly.prototype.start ([tasks], options)`
+
+Run the specified tasks (or the `default` one if `tasks.length === 0`).
+
+  + Can be yielded inside other tasks.
+
+  ```js
+  export default function* () {
+    yield this.start(["lint", "test", "build"])
+  }
+  ```
+
+#### Options
+
+  + Use the `value` option to pass a value into the first task. Return values cascade on to subsequent tasks.
+
+  ```js
+  export default function* () {
+    yield this.start(["a", "b", "c"])
+    ...
+    return 42
+  }
+
+  export default function* (secret) {
+    this.log(`The secret is ${secret}`) // The secret is 42
+  }
+  ```
+
+  + To run tasks in parallel use `parallel: true`. The following causes `dev`, `stage` and `server` tasks to start at the same time.
+
+  ```js
+  export default function* () {
+    yield this.start(["dev", "stage", "server"], { parallel: true })
+  }
+  ```
+
+#### `Fly.prototype.watch (globs, tasks)`
 
 Run the specified tasks when a change is detected in any of the paths expanded from `globs`. Returns a promise.
 
 
-### `Fly.prototype.concat (name)`
-
-Concatenate files read with `Fly.prototype.source`.
-
-
-### `Fly.prototype.unwrap (onFulfilled, onRejected)`
+### Other
+#### `Fly.prototype.unwrap (onFulfilled, onRejected)`
 
 Unwrap the source globs and returns a promise.
 
@@ -287,27 +304,21 @@ export default function () {
 }
 ```
 
-### `Fly.prototype.write (writer Function)`
+### Instrumentation
 
-Add a writer function to the collection of writers. A writer is the receiving end of the expanded glob source after all filters have been applied. It usually results in an IO operation, for example `Fly.prototype.target` and `Fly.prototype.concat`.
-
-
-### `Fly.prototype.clear (paths)`
-
-Clears / Deletes all paths including sub directories.
-
-
-### `Fly.prototype.log (...args)`
+#### `Fly.prototype.log (...args)`
 Log a message with a time stamp.
 
-### `Fly.prototype.error (...args)`
+#### `Fly.prototype.error (...args)`
 Log an error message with a time stamp.
 
-### `Fly.prototype.debug (...args)`
-Log a message with a time stamp _if_ `process.env.DEBUG` is truthy.
+#### `Fly.prototype.warn (...args)`
+Log a message with a time stamp, if `process.env.VERBOSE` is truthy.
 
-### `Fly.prototype.warn (...args)`
-Log a message with a time stamp, _unless_ `process.env.SILENT` is truthy.
+#### `Fly.prototype.debug (...args)`
+
+Log a debug message. Set `DEBUG="*"` or `DEBUG="fly:*"` to visualize. See [`debug`](https://github.com/visionmedia/debug)'s documentation for advance use.
+
 
 
 ## Plugins
@@ -402,7 +413,7 @@ fly -f examples/babel
 
 To get started writing Flyfiles, check out our [quickstart guide][quickstart].
 
-Happy Hacking! :metal:
+:metal:
 
 
 
