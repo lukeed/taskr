@@ -1,20 +1,27 @@
-import path from "path"
-import { findPlugins as find, warn } from "fly-util"
-
+import Fly from "../fly"
+import { join, dirname } from "path"
+import { find, filter, bind, alert } from "fly-util"
 /**
-  Resolve flyfile using flypath and create a new Fly instance.
-  @param {String} flypath Path to a flyfile
+  Create a new Fly instance.
+  @param {String} path to a flyfile
+  @return {Fly} fly instance ✈
  */
 export function* spawn (flypath) {
-  const host = require(flypath)
-  const root = path.dirname(flypath)
-  const load = (...file) => require(path.join(root, ...file))
-  const plugins = yield function* () {
-    try {
-      return find(load("package"))
-        .reduce((prev, next) => prev
-          .concat(load("node_modules", next)), [])
-    } catch (error) { warn(`${error.message}`) }
-  }()
-  return { host, root, plugins }
+  const file = yield find(flypath, bind)
+  return new Fly({
+    file, host: require(file), plugins: getPlugins(dirname(file))
+  })
+}
+/**
+  Load and return plugins in path/node_modules
+  Bind require to compile plugins on the fly.
+*/
+function getPlugins (path) {
+  bind(null, { stage: 0, only: [/fly-[-\w]+\/[-\w]+\./, /[fF]lyfile\.js/] })
+  return filter(load(join(path, "package")), (name) => {
+    return { name, plugin: load(join(path, "node_modules", name)) }
+  })
+  function load (file) {
+    try { return require(file) } catch (e) { alert(`${e.message}`) }
+  }
 }
