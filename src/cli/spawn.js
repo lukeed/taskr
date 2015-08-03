@@ -6,8 +6,8 @@ import { find, filter, bind, alert } from "fly-util"
   @param {String} path to a flyfile
   @return {Fly} fly instance ✈
  */
-export function* spawn (flypath) {
-  const file = yield find(flypath, bind)
+export function* spawn (path) {
+  const file = yield find(path, bind)
   return new Fly({
     file, host: require(file), plugins: getPlugins(dirname(file))
   })
