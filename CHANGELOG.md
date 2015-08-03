@@ -6,6 +6,7 @@
 
 # Changelog
 
++ [v0.4.0](#v040)
 + [v0.3.4](#v034)
 + [v0.3.1](#v031)
 + [v0.3.0](#v030)
@@ -30,6 +31,62 @@
   + [Plugins API update](#plugins-api-update)
   + [`watch` API update](#watch-api-update)
 + [v0.0.1](#v001)
+
+## v0.4.0
+
++ :boom: **new** in addition to Flyfiles, plugins can now be written in *ES6/7* out of the box. To accomplish this, node's `require` is bound using `babel-core/register` before loading plugins.
+
+  > Support for plugins written in any language is under discussion.
+
++ :boom: **new** Flyfiles are transpiled by default with Babel. This adds a small perf penalty when running a modified flyfile the first time, but will allow us to support more versions of node in the future.
+
++ :boom: **new** full tests! Check out `test/`.
+
++ :boom: **new** instrumentation  :flashlight: Set `DEBUG="*"` or `DEBUG="fly:*"` for extensive logs. See [`debug`](https://github.com/visionmedia/debug)'s documentation for advance use.
+
++ :boom: **new** [Optional] plugins are now invoked with a contextualized `debug` object that can be used to add instrumentation to your plugin. `this.debug` is also available, useful to debug tasks in a flyfile.
+
+```js
+export default function (debug) {
+  debug("init")
+  //
+  debug("finish")
+}
+```
+
+> You are not required to instrument your plugins, but now it's very easy to do so and your users will appreciate the effort you put in making your code easier to debug.
+
++ **new** `examples/watch` to illustrate a watch task.
+
++ **improve** tests are now written in a mix of ES5 and ES6. if you are hacking on Fly and want to run the tests yourself, you need to run `iojs`. Check out [`n`](https://github.com/tj/n) for an excellent version manager for node.
+
++ **improve** revise documentation, fix typos, simplify and add more examples.
+
++ **improve** more concise comments, simplify CLI engine.
+
++ **improve** simpler and friendlier shell runner `bin/index`. Full Windows support is just around the corner.
+
++ **improve** errors are handled in `index.js` now (they were at `bin/index` before).
+
++ **improve** `index.js` is much simpler now. a new `Fly` instance is created via `cli.spawn` which hides the complexity of resolving the path and `cli.list` does not accept a path anymore, but a loaded `flyfile` object.
+
++ **change** `Flypath.js` is **no** longer a valid name for a Flyfile. Please , name your Flyfiles either `flyfile.js` or `Flyfile.js`.
+
++ **bugfix** `Fly.prototype.watch` was failing due to `fly-util` `watch` not being correctly exported and not calling `flatten` on the specified globs.
+
++ **change** fix an inconsistency where a `default` task with a watch would end *before* any tasks ran inside. This bug was resolved by returning a promise.
+
+> **This affects `watch` tasks in your Flyfile.** Please `yield` watch tasks from now:
+
+```js
+export default function* () {
+  yield this.watch(globs, tasks)
+}
+```
+
++ **change** `Fly.prototype.warn` was renamed to the more accurate `alert`.
+
+
 
 ## v0.3.4
 
