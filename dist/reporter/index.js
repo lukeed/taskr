@@ -6,14 +6,18 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _fmt = require("./fmt");
+var _fmt = require("../fmt");
 
 var _fmt2 = _interopRequireDefault(_fmt);
+
+var _timeInfo = require("./timeInfo");
+
+var _timeInfo2 = _interopRequireDefault(_timeInfo);
 
 var _flyUtil = require("fly-util");
 
 exports["default"] = function () {
-  this.on("fly_run", function (_ref) {
+  return this.on("fly_run", function (_ref) {
     var path = _ref.path;
     return (0, _flyUtil.log)("Flying with " + _fmt2["default"].path + "...", path);
   }).on("flyfile_not_found", function (_ref2) {
@@ -39,25 +43,12 @@ exports["default"] = function () {
     var task = _ref7.task;
     var duration = _ref7.duration;
 
-    var time = timeInfo(duration);
+    var time = (0, _timeInfo2["default"])(duration);
     (0, _flyUtil.log)("Finished " + _fmt2["default"].complete + " in " + _fmt2["default"].secs, task, time.duration, time.scale);
   }).on("task_not_found", function (_ref8) {
     var task = _ref8.task;
     return (0, _flyUtil.log)(_fmt2["default"].error + " not found in Flyfile.", task);
   });
-
-  return this;
 };
 
-/**
- * conditionally format task duration
- * @param  {Number} duration task duration in ms
- * @param  {String} scale default scale for output
- * @return {Object} time information
- */
-function timeInfo(duration) {
-  var scale = arguments.length <= 1 || arguments[1] === undefined ? "ms" : arguments[1];
-
-  return duration >= 1000 ? { duration: Math.round(duration / 1000 * 10) / 10, scale: "s" } : { duration: duration, scale: scale };
-}
 module.exports = exports["default"];

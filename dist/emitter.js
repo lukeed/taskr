@@ -15,26 +15,26 @@ var Emitter = (function () {
     this.events = [];
   }
 
+  /**
+   * Listen to an event.
+   * @param {String} name of event to observe
+   * @param {Function} handler
+   */
+
   _createClass(Emitter, [{
     key: "on",
-
-    /**
-     * Listen to an event.
-     * @param {String} name of event to observe
-     * @param {Function} handler
-     */
     value: function on(name, cb) {
       (this.events[name] = this.events[name] || []).push(cb);
       return this;
     }
-  }, {
-    key: "emit",
 
     /**
      * Emit an event to listeners.
      * @param {String} name of event to emit
      * @param {Object} data to send
      */
+  }, {
+    key: "emit",
     value: function emit(name, obj) {
       var _this = this;
 

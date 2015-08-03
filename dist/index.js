@@ -6,13 +6,9 @@ var _interopRequireDefault = require("babel-runtime/helpers/interop-require-defa
 
 var _interopRequireWildcard = require("babel-runtime/helpers/interop-require-wildcard")["default"];
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+var _co = require("co");
 
-var _fly = require("./fly");
-
-var _fly2 = _interopRequireDefault(_fly);
+var _co2 = _interopRequireDefault(_co);
 
 var _parsec = require("parsec");
 
@@ -32,73 +28,63 @@ var _package = require("../package");
 
 var _package2 = _interopRequireDefault(_package);
 
-(0, _flyUtil.notifyUpdates)({ pkg: _package2["default"] });
-
-exports["default"] = _regeneratorRuntime.mark(function callee$0$0() {
-  var _Parsec$parse$options$options$options$options, help, list, file, version, tasks, path;
+(0, _co2["default"])(_regeneratorRuntime.mark(function callee$0$0() {
+  var _Parsec$options$options$options$options$parse, help, list, file, version, tasks, fly;
 
   return _regeneratorRuntime.wrap(function callee$0$0$(context$1$0) {
     while (1) switch (context$1$0.prev = context$1$0.next) {
       case 0:
-        _Parsec$parse$options$options$options$options = _parsec2["default"].parse(process.argv).options("file", { "default": "./" }).options("list").options("help").options("version");
-        help = _Parsec$parse$options$options$options$options.help;
-        list = _Parsec$parse$options$options$options$options.list;
-        file = _Parsec$parse$options$options$options$options.file;
-        version = _Parsec$parse$options$options$options$options.version;
-        tasks = _Parsec$parse$options$options$options$options._;
+        (0, _flyUtil.notifyUpdates)({ pkg: _package2["default"] });
+        _Parsec$options$options$options$options$parse = _parsec2["default"].options("file").options("list").options("help").options("version").parse(process.argv, { strictMode: true });
+        help = _Parsec$options$options$options$options$parse.help;
+        list = _Parsec$options$options$options$options$parse.list;
+        file = _Parsec$options$options$options$options$parse.file;
+        version = _Parsec$options$options$options$options$parse.version;
+        tasks = _Parsec$options$options$options$options$parse._;
 
         if (!help) {
-          context$1$0.next = 10;
+          context$1$0.next = 11;
           break;
         }
 
         cli.help();
-        context$1$0.next = 30;
+        context$1$0.next = 23;
         break;
 
-      case 10:
+      case 11:
         if (!version) {
-          context$1$0.next = 14;
+          context$1$0.next = 15;
           break;
         }
 
         cli.version(_package2["default"]);
-        context$1$0.next = 30;
+        context$1$0.next = 23;
         break;
 
-      case 14:
-        context$1$0.next = 16;
-        return (0, _flyUtil.findPath)(file);
+      case 15:
+        context$1$0.next = 17;
+        return cli.spawn(file);
 
-      case 16:
-        path = context$1$0.sent;
+      case 17:
+        fly = context$1$0.sent;
 
         if (!list) {
-          context$1$0.next = 21;
+          context$1$0.next = 22;
           break;
         }
 
-        cli.list(path, { simple: list === "bare" });
-        context$1$0.next = 30;
+        cli.list(fly.host, { bare: list === "bare" });
+        context$1$0.next = 23;
         break;
 
-      case 21:
-        context$1$0.t0 = _reporter2["default"];
-        context$1$0.t1 = _fly2["default"];
-        context$1$0.next = 25;
-        return cli.spawn(path);
+      case 22:
+        return context$1$0.abrupt("return", _reporter2["default"].call(fly).emit("fly_run", { path: fly.file }).start(tasks));
 
-      case 25:
-        context$1$0.t2 = context$1$0.sent;
-        context$1$0.t3 = new context$1$0.t1(context$1$0.t2);
-        context$1$0.t4 = { path: path };
-        context$1$0.t5 = tasks;
-        return context$1$0.abrupt("return", context$1$0.t0.call.call(context$1$0.t0, context$1$0.t3).emit("fly_run", context$1$0.t4).start(context$1$0.t5));
-
-      case 30:
+      case 23:
       case "end":
         return context$1$0.stop();
     }
   }, callee$0$0, this);
+}))["catch"](function (e) {
+  if (e.code === "ENOENT") (0, _flyUtil.error)("No Flyfile? See the Quickstart guide → git.io/fly-quick");else if (e.code === "INVALID_OPTION") (0, _flyUtil.error)("Unknown Flag: -" + e.key + ". Run fly -h to see the options.");else (0, _flyUtil.trace)(e);
 });
-module.exports = exports["default"];
