@@ -345,7 +345,7 @@ module.exports = function () {
 module.exports = function () {
   return this.filter("myFilter", (source, options) => {
     try {
-      return tranform → source
+      return transform(source)
     } catch (e) { throw e }
   })
 }
