@@ -2,7 +2,10 @@ export default function* () {
   yield this.clear("dist")
   yield this
     .source("src/*.scss")
-    .sass({ outputStyle: "compressed" })
+    .sass({
+      outputStyle: "compressed",
+      includePaths: ["src/imports"]
+    })
     .target("dist")
   yield this
     .source("src/*.less")

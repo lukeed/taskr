@@ -14,6 +14,12 @@ To try any of the examples _please build_ the `examples` project first:
 fly -f examples/
 ```
 
+or
+
+```
+bin/index -f examples/
+```
+
 This will load Fly with `Flyfile.babel.js` and install the necessary node packages in each of the sample directories.
 
 > The above may take a few minutes to finish.

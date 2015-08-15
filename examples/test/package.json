@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "fly-mocha": "^0.2.0"
+    "fly-mocha": "*"
   }
 }
