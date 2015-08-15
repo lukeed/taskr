@@ -1,7 +1,5 @@
-$blue: #3bbfce;
-$margin: 16px;
+@import "color";
 
 .border {
-  margin: $margin / 2;
   border-color: $blue;
 }

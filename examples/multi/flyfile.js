@@ -1,36 +1,30 @@
-const options = [
-  { value: { dist: "dist/seq" } },
-  { parallel: true, value: { dist: "dist/con" } }
-]
-
 export default function* () {
   yield this.clear("dist")
-  for (let opt of options)
-    yield this.start(["first", "second", "third"], opt)
+  yield this.start(["first", "second", "third"], { parallel: true })
 }
 
-export function* first ({ dist }) {
+export function* first () {
   yield this
     .source("src/*.1")
     .filter(s => this.defer(transform)(s, { time: 500 }))
     .concat("all.1.min")
-    .target(dist)
+    .target("dist")
 }
 
-export function* second ({ dist }) {
+export function* second () {
   yield this
     .source("src/*.2")
     .filter(s => this.defer(transform)(s, { time: 500 }))
     .concat("all.2.min")
-    .target(dist)
+    .target("dist")
 }
 
-export function* third ({ dist }) {
+export function* third () {
   yield this
     .source("src/*.3")
     .filter(s => this.defer(transform)(s, { time: 500 }))
     .concat("all.3.min")
-    .target(dist)
+    .target("dist")
 }
 
 function transform (source, options, cb) {
