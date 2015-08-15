@@ -6,6 +6,6 @@ const args = [ "--harmony", "--harmony_arrow_functions"]
   .concat(process.argv.slice(2))
 const opts = { stdio: "inherit" }
 /**
- * @overview Launch a new node process with harmony flags and args.
+ * @overview Launch a new node process enabling harmony flags.
  */
 require("child_process").spawn(node, args, opts)
