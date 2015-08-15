@@ -8,6 +8,8 @@ var _createClass = require("babel-runtime/helpers/create-class")["default"];
 
 var _classCallCheck = require("babel-runtime/helpers/class-call-check")["default"];
 
+var _toConsumableArray = require("babel-runtime/helpers/to-consumable-array")["default"];
+
 var _Object$assign = require("babel-runtime/core-js/object/assign")["default"];
 
 var _Object$keys = require("babel-runtime/core-js/object/keys")["default"];
@@ -32,10 +34,6 @@ var _co = require("co");
 
 var _co2 = _interopRequireDefault(_co);
 
-var _chokidar = require("chokidar");
-
-var _chokidar2 = _interopRequireDefault(_chokidar);
-
 var _debug = require("debug");
 
 var _debug2 = _interopRequireDefault(_debug);
@@ -47,6 +45,10 @@ var _mkdirp2 = _interopRequireDefault(_mkdirp);
 var _rimraf = require("rimraf");
 
 var _rimraf2 = _interopRequireDefault(_rimraf);
+
+var _chokidar = require("chokidar");
+
+var _chokidar2 = _interopRequireDefault(_chokidar);
 
 var _emitter = require("./emitter");
 
@@ -85,25 +87,31 @@ var Fly = (function (_Emitter) {
     _classCallCheck(this, Fly);
 
     _get(Object.getPrototypeOf(Fly.prototype), "constructor", this).call(this);
+
     _("init ✈");
     this.debug = _;
     this.tasks = {};
     this._filters = [];
     this._writers = [];
     this.encoding = process.env.ENCODING || "utf8";
+
     this.host = host instanceof Function ? _Object$assign(host, { "default": host }) : host;
+
     _Object$assign(this, { log: _flyUtil.log, alert: _flyUtil.alert, error: _flyUtil.error, defer: _flyUtil.defer, plugins: plugins });
+
     _Object$keys(host).forEach(function (task) {
       return _this.tasks[task] = host[task].bind(_this);
     });
 
+    _("load %o", plugins);
+    this.plugins = plugins;
     plugins.forEach(function (_ref2) {
       var name = _ref2.name;
       var plugin = _ref2.plugin;
-
-      _("load %o", name);
-      plugin.call(_this, (0, _debug2["default"])(name.replace("-", ":")));
+      return plugin.call(_this, (0, _debug2["default"])(name.replace("-", ":")));
     });
+
+    this.root = (0, _path.dirname)(file);
     process.chdir((0, _path.dirname)(this.file = file));
     _("switch to %o", process.cwd());
   }
@@ -140,8 +148,6 @@ var Fly = (function (_Emitter) {
   }, {
     key: "filter",
     value: function filter(name, transform) {
-      var _this2 = this;
-
       var _ref3 = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 
       var _ref3$ext = _ref3.ext;
@@ -154,7 +160,7 @@ var Fly = (function (_Emitter) {
       } else {
         if (this[name] instanceof Function) throw new Error(name + " method already defined in instance.");
         this[name] = function (options) {
-          return _this2.filter({ transform: transform, options: options, ext: ext });
+          return this.filter({ transform: transform, options: options, ext: ext });
         };
       }
       return this;
@@ -169,12 +175,12 @@ var Fly = (function (_Emitter) {
   }, {
     key: "watch",
     value: function watch(globs, tasks, options) {
-      var _this3 = this;
+      var _this2 = this;
 
       _("watch %o", globs);
       return this.emit("fly_watch").start(tasks, options).then(function () {
         return _chokidar2["default"].watch((0, _flyUtil.flatten)([globs]), { ignoreInitial: true }).on("all", function () {
-          return _this3.start(tasks, options);
+          return _this2.start(tasks, options);
         });
       });
     }
@@ -187,15 +193,17 @@ var Fly = (function (_Emitter) {
   }, {
     key: "unwrap",
     value: function unwrap(onFulfilled, onRejected) {
-      var _this4 = this;
+      var _this3 = this;
 
       _("unwrap %o", this._globs);
       return new _Promise(function (resolve, reject) {
-        _Promise.all(_this4._globs.map(function (glob) {
+        //return
+        _Promise.all(_this3._globs.map(function (glob) {
           return (0, _flyUtil.expand)(glob);
         })).then(function (result) {
-          _("glob %o", result);
-          return resolve.apply(_this4, result);
+          _("%o", result);
+          _("unwrap ✔");
+          return resolve.apply(_this3, result);
         })["catch"](reject);
       }).then(onFulfilled)["catch"](onRejected);
     }
@@ -265,7 +273,7 @@ var Fly = (function (_Emitter) {
   }, {
     key: "start",
     value: function start() {
-      var _this6 = this;
+      var _this5 = this;
 
       var tasks = arguments.length <= 0 || arguments[0] === undefined ? "default" : arguments[0];
 
@@ -275,12 +283,12 @@ var Fly = (function (_Emitter) {
       var parallel = _ref4$parallel === undefined ? false : _ref4$parallel;
       var value = _ref4.value;
 
-      _("%s: start %o", tasks, parallel ? "concurrent" : "sequential");
+      _("start %o in %o", tasks, parallel ? "parallel" : "sequence");
       return _co2["default"].call(this, _regeneratorRuntime.mark(function callee$2$0(tasks) {
         var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, task;
 
         return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
-          var _this5 = this;
+          var _this4 = this;
 
           while (1) switch (context$3$0.prev = context$3$0.next) {
             case 0:
@@ -291,7 +299,7 @@ var Fly = (function (_Emitter) {
 
               context$3$0.next = 3;
               return tasks.map(function (task) {
-                return _this5.exec(task, value, _Object$create(_this5));
+                return _this4.exec(task, value, _Object$create(_this4));
               });
 
             case 3:
@@ -366,7 +374,7 @@ var Fly = (function (_Emitter) {
           }
         }, callee$2$0, this, [[8, 20, 24, 32], [25,, 27, 31]]);
       }), [].concat(tasks).filter(function (task) {
-        return ~_Object$keys(_this6.host).indexOf(task) || !_this6.emit("task_not_found", { task: task });
+        return ~_Object$keys(_this5.host).indexOf(task) || !_this5.emit("task_not_found", { task: task });
       }));
     }
 
@@ -409,21 +417,19 @@ var Fly = (function (_Emitter) {
       this.write(_regeneratorRuntime.mark(function callee$2$0(_ref5) {
         var path = _ref5.path;
         var source = _ref5.source;
-        var target;
+        var target = _ref5.target;
         return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
           while (1) switch (context$3$0.prev = context$3$0.next) {
             case 0:
-              target = (0, _path.join)(path, name);
-
               _("concat %o", target);
               _mkdirp2["default"].sync(path); // @TODO: should clear the target file to concat!
-              context$3$0.next = 5;
-              return (0, _mzFs.appendFile)(target, source, this.encoding);
+              context$3$0.next = 4;
+              return (0, _mzFs.appendFile)((0, _path.join)(path, name), source, this.encoding);
+
+            case 4:
+              _("concat ✔");
 
             case 5:
-              _("concat %o ✔", target);
-
-            case 6:
             case "end":
               return context$3$0.stop();
           }
@@ -452,13 +458,13 @@ var Fly = (function (_Emitter) {
           return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
             while (1) switch (context$3$0.prev = context$3$0.next) {
               case 0:
-                _("write start %o", target);
+                _("write %o", target);
                 _mkdirp2["default"].sync((0, _path.dirname)(target));
                 context$3$0.next = 4;
                 return (0, _mzFs.writeFile)(target, source, this.encoding);
 
               case 4:
-                _("write %o ✔", target);
+                _("write ✔");
 
               case 5:
               case "end":
@@ -468,9 +474,11 @@ var Fly = (function (_Emitter) {
         }));
       }
       return _co2["default"].call(this, _regeneratorRuntime.mark(function callee$2$0() {
-        var _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, glob, _iteratorNormalCompletion3, _didIteratorError3, _iteratorError3, _iterator3, _step3, file, output, _iteratorNormalCompletion4, _didIteratorError4, _iteratorError4, _iterator4, _step4, path, _iteratorNormalCompletion5, _didIteratorError5, _iteratorError5, _iterator5, _step5, write;
+        var _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, glob, _iteratorNormalCompletion3, _didIteratorError3, _iteratorError3, _loop, _iterator3, _step3, _iteratorNormalCompletion4, _didIteratorError4, _iteratorError4, _iterator4, _step4, _iteratorNormalCompletion5, _didIteratorError5, _iteratorError5, _iterator5, _step5;
 
         return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
+          var _this6 = this;
+
           while (1) switch (context$3$0.prev = context$3$0.next) {
             case 0:
               _("target %o", dest);
@@ -482,7 +490,7 @@ var Fly = (function (_Emitter) {
 
             case 6:
               if (_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done) {
-                context$3$0.next = 101;
+                context$3$0.next = 39;
                 break;
               }
 
@@ -491,278 +499,299 @@ var Fly = (function (_Emitter) {
               _didIteratorError3 = false;
               _iteratorError3 = undefined;
               context$3$0.prev = 11;
-              context$3$0.next = 14;
-              return (0, _flyUtil.expand)(glob);
+              _loop = _regeneratorRuntime.mark(function callee$3$0() {
+                var file, _parse, dir, name, _ext, globCache, _ref7, data, ext, path, write;
 
-            case 14:
-              context$3$0.t0 = _Symbol$iterator;
-              _iterator3 = context$3$0.sent[context$3$0.t0]();
-
-            case 16:
-              if (_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done) {
-                context$3$0.next = 84;
-                break;
-              }
-
-              file = _step3.value;
-
-              _("reduce %o", file);
-              context$3$0.t1 = _regeneratorRuntime.mark(function reduce(file, filters) {
-                var filter;
-                return _regeneratorRuntime.wrap(function reduce$(context$4$0) {
+                return _regeneratorRuntime.wrap(function callee$3$0$(context$4$0) {
                   while (1) switch (context$4$0.prev = context$4$0.next) {
                     case 0:
-                      filter = filters[0];
+                      file = _step3.value;
 
-                      if (!(filters.length === 0)) {
-                        context$4$0.next = 5;
+                      _("file %o", file);
+                      _parse = (0, _path.parse)(file);
+                      dir = _parse.dir;
+                      name = _parse.name;
+                      _ext = _parse.ext;
+                      globCache = glob.split(_path.sep);
+                      context$4$0.t0 = _regeneratorRuntime.mark(function reduce(data, ext, filters) {
+                        var f;
+                        return _regeneratorRuntime.wrap(function reduce$(context$5$0) {
+                          while (1) switch (context$5$0.prev = context$5$0.next) {
+                            case 0:
+                              f = filters[0];
+
+                              if (!(filters.length === 0)) {
+                                context$5$0.next = 5;
+                                break;
+                              }
+
+                              context$5$0.t0 = { data: data, ext: ext };
+                              context$5$0.next = 16;
+                              break;
+
+                            case 5:
+                              context$5$0.t1 = reduce;
+                              context$5$0.t2 = this;
+                              context$5$0.next = 9;
+                              return _Promise.resolve(f.transform.call(this, data, f.options));
+
+                            case 9:
+                              context$5$0.t3 = context$5$0.sent;
+                              context$5$0.t4 = f.ext || ext;
+                              context$5$0.t5 = filters.slice(1);
+                              context$5$0.t6 = _("filter %s", f.transform);
+                              context$5$0.next = 15;
+                              return context$5$0.t1.call.call(context$5$0.t1, context$5$0.t2, context$5$0.t3, context$5$0.t4, context$5$0.t5, context$5$0.t6);
+
+                            case 15:
+                              context$5$0.t0 = context$5$0.sent;
+
+                            case 16:
+                              return context$5$0.abrupt("return", context$5$0.t0);
+
+                            case 17:
+                            case "end":
+                              return context$5$0.stop();
+                          }
+                        }, reduce, this);
+                      });
+                      context$4$0.t1 = this;
+                      context$4$0.next = 11;
+                      return (0, _mzFs.readFile)(file);
+
+                    case 11:
+                      context$4$0.t2 = context$4$0.sent;
+                      context$4$0.t3 = "" + context$4$0.t2;
+                      context$4$0.t4 = _ext;
+                      context$4$0.t5 = this._filters;
+                      context$4$0.next = 17;
+                      return context$4$0.t0.call.call(context$4$0.t0, context$4$0.t1, context$4$0.t3, context$4$0.t4, context$4$0.t5);
+
+                    case 17:
+                      _ref7 = context$4$0.sent;
+                      data = _ref7.data;
+                      ext = _ref7.ext;
+
+                      _("filter ✔");
+                      _iteratorNormalCompletion4 = true;
+                      _didIteratorError4 = false;
+                      _iteratorError4 = undefined;
+                      context$4$0.prev = 24;
+                      _iterator4 = _getIterator((0, _flyUtil.flatten)(dest));
+
+                    case 26:
+                      if (_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done) {
+                        context$4$0.next = 57;
                         break;
                       }
 
-                      context$4$0.t0 = file;
-                      context$4$0.next = 16;
+                      path = _step4.value;
+                      _iteratorNormalCompletion5 = true;
+                      _didIteratorError5 = false;
+                      _iteratorError5 = undefined;
+                      context$4$0.prev = 31;
+                      _iterator5 = _getIterator(this._writers);
+
+                    case 33:
+                      if (_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done) {
+                        context$4$0.next = 40;
+                        break;
+                      }
+
+                      write = _step5.value;
+                      context$4$0.next = 37;
+                      return write({
+                        path: path, source: data,
+                        target: (0, _path.join)(path, _path.join.apply(undefined, _toConsumableArray(dir.split(_path.sep).filter(function (p) {
+                          return ! ~globCache.indexOf(p);
+                        }))), "" + name + ext)
+                      });
+
+                    case 37:
+                      _iteratorNormalCompletion5 = true;
+                      context$4$0.next = 33;
                       break;
 
-                    case 5:
-                      context$4$0.t1 = reduce;
-                      context$4$0.t2 = this;
-                      context$4$0.next = 9;
-                      return _Promise.resolve(filter.transform.call(this, file.source, filter.options));
+                    case 40:
+                      context$4$0.next = 46;
+                      break;
 
-                    case 9:
-                      context$4$0.t3 = context$4$0.sent;
-                      context$4$0.t4 = filter.ext || file.ext;
-                      context$4$0.t5 = {
-                        source: context$4$0.t3,
-                        ext: context$4$0.t4
-                      };
-                      context$4$0.t6 = filters.slice(1);
-                      context$4$0.next = 15;
-                      return context$4$0.t1.call.call(context$4$0.t1, context$4$0.t2, context$4$0.t5, context$4$0.t6);
+                    case 42:
+                      context$4$0.prev = 42;
+                      context$4$0.t6 = context$4$0["catch"](31);
+                      _didIteratorError5 = true;
+                      _iteratorError5 = context$4$0.t6;
 
-                    case 15:
-                      context$4$0.t0 = context$4$0.sent;
+                    case 46:
+                      context$4$0.prev = 46;
+                      context$4$0.prev = 47;
 
-                    case 16:
-                      return context$4$0.abrupt("return", context$4$0.t0);
+                      if (!_iteratorNormalCompletion5 && _iterator5["return"]) {
+                        _iterator5["return"]();
+                      }
 
-                    case 17:
+                    case 49:
+                      context$4$0.prev = 49;
+
+                      if (!_didIteratorError5) {
+                        context$4$0.next = 52;
+                        break;
+                      }
+
+                      throw _iteratorError5;
+
+                    case 52:
+                      return context$4$0.finish(49);
+
+                    case 53:
+                      return context$4$0.finish(46);
+
+                    case 54:
+                      _iteratorNormalCompletion4 = true;
+                      context$4$0.next = 26;
+                      break;
+
+                    case 57:
+                      context$4$0.next = 63;
+                      break;
+
+                    case 59:
+                      context$4$0.prev = 59;
+                      context$4$0.t7 = context$4$0["catch"](24);
+                      _didIteratorError4 = true;
+                      _iteratorError4 = context$4$0.t7;
+
+                    case 63:
+                      context$4$0.prev = 63;
+                      context$4$0.prev = 64;
+
+                      if (!_iteratorNormalCompletion4 && _iterator4["return"]) {
+                        _iterator4["return"]();
+                      }
+
+                    case 66:
+                      context$4$0.prev = 66;
+
+                      if (!_didIteratorError4) {
+                        context$4$0.next = 69;
+                        break;
+                      }
+
+                      throw _iteratorError4;
+
+                    case 69:
+                      return context$4$0.finish(66);
+
+                    case 70:
+                      return context$4$0.finish(63);
+
+                    case 71:
                     case "end":
                       return context$4$0.stop();
                   }
-                }, reduce, this);
+                }, callee$3$0, _this6, [[24, 59, 63, 71], [31, 42, 46, 54], [47,, 49, 53], [64,, 66, 70]]);
               });
-              context$3$0.t2 = this;
-              context$3$0.next = 23;
-              return (0, _mzFs.readFile)(file);
+              context$3$0.next = 15;
+              return (0, _flyUtil.expand)(glob);
 
-            case 23:
-              context$3$0.t3 = context$3$0.sent;
-              context$3$0.t4 = "" + context$3$0.t3;
-              context$3$0.t5 = (0, _path.parse)(file).ext;
-              context$3$0.t6 = {
-                source: context$3$0.t4,
-                ext: context$3$0.t5
-              };
-              context$3$0.t7 = this._filters;
-              context$3$0.next = 30;
-              return context$3$0.t1.call.call(context$3$0.t1, context$3$0.t2, context$3$0.t6, context$3$0.t7);
+            case 15:
+              context$3$0.t0 = _Symbol$iterator;
+              _iterator3 = context$3$0.sent[context$3$0.t0]();
 
-            case 30:
-              output = context$3$0.sent;
-              _iteratorNormalCompletion4 = true;
-              _didIteratorError4 = false;
-              _iteratorError4 = undefined;
-              context$3$0.prev = 34;
-              _iterator4 = _getIterator((0, _flyUtil.flatten)(dest));
-
-            case 36:
-              if (_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done) {
-                context$3$0.next = 67;
+            case 17:
+              if (_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done) {
+                context$3$0.next = 22;
                 break;
               }
 
-              path = _step4.value;
-              _iteratorNormalCompletion5 = true;
-              _didIteratorError5 = false;
-              _iteratorError5 = undefined;
-              context$3$0.prev = 41;
-              _iterator5 = _getIterator(this._writers);
+              return context$3$0.delegateYield(_loop(), "t1", 19);
 
-            case 43:
-              if (_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done) {
-                context$3$0.next = 50;
-                break;
-              }
-
-              write = _step5.value;
-              context$3$0.next = 47;
-              return write({
-                path: path, source: output.source,
-                target: (0, _path.join)(path, "" + (0, _path.parse)(file).name + output.ext)
-              });
-
-            case 47:
-              _iteratorNormalCompletion5 = true;
-              context$3$0.next = 43;
-              break;
-
-            case 50:
-              context$3$0.next = 56;
-              break;
-
-            case 52:
-              context$3$0.prev = 52;
-              context$3$0.t8 = context$3$0["catch"](41);
-              _didIteratorError5 = true;
-              _iteratorError5 = context$3$0.t8;
-
-            case 56:
-              context$3$0.prev = 56;
-              context$3$0.prev = 57;
-
-              if (!_iteratorNormalCompletion5 && _iterator5["return"]) {
-                _iterator5["return"]();
-              }
-
-            case 59:
-              context$3$0.prev = 59;
-
-              if (!_didIteratorError5) {
-                context$3$0.next = 62;
-                break;
-              }
-
-              throw _iteratorError5;
-
-            case 62:
-              return context$3$0.finish(59);
-
-            case 63:
-              return context$3$0.finish(56);
-
-            case 64:
-              _iteratorNormalCompletion4 = true;
-              context$3$0.next = 36;
-              break;
-
-            case 67:
-              context$3$0.next = 73;
-              break;
-
-            case 69:
-              context$3$0.prev = 69;
-              context$3$0.t9 = context$3$0["catch"](34);
-              _didIteratorError4 = true;
-              _iteratorError4 = context$3$0.t9;
-
-            case 73:
-              context$3$0.prev = 73;
-              context$3$0.prev = 74;
-
-              if (!_iteratorNormalCompletion4 && _iterator4["return"]) {
-                _iterator4["return"]();
-              }
-
-            case 76:
-              context$3$0.prev = 76;
-
-              if (!_didIteratorError4) {
-                context$3$0.next = 79;
-                break;
-              }
-
-              throw _iteratorError4;
-
-            case 79:
-              return context$3$0.finish(76);
-
-            case 80:
-              return context$3$0.finish(73);
-
-            case 81:
+            case 19:
               _iteratorNormalCompletion3 = true;
-              context$3$0.next = 16;
+              context$3$0.next = 17;
               break;
 
-            case 84:
-              context$3$0.next = 90;
+            case 22:
+              context$3$0.next = 28;
               break;
 
-            case 86:
-              context$3$0.prev = 86;
-              context$3$0.t10 = context$3$0["catch"](11);
+            case 24:
+              context$3$0.prev = 24;
+              context$3$0.t2 = context$3$0["catch"](11);
               _didIteratorError3 = true;
-              _iteratorError3 = context$3$0.t10;
+              _iteratorError3 = context$3$0.t2;
 
-            case 90:
-              context$3$0.prev = 90;
-              context$3$0.prev = 91;
+            case 28:
+              context$3$0.prev = 28;
+              context$3$0.prev = 29;
 
               if (!_iteratorNormalCompletion3 && _iterator3["return"]) {
                 _iterator3["return"]();
               }
 
-            case 93:
-              context$3$0.prev = 93;
+            case 31:
+              context$3$0.prev = 31;
 
               if (!_didIteratorError3) {
-                context$3$0.next = 96;
+                context$3$0.next = 34;
                 break;
               }
 
               throw _iteratorError3;
 
-            case 96:
-              return context$3$0.finish(93);
+            case 34:
+              return context$3$0.finish(31);
 
-            case 97:
-              return context$3$0.finish(90);
+            case 35:
+              return context$3$0.finish(28);
 
-            case 98:
+            case 36:
               _iteratorNormalCompletion2 = true;
               context$3$0.next = 6;
               break;
 
-            case 101:
-              context$3$0.next = 107;
+            case 39:
+              context$3$0.next = 45;
               break;
 
-            case 103:
-              context$3$0.prev = 103;
-              context$3$0.t11 = context$3$0["catch"](4);
+            case 41:
+              context$3$0.prev = 41;
+              context$3$0.t3 = context$3$0["catch"](4);
               _didIteratorError2 = true;
-              _iteratorError2 = context$3$0.t11;
+              _iteratorError2 = context$3$0.t3;
 
-            case 107:
-              context$3$0.prev = 107;
-              context$3$0.prev = 108;
+            case 45:
+              context$3$0.prev = 45;
+              context$3$0.prev = 46;
 
               if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
                 _iterator2["return"]();
               }
 
-            case 110:
-              context$3$0.prev = 110;
+            case 48:
+              context$3$0.prev = 48;
 
               if (!_didIteratorError2) {
-                context$3$0.next = 113;
+                context$3$0.next = 51;
                 break;
               }
 
               throw _iteratorError2;
 
-            case 113:
-              return context$3$0.finish(110);
+            case 51:
+              return context$3$0.finish(48);
 
-            case 114:
-              return context$3$0.finish(107);
+            case 52:
+              return context$3$0.finish(45);
 
-            case 115:
+            case 53:
+              _("done ✔");
+
+            case 54:
             case "end":
               return context$3$0.stop();
           }
-        }, callee$2$0, this, [[4, 103, 107, 115], [11, 86, 90, 98], [34, 69, 73, 81], [41, 52, 56, 64], [57,, 59, 63], [74,, 76, 80], [91,, 93, 97], [108,, 110, 114]]);
+        }, callee$2$0, this, [[4, 41, 45, 53], [11, 24, 28, 36], [29,, 31, 35], [46,, 48, 52]]);
       }));
     }
   }]);

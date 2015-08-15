@@ -10,15 +10,11 @@ var _co = require("co");
 
 var _co2 = _interopRequireDefault(_co);
 
-var _parsec = require("parsec");
-
-var _parsec2 = _interopRequireDefault(_parsec);
-
 var _reporter = require("./reporter");
 
 var _reporter2 = _interopRequireDefault(_reporter);
 
-var _cli = require("./cli/");
+var _cli = require("./cli");
 
 var cli = _interopRequireWildcard(_cli);
 
@@ -29,18 +25,18 @@ var _package = require("../package");
 var _package2 = _interopRequireDefault(_package);
 
 (0, _co2["default"])(_regeneratorRuntime.mark(function callee$0$0() {
-  var _Parsec$options$options$options$options$parse, help, list, file, version, tasks, fly;
+  var _cli$options, help, list, file, version, tasks, fly;
 
   return _regeneratorRuntime.wrap(function callee$0$0$(context$1$0) {
     while (1) switch (context$1$0.prev = context$1$0.next) {
       case 0:
         (0, _flyUtil.notifyUpdates)({ pkg: _package2["default"] });
-        _Parsec$options$options$options$options$parse = _parsec2["default"].options("file", { "default": "." }).options("list").options("help").options("version").parse(process.argv, { strictMode: true });
-        help = _Parsec$options$options$options$options$parse.help;
-        list = _Parsec$options$options$options$options$parse.list;
-        file = _Parsec$options$options$options$options$parse.file;
-        version = _Parsec$options$options$options$options$parse.version;
-        tasks = _Parsec$options$options$options$options$parse._;
+        _cli$options = cli.options();
+        help = _cli$options.help;
+        list = _cli$options.list;
+        file = _cli$options.file;
+        version = _cli$options.version;
+        tasks = _cli$options.tasks;
 
         if (!help) {
           context$1$0.next = 11;
@@ -86,5 +82,6 @@ var _package2 = _interopRequireDefault(_package);
     }
   }, callee$0$0, this);
 }))["catch"](function (e) {
-  if (e.code === "ENOENT") (0, _flyUtil.error)("No Flyfile? See the Quickstart guide → git.io/fly-quick");else if (e.code === "INVALID_OPTION") (0, _flyUtil.error)("Unknown Flag: -" + e.key + ". Run fly -h to see the options.");else (0, _flyUtil.trace)(e);
+  (0, _flyUtil.trace)(e.key);
+  if (e.code === "ENOENT") (0, _flyUtil.error)("No Flyfile? See the Quickstart guide → git.io/fly-quick");else if (e.code === "UNKNOWN_OPTION") (0, _flyUtil.error)("Unknown Flag: -" + e.key + ". Run fly -h to see the options.");else (0, _flyUtil.trace)(e);
 });

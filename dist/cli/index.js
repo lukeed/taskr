@@ -23,3 +23,7 @@ _defaults(exports, _interopExportWildcard(_version, _defaults));
 var _spawn = require("./spawn");
 
 _defaults(exports, _interopExportWildcard(_spawn, _defaults));
+
+var _options = require("./options");
+
+_defaults(exports, _interopExportWildcard(_options, _defaults));
