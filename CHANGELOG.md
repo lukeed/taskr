@@ -6,6 +6,7 @@
 
 # Changelog
 
++ [v0.5.0](#v050)
 + [v0.4.0](#v040)
 + [v0.3.4](#v034)
 + [v0.3.1](#v031)
@@ -31,6 +32,29 @@
   + [Plugins API update](#plugins-api-update)
   + [`watch` API update](#watch-api-update)
 + [v0.0.1](#v001)
+
+## v0.5.0
+
++ :boom: Fix Fly's own `flyfile.js` to compile with fly. If you have fly installed globally just type `fly` to compile fly, otherwise type `bin/index`. For full instrumentation type: `DEBUG="fly*" fly` or `env DEBUG="fly*" fly`.
+
++ :boom: Upgrade to [`parsec@1.3.0`](https://github.com/bucaran/parsec/blob/master/src/index.js) that featured a complete rewrite and several improvements.
+
++ :boom: Fix bug where plugin closures created by `Fly.proto.filter` where bound to the fly instance `.filter` instead of the Fly instance that would exist during concurrent execution.
+
+  > Loading plugins (invoking each plugin's default export function) occurs only once during Fly's instantiation by the CLI. Some plugins may inject dependencies directly into the Fly instance or use `Fly.proto.filter` at this time. Before, `.filter` would create a closure by means of an arrow function bound to the new Fly instance. This would break concurrent tasks using `fly-*` plugins as described by [#73](https://github.com/flyjs/fly/issues/73).
+  
+  > Each task running in parallel is invoked bound to a copy of the Fly instance which is obtained via `Object.create(fly)`. This fix does not bind the closure created in `.filter` to any object, thus the correct `this` reference to any Fly instance is always picked up.
+
++ Fix encoding issue during `.source` → `.target` simple file copies of non-text files. Fixes [#72](https://github.com/flyjs/fly/issues/72)
+
++ Fix bug in `Fly.proto.target` where target directory name was not specified, and only the new file name was used to copy to _target_. The result was each `.target` write operation would create a flat tree skipping subdirectories and writing everything to the _target_ directory.
+
++ Improve `Fly.proto.target` with more instrumentation and simplify recursive reduce filter.
+
++ Improve multi tasking examples under `examples/multi`.
+
++ Review examples directory and refactor inconsistencies.
+
 
 ## v0.4.0
 
