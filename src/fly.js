@@ -1,10 +1,10 @@
 import co from "co"
-import chok from "chokidar"
 import debug from "debug"
 import mkdirp from "mkdirp"
 import rimraf from "rimraf"
+import chokidar from "chokidar"
 import Emitter from "./emitter"
-import { dirname, join, parse } from "path"
+import { dirname, join, parse, sep } from "path"
 import { readFile, appendFile, writeFile } from "mz/fs"
 import { log, alert, error } from "fly-util"
 import { defer, flatten, expand } from "fly-util"
@@ -19,22 +19,28 @@ export default class Fly extends Emitter {
   */
   constructor ({ file = ".", host = {}, plugins = [] } = {}) {
     super()
+
     _("init ✈")
     this.debug = _
     this.tasks = {}
     this._filters = []
     this._writers = []
     this.encoding = process.env.ENCODING || "utf8"
-    this.host = host instanceof Function ?
-      Object.assign(host, { default: host }) : host
+
+    this.host = host instanceof Function
+      ? Object.assign(host, { default: host }) : host
+
     Object.assign(this, { log, alert, error, defer, plugins })
+
     Object.keys(host).forEach((task) =>
       this.tasks[task] = host[task].bind(this))
 
-    plugins.forEach(({ name, plugin }) => {
-      _("load %o", name)
-      plugin.call(this, debug(name.replace("-", ":")))
-    })
+    _("load %o", plugins)
+    this.plugins = plugins
+    plugins.forEach(({ name, plugin }) =>
+      plugin.call(this, debug(name.replace("-", ":"))))
+
+    this.root = dirname(file)
     process.chdir(dirname(this.file = file))
     _("switch to %o", process.cwd())
   }
@@ -67,7 +73,9 @@ export default class Fly extends Emitter {
     } else {
       if (this[name] instanceof Function)
         throw new Error(`${name} method already defined in instance.`)
-      this[name] = (options) => this.filter({ transform, options, ext })
+      this[name] = function (options) {
+        return this.filter({ transform, options, ext })
+      }
     }
     return this
   }
@@ -80,7 +88,7 @@ export default class Fly extends Emitter {
   watch (globs, tasks, options) {
     _("watch %o", globs)
     return this.emit("fly_watch").start(tasks, options)
-      .then(() => chok.watch(flatten([globs]), { ignoreInitial: true })
+      .then(() => chokidar.watch(flatten([globs]), { ignoreInitial: true })
         .on("all", () => this.start(tasks, options)))
   }
 
@@ -92,9 +100,11 @@ export default class Fly extends Emitter {
   unwrap (onFulfilled, onRejected) {
     _("unwrap %o", this._globs)
     return new Promise((resolve, reject) => {
+      //return
       Promise.all(this._globs.map(glob => expand(glob)))
         .then((result) => {
-          _("glob %o", result)
+          _("%o", result)
+          _("unwrap ✔")
           return resolve.apply(this, result)
         }).catch(reject)
       }).then(onFulfilled).catch(onRejected)
@@ -124,15 +134,15 @@ export default class Fly extends Emitter {
     @return {Promise}
    */
   start (tasks = "default", { parallel = false, value } = {}) {
-    _("%s: start %o", tasks, parallel
-      ? "concurrent" : "sequential")
+    _("start %o in %o", tasks, parallel ? "parallel" : "sequence")
     return co.call(this, function* (tasks) {
-      if (parallel)
+      if (parallel) {
         yield tasks.map((task) =>
           this.exec(task, value, Object.create(this)))
-      else
+      } else {
         for (let task of tasks)
           value = yield this.exec(task, value)
+      }
       return value
     }, [].concat(tasks).filter((task) => ~Object.keys(this.host)
       .indexOf(task) || !this.emit("task_not_found", { task })))
@@ -159,12 +169,11 @@ export default class Fly extends Emitter {
     @param {[String]} array of name of target files
    */
   concat (name) {
-    this.write(function* ({ path, source }) {
-      const target = join(path, name)
+    this.write(function* ({ path, source, target }) {
       _("concat %o", target)
       mkdirp.sync(path)// @TODO: should clear the target file to concat!
-      yield appendFile(target, source, this.encoding)
-      _("concat %o ✔", target)
+      yield appendFile(join(path, name), source, this.encoding)
+      _("concat ✔")
     })
     return this
   }
@@ -177,40 +186,39 @@ export default class Fly extends Emitter {
   target (...dest) {
     if (this._writers.length === 0) {
       this.write(function* ({ target, source }) {
-        _("write start %o", target)
+        _("write %o", target)
         mkdirp.sync(dirname(target))
         yield writeFile(target, source, this.encoding)
-        _("write %o ✔", target)
+        _("write ✔")
       })
     }
     return co.call(this, function* () {
       _("target %o", dest)
       for (let glob of this._globs) {
         for (let file of yield expand(glob)) {
-          _("reduce %o", file)
-          const output = yield function* reduce (file, filters) {
-            const filter = filters[0]
+          _("file %o", file)
+          const { dir, name, ext: _ext } = parse(file)
+          const globCache = glob.split(sep)
+          const { data, ext } = yield function* reduce (data, ext, filters) {
+            const f = filters[0]
             return filters.length === 0
-              ? file : yield reduce.call(this, {
-                source: yield Promise.resolve(filter.transform
-                  .call(this, file.source, filter.options)),
-                ext: filter.ext || file.ext
-              }, filters.slice(1))
-          }.call(this, {
-            source: `${yield readFile(file)}`,
-            ext: parse(file).ext
-          }, this._filters)
-
+              ? {data, ext} : yield reduce.call(this, yield Promise.resolve(
+                f.transform.call(this, data, f.options)),
+                f.ext || ext, filters.slice(1), _("filter %s", f.transform))
+          }.call(this, `${yield readFile(file)}`, _ext, this._filters)
+          _("filter ✔")
           for (let path of flatten(dest)) {
             for (let write of this._writers) {
               yield write({
-                path, source: output.source,
-                target: join(path, `${parse(file).name}${output.ext}`)
+                path, source: data,
+                target: join(path, join(...dir.split(sep).filter((p) =>
+                  !~globCache.indexOf(p))), `${name}${ext}`)
               })
             }
           }
         }
       }
+      _("done ✔")
     })
   }
 }
