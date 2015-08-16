@@ -42,7 +42,7 @@
   },
   "scripts": {
     "setup": "npm i && npm run test && npm run symlink",
-    "lint": "eslint src/",
+    "lint": "eslint .",
     "test": "npm run build && npm run lint && npm run harmony-test",
     "spec": "npm run test | tspec",
     "nyan": "npm run test | tnyan",

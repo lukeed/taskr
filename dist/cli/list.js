@@ -13,13 +13,13 @@ exports.list = list;
 
 var _fmt = require("../fmt");
 
+var _fmt2 = _interopRequireDefault(_fmt);
+
 /**
   List tasks in a fly instance.
   @param {Object} fly instance
   @param {{ bare:Boolean }} unstyled
  */
-
-var _fmt2 = _interopRequireDefault(_fmt);
 
 function list(host, _ref) {
   var bare = _ref.bare;
