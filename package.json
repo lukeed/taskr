@@ -3,6 +3,11 @@
   "version": "0.5.0",
   "description": "Modern Build System",
   "main": "dist/index.js",
+  "files": [
+    "bin/",
+    "dist/",
+    "LICENSE"
+  ],
   "bin": {
     "fly": "./bin/index"
   },
@@ -46,7 +51,8 @@
     "harmony-test": "node --harmony --harmony_arrow_functions ./node_modules/tape/bin/tape test/*.js",
     "rebuild": "rm -rf node_modules && npm run setup",
     "samples": "./bin/index -f examples",
-    "symlink": "ln -s $PWD/bin/index /usr/local/bin/fly"
+    "symlink": "ln -s $PWD/bin/index /usr/local/bin/fly",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
