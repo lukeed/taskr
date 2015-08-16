@@ -1,13 +1,12 @@
 export default async function () {
-  const transform = (source, options, cb) => {
+  const transform = (data, options, cb) => {
     setTimeout(() => {
-      cb(null, source.split("").reverse().join(""))
+      cb(null, `${data}`.split("").reverse().join("").toUpperCase())
     }, options.time)
   }
   await this.clear("dist")
   await this
     .source("src/*.txt")
-    .filter(s => this.defer(transform)(s, { time: 1000 }))
-    .filter(s => s.toUpperCase())
+    .filter(data => this.defer(transform)(data, { time: 1000 }))
     .target("dist")
 }

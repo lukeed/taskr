@@ -27,7 +27,7 @@ export function* third () {
     .target("dist")
 }
 
-function transform (source, options, cb) {
+function transform (data, options, cb) {
   // Add a delay to simulate a lengthy transform.
-  setTimeout(() => cb(null, source), options.time)
+  setTimeout(() => cb(null, `${data}`), options.time)
 }

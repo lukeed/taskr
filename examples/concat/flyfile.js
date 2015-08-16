@@ -4,6 +4,6 @@ export default function* () {
     .source("src/*.js")
     .babel({ stage: 0 })
     .uglify()
-    .concat("all.min.js")
+    .concat("foobar.js")
     .target("dist")
 }
