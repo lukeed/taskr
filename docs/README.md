@@ -89,7 +89,7 @@ Similar to gulp, _Fly_ favors _code_ over configuration.
 
 + Use `Fly.prototype.filter(Function)` to add a transform in the sequence. If your function is async wrap it with `Fly.prototype.defer`.
 
-+ Plugins are autoloaded, just make sure to include it in your `package.json` and under `node_modules`.
++ Plugins are automatically loaded, just include it in your `package.json` and under `node_modules`.
 
 + Use JSDoc's `/** @desc description */` to describe tasks. The text is displayed when listing tasks on the terminal with `fly -l`.
 
@@ -180,12 +180,11 @@ Begin a _yieldable_ sequence.
 
 ```js
 export default function* () {
-  yield this.source(["styles/*.scss", "styles/*.sass"])...
+  yield this.source("styles/*.scss", "styles/*.sass")...
 }
 ```
 
-#### `Fly.prototype.target ([dest])`
-> `dest` can be both comma separated or a single array of paths.
+#### `Fly.prototype.target (...targets)`
 
 Resolve a _yieldable_ sequence. Reduce the data source applying filters and writers.
 
@@ -196,8 +195,7 @@ export default function* () {
   yield this
     .source("*")
     ...
-    .filter()
-    .filter()
+    .filter((data) => data.toString())
     ...
     .concat() // Writer
     ...
@@ -222,27 +220,30 @@ Clears / Deletes all paths including sub directories.
 
 #### `Fly.prototype.filter (filter)`
 
-Add a sync/async function into the `source → target` sequence. Use `Fly.prototype.defer (Function)` to promisify async functions.
+Add a sync/async transform into the `source → target` sequence. Use `Fly.prototype.defer (Function)` to promisify async functions.
 
 > Conceptually similar to a stream, a filter receives the incoming data source and usually returns a new _modified_ version.
+
+> Filters/Plugins are responsible to convert the incoming raw data to a `String` if they are processing text.
 
 ```js
 export default function* () {
   yield this
     .source("*.txt")
-    .filter((s) => s.replace(/(\w+)\s(\w+)/g, "$2 $1"))
+    .filter((data) => `${data}`.replace(/(\w+)\s(\w+)/g, "$2 $1"))
     .target("swap")
 }
 ```
 
-The above reads all text files in the current directory and swaps all two-letter words.
+The above reads all text files in the current directory and swaps two-letter words.
 
 #### Named Filters
 
-You can specify a name for the filter with `Fly.prototype.filter (name, filter)` and this will inject the method in current Fly instance.
+You can specify a name for the filter with `Fly.prototype.filter (name, filter)` and this will inject the method `name` in current Fly instance.
 
 > This feature is mostly used by filter plugins.
 
+> A RangeError will be thrown if a plugin with the same name already exists.
 
 ### Tasks
 
@@ -278,7 +279,7 @@ Run the specified tasks (or the `default` one if `tasks.length === 0`).
 
   ```js
   export default function* () {
-    yield this.start(["dev", "stage", "server"], { parallel: true })
+    yield this.start(["html", "css", "js"], { parallel: true })
   }
   ```
 
@@ -292,7 +293,7 @@ Run the specified tasks when a change is detected in any of the paths expanded f
 
 Unwrap the source globs and returns a promise.
 
-This method can be used when creating plugins that need to expand the source globs, usually to bypass IO operations, for example, linting / testing plugins.
+This method can be used when creating plugins that need to expand the source globs in advance, for example, linting / test kind of plugins.
 
 
 ```js
@@ -312,12 +313,12 @@ Log a message with a time stamp.
 #### `Fly.prototype.error (...args)`
 Log an error message with a time stamp.
 
-#### `Fly.prototype.warn (...args)`
+#### `Fly.prototype.alert (...args)`
 Log a message with a time stamp, if `process.env.VERBOSE` is truthy.
 
 #### `Fly.prototype.debug (...args)`
 
-Log a debug message. Set `DEBUG="*"` or `DEBUG="fly:*"` to visualize. See [`debug`](https://github.com/visionmedia/debug)'s documentation for advance use.
+Log a debug message. Set `DEBUG="*"` or `DEBUG="fly*"` to filter the content. See [`debug`](https://github.com/visionmedia/debug)'s documentation for advance use.
 
 
 
@@ -327,25 +328,23 @@ Log a debug message. Set `DEBUG="*"` or `DEBUG="fly:*"` to visualize. See [`debu
 
 > Search the registry for new plugins by ["fly" keyword](https://www.npmjs.com/browse/keyword/fly).
 
-Plugins are node modules that export at least one default method. This method is automatically run when a new Fly instance is created and is bound to the Fly instance.
+Plugins are node modules that export at least one default method. This method runs when a new Fly instance is created and is bound to the current Fly instance.
 
 ```js
 module.exports = function () {
-  this.log("Ok!")
+  this.myPlugin = (data) => /* process raw data */
 }
 ```
 
-```js
-module.exports = function () {
-  this.myPlugin = (message) => this.log(message)
-}
-```
+Use `Fly.prototype.filter` to avoid name collisions with other existing filters.
+
+> Filters/Plugins are responsible to convert the incoming raw data to a `String` if they are processing text.
 
 ```js
 module.exports = function () {
-  return this.filter("myFilter", (source, options) => {
+  return this.filter("myFilter", (data, options) => {
     try {
-      return transform(source)
+      return myTransform(data.toString())
     } catch (e) { throw e }
   })
 }
@@ -377,8 +376,8 @@ module.exports = function () {
 Wrap async functions with `Fly.prototype.defer`. This creates a new function that returns a promise. Call this function with `source` and `options`.
 
 ```js
-this.filter("myPlugin", (source, options) => {
-  return this.defer(myFilter)(source, options)
+this.filter("myPlugin", (data, options) => {
+  return this.defer(myFilter)(data, options)
 }, { ext: ".fly" })
 ```
 
