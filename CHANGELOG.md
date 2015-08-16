@@ -6,6 +6,7 @@
 
 # Changelog
 
++ [v0.6.0](#v060)
 + [v0.5.0](#v050)
 + [v0.4.0](#v040)
 + [v0.3.4](#v034)
@@ -33,6 +34,42 @@
   + [`watch` API update](#watch-api-update)
 + [v0.0.1](#v001)
 
+## v0.6.0
+
++ Improve build workflow by removing `dist` from repository and using `npm prepublish` step to compile Fly.
+
++ :boom: :boom: Fix encoding bug that was corrupting non-text files. Now Fly can read/filter/write any type of files, but there is a minor caveat:
+
+> Now filters and plugins, will receive the **raw data** as opposed to a _string_. This means if the filter/plugin is expecting a string, (for example `fly-coffescript` expects the source code to compile as a string) you need to convert the data to a string _before_ you can call any `String.prototype` methods on it.
+
+  For example:
+
+  ```js
+  export default function* () {
+    yield this
+      .source("words.txt")
+      .filter((data) => `${data}\n`)
+      .target("dist")
+  }
+  ```
+
+  or
+
+
+  ```js
+  export default function* () {
+    yield this
+      .source("words.txt")
+      .filter((data) => data.toString() + "\n")
+      .target("dist")
+  }
+  ```
+
+  > Documentation, examples and existing plugins have been updated.
+
+
++ :boom: Following up on the above mentioned fix, `Fly.proto.encoding` has been deprecated starting from this `@0.6.0`.
+
 ## v0.5.0
 
 + :boom: Fix Fly's own `flyfile.js` to compile with fly. If you have fly installed globally just type `fly` to compile fly, otherwise type `bin/index`. For full instrumentation type: `DEBUG="fly*" fly` or `env DEBUG="fly*" fly`.
@@ -42,7 +79,7 @@
 + :boom: Fix bug where plugin closures created by `Fly.proto.filter` where bound to the fly instance `.filter` instead of the Fly instance that would exist during concurrent execution.
 
   > Loading plugins (invoking each plugin's default export function) occurs only once during Fly's instantiation by the CLI. Some plugins may inject dependencies directly into the Fly instance or use `Fly.proto.filter` at this time. Before, `.filter` would create a closure by means of an arrow function bound to the new Fly instance. This would break concurrent tasks using `fly-*` plugins as described by [#73](https://github.com/flyjs/fly/issues/73).
-  
+
   > Each task running in parallel is invoked bound to a copy of the Fly instance which is obtained via `Object.create(fly)`. This fix does not bind the closure created in `.filter` to any object, thus the correct `this` reference to any Fly instance is always picked up.
 
 + Fix encoding issue during `.source` → `.target` simple file copies of non-text files. Fixes [#72](https://github.com/flyjs/fly/issues/72)
