@@ -243,14 +243,14 @@ test("✈  fly.target", (t) => {
     const fly = new Fly()
     yield fly
       .source("*.txt")
-      .filter((src) => `${src}`.toUpperCase())
+      .filter((data) => data.toString().toUpperCase())
       .target(".")
 
     yield fly
       .source("*.txt")
-      .filter((src) => {
-        t.ok(`${src}` === "FOO BAR\n", "resolve source, filters and writers")
-        return src.toLowerCase()
+      .filter((data) => {
+        t.ok(data.toString() === "FOO BAR\n", "resolve source, filters and writers")
+        return data.toString().toLowerCase()
       })
       .target(".")
   })
