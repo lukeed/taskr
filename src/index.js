@@ -23,7 +23,6 @@ co(function* () {
     }
   }
 }).catch((e) => {
-  trace(e.key)
   if (e.code === "ENOENT")
     error(`No Flyfile? See the Quickstart guide → git.io/fly-quick`)
   else if (e.code === "UNKNOWN_OPTION")

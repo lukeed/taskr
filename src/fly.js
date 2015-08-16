@@ -25,7 +25,6 @@ export default class Fly extends Emitter {
     this.tasks = {}
     this._filters = []
     this._writers = []
-    this.encoding = process.env.ENCODING || "utf8"
 
     this.host = host instanceof Function
       ? Object.assign(host, { default: host }) : host
@@ -61,20 +60,20 @@ export default class Fly extends Emitter {
     Add a filter. If name is undefined, inject this[name].
     @param
       {String} name of the filter
-      {Object} { transform, options, ext } object
-      {Function} transform function
-    @param [{Function}] transform function
+      {Object} { cb, options, ext } object
+      {Function} cb function
+    @param [{Function}] cb function
   */
-  filter (name, transform, { ext = "" } = {}) {
+  filter (name, cb, { ext = "" } = {}) {
     if (name instanceof Function) {
-      this.filter({ transform: name })
+      this.filter({ cb: name })
     } else if (typeof name === "object") {
       this._filters.push(name)
     } else {
       if (this[name] instanceof Function)
-        throw new Error(`${name} method already defined in instance.`)
+        throw new RangeError(`${name} method already defined in instance.`)
       this[name] = function (options) {
-        return this.filter({ transform, options, ext })
+        return this.filter({ cb, options, ext })
       }
     }
     return this
@@ -171,7 +170,7 @@ export default class Fly extends Emitter {
     this.write(function* ({ path, source, target }) {
       _("concat %o", target)
       mkdirp.sync(path)// @TODO: should clear the target file to concat!
-      yield appendFile(join(path, name), source, this.encoding)
+      yield appendFile(join(path, name), source)
       _("concat ✔")
     })
     return this
@@ -182,17 +181,17 @@ export default class Fly extends Emitter {
     @param {Array} destination paths
     @return {Promise}
    */
-  target (...dest) {
+  target (...targets) {
     if (this._writers.length === 0) {
       this.write(function* ({ target, source }) {
         _("write %o", target)
         mkdirp.sync(dirname(target))
-        yield writeFile(target, source, this.encoding)
+        yield writeFile(target, source)
         _("write ✔")
       })
     }
     return co.call(this, function* () {
-      _("target %o", dest)
+      _("target %o", targets)
       for (let glob of this._globs) {
         for (let file of yield expand(glob)) {
           _("file %o", file)
@@ -202,11 +201,11 @@ export default class Fly extends Emitter {
             const f = filters[0]
             return filters.length === 0
               ? {data, ext} : yield reduce.call(this, yield Promise.resolve(
-                f.transform.call(this, data, f.options)),
-                f.ext || ext, filters.slice(1), _("filter %s", f.transform))
-          }.call(this, `${yield readFile(file)}`, _ext, this._filters)
+                f.cb.call(this, data, f.options)),
+                f.ext || ext, filters.slice(1), _("filter %s", f.cb))
+          }.call(this, yield readFile(file), _ext, this._filters)
           _("filter ✔")
-          for (let path of flatten(dest)) {
+          for (let path of flatten(targets)) {
             for (let write of this._writers) {
               yield write({
                 path, source: data,

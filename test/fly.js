@@ -36,7 +36,6 @@ test("✈  fly.constructor", (t) => {
   t.ok(fly !== undefined, "create fly instance")
   t.ok(fly.tasks.task !== undefined, "load task from host")
   fly.tasks.task()
-  t.equal(fly.encoding, "utf8", "set default encoding to utf8")
   t.deepEqual(fly.plugins, [], "no default plugins")
   t.equal(process.cwd(), join(__dirname, "fixtures"),
     "switch current working directory")
@@ -59,15 +58,18 @@ test("✈  fly.filter", (t) => {
   fly.filter((src) => src.toLowerCase())
 
   t.equal(fly._filters.length, 1, "add filter to filter collection")
-  t.equal(fly._filters[0].transform("FLY"), "fly",
-    "add transform for anonymous filters")
+  t.equal(fly._filters[0].cb("FLY"), "fly",
+    "add transform cb for anonymous filters")
 
-  fly.filter("myFilter", (src) => src.toUpperCase(), { ext: ".foo" })
+  fly.filter("myFilter", (data) => data
+    .toString().toUpperCase(), { ext: ".foo" })
+
   t.ok(fly.myFilter instanceof Function,
-    "add transform to fly instance for named filters")
+    "add transform cb to fly instance for named filters")
+
   fly.myFilter({ secret: 42 })
-  t.equal(fly._filters[1].transform("fly"), "FLY",
-    "create transform function for named filter")
+  t.equal(fly._filters[1].cb("fly"), "FLY",
+    "create transform cb function for named filter")
   t.equal(fly._filters[1].options.secret, 42, "read options from filter")
   t.equal(fly._filters[1].ext, ".foo", "read extension from filter")
 
@@ -241,13 +243,13 @@ test("✈  fly.target", (t) => {
     const fly = new Fly()
     yield fly
       .source("*.txt")
-      .filter((src) => src.toUpperCase())
+      .filter((src) => `${src}`.toUpperCase())
       .target(".")
 
     yield fly
       .source("*.txt")
       .filter((src) => {
-        t.ok(src === "FOO BAR\n", "resolve source, filters and writers")
+        t.ok(`${src}` === "FOO BAR\n", "resolve source, filters and writers")
         return src.toLowerCase()
       })
       .target(".")
