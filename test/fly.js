@@ -174,9 +174,9 @@ test("✈  fly.start", (t) => {
   })
 })
 
-test("✈  fly.start (order)", (t) => {
+test("✈  fly.start (order)", (t, state) => {
   t.plan(2)
-  var state = 0
+  state = 0
   const fly = new Fly({
     host: {
     // when running in a sequence both b and c wait while a blocks.
@@ -198,11 +198,7 @@ test("✈  fly.start (order)", (t) => {
     t.ok(state !== 3, "run tasks in parallel")
   })
   function block () {
-    return new Promise((resolve) => {
-      setTimeout(function () {
-        resolve()
-      }, 200)
-    })
+    return new Promise((resolve) => setTimeout(() => resolve(), 200))
   }
 })
 
