@@ -100,8 +100,7 @@ export default class Fly extends Emitter {
   unwrap (onFulfilled, onRejected) {
     _("unwrap %o", this._globs)
     return new Promise((resolve, reject) => {
-      //return
-      Promise.all(this._globs.map(glob => expand(glob)))
+      return Promise.all(this._globs.map(glob => expand(glob)))
         .then((result) => {
           _("%o", result)
           _("unwrap ✔")
