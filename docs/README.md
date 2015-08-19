@@ -39,14 +39,8 @@ Similar to gulp, _Fly_ favors _code_ over configuration.
 + Tasks are described using ES6 [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) or ES7 [async](http://jakearchibald.com/2014/es7-async-functions/) functions and async flow is controlled with [`yield`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield):
 
   ```js
-  export function* task () {
-    yield this.tasks.write("awesome")
-  }
-  ```
-
-  ```js
-  export async function task () {
-    await this.tasks.write("awesome")
+  export default function* () {
+    yield this.source("index.js").uglify().target("dist")
   }
   ```
 
@@ -71,7 +65,7 @@ Similar to gulp, _Fly_ favors _code_ over configuration.
   ```js
   export default function* () {
     yield this
-      .source("src/**/*.babel.js")
+      .source("src/**/*.js")
       .babel()
       .uglify()
       .concat("all.min.js")
@@ -186,9 +180,7 @@ export default function* () {
 
 #### `Fly.prototype.target (...targets)`
 
-Resolve a _yieldable_ sequence. Reduce the data source applying filters and writers.
-
-A writer is the receiving end of the expanded glob source after all filters are applied.
+Resolve a _yieldable_ sequence. Reduce the data source applying filters and write the result to `targets`.
 
 ```js
 export default function* () {
@@ -197,15 +189,9 @@ export default function* () {
     ...
     .filter((data) => data.toString())
     ...
-    .concat() // Writer
-    ...
     .target("dist", "build", "test")
 }
 ```
-
-#### `Fly.prototype.write (writer Function)`
-
-Add a writer function to the collection of writers. For example `Fly.prototype.target` and `Fly.prototype.concat`.
 
 #### `Fly.prototype.concat (name)`
 
@@ -343,9 +329,7 @@ Use `Fly.prototype.filter` to avoid name collisions with other existing filters.
 ```js
 module.exports = function () {
   return this.filter("myFilter", (data, options) => {
-    try {
-      return myTransform(data.toString())
-    } catch (e) { throw e }
+    return { code /* or `css` or `data` */, ext, map }
   })
 }
 ```
@@ -378,13 +362,8 @@ Wrap async functions with `Fly.prototype.defer`. This creates a new function tha
 ```js
 this.filter("myPlugin", (data, options) => {
   return this.defer(myFilter)(data, options)
-}, { ext: ".fly" })
+})
 ```
-
-+ `Fly.prototype.filter` accepts a third argument with options:
-
-  + `ext`: File extension.
-
 
 ## Hacking
 
