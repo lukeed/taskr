@@ -4,12 +4,13 @@ export default function* () {
     .source("src/*.scss")
     .sass({
       outputStyle: "compressed",
-      includePaths: ["src/imports"]
+      includePaths: ["src/imports"],
+      sourceMap: true
     })
     .target("dist")
   yield this
     .source("src/*.less")
-    .less({ compress: true })
+    .less({ compress: true, sourceMap: true })
     .target("dist")
   yield this
     .source("src/*.styl")
