@@ -1,85 +1,74 @@
 import co from "co"
 import debug from "debug"
-import mkdirp from "mkdirp"
 import rimraf from "rimraf"
 import chokidar from "chokidar"
-import Emitter from "./emitter"
+import Catenator from "concat-with-sourcemaps"
 import { dirname, join, parse, sep } from "path"
-import { readFile, appendFile, writeFile } from "mz/fs"
-import { log, alert, error } from "fly-util"
-import { defer, flatten, expand } from "fly-util"
+import { readFile, appendFile } from "mz/fs"
+import { log, alert, error, defer, flatten, expand } from "fly-util"
+import Emitter from "./emitter"
+import write from "./write"
 const _ = debug("fly")
+const clear = defer(rimraf)
 
 export default class Fly extends Emitter {
   /**
     Create a new Fly instance.
-    @param {String} path to the flyfile
-    @param {Object} loaded flyfile
-    @param {[Function]} plugins
+    @param {String} flyfile path
+    @param {Object} flyfile module
+    @param {[Function]} array of plugins
   */
-  constructor ({ file = ".", host = {}, plugins = [] } = {}) {
-    super()
-
-    _("init ✈")
-    this.debug = _
-    this.tasks = {}
-    this._filters = []
-    this._writers = []
-
-    this.host = host instanceof Function
-      ? Object.assign(host, { default: host }) : host
-
-    Object.assign(this, { log, alert, error, defer, plugins })
-
-    Object.keys(host).forEach((task) =>
-      this.tasks[task] = host[task].bind(this))
-
-    _("load %o", plugins)
-    this.plugins = plugins
+  constructor ({ file = ".", plugins = [], host = {} } = {}) {
+    super(/* ✈ */)
+    Object.assign(this, {
+      log, alert, error, defer, file, plugins,
+      root: dirname(file),
+      host: host instanceof Function
+        ? Object.assign(host, { default: host })
+        : host,
+      debug: _,
+      tasks: Object.keys(host).reduce((_, key) =>
+        Object.assign(_, { [key]: host[key].bind(this) }), {}),
+      _: { filters: [] }
+    })
+    _("chdir %o", this.root)
+    process.chdir(this.root)
     plugins.forEach(({ name, plugin }) =>
-      plugin.call(this, debug(name.replace("-", ":"))))
-
-    this.root = dirname(file)
-    process.chdir(dirname(this.file = file))
-    _("switch to %o", process.cwd())
+      plugin.call(this, debug(name.replace("-", ":")), _("load %o", name)))
   }
   /**
-    Use to compose a yieldable sequence.
-    Reset globs, filters and writers.
+    Compose a new yieldable sequence.
+    Reset globs, filters and writer.
     @param {...String} glob patterns
     @return Fly instance. Promises resolve to { file, source }
    */
    source (...globs) {
-     _("source %o", globs)
-     this._globs = flatten(globs)
-     this._filters = []
-     this._writers = []
+     Object.assign(this, { _: { write, filters: [], globs: flatten(globs) }})
+     this._.catenator = undefined
+     _("source %o", this._.globs)
      return this
    }
   /**
-    Add a filter. If name is undefined, inject this[name].
-    @param
-      {String} name of the filter
-      {Object} { cb, options, ext } object
-      {Function} cb function
-    @param [{Function}] cb function
+    Add filter / transform function.
+    Create a closure bound to the current Fly instance.
+    @param {String|Function} name or filter callback
+    @param [{Function}] callback with the signature (cb, options) => {}
   */
-  filter (name, cb, { ext = "" } = {}) {
-    if (name instanceof Function) {
-      this.filter({ cb: name })
-    } else if (typeof name === "object") {
-      this._filters.push(name)
-    } else {
+  filter (name, cb) {
+    if (name instanceof Function) this.filter({ cb: name })
+    else if (typeof name === "object") this._.filters.push(name)
+    else {
       if (this[name] instanceof Function)
         throw new RangeError(`${name} method already defined in instance.`)
       this[name] = function (options) {
-        return this.filter({ cb, options, ext })
+        debug("fly")(`${name} %o`, options)
+        return this.filter({ cb, options })
       }
     }
     return this
   }
   /**
-    Watch for IO events in globs and run tasks.
+    Watch IO events in globs and run tasks.
     @param {[String]} glob patterns to observe for changes
     @param {[String]} list of tasks to run on changes
     @param {Object} start options. See Fly.proto.start
@@ -90,25 +79,19 @@ export default class Fly extends Emitter {
       .then(() => chokidar.watch(flatten([globs]), { ignoreInitial: true })
         .on("all", () => this.start(tasks, options)))
   }
-
   /**
-    Unwrap source globs.
+    Unwrap/expand source globs to files.
     @param {Function} onFulfilled
-    @param {onRejected} onFulfilled
+    @param {Function} onRejected
   */
   unwrap (onFulfilled, onRejected) {
-    _("unwrap %o", this._globs)
     return new Promise((resolve, reject) => {
-      return Promise.all(this._globs.map(glob => expand(glob)))
-        .then((result) => {
-          _("%o", result)
-          _("unwrap ✔")
-          return resolve.apply(this, result)
-        }).catch(reject)
+      return Promise.all(this._.globs.map(glob => expand(glob)))
+        .then((files) => resolve.apply(this, files)).catch(reject)
       }).then(onFulfilled).catch(onRejected)
   }
   /**
-    @private Execute a single task.
+    @private Execute a task.
     @param {String} name of the task
     @param {Mixed} initial value to pass into the task
     @param {Object} Fly instance the task should be bound to
@@ -126,97 +109,79 @@ export default class Fly extends Emitter {
     return value
   }
   /**
-    Run one or more tasks. Each task's return value cascades on to
-    the next task in a series.
+    Run one or more tasks. Each task's return value cascades on to the next
+    task in a sequence.
     @param {Array} list of tasks
     @return {Promise}
    */
   start (tasks = "default", { parallel = false, value } = {}) {
-    _("start %o in %o", tasks, parallel ? "parallel" : "sequence")
+    _(`start %o in ${parallel ? "parallel" : "sequence"}`, tasks)
     return co.call(this, function* (tasks) {
       if (parallel) {
         yield tasks.map((task) =>
           this.exec(task, value, Object.create(this)))
       } else {
-        for (let task of tasks)
-          value = yield this.exec(task, value)
+        for (let task of tasks) value = yield this.exec(task, value)
       }
       return value
     }, [].concat(tasks).filter((task) => ~Object.keys(this.host)
       .indexOf(task) || !this.emit("task_not_found", { task })))
   }
   /**
-    Add a writer function to the collection of writers.
-    @param {Generator} function yielding a promise
-   */
-  write (writer) {
-    this._writers.push(writer.bind(this))
-    return this
-  }
-  /**
-    Rimraf paths.
+    Deferred rimraf wrapper.
     @param {...String} paths
    */
   clear (...paths) {
     _("clear %o", paths)
-    const clear = this.defer(rimraf)
     return flatten(paths).map((path) => clear(path))
   }
   /**
-    Concat read globs into one or more files.
-    @param {[String]} array of name of target files
+    Writer based in fs/mz appendFile.
+    @param {String} file name
    */
-  concat (name) {
-    this.write(function* ({ path, source, target }) {
-      _("concat %o", target)
-      mkdirp.sync(path)// @TODO: should clear the target file to concat!
-      yield appendFile(join(path, name), source)
-      _("concat ✔")
-    })
+  concat (base) {
+    this._.catenator = new Catenator(true, base, "\n")
+    this._.write = function* ({ dir, data, map }) {
+      yield write({ dir, base, data, map, write: appendFile })
+    }
     return this
   }
   /**
     Resolve a yieldable sequence.
-    Reduce source applying available filters.
-    @param {Array} destination paths
+    Reduce source with filters and invoke writer.
+    @param {Array} target directories
     @return {Promise}
    */
-  target (...targets) {
-    if (this._writers.length === 0) {
-      this.write(function* ({ target, source }) {
-        _("write %o", target)
-        mkdirp.sync(dirname(target))
-        yield writeFile(target, source)
-        _("write ✔")
-      })
-    }
+  target (...dirs) {
     return co.call(this, function* () {
-      _("target %o", targets)
-      for (let glob of this._globs) {
+      for (let glob of this._.globs) {
         for (let file of yield expand(glob)) {
-          _("file %o", file)
-          const { dir, name, ext: _ext } = parse(file)
-          const globCache = glob.split(sep)
-          const { data, ext } = yield function* reduce (data, ext, filters) {
-            const f = filters[0]
-            return filters.length === 0
-              ? {data, ext} : yield reduce.call(this, yield Promise.resolve(
-                f.cb.call(this, data, f.options)),
-                f.ext || ext, filters.slice(1), _("filter %s", f.cb))
-          }.call(this, yield readFile(file), _ext, this._filters)
-          _("filter ✔")
-          for (let path of flatten(targets)) {
-            for (let write of this._writers) {
-              yield write({
-                path, source: data,
-                target: join(path, join(...dir.split(sep).filter((p) =>
-                  !~globCache.indexOf(p))), `${name}${ext}`)
-              })
+          let { base, ext } = parse(file), data = yield readFile(file)
+          let concat = this._.catenator || new Catenator(true, base, "\n")
+          for (let filter of this._.filters) {
+            const result = yield Promise.resolve(filter.cb.call(this, data,
+              Object.assign({ filename: base }, filter.options)))
+            data = result.code || result.css || result.data || result || data
+            ext = result.ext || ext
+            if (result.map) {
+              concat.add(`${base}`, data, result.map)
+              if (ext === ".css")
+                data += `\n/*# sourceMappingURL=${base}.map*/\n`
+              if (ext === ".js")
+                data += `\n//# sourceMappingURL=${base}.map\n`
             }
+          }
+          for (let dir of flatten(dirs)) {
+            yield this._.write({
+              dir, data,
+              base: join(...parse(file).dir.split(sep)
+                .filter((path) => !~glob.split(sep).indexOf(path)),
+                `${parse(file).name}${ext}`),
+              map: concat.contentParts.length && concat.sourceMap
+            })
           }
         }
       }
-      _("done ✔")
     })
   }
 }

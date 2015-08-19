@@ -47,9 +47,8 @@ test("✈  fly.constructor", (t) => {
 test("✈  fly.source", (t) => {
   const fly = new Fly()
   fly.source([[[[["*.a", ["*.b"]]], ["*.c"]]]])
-  t.deepEqual(fly._globs, ["*.a", "*.b", "*.c"], "flatten globs")
-  t.deepEqual(fly._writers, [], "init empty writer list")
-  t.deepEqual(fly._filters, [], "init empty filter list")
+  t.deepEqual(fly._.globs, ["*.a", "*.b", "*.c"], "flatten globs")
+  t.deepEqual(fly._.filters, [], "init empty filter list")
   t.end()
 })
 
@@ -57,27 +56,31 @@ test("✈  fly.filter", (t) => {
   const fly = new Fly()
   fly.filter((src) => src.toLowerCase())
 
-  t.equal(fly._filters.length, 1, "add filter to filter collection")
-  t.equal(fly._filters[0].cb("FLY"), "fly",
+  t.equal(fly._.filters.length, 1, "add filter to filter collection")
+  t.equal(fly._.filters[0].cb("FLY"), "fly",
     "add transform cb for anonymous filters")
 
-  fly.filter("myFilter", (data) => data
-    .toString().toUpperCase(), { ext: ".foo" })
+  fly.filter("myFilter", (data) => {
+    return {
+      code: data.toString().toUpperCase(),
+      ext: ".foo"
+    }
+  })
 
   t.ok(fly.myFilter instanceof Function,
     "add transform cb to fly instance for named filters")
 
   fly.myFilter({ secret: 42 })
-  t.equal(fly._filters[1].cb("fly"), "FLY",
+  t.equal(fly._.filters[1].cb("fly").code, "FLY",
     "create transform cb function for named filter")
-  t.equal(fly._filters[1].options.secret, 42, "read options from filter")
-  t.equal(fly._filters[1].ext, ".foo", "read extension from filter")
+  t.equal(fly._.filters[1].cb("fly").ext, ".foo", "read extension from filter")
+  t.equal(fly._.filters[1].options.secret, 42, "read options from filter")
 
   try { fly.filter("myFilter")
   } catch (e) { t.ok(true, "throw an error if filter already exists") }
 
   fly.source("")
-  t.deepEqual(fly._filters, [], "reset filter each time source is called")
+  t.deepEqual(fly._.filters, [], "reset filter each time source is called")
 
   t.end()
 })
@@ -109,7 +112,7 @@ test("✈  fly.watch", (t) => {
         t.equal(data, 42, "pass options into task via start on change")
       }
       touch(path)
-    }, 0)
+    }, 1)
   })
 })
 
@@ -204,16 +207,6 @@ test("✈  fly.start (order)", (t, state) => {
   }
 })
 
-test("✈  fly.write", (t) => {
-  t.plan(2)
-  const fly = new Fly()
-  fly.write(function () {
-    t.ok(fly === this, "bind writer to fly instance")
-  })
-  t.ok(fly._writers.length === 1, "add writer function to writer list")
-  fly._writers[0]()
-})
-
 test("✈  fly.clear", (t) => {
   t.plan(1)
   const paths = Array.prototype.concat(["tmp1", "tmp2", "tmp3"])
@@ -232,7 +225,7 @@ test("✈  fly.clear", (t) => {
 test("✈  fly.concat", (t) => {
   const fly = new Fly()
   fly.concat("f")
-  t.ok(fly._writers.length === 1, "add concat writer to writer collection")
+  t.ok(fly._.write !== undefined, "add concat writer")
   t.end()
 })
 
