@@ -14,7 +14,7 @@ export default function () {
     log(`${fmt.warn}`, "Watching files..."))
 
   .on("plugin_load", ({ plugin }) =>
-    log(`Loading plugin ${fmt.name}`, plugin))
+    log(`Loading plugin ${fmt.title}`, plugin))
 
   .on("plugin_error", ({ plugin, error }) =>
     log(`${fmt.error} failed due to ${fmt.error}`, plugin, error))
