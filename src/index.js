@@ -1,11 +1,12 @@
 import co from "co"
 import reporter from "./reporter"
 import * as cli from "./cli"
-import { notifyUpdates, error, trace } from "fly-util"
+import { error, trace } from "fly-util"
+import updateNotifier from "update-notifier"
 import pkg from "../package"
 
 co(function* () {
-  notifyUpdates({ pkg })
+  updateNotifier({ pkg }).notify()
   const { help, list, file, version, tasks } = cli.options()
   if (help) {
     cli.help()
