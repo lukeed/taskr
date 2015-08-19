@@ -6,6 +6,7 @@
 
 # Changelog
 
++ [v0.7.0](#v070)
 + [v0.6.0](#v060)
 + [v0.5.0](#v050)
 + [v0.4.0](#v040)
@@ -33,6 +34,40 @@
   + [Plugins API update](#plugins-api-update)
   + [`watch` API update](#watch-api-update)
 + [v0.0.1](#v001)
+
+
+## v0.7.0
+
++ :trophy: Handle sourcemaps [#60](https://github.com/flyjs/fly/issues/60)
+
++ :boom: Add test coverage tools. [#71](https://github.com/flyjs/fly/issues/71)
+
++ :boom: In order to support sourcemaps and open the door to future features, transformer plugins using the `Fly.prototype.filter` method can now return an object instead of a string such as:
+
+  > See [#83](https://github.com/flyjs/fly/issues/83)
+
+  ```js
+  return {
+    code: "data",
+    map: {/* source map */},
+    ext: ".js"
+  }
+  ```
+
++ :boom: Improve plugin API. Plugins injecting filters are not required to create `try { } catch() {}` blocks anymore.
+
+
++ :warning: Deprecate `Fly.prototype.write` in favor of promoting writing your own plugins that perform IO.
+
++ :boom: Make `Fly.prototype._filters` publish by renaming it to `Fly.prototype.filters`.
+
+  > Please use `Fly.prototype.filter` to add inline transformers, create plugins, etc. But don't be afraid of using this collection if you are in dire need.
+
++ :boom: Refactor `fly.js`, remove duplication from `concat` and `target`
+
++ :space_invader: Improve instrumentation for plugins and filters.
+
++ :space_invader: Fix [clor](https://github.com/bucaran/clor) overriding `Function.prototype.name` inadvertently in [#79](https://github.com/flyjs/fly/issues/79)
 
 ## v0.6.0
 

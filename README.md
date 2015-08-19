@@ -66,7 +66,7 @@ export function* build () {
   yield this.clear("dist")
   yield this
     .source(paths.scripts)
-    .babel({ stage: 0 })
+    .babel({ stage: 0, sourceMap: true })
     .uglify()
     .concat("all.min.js")
     .target("dist")
