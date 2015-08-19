@@ -6,6 +6,7 @@
 
 # Changelog
 
++ [v0.7.1](#v071)
 + [v0.7.0](#v070)
 + [v0.6.0](#v060)
 + [v0.5.0](#v050)
@@ -35,6 +36,20 @@
   + [`watch` API update](#watch-api-update)
 + [v0.0.1](#v001)
 
+
+## v0.7.0
+
++ Objects that return objects with transformed data support any of the following forms:
+
+```js
+{ css, map, ext }
+// or
+{ js, map, ext }
+// or
+{ code, map, ext }
+// or
+{ data, map, ext }
+```
 
 ## v0.7.0
 
