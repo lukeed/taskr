@@ -159,12 +159,12 @@ export default class Fly extends Emitter {
           let { base, ext } = parse(file), data = yield readFile(file)
           let concat = this._.catenator || new Catenator(true, base, "\n")
           for (let filter of this._.filters) {
-            const result = yield Promise.resolve(filter.cb.call(this, data,
+            const res = yield Promise.resolve(filter.cb.call(this, data,
               Object.assign({ filename: base }, filter.options)))
-            data = result.code || result.css || result.data || result || data
-            ext = result.ext || ext
-            if (result.map) {
-              concat.add(`${base}`, data, result.map)
+            data = res.code || res.js || res.css || res.data || res || data
+            ext = res.ext || ext
+            if (res.map) {
+              concat.add(`${base}`, data, res.map)
               if (ext === ".css")
                 data += `\n/*# sourceMappingURL=${base}.map*/\n`
               if (ext === ".js")
