@@ -112,7 +112,7 @@ test("✈  fly.watch", (t) => {
         t.equal(data, 42, "pass options into task via start on change")
       }
       touch(path)
-    }, 1)
+    }, 10)
   })
 })
 
