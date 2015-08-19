@@ -1,16 +1,12 @@
-const paths = {
-  dist: "dist",
-  scripts: ["src/*.babel.js", "src/*.js"]
-}
-
 export default function* () {
-  yield this.watch(paths.scripts, ["build"])
+  yield this.watch("src/**/*.js", ["build"])
 }
 
 export function* build () {
-  yield this.clear(paths.dist)
+  yield this.clear("dist")
   yield this
-    .source(paths.scripts)
-    .babel({ stage: 0 })
-    .target(paths.dist)
+    .source("src/**/*.js")
+    .babel({ stage: 0, sourceMaps: true })
+    .concat("foobar.js")
+    .target("dist")
 }
