@@ -117,8 +117,10 @@ test("✈  fly.watch", (t) => {
 })
 
 test("✈  fly.unwrap", (t) => {
-  t.plan(2)
-  const files = ["a.x", "b.x", "c.x"]
+  t.plan(4)
+  const files_x = ["a.x", "b.x", "c.x"]
+  const files_y = ["a.y", "b.y", "c.y"]
+  const files = files_x.concat(files_y)
   const paths = files.map((file) => {
     const path = join(__dirname, "fixtures", file)
     touch(path)
@@ -126,8 +128,14 @@ test("✈  fly.unwrap", (t) => {
   })
   const fly = new Fly()
   co(function* () {
-    const result = yield fly.source("*.x").unwrap((f) => {
-      t.deepEqual(f, files, "unwrap source globs")
+    yield fly.source("*.x").unwrap((f) => {
+      t.deepEqual(f, files_x, "unwrap source globs with single entry point")
+    })
+    yield fly.source(["*.y"]).unwrap((f) => {
+      t.deepEqual(f, files_y, "unwrap source globs with single entry point in array")
+    })
+    const result = yield fly.source(["*.x", "*.y"]).unwrap((f) => {
+      t.deepEqual(f, files, "unwrap source globs with multiple entry points")
       return 42
     })
     t.equal(result, 42, "result is the return value from fulfilled handler")

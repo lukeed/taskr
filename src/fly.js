@@ -87,7 +87,7 @@ export default class Fly extends Emitter {
   unwrap (onFulfilled, onRejected) {
     return new Promise((resolve, reject) => {
       return Promise.all(this._.globs.map(glob => expand(glob)))
-        .then((files) => resolve.apply(this, files)).catch(reject)
+        .then((files) => resolve.call(this, files.reduce((arr, item) => arr.concat(item)))).catch(reject)
       }).then(onFulfilled).catch(onRejected)
   }
   /**
