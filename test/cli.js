@@ -1,24 +1,23 @@
-const co = require("co")
-const test = require("tape").test
-const tlog = require("./helpers/testLog").test
-const Fly = require("../dist/fly")
-const cli = require("../dist/cli")
-const pkg = require("../package")
-const join = require("path").join
+import co from "co"
+import test from "tape"
+import { test as tlog } from "./helpers/testLog"
+import Fly from "../dist/fly"
+import * as cli from "../dist/cli"
+import pkg from "../package"
+import { join } from "path"
 
 test("✈  cli", (t) => {
   t.ok(cli !== undefined, "is defined")
   Array.prototype.concat(["help", "list", "spawn", "version"])
-  .forEach((command) => {
-    t.equal(command in cli, true, command + " is defined")
-  })
+  .forEach((command) =>
+    t.equal(command in cli, true, `${command} is defined`))
   t.end()
 })
 
 test("✈  cli.version", (t) => {
   const flypath = join(process.cwd(), "test", "fixtures", "flyfile.js")
   tlog.call(t, () => cli.version(pkg), (actual) => {
-    t.equal(actual, pkg.name + ", " + pkg.version, "log fly version")
+    t.equal(actual, `${pkg.name}, ${pkg.version}`, "log fly version")
   })
   t.end()
 })
@@ -46,7 +45,7 @@ test("✈  cli.list", (t) => {
         case "b":
           return true
         case "c":
-          t.ok(true, "message / bare " + bare)
+          t.ok(true, `message / bare ${bare}`)
           break
         default:
           t.ok(false, message)
@@ -57,12 +56,12 @@ test("✈  cli.list", (t) => {
 })
 
 test("✈  cli.spawn", (t) => {
-  t.plan(4)
+  t.plan(6)
   Array.prototype.concat([
     join("test", "fixtures", "alt"),
     join("test", "fixtures", "alt", "flyfile.js")
   ]).map((flypath) => ({
-    spawn: co.wrap(cli.spawn)(flypath),
+    spawn: co.wrap(cli.spawn)(flypath, _ => _),
     flypath: flypath
   }))
   .forEach(_ => {
@@ -71,6 +70,10 @@ test("✈  cli.spawn", (t) => {
         "spawn a fly instance using " + _.flypath)
       t.ok(fly.plugins.length === 1 && fly.fakePlugin,
         "load plugins from package.json")
+
+        fly.filter = (f) => t.equal("ylf", f.cb("fly"),
+          "add plugin function to fly instance and get expected result")
+        fly.fakePlugin()
     }).catch((e) => t.ok(false, e))
   })
 })

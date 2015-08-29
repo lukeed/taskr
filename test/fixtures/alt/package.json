@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "fly-fake-plugin": "0.0.0"
+    "fly-fake-plugin": "*"
   }
 }

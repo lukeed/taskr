@@ -1,11 +1,11 @@
-const co = require("co")
-const read = require("mz/fs").readFile
-const test = require("tape").test
-const Fly = require("../dist/fly")
-const join = require("path").join
-const touch = require("touch")
+import co from "co"
+import { readFile as read } from "mz/fs"
+import { test } from "tape"
+import Fly from "../dist/fly"
+import { join } from "path"
+import touch from "touch"
 
-test("✈  fly", function (t) {
+test("✈  fly", (t) => {
   t.ok(Fly !== undefined, "is defined")
   Array.prototype.concat([
     "source",
@@ -28,7 +28,7 @@ test("✈  fly.constructor", (t) => {
   const fly = new Fly({
     file: join(__dirname, "fixtures", "flyfile.js"),
     host: {
-      task: function () {
+      task() {
         t.equal(fly, this, "bind tasks to fly instance")
       }
     }
@@ -92,7 +92,7 @@ test("✈  fly.watch", (t) => {
   const fly = new Fly({
     file: path,
     host: {
-      default: function* (data) {
+      *default(data) {
         t.ok(true, "run tasks at least once")
         t.equal(data, 42, "pass options into task via start")
       }
@@ -112,7 +112,7 @@ test("✈  fly.watch", (t) => {
         t.equal(data, 42, "pass options into task via start on change")
       }
       touch(path)
-    }, 10)
+    }, 100)
   })
 })
 
@@ -147,13 +147,13 @@ test("✈  fly.*exec", (t) => {
   t.plan(4)
   const fly = new Fly({
     host: {
-      task: function* (data) {
+      *task(data) {
         t.ok(true, "run a task")
         t.equal(data, "rosebud", "pass an initial value to task")
       }
     }
   })
-  fly.emit = function (event, options) {
+  fly.emit = (event, options) => {
     if (event === "task_start")
       t.ok(true, "notify start event to observers")
     if (event === "task_complete")
@@ -168,13 +168,13 @@ test("✈  fly.start", (t) => {
   const value = 42
   const fly = new Fly({
     host: {
-      a: function* (data) {
+      *a(data) {
         return data + 1
       },
-      b: function* (data) {
+      *b(data) {
         return data + 1
       },
-      c: function* (data) {
+      *c(data) {
         t.ok(true, "run a given list of tasks")
         t.equal(data, value + 2, "cascade return values")
         return data + 1
@@ -195,12 +195,12 @@ test("✈  fly.start (order)", (t, state) => {
     // when running in a sequence both b and c wait while a blocks.
     // when running in parallel, b and c run while a blocks. state
     // can only be 3 when each task runs in order.
-      a: function* () {
+      *a() {
         yield block()
         if (state === 0) state++
       },
-      b: function* () { state++ },
-      c: function* () { state++ }
+      *b() { state++ },
+      *c() { state++ }
     }
   })
   co(function* () {
