@@ -1,14 +1,14 @@
-const test = require("tape").test
-const reporter = require("../dist/reporter")
+import { test } from "tape"
+import reporter from "../dist/reporter"
 
 const fakeEmitter = (event, t) => ({
-  on: function (e) {
-    if (e === event) t.ok(true, "notify " + event + " events")
+  on(e) {
+    if (e === event) t.ok(true, `notify ${event} events`)
     return this
   }
 })
 
-test("✈  reporter", function (t) {
+test("✈  reporter", (t) => {
   const ctx = fakeEmitter()
   t.deepEqual(reporter.call(ctx), ctx, "return the bound object")
   Array.prototype.concat([
