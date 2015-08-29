@@ -6,17 +6,17 @@ import { find, filter, bind, alert } from "fly-util"
   @param {String} path to a flyfile
   @return {Fly} fly instance ✈
  */
-export function* spawn (path) {
-  const file = yield find(path, bind)
+export function* spawn (path, bind) {
+  const file = yield find(path)
   return new Fly({
-    file, host: require(file), plugins: getPlugins(dirname(file))
+    file, host: require(file), plugins: getPlugins(dirname(file), bind)
   })
 }
 /**
   Load and return plugins in path/node_modules
   Bind require to compile plugins on the fly.
 */
-function getPlugins (path) {
+function getPlugins (path, bind) {
   bind(null, { stage: 0, only: [/fly-[-\w]+\/[-\w]+\./, /[fF]lyfile\.js/] })
   return filter(load(join(path, "package")), (name) => {
     return { name, plugin: load(join(path, "node_modules", name)) }
