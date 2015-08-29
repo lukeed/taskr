@@ -1,6 +1,6 @@
 import fmt from "../fmt"
 import timeInfo from "./timeInfo"
-import { log } from "fly-util"
+import { log, trace } from "fly-util"
 
 export default function () {
   return this
@@ -19,8 +19,10 @@ export default function () {
   .on("plugin_error", ({ plugin, error }) =>
     log(`${fmt.error} failed due to ${fmt.error}`, plugin, error))
 
-  .on("task_error", ({ task, error }) =>
-    log(`${fmt.error} failed due to ${fmt.error}`, task, error))
+  .on("task_error", ({ task, error }) => {
+    trace(error)
+    log(`${fmt.error} failed due to ${fmt.error}`, task, error)
+  })
 
   .on("task_start", ({ task }) =>
     log(`Starting ${fmt.start}`, task))
