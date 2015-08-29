@@ -1,8 +1,8 @@
 import co from "co"
 import test from "tape"
 import { test as tlog } from "./helpers/testLog"
-import Fly from "../dist/fly"
-import * as cli from "../dist/cli"
+import Fly from "../src/fly"
+import * as cli from "../src/cli"
 import pkg from "../package"
 import { join } from "path"
 
