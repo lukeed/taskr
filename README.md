@@ -17,7 +17,7 @@
          alt="NPM Version">
   </a>
 
-  <a href="https://coveralls.io/r/bucaran/fly">
+  <a href="https://coveralls.io/r/flyjs/fly">
     <img src="https://img.shields.io/coveralls/flyjs/fly.svg?style=flat-square"
          alt="Coverage Status">
   </a>
