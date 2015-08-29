@@ -1,5 +1,5 @@
 import { test } from "tape"
-import Emitter from "../dist/emitter"
+import Emitter from "../src/emitter"
 class Subscriber extends Emitter {}
 
 test("✈  Emitter", (t) => {

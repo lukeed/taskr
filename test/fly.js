@@ -1,7 +1,7 @@
 import co from "co"
 import { readFile as read } from "mz/fs"
 import { test } from "tape"
-import Fly from "../dist/fly"
+import Fly from "../src/fly"
 import { join } from "path"
 import touch from "touch"
 

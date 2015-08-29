@@ -1,5 +1,5 @@
 import { test } from "tape"
-import reporter from "../dist/reporter"
+import reporter from "../src/reporter"
 
 const fakeEmitter = (event, t) => ({
   on(e) {
