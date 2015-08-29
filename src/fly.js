@@ -8,8 +8,8 @@ import { readFile, appendFile } from "mz/fs"
 import { log, alert, error, defer, flatten, expand } from "fly-util"
 import Emitter from "./emitter"
 import write from "./write"
-const _ = debug("fly")
 const clear = defer(rimraf)
+const _ = debug("fly")
 
 export default class Fly extends Emitter {
   /**
@@ -31,13 +31,12 @@ export default class Fly extends Emitter {
         Object.assign(_, { [key]: host[key].bind(this) }), {}),
       _: { filters: [] }
     })
-    _("chdir %o", this.root)
-    process.chdir(this.root)
-
     plugins.forEach(({ name, plugin }) => {
       if (!plugin) throw new Error(`Did you forget to npm i -D ${name}?`)
       plugin.call(this, debug(name.replace("-", ":")), _("load %o", name))
     })
+    _("chdir %o", this.root)
+    process.chdir(this.root)
   }
   /**
     Compose a new yieldable sequence.
