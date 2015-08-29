@@ -1,5 +1,7 @@
 language: node_js
 node_js:
-  - iojs
   - "0.12"
-script: "npm test"
+  - "iojs-1"
+  - "iojs-2"
+after_script:
+  - npm run coveralls
