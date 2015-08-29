@@ -33,8 +33,11 @@ export default class Fly extends Emitter {
     })
     _("chdir %o", this.root)
     process.chdir(this.root)
-    plugins.forEach(({ name, plugin }) =>
-      plugin.call(this, debug(name.replace("-", ":")), _("load %o", name)))
+
+    plugins.forEach(({ name, plugin }) => {
+      if (!plugin) throw new Error(`Did you forget to npm i -D ${name}?`)
+      plugin.call(this, debug(name.replace("-", ":")), _("load %o", name))
+    })
   }
   /**
     Compose a new yieldable sequence.
@@ -60,9 +63,9 @@ export default class Fly extends Emitter {
     else {
       if (this[name] instanceof Function)
         throw new RangeError(`${name} method already defined in instance.`)
-      this[name] = function (options) {
-        debug("fly")(`${name} %o`, options)
-        return this.filter({ cb, options })
+      this[name] = function (options, ...rest) {
+        debug("fly")(`${name} %o, %o`, options, rest)
+        return this.filter({ cb, options, rest })
       }
     }
     return this
@@ -158,11 +161,17 @@ export default class Fly extends Emitter {
         for (let file of yield expand(glob)) {
           let { base, ext } = parse(file), data = yield readFile(file)
           let concat = this._.catenator || new Catenator(true, base, "\n")
+
           for (let filter of this._.filters) {
-            const res = yield Promise.resolve(filter.cb.call(this, data,
-              Object.assign({ filename: base }, filter.options)))
+            const options = (filter.options || {}).sourceMap
+              ? Object.assign({ filename: base }, filter.options)
+              : filter.options
+            const res = yield Promise.resolve(
+              filter.cb.apply(this, [data, options].concat(filter.rest)))
+
             data = res.code || res.js || res.css || res.data || res || data
-            ext = res.ext || ext
+            ext = res.ext || res.extension || ext
+
             if (res.map) {
               concat.add(`${base}`, data, res.map)
               if (ext === ".css")
@@ -171,6 +180,7 @@ export default class Fly extends Emitter {
                 data += `\n//# sourceMappingURL=${base}.map\n`
             }
           }
+
           for (let dir of flatten(dirs)) {
             yield this._.write({
               dir, data,
