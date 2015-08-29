@@ -6,6 +6,7 @@
 
 # Changelog
 
++ [v0.8.0](#v080)
 + [v0.7.1](#v071)
 + [v0.7.0](#v070)
 + [v0.6.0](#v060)
@@ -37,6 +38,32 @@
 + [v0.0.1](#v001)
 
 
+## v0.8.0
+
++ :boom: Rewrite tests in ES6.
+
++ :boom: Add test coverage tools. [#71](https://github.com/flyjs/fly/issues/71)
+
++ :boom: Better error handling.
+  + Throw a descriptive error when plugins are not found inside `node_modules`
+  + Show name of file when plugin fails. SEE [#85](https://github.com/flyjs/fly/issues/85)/[@andy-hanson](https://github.com/andy-hanson), [#93](https://github.com/flyjs/fly/issues/93) and [#94](https://github.com/flyjs/fly/issues/94).
+
++ Improve usage of npm scripts, more closely resembling those found in [generator-rise](https://github.com/bucaran/generator-rise).
+
++ Support passing `data, options, ...rest` to support a variable number of arguments inside filters/plugins:
+
+  ```js
+  //flyfile.js
+  yield this.source(...).myPlugin(a, b, c).target(...)
+  ```
+  ```js
+  // myPlugin/index.js
+  module.exports = function (_) {
+    this.filter("myPlugin", (data, a, b, c) => {
+    })
+  }
+  ```
+
 ## v0.7.0
 
 + Objects that return objects with transformed data support any of the following forms:
@@ -54,8 +81,6 @@
 ## v0.7.0
 
 + :trophy: Handle sourcemaps [#60](https://github.com/flyjs/fly/issues/60)
-
-+ :boom: Add test coverage tools. [#71](https://github.com/flyjs/fly/issues/71)
 
 + :boom: In order to support sourcemaps and open the door to future features, transformer plugins using the `Fly.prototype.filter` method can now return an object instead of a string such as:
 
