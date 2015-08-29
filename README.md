@@ -1,18 +1,47 @@
 > New Generation Build System
 
-[![][fly-badge]][fly]
-[![npm package][npm-ver-link]][fly]
-[![][dl-badge]][npm-pkg-link]
-[![][travis-logo]][travis]
-![][mit-badge]
+<div align="center">
+  <a href="http://github.com/flyjs">
+    <img width=280px src="https://cloud.githubusercontent.com/assets/8317250/8733685/0be81080-2c40-11e5-98d2-c634f076ccd7.png">
+  </a>
+</div>
+<br>
 
+<p align="center"><big>
+
+</big></p>
 
 <p align="center">
-  <a href="http://github.com/flyjs/fly">
-    <img width=280px  src="https://cloud.githubusercontent.com/assets/8317250/8733685/0be81080-2c40-11e5-98d2-c634f076ccd7.png">
+  <a href="https://npmjs.org/package/fly">
+    <img src="https://img.shields.io/npm/v/fly.svg?style=flat-square"
+         alt="NPM Version">
+  </a>
+
+  <a href="https://coveralls.io/r/bucaran/fly">
+    <img src="https://img.shields.io/coveralls/flyjs/fly.svg?style=flat-square"
+         alt="Coverage Status">
+  </a>
+
+  <a href="https://travis-ci.org/flyjs/fly">
+    <img src="https://img.shields.io/travis/flyjs/fly.svg?style=flat-square"
+         alt="Build Status">
+  </a>
+
+  <a href="https://npmjs.org/package/fly">
+    <img src="http://img.shields.io/npm/dm/fly.svg?style=flat-square"
+         alt="Downloads">
+  </a>
+
+  <a href="https://david-dm.org/flyjs/fly.svg">
+    <img src="https://david-dm.org/flyjs/fly.svg?style=flat-square"
+         alt="Dependency Status">
+  </a>
+
+  <a href="https://github.com/flyjs/fly/blob/master/LICENSE">
+    <img src="https://img.shields.io/npm/l/fly.svg?style=flat-square"
+         alt="License">
   </a>
 </p>
-
 
 <p align="center">
   <b><a href="#about">About</a></b>
@@ -68,7 +97,7 @@ export function* build () {
     .source(paths.scripts)
     .babel({ stage: 0, sourceMap: true })
     .uglify()
-    .concat("all.min.js")
+    .concat("app.js")
     .target("dist")
 }
 ```
@@ -82,16 +111,20 @@ Contributions are _absolutely_ welcome. Check out our [contribution guide](/CONT
 [MIT](http://opensource.org/licenses/MIT) © [Jorge Bucaran][Author] et [al][contributors]
 :heart:
 
+[author]:         http://github.com/bucaran
+[contributors]:   https://github.com/flyjs/fly/graphs/contributors
 
-[author]: http://about.bucaran.me
-[fly]: https://www.github.com/flyjs/fly
-[fly-badge]: https://img.shields.io/badge/fly-JS-05B3E1.svg?style=flat-square
-[mit-badge]: https://img.shields.io/badge/license-MIT-444444.svg?style=flat-square
-[npm-pkg-link]: https://www.npmjs.org/package/fly
-[npm-ver-link]: https://img.shields.io/npm/v/fly.svg?style=flat-square
-[dl-badge]: http://img.shields.io/npm/dm/fly.svg?style=flat-square
-[travis-logo]: http://img.shields.io/travis/flyjs/fly.svg?style=flat-square
-[travis]: https://travis-ci.org/flyjs/fly
-[contributors]: https://github.com/flyjs/fly/graphs/contributors
-[es6-example]: https://github.com/flyjs/fly/blob/master/examples/Flyfile.babel.js
-[es7-example]: https://github.com/flyjs/fly/blob/master/examples/async/Flypath.babel.js
+[fly]:            https://www.github.com/flyjs/fly
+
+[npm-pkg-link]:   https://www.npmjs.org/package/fly
+[npm-ver-link]:   https://img.shields.io/npm/v/fly.svg?style=flat-square
+
+[dl-badge]:       http://img.shields.io/npm/dm/fly.svg?style=flat-square
+
+[travis-badge]:   http://img.shields.io/travis/flyjs/fly.svg?style=flat-square
+[travis-link]:    https://travis-ci.org/flyjs/fly
+
+[mit-badge]:      https://img.shields.io/badge/license-MIT-444444.svg?style=flat-square
+
+[es6-example]:    https://github.com/flyjs/fly/blob/master/examples/Flyfile.babel.js
+[es7-example]:    https://github.com/flyjs/fly/blob/master/examples/async/Flypath.babel.js
