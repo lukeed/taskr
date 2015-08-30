@@ -197,9 +197,16 @@ export default function* () {
 
 Concatenate files read with `Fly.prototype.source`.
 
-#### `Fly.prototype.clear (paths)`
+#### `Fly.prototype.clear (...paths)`
 
 Clears / Deletes all paths including sub directories.
+
+```js
+export default function* () {
+  yield this.clear("dist/main.js", "dist/plugins/**/*.js");
+  ...
+}
+```
 
 
 ### Filters
