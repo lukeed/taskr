@@ -276,9 +276,20 @@ Run the specified tasks (or the `default` one if `tasks.length === 0`).
   }
   ```
 
-#### `Fly.prototype.watch (globs, tasks)`
+#### `Fly.prototype.watch (globs, tasks, options)`
 
-Run the specified tasks when a change is detected in any of the paths expanded from `globs`. Returns a promise.
+Run the specified tasks when a change is detected in any of the paths expanded from globs. Returns a promise.
+
+> Note: `tasks`, and `options` will be passed to `Fly.prototype.start`
+
+```js
+export function* watch(){
+ yield this.watch("app/lib/**/*.scss", "styles");
+ yield this.watch("app/lib/**/*.js", ["js", "lint"], { 
+        parallel: true 
+       });
+}
+```
 
 
 ### Other
