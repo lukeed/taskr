@@ -233,7 +233,7 @@ test("✈  fly.clear", (t) => {
 test("✈  fly.concat", (t) => {
   const fly = new Fly()
   fly.concat("f")
-  t.ok(fly._.write !== undefined, "add concat writer")
+  t.equal(fly._.cat.base, "f", "add concat writer")
   t.end()
 })
 

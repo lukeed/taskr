@@ -1,13 +1,13 @@
 import co from "co"
 import debug from "debug"
 import rimraf from "rimraf"
+import mkdirp from "mkdirp"
 import chokidar from "chokidar"
-import Catenator from "concat-with-sourcemaps"
-import { dirname, join, parse, sep } from "path"
-import { readFile, appendFile } from "mz/fs"
-import { log, alert, error, defer, flatten, expand } from "fly-util"
 import Emitter from "./emitter"
-import write from "./write"
+import Cat from "concat-with-sourcemaps"
+import { dirname, join, parse, sep } from "path"
+import { readFile, writeFile, appendFile } from "mz/fs"
+import { log, alert, error, defer, flatten, expand } from "fly-util"
 const clear = defer(rimraf)
 const _ = debug("fly")
 
@@ -45,8 +45,8 @@ export default class Fly extends Emitter {
     @return Fly instance. Promises resolve to { file, source }
    */
    source (...globs) {
-     Object.assign(this, { _: { write, filters: [], globs: flatten(globs) }})
-     this._.catenator = undefined
+     Object.assign(this, { _: { filters: [], globs: flatten(globs) }})
+     this._.cat = undefined
      _("source %o", this._.globs)
      return this
    }
@@ -143,10 +143,8 @@ export default class Fly extends Emitter {
     @param {String} file name
    */
   concat (base) {
-    this._.catenator = new Catenator(true, base, "\n")
-    this._.write = function* ({ dir, data, map }) {
-      yield write({ dir, base, data, map, write: appendFile })
-    }
+    this._.cat = new Cat(true, base, "\n")
+    this._.cat.base = base
     return this
   }
   /**
@@ -159,39 +157,58 @@ export default class Fly extends Emitter {
     return co.call(this, function* () {
       for (let glob of this._.globs) {
         for (let file of yield expand(glob)) {
-          let { base, ext } = parse(file), data = yield readFile(file)
-          let concat = this._.catenator || new Catenator(true, base, "\n")
-
+          let { base, ext } = parse(file), data = yield readFile(file), map
           for (let filter of this._.filters) {
-            const options = (filter.options || {}).sourceMap
-              ? Object.assign({ filename: base }, filter.options)
-              : filter.options
             const res = yield Promise.resolve(
-              filter.cb.apply(this, [data, options].concat(filter.rest)))
-
+              filter.cb.apply(this, [data, Object
+                  .assign({ filename: base }, filter.options)]
+                  .concat(filter.rest)))
             data = res.code || res.js || res.css || res.data || res || data
             ext = res.ext || res.extension || ext
-
-            if (res.map) {
-              concat.add(`${base}`, data, res.map)
-              if (ext === ".css")
-                data += `\n/*# sourceMappingURL=${base}.map*/\n`
-              if (ext === ".js")
-                data += `\n//# sourceMappingURL=${base}.map\n`
-            }
+            map = res.map
           }
-
-          for (let dir of flatten(dirs)) {
-            yield this._.write({
-              dir, data,
-              base: join(...parse(file).dir.split(sep)
+          data = map && ext === ".css"
+           ? `${data}\n/*# sourceMappingURL=${base}.map*/\n`
+           : map && ext === ".js"
+             ? `${data}\n//# sourceMappingURL=${base}.map\n`
+             : data
+          if (this._.cat) {
+            this._.cat.add(`${base}`, data, map)
+          } else {
+            yield resolve(dirs, {
+              data, base: join(...parse(file).dir.split(sep)
                 .filter((path) => !~glob.split(sep).indexOf(path)),
                 `${parse(file).name}${ext}`),
-              map: concat.contentParts.length && concat.sourceMap
+              map: this._.cat && this._.cat.sourceMap
             })
           }
         }
       }
+      if (this._.cat) {
+        yield resolve(dirs, {
+          data: this._.cat.content,
+          base: this._.cat.base,
+          write: appendFile,
+          map: this._.cat && this._.cat.sourceMap
+        })
+      }
     })
+  }
+}
+
+/** Write utility to help concat and target.
+  @param {String} parent directory
+  @param {String} base directory/file
+  @param {Mixed} data
+  @param {String} sourcemap
+  @param {Function} promisified writer function
+*/
+function* resolve (dirs, { base, data, map, write = writeFile }) {
+  for (let dir of flatten(dirs)) {
+    const file = join(dir, base)
+    mkdirp.sync(dirname(file))
+    yield write(file, data)
+    if (map) writeFile(`${file}.map`, JSON.stringify(
+      Object.assign(map, { file: base })))
   }
 }

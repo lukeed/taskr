@@ -3,7 +3,7 @@ export default function* () {
   yield this
     .source("src/*.js")
     .babel({ stage: 0, sourceMap: true })
-    .uglify({})
-    .concat("foobar.js")
+    // .uglify({})
+    .concat("out.js")
     .target("dist")
 }
