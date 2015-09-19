@@ -268,7 +268,7 @@ Run the specified tasks (or the `default` one if `tasks.length === 0`).
   }
   ```
 
-  + To run tasks in parallel use `parallel: true`. The following causes `dev`, `stage` and `server` tasks to start at the same time.
+  + To run tasks in parallel use `parallel: true`. The following causes `html`, `css` and `js` tasks to start at the same time.
 
   ```js
   export default function* () {
