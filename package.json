@@ -39,7 +39,6 @@
     "tap-spec": "*",
     "tape": "*",
     "touch": "*",
-    "rimraf": "*",
     "coveralls": "*",
     "isparta": "*"
   },
