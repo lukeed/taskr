@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "babel-core": "*",
-    "babel-runtime": "*",
+    "babel-runtime": "^6.0.14",
     "chokidar": "^1.0.5",
     "clor": "*",
     "co": "^4.5.4",
