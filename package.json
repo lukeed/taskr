@@ -11,8 +11,7 @@
     "fly": "./bin/index"
   },
   "dependencies": {
-    "babel-core": "*",
-    "babel-runtime": "*",
+    "babel-runtime": "^5.8.29",
     "chokidar": "^1.0.5",
     "clor": "*",
     "co": "^4.5.4",
@@ -29,8 +28,8 @@
     "update-notifier": "^0.5.0"
   },
   "devDependencies": {
-    "babel": "*",
-    "babel-eslint": "*",
+    "babel": "^5.8.29",
+    "babel-eslint": "^4.1.4",
     "coffee-script": "*",
     "eslint": "*",
     "fly-babel": "*",
