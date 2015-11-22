@@ -41,6 +41,11 @@
     <img src="https://img.shields.io/npm/l/fly.svg?style=flat-square"
          alt="License">
   </a>
+
+  <a href="https://github.com/flyjs/fly/blob/master/LICENSE">
+    <img src="https://img.shields.io/badge/gitter-join-FF2B6E.svg?style=flat-square"
+         alt="Gitt">
+  </a>
 </p>
 
 <p align="center">
@@ -54,11 +59,6 @@
   |
   <b><a href="#contributing">Contributing</a></b>
 
-  <p align="center">
-    <a href="https://gitter.im/flyjs/fly?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge">
-      <img src="https://badges.gitter.im/Join%20Chat.svg">
-    </a>
-  </p>
 </p>
 
 <br>
@@ -106,10 +106,7 @@ export function* build () {
 
 Contributions are _absolutely_ welcome. Check out our [contribution guide](/CONTRIBUTING.md).
 
-# License
-
-[MIT](http://opensource.org/licenses/MIT) © [Jorge Bucaran][Author] et [al][contributors]
-:heart:
+<!-- -->
 
 [author]:         http://github.com/bucaran
 [contributors]:   https://github.com/flyjs/fly/graphs/contributors
