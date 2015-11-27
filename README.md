@@ -22,8 +22,8 @@
          alt="Coverage Status">
   </a>
 
-  <a href="https://travis-ci.org/flyjs/fly">
-    <img src="https://img.shields.io/travis/flyjs/fly.svg?style=flat-square"
+  <a href="https://travis-ci.org/bucaran/fly">
+    <img src="https://img.shields.io/travis/bucaran/fly.svg?style=flat-square"
          alt="Build Status">
   </a>
 
@@ -32,17 +32,17 @@
          alt="Downloads">
   </a>
 
-  <a href="https://david-dm.org/flyjs/fly.svg">
-    <img src="https://david-dm.org/flyjs/fly.svg?style=flat-square"
+  <a href="https://david-dm.org/bucaran/fly.svg">
+    <img src="https://david-dm.org/bucaran/fly.svg?style=flat-square"
          alt="Dependency Status">
   </a>
 
-  <a href="https://github.com/flyjs/fly/blob/master/LICENSE">
+  <a href="https://github.com/bucaran/fly/blob/master/LICENSE">
     <img src="https://img.shields.io/npm/l/fly.svg?style=flat-square"
          alt="License">
   </a>
 
-  <a href="https://github.com/flyjs/fly/blob/master/LICENSE">
+  <a href="https://github.com/bucaran/fly/blob/master/LICENSE">
     <img src="https://img.shields.io/badge/gitter-join-FF2B6E.svg?style=flat-square"
          alt="Gitt">
   </a>
@@ -55,7 +55,7 @@
   |
   <b><a href="/docs/README.md">Documentation</a></b>
   |
-  <b><a href="https://github.com/flyjs/fly/wiki#plugins">Plugins</a></b>
+  <b><a href="https://github.com/bucaran/fly/wiki#plugins">Plugins</a></b>
   |
   <b><a href="#contributing">Contributing</a></b>
 
@@ -109,19 +109,19 @@ Contributions are _absolutely_ welcome. Check out our [contribution guide](/CONT
 <!-- -->
 
 [author]:         http://github.com/bucaran
-[contributors]:   https://github.com/flyjs/fly/graphs/contributors
+[contributors]:   https://github.com/bucaran/fly/graphs/contributors
 
-[fly]:            https://www.github.com/flyjs/fly
+[fly]:            https://www.github.com/bucaran/fly
 
 [npm-pkg-link]:   https://www.npmjs.org/package/fly
 [npm-ver-link]:   https://img.shields.io/npm/v/fly.svg?style=flat-square
 
 [dl-badge]:       http://img.shields.io/npm/dm/fly.svg?style=flat-square
 
-[travis-badge]:   http://img.shields.io/travis/flyjs/fly.svg?style=flat-square
-[travis-link]:    https://travis-ci.org/flyjs/fly
+[travis-badge]:   http://img.shields.io/travis/bucaran/fly.svg?style=flat-square
+[travis-link]:    https://travis-ci.org/bucaran/fly
 
 [mit-badge]:      https://img.shields.io/badge/license-MIT-444444.svg?style=flat-square
 
-[es6-example]:    https://github.com/flyjs/fly/blob/master/examples/Flyfile.babel.js
-[es7-example]:    https://github.com/flyjs/fly/blob/master/examples/async/Flypath.babel.js
+[es6-example]:    https://github.com/bucaran/fly/blob/master/examples/babel/flyfile.js
+[es7-example]:    https://github.com/bucaran/fly/blob/master/examples/async/flyfile.js
