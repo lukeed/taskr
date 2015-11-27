@@ -49,7 +49,7 @@
     "clean": "rimraf dist",
     "lint": "eslint src test",
     "coverage": "babel-node ./node_modules/.bin/isparta cover --report text test/*.js",
-    "coveralls": "npm run coverage -s && coveralls < coverage/lcov.info && rimraf ./coverage",
+    "coveralls": "npm run coverage -s && coveralls < coverage/lcov.info",
     "postcoveralls": "rimraf coverage",
     "prebuild": "npm run lint -s && npm run clean -s",
     "build": "babel src -d dist",
