@@ -11,7 +11,7 @@
     "fly": "./bin/index"
   },
   "dependencies": {
-    "babel-runtime": "^5.8.29",
+    "babel-runtime": "^6.0.0",
     "chokidar": "^1.0.5",
     "clor": "*",
     "co": "^4.5.4",
@@ -28,7 +28,9 @@
     "update-notifier": "^0.5.0"
   },
   "devDependencies": {
-    "babel": "^5.8.29",
+    "babel-cli": "^6.0.0",
+    "babel-preset-es2015": "^6.0.0",
+    "babel-preset-stage-3": "^6.0.0",
     "babel-eslint": "^4.1.4",
     "coffee-script": "*",
     "eslint": "*",
@@ -46,11 +48,11 @@
     "symlink": "ln -s $PWD/bin/index /usr/local/bin/fly",
     "clean": "rimraf dist",
     "lint": "eslint src test",
-    "coverage": "babel-node node_modules/.bin/isparta cover test/*.js",
+    "coverage": "babel-node ./node_modules/.bin/isparta cover --report text test/*.js",
     "coveralls": "npm run coverage -s && coveralls < coverage/lcov.info",
     "postcoveralls": "rimraf coverage",
     "prebuild": "npm run lint -s && npm run clean -s",
-    "build": "babel --optional runtime src -d dist",
+    "build": "babel src -d dist",
     "postbuild": "npm test -s",
     "test": "babel-node ./node_modules/tape/bin/tape test/*.js | tspec",
     "deploy": "git pull --rebase origin master && git push origin master",
