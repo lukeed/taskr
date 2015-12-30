@@ -32,7 +32,7 @@
          alt="Downloads">
   </a>
 
-  <a href="https://david-dm.org/bucaran/fly.svg">
+  <a href="https://david-dm.org/bucaran/fly">
     <img src="https://david-dm.org/bucaran/fly.svg?style=flat-square"
          alt="Dependency Status">
   </a>
