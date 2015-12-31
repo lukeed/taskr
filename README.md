@@ -42,7 +42,7 @@
          alt="License">
   </a>
 
-  <a href="https://github.com/bucaran/fly/blob/master/LICENSE">
+  <a href="https://gitter.im/bucaran/fly">
     <img src="https://img.shields.io/badge/gitter-join-FF2B6E.svg?style=flat-square"
          alt="Gitt">
   </a>
