@@ -95,7 +95,7 @@ export function* build () {
   yield this.clear("dist")
   yield this
     .source(paths.scripts)
-    .babel({ stage: 0, sourceMap: true })
+    .babel({ stage: 0, sourceMaps: true })
     .uglify()
     .concat("app.js")
     .target("dist")
