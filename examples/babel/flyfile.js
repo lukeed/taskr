@@ -6,7 +6,7 @@ export function* build () {
   yield this.clear("dist")
   yield this
     .source("src/**/*.js")
-    .babel({ presets: ["es2015"], sourceMaps: true })
+    .babel({ stage: 0, sourceMaps: true })
     .concat("foobar.js")
     .target("dist")
 }
