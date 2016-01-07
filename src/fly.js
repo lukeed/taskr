@@ -6,7 +6,7 @@ import chokidar from "chokidar"
 import Emitter from "./emitter"
 import Cat from "concat-with-sourcemaps"
 import { dirname, join, parse, sep } from "path"
-import { readFile, writeFile, appendFile } from "mz/fs"
+import { readFile, writeFile } from "mz/fs"
 import { log, alert, error, defer, flatten, expand } from "fly-util"
 const clear = defer(rimraf)
 const _ = debug("fly")
@@ -139,7 +139,7 @@ export default class Fly extends Emitter {
     return flatten(paths).map((path) => clear(path))
   }
   /**
-    Writer based in fs/mz appendFile.
+    Writer based in fs/mz writeFile.
     @param {String} file name
    */
   concat (base) {
@@ -188,7 +188,7 @@ export default class Fly extends Emitter {
         yield resolve(dirs, {
           data: this._.cat.content,
           base: this._.cat.base,
-          write: appendFile,
+          write: writeFile,
           map: this._.cat && this._.cat.sourceMap
         })
       }
