@@ -46,7 +46,7 @@
     "symlink": "ln -s $PWD/bin/index /usr/local/bin/fly",
     "clean": "rimraf dist",
     "lint": "eslint src test",
-    "coverage": "babel-node ./node_modules/.bin/isparta cover --report text test/*.js",
+    "coverage": "babel-node ./node_modules/.bin/isparta cover test/*.js",
     "coveralls": "npm run coverage -s && coveralls < coverage/lcov.info",
     "postcoveralls": "rimraf coverage",
     "prebuild": "npm run lint -s && npm run clean -s",
