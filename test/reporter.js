@@ -26,7 +26,7 @@ test("✈  reporter", (t) => {
 })
 
 test("✈  timeInfo", (t) => {
-  const timeInfo = require("../src/reporter/timeInfo").default
+  const timeInfo = require("../src/reporter/timeInfo")
   t.deepEqual(timeInfo(100), { duration: 100, scale: "ms" },
     "use 'ms' units by default.")
   t.deepEqual(timeInfo(1000), { duration: 1, scale: "s" },
