@@ -10,6 +10,9 @@ export default function* () {
   yield this.clear(paths.dist)
   yield this.log("Building Fly...")
     .source(paths.src)
-    .babel({ presets: ["es2015", "stage-3"] })
+    .babel({
+      optional: ["runtime"],
+      modules: "common"
+    })
     .target(paths.dist)
 }
