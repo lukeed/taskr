@@ -143,7 +143,7 @@ export default class Fly extends Emitter {
     @param {String} file name
    */
   concat (base) {
-    this._.cat = new Cat(true, base, "\n")
+    this._.cat = new Cat(false, base, "\n")
     this._.cat.base = base
     return this
   }
@@ -157,7 +157,8 @@ export default class Fly extends Emitter {
     return co.call(this, function* () {
       for (let glob of this._.globs) {
         for (let file of yield expand(glob)) {
-          let { base, ext } = parse(file), data = yield readFile(file), map
+          let { base, ext } = parse(file),
+            data = yield readFile(file)
           for (let filter of this._.filters) {
             const res = yield Promise.resolve(
               filter.cb.apply(this, [data, Object
@@ -165,21 +166,15 @@ export default class Fly extends Emitter {
                   .concat(filter.rest)))
             data = res.code || res.js || res.css || res.data || res || data
             ext = res.ext || res.extension || ext
-            map = res.map
           }
-          data = map && ext === ".css"
-           ? `${data}\n/*# sourceMappingURL=${base}.map*/\n`
-           : map && ext === ".js"
-             ? `${data}\n//# sourceMappingURL=${base}.map\n`
-             : data
           if (this._.cat) {
-            this._.cat.add(`${base}`, data, map)
+            this._.cat.add(`${base}`, data)
           } else {
             yield resolve(dirs, {
-              data, base: join(...parse(file).dir.split(sep)
+              data,
+              base: join(...parse(file).dir.split(sep)
                 .filter((path) => !~glob.split(sep).indexOf(path)),
-                `${parse(file).name}${ext}`),
-              map: this._.cat && this._.cat.sourceMap
+                `${parse(file).name}${ext}`)
             })
           }
         }
@@ -188,8 +183,7 @@ export default class Fly extends Emitter {
         yield resolve(dirs, {
           data: this._.cat.content,
           base: this._.cat.base,
-          write: writeFile,
-          map: this._.cat && this._.cat.sourceMap
+          write: writeFile
         })
       }
     })
@@ -200,15 +194,12 @@ export default class Fly extends Emitter {
   @param {String} parent directory
   @param {String} base directory/file
   @param {Mixed} data
-  @param {String} sourcemap
   @param {Function} promisified writer function
 */
-function* resolve (dirs, { base, data, map, write = writeFile }) {
+function* resolve (dirs, { base, data, write = writeFile }) {
   for (let dir of flatten(dirs)) {
     const file = join(dir, base)
     mkdirp.sync(dirname(file))
     yield write(file, data)
-    if (map) writeFile(`${file}.map`, JSON.stringify(
-      Object.assign(map, { file: base })))
   }
 }
