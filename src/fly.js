@@ -84,6 +84,7 @@ export default class Fly extends Emitter {
       .then(() => chokidar.watch(flatten([globs]), { ignoreInitial: true })
         .on("all", () => this.start(tasks, options)))
   }
+
   /**
     Unwrap/expand source globs to files.
     @param {Function} onFulfilled
@@ -96,6 +97,7 @@ export default class Fly extends Emitter {
           arr.concat(item)))).catch(reject)
       }).then(onFulfilled).catch(onRejected)
   }
+
   /**
     @private Execute a task.
     @param {String} name of the task
@@ -114,6 +116,7 @@ export default class Fly extends Emitter {
     } catch (error) { this.emit("task_error", { task, error }) }
     return value
   }
+
   /**
     Run one or more tasks. Each task's return value cascades on to the next
     task in a sequence.
@@ -133,6 +136,7 @@ export default class Fly extends Emitter {
     }, [].concat(tasks).filter((task) => ~Object.keys(this.host)
       .indexOf(task) || !this.emit("task_not_found", { task })))
   }
+
   /**
     Deferred rimraf wrapper.
     @param {...String} paths
@@ -141,6 +145,7 @@ export default class Fly extends Emitter {
     _("clear %o", paths)
     return flatten(paths).map((path) => clear(path))
   }
+
   /**
     Writer based in fs/mz writeFile.
     @param {String} file name
@@ -150,6 +155,7 @@ export default class Fly extends Emitter {
     this._.cat.base = base
     return this
   }
+
   /**
     Resolve a yieldable sequence.
     Reduce source with filters and invoke writer.
@@ -162,14 +168,17 @@ export default class Fly extends Emitter {
         for (let file of yield expand(glob)) {
           let { base, ext } = parse(file),
             data = yield readFile(file)
+
           for (let filter of this._.filters) {
             const res = yield Promise.resolve(
               filter.cb.apply(this, [data, Object
                   .assign({ filename: base }, filter.options)]
-                  .concat(filter.rest)))
+                  .concat(filter.rest))
+            )
             data = res.code || res.js || res.css || res.data || res || data
             ext = res.ext || res.extension || ext
           }
+
           if (this._.cat) {
             this._.cat.add(`${base}`, data)
           } else {
@@ -182,6 +191,7 @@ export default class Fly extends Emitter {
           }
         }
       }
+
       if (this._.cat) {
         yield resolve(dirs, {
           data: this._.cat.content,
