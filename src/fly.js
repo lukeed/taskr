@@ -38,18 +38,20 @@ export default class Fly extends Emitter {
     _("chdir %o", this.root)
     process.chdir(this.root)
   }
+
   /**
     Compose a new yieldable sequence.
     Reset globs, filters and writer.
     @param {...String} glob patterns
     @return Fly instance. Promises resolve to { file, source }
    */
-   source (...globs) {
-     Object.assign(this, { _: { filters: [], globs: flatten(globs) }})
-     this._.cat = undefined
-     _("source %o", this._.globs)
-     return this
-   }
+  source (...globs) {
+    Object.assign(this, { _: { filters: [], globs: flatten(globs) }})
+    this._.cat = undefined
+    _("source %o", this._.globs)
+    return this
+  }
+
   /**
     Add filter / transform function.
     Create a closure bound to the current Fly instance.
@@ -69,6 +71,7 @@ export default class Fly extends Emitter {
     }
     return this
   }
+
   /**
     Watch IO events in globs and run tasks.
     @param {[String]} glob patterns to observe for changes
