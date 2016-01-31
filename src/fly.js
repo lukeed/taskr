@@ -232,7 +232,7 @@ function* resolve (dirs, { base, data, depth, write = writeFile }) {
  * @return {string}
  */
 function dirpaths (full, depth) {
-  const arr = full.split('/')
+  const arr = full.split(sep)
   const len = arr.length
-  return (depth==0) ? arr[len-1] : (depth >= len) ? full : arr.slice(len - 1 - depth).join('/')
+  return (depth==0) ? arr[len-1] : (depth >= len) ? full : arr.slice(len - 1 - depth).join(sep)
 }
