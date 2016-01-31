@@ -159,10 +159,13 @@ export default class Fly extends Emitter {
   /**
     Resolve a yieldable sequence.
     Reduce source with filters and invoke writer.
-    @param {Array} target directories
+    @param {Array}  dirs  target directories
+    @param {Object} depth target options, for path flattening
     @return {Promise}
    */
-  target (...dirs) {
+  target (dirs, {depth = -1} = {}) {
+    dirs = Array.isArray(dirs) ? dirs : [dirs]
+
     return co.call(this, function* () {
       for (let glob of this._.globs) {
         for (let file of yield expand(glob)) {
@@ -182,12 +185,11 @@ export default class Fly extends Emitter {
           if (this._.cat) {
             this._.cat.add(`${base}`, data)
           } else {
-            yield resolve(dirs, {
-              data,
-              base: join(...parse(file).dir.split(sep)
-                .filter((path) => !~glob.split(sep).indexOf(path)),
-                `${parse(file).name}${ext}`)
-            })
+            const base = join(
+              ...parse(file).dir.split(sep).filter(path => !~glob.split(sep).indexOf(path)),
+              `${parse(file).name}${ext}`
+            )
+            yield resolve(dirs, {data, base, depth})
           }
         }
       }
@@ -196,7 +198,8 @@ export default class Fly extends Emitter {
         yield resolve(dirs, {
           data: this._.cat.content,
           base: this._.cat.base,
-          write: writeFile
+          write: writeFile,
+          depth
         })
       }
     })
@@ -204,15 +207,32 @@ export default class Fly extends Emitter {
 }
 
 /** Write utility to help concat and target.
-  @param {String} parent directory
-  @param {String} base directory/file
-  @param {Mixed} data
-  @param {Function} promisified writer function
+  @param {String}   dirs  parent directory
+  @param {String}   base  directory/file
+  @param {Mixed}    data
+  @param {Integer}  depth number of parent directories to keep
+  @param {Function} write promisified writer function
 */
-function* resolve (dirs, { base, data, write = writeFile }) {
+function* resolve (dirs, { base, data, depth, write = writeFile }) {
+  if (depth > -1) {
+    base = dirpaths(base, depth)
+  }
+
   for (let dir of flatten(dirs)) {
     const file = join(dir, base)
     mkdirp.sync(dirname(file))
     yield write(file, data)
   }
+}
+
+/**
+ * Shorten a directory string to # of parent dirs
+ * @param  {str}  full    The original full path
+ * @param  {int}  depth   The number of levels to retain
+ * @return {string}
+ */
+function dirpaths (full, depth) {
+  const arr = full.split('/')
+  const len = arr.length
+  return (depth==0) ? arr[len-1] : (depth >= len) ? full : arr.slice(len - 1 - depth).join('/')
 }
