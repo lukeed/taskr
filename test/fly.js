@@ -237,6 +237,37 @@ test("✈  fly.concat", (t) => {
   t.end()
 })
 
+test("✈  fly.flatten", (t) => {
+  t.plan(4)
+  const fly = new Fly()
+  const src = join(__dirname, "fixtures", "**/*.md")
+  const dest = join(__dirname, "fixtures", "dest")
+
+  co(function* () {
+    yield fly.source(src).target(dest)
+    t.ok(true, "retain normal pathing if desired depth not specified")
+    yield fly.clear(dest)
+  })
+
+  co(function* () {
+    yield fly.source(src).target(dest, {depth: 0})
+    t.ok(true, "move all files to same directory, no parents")
+    yield fly.clear(dest)
+  })
+
+  co(function* () {
+    yield fly.source(src).target(dest, {depth: 1})
+    t.ok(true, "keep one parent directory per file")
+    yield fly.clear(dest)
+  })
+
+  co(function* () {
+    yield fly.source(src).target(dest, {depth: 5})
+    t.ok(true, 'retain full path if desired depth exceeds path depth')
+    yield fly.clear(dest)
+  })
+})
+
 test("✈  fly.target", (t) => {
   t.plan(1)
   co(function* () {
