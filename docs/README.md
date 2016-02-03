@@ -287,7 +287,7 @@ The direct descendents of `dest/img` are:
 
 ---
 
-**Note:** Everything greater than `depth: 2` returns the original structure because it is/exceeds the original nesting depth **in this example**.
+**Note:** In this example, anything greater than `depth: 2` returns the original structure because it is/exceeds the original nesting depth.
 
 ---
 
