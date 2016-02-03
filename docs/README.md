@@ -232,6 +232,65 @@ export default function* () {
 }
 ```
 
+### Depths
+
+A source's directory structure isn't always desirable in the output; however, it is preserved by default if no `config` parameter is found. 
+
+But, by specifying a `depth` value, you are dictating how many _parent directories_ of a file to keep.
+
+When handling fonts and images, it's often desired to modify, or _flatten_, the `target` directory's structure. Let's look at the following example structure for a project's images:
+
+```
+app
+|- images/
+  |- img.jpg
+  |- one/
+    |- one.jpg
+    |- two/
+      |- two.jpg
+```
+
+#### Depth: Default
+
+```js
+yield this.source('app/images/**/*.jpg').target('dest/img')
+```
+The direct descendents of `dest/img` are:
+* `img.jpg`
+* `one/`
+
+#### Depth: 0
+```js
+yield this.source('app/images/**/*.jpg').target('dest/img', {depth: 0})
+```
+The direct descendents of `dest/img` are:
+* `img.jpg`
+* `one.jpg`
+* `two.jpg`
+
+#### Depth: 1
+```js
+yield this.source('app/images/**/*.jpg').target('dest/img', {depth: 1})
+```
+The direct descendents of `dest/img` are:
+* `img.jpg`
+* `one/`
+* `two/`
+
+#### Depth: 2
+```js
+yield this.source('app/images/**/*.jpg').target('dest/img', {depth: 2})
+```
+The direct descendents of `dest/img` are:
+* `img.jpg`
+* `one/`
+
+---
+
+**Note:** Everything greater than `depth: 2` returns the original structure because it is/exceeds the original nesting depth **in this example**.
+
+---
+
 
 ### Filters
 
