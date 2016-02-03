@@ -1,3 +1,4 @@
+import fs from "fs"
 import co from "co"
 import { readFile as read } from "mz/fs"
 import { test } from "tape"
@@ -243,28 +244,45 @@ test("✈  fly.flatten", (t) => {
   const src = join(__dirname, "fixtures", "**/*.md")
   const dest = join(__dirname, "fixtures", "dest")
 
+  const results_norm = ["one"]
+  const results_zero = ["one.md", "two-1.md", "two-2.md"]
+  const results_one = ["one", "two"]
+
+  function* matches (dir, expect) {
+    const data = fs.readdirSync(dir)
+    return (expect.length == data.length) && expect.every((u, i) => u === data[i])
+  }
+
   co(function* () {
-    yield fly.source(src).target(dest)
-    t.ok(true, "retain normal pathing if desired depth not specified")
-    yield fly.clear(dest)
+    const tar = `${dest}-1`
+
+    yield fly.source(src).target(tar)
+    t.ok(yield matches(tar, results_norm), "retain normal pathing if desired depth not specified")
+    yield fly.clear(tar)
   })
 
   co(function* () {
-    yield fly.source(src).target(dest, {depth: 0})
-    t.ok(true, "move all files to same directory, no parents")
-    yield fly.clear(dest)
+    const tar = `${dest}-2`
+
+    yield fly.source(src).target(tar, {depth: 0})
+    t.ok(yield matches(tar, results_zero), "move all files to same directory, no parents")
+    yield fly.clear(tar)
   })
 
   co(function* () {
-    yield fly.source(src).target(dest, {depth: 1})
-    t.ok(true, "keep one parent directory per file")
-    yield fly.clear(dest)
+    const tar = `${dest}-3`
+
+    yield fly.source(src).target(tar, {depth: 1})
+    t.ok(yield matches(tar, results_one), "keep one parent directory per file")
+    yield fly.clear(tar)
   })
 
   co(function* () {
-    yield fly.source(src).target(dest, {depth: 5})
-    t.ok(true, 'retain full path if desired depth exceeds path depth')
-    yield fly.clear(dest)
+    const tar = `${dest}-4`
+
+    yield fly.source(src).target(tar, {depth: 5})
+    t.ok(yield matches(tar, results_norm), "retain full path if desired depth exceeds path depth")
+    yield fly.clear(tar)
   })
 })
 
