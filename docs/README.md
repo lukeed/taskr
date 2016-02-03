@@ -178,9 +178,33 @@ export default function* () {
 }
 ```
 
-#### `Fly.prototype.target (...targets)`
+#### `Fly.prototype.target (targets[, {config}])`
 
 Resolve a _yieldable_ sequence. Reduce the data source applying filters and write the result to `targets`.
+
+**targets**
+
+> Type: `string` or `array`
+
+> Default: `null`
+
+The destination folder(s) to write to.
+
+**config** -- Optional
+
+> Type: `object`
+
+> Default: `{}`
+
+The optional config for destination folder(s).
+
+**config.depth**
+
+> Type: `integer`
+
+> Default: `-1`
+
+The number of parent directories of the source to retain in the target(s). See [Depths](#depths).
 
 ```js
 export default function* () {
@@ -189,7 +213,7 @@ export default function* () {
     ...
     .filter((data) => data.toString())
     ...
-    .target("dist", "build", "test")
+    .target(["dist", "build", "test"])
 }
 ```
 
