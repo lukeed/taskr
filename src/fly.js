@@ -7,7 +7,7 @@ import Emitter from "./emitter"
 import Cat from "concat-with-sourcemaps"
 import { dirname, join, parse, sep } from "path"
 import { readFile, writeFile } from "mz/fs"
-import { log, alert, error, defer, flatten, expand } from "fly-util"
+import { log, alert, error, defer, flatten, expand } from "./utils"
 const clear = defer(rimraf)
 const _ = debug("fly")
 

@@ -1,6 +1,6 @@
 import Fly from "../fly"
 import { join, dirname } from "path"
-import { find, filter, bind, alert } from "fly-util"
+import { find, filter, bind, alert } from "../utils"
 /**
   Create a new Fly instance.
   @param {String} path to a flyfile
