@@ -17,7 +17,7 @@ export function* spawn (path, hook = bind) {
   Bind require to compile plugins on the fly.
 */
 function getPlugins (path, hook = bind) {
-  hook(null, { stage: 0, only: [/fly-[-\w]+\/[-\w]+\./, /[fF]lyfile\.js/] })
+  hook(null, {presets: ['es2015', 'stage-0'], only: [/fly-[-\w]+\/[-\w]+\./, /[fF]lyfile\.js/] })
   return filter(load(join(path, "package")), (name) => {
     return { name, plugin: load(join(path, "node_modules", name)) }
   })

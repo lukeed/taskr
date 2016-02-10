@@ -14,7 +14,7 @@ export function bind (path, options) {
     js[`.${(path || "").split(".").slice(1).join(".")}`] || js[".babel.js"]
   )
   if (module instanceof Function) {
-    module(options || { stage: 0 })
+    module(options || {presets: ['es2015', 'stage-0']})
   }
   return path
 }
