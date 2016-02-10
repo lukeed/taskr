@@ -4,7 +4,7 @@ const path = require("path")
 /**
  * Spawn a new Babel-Node process
  */
-const fly = path.normalize("src")
+const fly = path.resolve(__dirname, "../src")
 const babel = path.normalize("node_modules/.bin/babel-node")
 
 require("child_process").execSync(`${babel} --presets es2015,stage-0 ${fly}`)
