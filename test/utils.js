@@ -82,10 +82,10 @@ test("util.bind (module) ✈", (t) => {
   )
   t.equal(coffee.getSecret(), 42, "binds to coffee-script")
 
-  const babel = require(
-    util.bind(join(process.cwd(), "./utils/sample.babel.js"))
-  )
-  t.equal(babel.getSecret(), 42, "binds to babel")
+  // const babel = require(
+  //   util.bind(join(process.cwd(), "./utils/sample.babel.js"))
+  // )
+  // t.equal(babel.getSecret(), 42, "binds to babel")
 
   t.end()
 })
