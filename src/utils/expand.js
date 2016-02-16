@@ -6,6 +6,6 @@ import globby from "globby"
   @param {Object}           options
   @return {Promise}
 */
-export function expand (pattern, options) {
+export function expand(pattern, options) {
   return globby(pattern, options)
 }

@@ -4,7 +4,7 @@
   @return [[a],[b],[c]] -> [a,b,c]
 */
 
-export function flatten (array) {
+export function flatten(array) {
   return array.reduce(
     (flat, next) => flat.concat(Array.isArray(next) ? flatten(next) : next), []
   )

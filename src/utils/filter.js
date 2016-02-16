@@ -10,7 +10,7 @@ const _ = debug("fly:filter")
   @return {[String]} list of fly plugins
 */
 
-export function filter (pkg, load, blacklist = []) {
+export function filter(pkg, load, blacklist = []) {
   _("filter fly-* plugins")
   return !pkg ? []
     : flatten(["dependencies", "devDependencies", "peerDependencies"]
