@@ -1,10 +1,11 @@
 #!/usr/bin/env node
-const path = require("path")
-
+const node = process.argv[0]
+const path = require("path").join(__dirname, "_index")
+const args = [ "--harmony", "--harmony_arrow_functions"]
+  .concat(path)
+  .concat(process.argv.slice(2))
+const opts = { stdio: "inherit" }
 /**
- * Spawn a new Babel-Node process
+ * @overview Launch a new node process enabling harmony flags.
  */
-const fly = path.resolve(__dirname, "../src")
-const babel = path.normalize("node_modules/.bin/babel-node")
-
-require("child_process").execSync(`${babel} --presets es2015,stage-0 ${fly}`)
+require("child_process").spawn(node, args, opts)
