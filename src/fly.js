@@ -33,6 +33,7 @@ module.exports = class Fly extends Emitter {
     })
     plugins.forEach(({name, plugin}) => {
       if (!plugin) throw new Error(`Did you forget to npm i -D ${name}?`)
+      if (plugin.default) plugin = plugin.default
       plugin.call(this, debug(name.replace("-", ":")), _("load %o", name))
     })
     _("chdir %o", this.root)
