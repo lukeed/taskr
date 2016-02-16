@@ -11,7 +11,7 @@ const _ = debug("fly:log")
   @prop {String} console method to use
   @prop {[String]} custom style to append to args
 */
-export function stamp (...args) {
+function stamp(...args) {
   if (process.env.DEBUG) {
     _.apply(_, args)
   } else {
@@ -25,17 +25,17 @@ export function stamp (...args) {
 /**
   Log utilities.
 */
-export function log (...args) {
+function log(...args) {
   stamp.apply({ method: "log", color: "magenta" }, args)
   return this
 }
 
-export function error (...args) {
+function error(...args) {
   stamp.apply({ method: "error", color: "red" }, args)
   return this
 }
 
-export function alert (...args) {
+function alert(...args) {
   if (process.env.VERBOSE)
     stamp.apply({
       custom: `${clor.yellow.bold("%s")}`,
@@ -49,11 +49,15 @@ export function alert (...args) {
   prettyjson wrapper and stack tracer.
   @param {Object} error object
 */
-export function trace (e) {
+function trace(e) {
   console.error(pretty.render(e)
     .replace(/(\sFunction|\sObject)\./g, `${clor.blue("$1")}.`)
     .replace(/\((~?\/.*)\)/g, `(${clor.gray("$1")})`)
     .replace(/:([0-9]*):([0-9]*)/g, ` ${clor.yellow("$1")}:${clor.yellow("$2")}`)
     .replace(new RegExp(process.env.HOME, "g"), "~")
   )
+}
+
+module.exports = {
+  trace, alert, error, log, stamp
 }

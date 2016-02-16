@@ -10,7 +10,7 @@ const _ = debug("fly:find")
   @param {Function} use to bind require or process path
   @return {String} path to the Flyfile
 */
-export function* find (path, bind = _ => _) {
+export function* find(path, bind = _ => _) {
   _("resolve path to flyfile %o", path)
   const root = join(process.cwd(), path)
   return bind((yield fs.stat(path)).isDirectory()
