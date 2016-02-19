@@ -1,0 +1,2 @@
+exports.getSecret = ->
+  42

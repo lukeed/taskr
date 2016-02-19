@@ -1,6 +1,6 @@
 import fmt from "../fmt"
 import timeInfo from "./timeInfo"
-import { log, trace } from "fly-util"
+import { log, trace } from "../utils"
 
 export default function () {
   return this
