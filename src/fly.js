@@ -7,11 +7,11 @@ import Emitter from "./emitter"
 import Cat from "concat-with-sourcemaps"
 import { dirname, join, parse, sep } from "path"
 import { readFile, writeFile } from "mz/fs"
-import { log, alert, error, defer, flatten, expand } from "fly-util"
+import { log, alert, error, defer, flatten, expand } from "./utils"
 const clear = defer(rimraf)
 const _ = debug("fly")
 
-export default class Fly extends Emitter {
+module.exports = class Fly extends Emitter {
   /**
     Create a new Fly instance.
     @param {String} flyfile path
@@ -31,8 +31,9 @@ export default class Fly extends Emitter {
         Object.assign(_, { [key]: host[key].bind(this) }), {}),
       _: { filters: [] }
     })
-    plugins.forEach(({ name, plugin }) => {
+    plugins.forEach(({name, plugin}) => {
       if (!plugin) throw new Error(`Did you forget to npm i -D ${name}?`)
+      if (plugin.default) plugin = plugin.default
       plugin.call(this, debug(name.replace("-", ":")), _("load %o", name))
     })
     _("chdir %o", this.root)

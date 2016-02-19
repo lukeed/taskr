@@ -1,7 +1,7 @@
 import co from "co"
 import * as cli from "./cli"
 import reporter from "./reporter"
-import { error, trace } from "fly-util"
+import { error, trace } from "./utils"
 import updateNotifier from "update-notifier"
 import pkg from "../package"
 
