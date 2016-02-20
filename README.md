@@ -95,8 +95,9 @@ export function* build () {
   yield this.clear("dist")
   yield this
     .source(paths.scripts)
-    .babel({ stage: 0, sourceMaps: true })
-    .uglify()
+    .babel({
+      presets: ["es2015", "stage-0"]
+    })
     .concat("app.js")
     .target("dist")
 }
