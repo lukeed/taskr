@@ -1,6 +1,6 @@
 {
   "name": "fly",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Modern Build System",
   "main": "dist/index.js",
   "files": [
