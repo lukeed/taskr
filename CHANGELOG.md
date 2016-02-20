@@ -6,6 +6,11 @@
 
 # Changelog
 
++ [v0.9.1](#v091)
++ [v0.9.0](#v090)
++ [v0.8.8](#v088)
++ [v0.8.6](#v086)
++ [v0.8.5](#v085)
 + [v0.8.0](#v080)
 + [v0.7.1](#v071)
 + [v0.7.0](#v070)
@@ -37,6 +42,25 @@
   + [`watch` API update](#watch-api-update)
 + [v0.0.1](#v001)
 
+
+## v0.9.1
+  + Hotfix: Actually include `dist` directory when downloading v0.9.x
+
+## v0.9.0
++ (Re)Upgrade to Babel v6!
++ Integrate `fly-util` module directly into core.
++ Import `fly-util`'s tests.
++ Revert `bin` to spawn native `child_process`. Includes `babel-polyfill` to avoid babel issues.
+
+## v0.8.8
++ Add ability to _flatten_ target files. Provides an optional `depth` option to `.target()`. See [documentation](https://github.com/bucaran/fly/blob/master/docs/README.md#depths) for more.
+
+## v0.8.6
++ Remove automatic sourcemaps. They behaved inconsistently and were not a part of the intended core functionality.
+
+## v0.8.5
++ Reverted to Babel v5 (temporarily)
++ Use `babel-node` at `bin` runtime.
 
 ## v0.8.0
 
