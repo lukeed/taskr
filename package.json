@@ -2,10 +2,10 @@
   "name": "fly",
   "version": "0.9.0",
   "description": "Modern Build System",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "files": [
     "bin/",
-    "src/"
+    "dist/"
   ],
   "bin": {
     "fly": "./bin/index"
