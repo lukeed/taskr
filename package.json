@@ -2,6 +2,10 @@
   "name": "fly",
   "version": "0.9.1",
   "description": "Modern Build System",
+  "license": "MIT",
+  "repository": "flyjs/fly",
+  "homepage": "https://github.com/flyjs/fly",
+  "author": "Jorge Bucaran",
   "main": "dist/index.js",
   "files": [
     "bin/",
@@ -64,10 +68,6 @@
     "major": "npm version major && npm publish",
     "postpublish": "git push origin master --follow-tags"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/flyjs/fly.git"
-  },
   "keywords": [
     "cli",
     "task",
@@ -84,14 +84,8 @@
     "build system",
     "task runner"
   ],
-  "author": "Jorge Bucaran",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/flyjs/fly/issues"
-  },
   "engines": {
     "iojs": ">= 1.0.0",
     "node": ">= 0.12.0"
-  },
-  "homepage": "https://github.com/flyjs/fly"
+  }
 }
