@@ -8,17 +8,16 @@ var mkdirp = require('mkdirp');
 var expand = require('globby');
 var chokidar = require('chokidar');
 var assign = require('object-assign');
+var Cat = require('concat-with-sourcemaps');
 
 var Emitter = require('./emitter');
 var utils = require('./utils');
 
-import Cat from "concat-with-sourcemaps"
 // import { dirname, join, parse, sep } from "path"
-import { readFile, writeFile } from "mz/fs"
+// import { readFile, writeFile } from "mz/fs"
 // import { log, alert, error, defer, flatten } from "./utils"
 var _ = utils.debug('fly');
 var clear = utils.defer(require('./rimraf'));
-
 
 function Fly(options) {
 	if (!(this instanceof Fly)) {
@@ -58,7 +57,7 @@ function Fly(options) {
 			throw new Error('Did you forget to `npm i -D ' + el.name + '`?');
 		}
 		// if (plugin.default) plugin = plugin.default
-		el.plugin.call(this, debug(el.name.replace('-', ':')), _('load %o', name));
+		el.plugin.call(this, debug(el.name.replace('-', ':')), _('load %o', el.name));
 	});
 
 	_('chdir %o', this.root);
@@ -70,7 +69,14 @@ function Fly(options) {
 util.inherits(Fly, Emitter);
 module.exports = Fly;
 
-Fly.prototype.source = function(globs) {
+/**
+ * Compose a new, yeildable sequence.
+ * Resets instance's glob, filters, and writer.
+ *
+ * @param  {String|Array} globs The glob selection
+ * @return 											The current Fly instance.
+ */
+Fly.prototype.source = function (globs) {
 	assign(this, {
 		_: {
 			filters: [],
@@ -83,47 +89,44 @@ Fly.prototype.source = function(globs) {
 	return this;
 };
 
-module.exports = class Fly extends Emitter {
-	/**
-		Create a new Fly instance.
-		@param {String} flyfile path
-		@param {Object} flyfile module
-		@param {[Function]} array of plugins
-	*/
+/**
+/**
+ * Add filter / transform function.
+ * Create a closure bound to the current Fly instance.
+ *
+ * @param {String|Function} name 		The name of filter || the callback
+ * @param {Function} 				cb 			the function: (cb, options) => {}
+*/
+Fly.prototype.filter = function(name, cb) {
+	var type = typeof name;
 
-
-	/**
-		Compose a new yieldable sequence.
-		Reset globs, filters and writer.
-		@param {...String} glob patterns
-		@return Fly instance. Promises resolve to { file, source }
-	 */
-	source (...globs) {
-		Object.assign(this, { _: { filters: [], globs: flatten(globs) }})
-		this._.cat = undefined
-		_("source %o", this._.globs)
-		return this
-	}
-
-	/**
-		Add filter / transform function.
-		Create a closure bound to the current Fly instance.
-		@param {String|Function} name or filter callback
-		@param [{Function}] callback with the signature (cb, options) => {}
-	*/
-	filter (name, cb) {
-		if (name instanceof Function) this.filter({ cb: name })
-		else if (typeof name === "object") this._.filters.push(name)
-		else {
-			if (this[name] instanceof Function)
-				throw new RangeError(`${name} method already defined in instance.`)
-			this[name] = function (options, ...rest) {
-				debug("fly")(`${name} %o, %o`, options, rest)
-				return this.filter({ cb, options, rest })
-			}
+	if (type === 'function') {
+		this.filter({cb: name});
+	} else if (type === 'object') {
+		this._.filters.push(name);
+	} else {
+		if (typeof this[name] === 'function') {
+			throw new RangeError(name + ' method is already defined!');
 		}
-		return this
+
+		this[name] = function (options) {
+			var rest = [];
+			rest.push.apply(rest, arguments) && rest.shift();
+
+			debug('fly')(`${name} %o, %o`, options, rest);
+
+			return this.filter({
+				cb: cb,
+				options: options,
+				rest: rest
+			});
+		};
 	}
+
+	return this;
+};
+
+module.exports = class Fly extends Emitter {
 
 	/**
 		Watch IO events in globs and run tasks.
