@@ -243,16 +243,22 @@ Fly.prototype.start = function (tasks, options) {
 	);
 };
 
-module.exports = class Fly extends Emitter {
+/**
+ * Deferred `rimraf` wrapper
+ * @param  {String|Array} paths The paths to delete
+ * @return {void}
+ */
+Fly.prototype.clear = function(paths) {
+	paths = Array.isArray(paths) ? paths : [paths];
 
-	/**
-		Deferred rimraf wrapper.
-		@param {...String} paths
-	 */
-	clear (...paths) {
-		_("clear %o", paths)
-		return flatten(paths).map((path) => clear(path))
-	}
+	_('clear %o', paths);
+
+	return flatten(paths).map(function (p) {
+		clear(p);
+	});
+};
+
+module.exports = class Fly extends Emitter {
 
 	/**
 		Writer based in fs/mz writeFile.
