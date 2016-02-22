@@ -18,6 +18,7 @@ module.exports = function (pkg, load, blacklist) {
 
 	_('filter fly-* plugins');
 
+	flatten();
 	// return !pkg ? []
 	// 	: flatten(['dependencies', 'devDependencies', 'peerDependencies']
 	// 		.filter((key) => key in pkg)
