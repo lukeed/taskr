@@ -97,7 +97,7 @@ Fly.prototype.source = function (globs) {
  * @param {String|Function} name 		The name of filter || the callback
  * @param {Function} 				cb 			the function: (cb, options) => {}
 */
-Fly.prototype.filter = function(name, cb) {
+Fly.prototype.filter = function (name, cb) {
 	var type = typeof name;
 
 	if (type === 'function') {
@@ -133,7 +133,7 @@ Fly.prototype.filter = function(name, cb) {
  * @param  {Object} options The options for `Fly.proto.start`
  * @return {void}
  */
-Fly.prototype.watch = function(globs, tasks, options) {
+Fly.prototype.watch = function (globs, tasks, options) {
 	_('watch %o', globs);
 
 	var self = this;
@@ -150,9 +150,8 @@ Fly.prototype.watch = function(globs, tasks, options) {
  * @param  {Function} onRejected  The callback to run on 'error'.
  * @return {Promise}
  */
-Fly.prototype.unwrap = function(onResolved, onRejected) {
+Fly.prototype.unwrap = function (onResolved, onRejected) {
 	var self = this;
-	var globs = self._.globs;
 
 	var p = new Promise(function (resolve, reject) {
 		// unwrap all globs
@@ -169,39 +168,42 @@ Fly.prototype.unwrap = function(onResolved, onRejected) {
 	return p.then(onResolved).catch(onRejected);
 };
 
+/**
+ * Execute a single task.
+ * @param  {String} task     The name of the task
+ * @param  {Mixed}  value    The initial value to pass into `task`
+ * @param  {Object} instance The Fly instance `task` should be bound to
+ * @return {[type]}          [description]
+ */
+Fly.prototype.exec = function * (task, value, instance) {
+	instance = instance || this;
+
+	_('run %o', task);
+
+	try {
+		var start = getTime();
+
+		this.emit('task_start', {
+			task: task
+		});
+
+		value = (yield this.host[task].call(instance, value)) || value;
+
+		this.emit('task_complete', {
+			task: task,
+			duration: getTime() - start
+		});
+	} catch (e) {
+		this.emit('task_error', {
+			task: task,
+			error: e
+		});
+	}
+
+	return value;
+};
+
 module.exports = class Fly extends Emitter {
-
-	/**
-		Unwrap/expand source globs to files.
-		@param {Function} onFulfilled
-		@param {Function} onRejected
-	*/
-	unwrap (onFulfilled, onRejected) {
-		return new Promise((resolve, reject) => {
-			return Promise.all(this._.globs.map(glob => expand(glob)))
-				.then((files) => resolve.call(this, files.reduce((arr, item) =>
-					arr.concat(item)))).catch(reject)
-			}).then(onFulfilled).catch(onRejected)
-	}
-
-	/**
-		@private Execute a task.
-		@param {String} name of the task
-		@param {Mixed} initial value to pass into the task
-		@param {Object} Fly instance the task should be bound to
-	*/
-	*exec (task, value, inject = this) {
-		_("run %o", task)
-		try {
-			const start = new Date()
-			this.emit("task_start", { task })
-			value = (yield this.host[task].call(inject, value)) || value
-			this.emit("task_complete", {
-				task, duration: (new Date()).getTime() - start
-			})
-		} catch (error) { this.emit("task_error", { task, error }) }
-		return value
-	}
 
 	/**
 		Run one or more tasks. Each task's return value cascades on to the next
@@ -301,7 +303,7 @@ module.exports = class Fly extends Emitter {
 */
 function* resolve (dirs, { base, data, depth, write = writeFile }) {
 	if (depth > -1) {
-		base = dirpaths(base, depth)
+		base = dirpaths(base, depth);
 	}
 
 	for (let dir of flatten(dirs)) {
@@ -313,12 +315,20 @@ function* resolve (dirs, { base, data, depth, write = writeFile }) {
 
 /**
  * Shorten a directory string to # of parent dirs
- * @param  {str}  full    The original full path
- * @param  {int}  depth   The number of levels to retain
- * @return {string}
+ * @param  {String}  	full    The original full path
+ * @param  {Integer}  depth   The number of levels to retain
+ * @return {String}
  */
 function dirpaths (full, depth) {
-	const arr = full.split(sep)
-	const len = arr.length
-	return (depth==0) ? arr[len-1] : (depth >= len) ? full : arr.slice(len - 1 - depth).join(sep)
+	var arr = full.split(sep);
+	var len = arr.length;
+	return (depth == 0) ? arr[len - 1] : (depth >= len) ? full : arr.slice(len - 1 - depth).join(sep);
+}
+
+/**
+ * Get the current timestamp
+ * @return {Integer}
+ */
+function getTime() {
+	return (new Date()).getTime();
 }
