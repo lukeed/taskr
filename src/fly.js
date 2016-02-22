@@ -126,20 +126,25 @@ Fly.prototype.filter = function(name, cb) {
 	return this;
 };
 
-module.exports = class Fly extends Emitter {
+/**
+ * Watch IO events within glob selections & run tasks
+ * @param  {String} globs   The glob patterns to observe
+ * @param  {String} tasks   The list of tasks to run on file changes
+ * @param  {Object} options The options for `Fly.proto.start`
+ * @return {void}
+ */
+Fly.prototype.watch = function(globs, tasks, options) {
+	_('watch %o', globs);
 
-	/**
-		Watch IO events in globs and run tasks.
-		@param {[String]} glob patterns to observe for changes
-		@param {[String]} list of tasks to run on changes
-		@param {Object} start options. See Fly.proto.start
-	*/
-	watch (globs, tasks, options) {
-		_("watch %o", globs)
-		return this.emit("fly_watch").start(tasks, options)
-			.then(() => chokidar.watch(flatten([globs]), { ignoreInitial: true })
-				.on("all", () => this.start(tasks, options)))
-	}
+	var self = this;
+	return self.emit('fly+watch').start(tasks, options).then(function () {
+		chokidar.watch(flatten(globs), {ignoreInitial: true}).on('all', function () {
+			self.start(tasks, options);
+		});
+	});
+};
+
+module.exports = class Fly extends Emitter {
 
 	/**
 		Unwrap/expand source globs to files.
