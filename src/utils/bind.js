@@ -1,33 +1,46 @@
-import debug from "debug"
-import { jsVariants as js } from "interpret"
-const _ = debug("fly:bind")
+var js = require('interpret').jsVariants;
+var arrify = require('arrify');
+var debug = require('debug');
+var _ = debug('fly:bind');
 
 /**
-  Register bind to node require to support on the fly compilation.
-  Bind require to babel to support ES6 by default.
-  @param {String} path to a flyfile
-  @param {Options} options to function modules, e.g, babel
-  @return {String} path
-*/
-export function bind(path, options) {
-  const module = reduce(
-    js[`.${(path || "").split(".").slice(1).join(".")}`] || js[".babel.js"]
-  )
-  if (module instanceof Function) {
-    module(options || {presets: ['es2015', 'stage-0']})
-  }
-  return path
-}
+ * Register & Bind modules (with options) on the fly
+ * @param  {String} filepath The path to a Flyfile
+ * @param  {Object} options  The module's options to pass, eg: Babel presets
+ * @return {Strubg}          The original file's path
+ */
+module.exports = function (filepath, options) {
+	filepath = filepath || '';
+
+	// the extns to read / pick up. currently: '.js' only
+	var ext = filepath.split('.').slice(1).join('.');
+
+	// load/require the necessary modules, as determined by 'interpret'
+	var module = reduce(js['.' + ext]);
+	if (typeof module === 'function') {
+		module(options); // pass in module options
+	}
+
+	return filepath;
+};
+
 /**
-  Try require each module until we don't error.
-  @param {String} module name
+	Try require each module until we don't error.
+	@param {String} module name
 */
-function reduce (m) {
-  if (Array.isArray(m)) {
-    try {
-      const module = m[0].module ? m[0].module : m[0]
-      _("register bind %o", module)
-      return require(module)
-    } catch (_) { return reduce(m.slice(1)) }
-  } else return reduce([m])
+
+/**
+ * Try requiring each module until we don't error.
+ * @param  {String} m The module's name
+ */
+function reduce(m) {
+	m = arrify(m);
+
+	try {
+		var module = m[0].module ? m[0].module : m[0];
+		_('register bind %o', module);
+		return require(module);
+	} catch (_) {
+		return m.length ? reduce(m.slice(1)) : null;
+	}
 }
