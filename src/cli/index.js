@@ -3,5 +3,5 @@ module.exports = {
 	list: require('./list'),
 	options: require('./options'),
 	spawn: require('./spawn'),
-	version: require('./version'),
+	version: require('./version')
 };
