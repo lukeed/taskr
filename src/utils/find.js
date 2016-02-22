@@ -1,27 +1,47 @@
-import debug from "debug"
-import fs from "mz/fs"
-import { join } from "path"
-import { jsVariants } from "interpret"
-const _ = debug("fly:find")
+'use strict';
+
+var path = require('path');
+var jsVars = require('interpret').jsVariants;
+var globby = require('globby');
+var debug = require('debug');
+var _ = debug('fly:find');
+// promisify `fs` methods
+var thenify = require('thenify-all');
+var fs = thenify(require('fs'), {}, ['stat']);
 
 /**
-  Find a valid Flyfile from a given path.
-  @param {String} file or path to the Flyfile
-  @param {Function} use to bind require or process path
-  @return {String} path to the Flyfile
-*/
-export function* find(path, bind = _ => _) {
-  _("resolve path to flyfile %o", path)
-  const root = join(process.cwd(), path)
-  return bind((yield fs.stat(path)).isDirectory()
-    ? yield resolve(root)
-    : root)
-  function* resolve (root) {
-    for (let file of function* () {
-      for (let ext of Object.keys(jsVariants))
-        for (let name of ["Flyfile", "flyfile"])
-          yield join(root, `${name}${ext}`)
-    }()) try { if (yield fs.stat(file)) return file } catch (_) {}
-    throw { code: "ENOENT" }
-  }
+ * Find a valid Flyfile from a given path
+ * @param {String}   filepath      The file or path to a Flyfile
+ * @param {Function} bind          The function to bind, require, or process `filepath`
+ * @return {String}   						 The path to the Flyfile
+ */
+module.exports = function * (filepath, bind) {
+	bind = bind || function(_) {
+		return _;
+	};
+
+	_('resolve path to flyfile %o', filepath);
+
+	var froot = path.join(process.cwd(), filepath);
+	var stats = yield fs.stat(filepath);
+
+	if (stats.isDirectory()) {
+		var glob = fileOptions();
+		froot = yield globby(froot + path.sep + glob);
+	}
+
+	return froot;
+};
+
+/**
+ * Format a Glob string for possible flyfile matching
+ * @return {String}
+ */
+function fileOptions() {
+	var extns = Object.keys(jsVars);
+	var names = ['Flyfile', 'flyfile'];
+
+	return [names, extns].map(function (obj) {
+		return '{' + obj.join('|') + '}';
+	}).join('.')
 }
