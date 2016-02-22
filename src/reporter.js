@@ -4,7 +4,7 @@ var trace = require('./utils').trace;
 
 module.exports = function () {
 	return this
-		.on('fly_run', function(obj) {
+		.on('fly_run', function (obj) {
 			log('Flying with ' + fmt.path + '...', obj.path);
 		})
 
@@ -12,7 +12,7 @@ module.exports = function () {
 			log('No Flyfile Error: ' + fmt.error, obj.error);
 		})
 
-		.on('fly_watch', function() {
+		.on('fly_watch', function () {
 			log(fmt.warn, 'Watching files...');
 		})
 
@@ -62,7 +62,7 @@ function timeInfo(duration, scale) {
 	scale = scale || 'ms';
 
 	if (duration >= 1000) {
-		duration = Math.round((duration/1000) * 10) / 10;
+		duration = Math.round((duration / 1000) * 10) / 10;
 		scale = 's';
 	}
 

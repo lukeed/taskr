@@ -1,6 +1,6 @@
 'use strict';
 
-function Emitter () {
+function Emitter() {
 	this.events = [];
 }
 
