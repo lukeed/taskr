@@ -223,24 +223,20 @@ Fly.prototype.start = function (tasks, options) {
 	var self = this;
 	var value = options.value;
 
-	return co.call(
-		self,
-		function * (tasks) {
-			if (options.parallel) {
-				yield tasks.map(function (task) {
-					return self.exec(task, value, Object.create(self));
-				});
-			} else {
-				tasks.map(function * (task) {
-					value = yield self.exec(task, value);
-				});
-			}
-			return value;
-		},
-		[].concat(tasks).filter(function (task) {
-			return Object.keys(self.host).indexOf(task) !== -1 || !self.emit('task_not_found', {task: task});
-		})
-	);
+	return co.call(self, function * (tasks) {
+		if (options.parallel) {
+			yield tasks.map(function (task) {
+				return self.exec(task, value, Object.create(self));
+			});
+		} else {
+			tasks.map(function * (task) {
+				value = yield self.exec(task, value);
+			});
+		}
+		return value;
+	}, [].concat(tasks).filter(function (task) {
+		return Object.keys(self.host).indexOf(task) !== -1 || !self.emit('task_not_found', {task: task});
+	}));
 };
 
 /**
@@ -269,57 +265,78 @@ Fly.prototype.concat = function (filename) {
 	return this;
 };
 
-module.exports = class Fly extends Emitter {
+/**
+ * Resolve a yieldable sequence.
+ * Reduces `source` with filters and invokes writer.
+ *
+ * @param  {Array}  dirs    The target/destination directories
+ * @param  {Object} options Target options. Depth refers to path retention
+ * @return {Promise}
+ */
+Fly.prototype.target = function (dirs, options) {
+	dirs = Array.isArray(dirs) ? dirs : [dirs];
+	options = assign({}, {depth: -1}, options || {});
 
-	/**
-		Resolve a yieldable sequence.
-		Reduce source with filters and invoke writer.
-		@param {Array}  dirs  target directories
-		@param {Object} depth target options, for path flattening
-		@return {Promise}
-	 */
-	target (dirs, {depth = -1} = {}) {
-		dirs = Array.isArray(dirs) ? dirs : [dirs]
+	var self = this;
+	var _cat = self._.concat;
+	var _filters = self._.filters;
+	var sep = path.sep;
 
-		return co.call(this, function* () {
-			for (let glob of this._.globs) {
-				for (let file of yield expand(glob)) {
-					let { base, ext } = parse(file),
-						data = yield readFile(file)
+	// @todo: utilize `unwrap` here?
+	return co.call(self, function * () {
+		// run thru all globs
+		self._.globs.map(function * (glob) {
+			var files = yield expand(glob);
+			// run thru all files of each glob
+			for (var i = 0, file = files[i]; i < files.length; i++) {
+				// get data & stats
+				var f = path.parse(file);
+				var data = yield fs.readFile(file);
+				var ext = f.ext;
 
-					for (let filter of this._.filters) {
-						const res = yield Promise.resolve(
-							filter.cb.apply(this, [data, Object
-									.assign({ filename: base }, filter.options)]
-									.concat(filter.rest))
-						)
-						data = res.code || res.js || res.css || res.data || res || data
-						ext = res.ext || res.extension || ext
-					}
+				// pass files' data thru attached filters
+				_filters.map(function * (filter) {
+					// run the filter's closure fn w/data
+					var res = yield Promise.resolve(filter.cb.apply(
+						self, [data, assign({filename: f.base}, filter.options)].concat(filter.rest)
+					));
 
-					if (this._.cat) {
-						this._.cat.add(`${base}`, data)
-					} else {
-						const base = join(
-							...parse(file).dir.split(sep).filter(path => !~glob.split(sep).indexOf(path)),
-							`${parse(file).name}${ext}`
-						)
-						yield resolve(dirs, {data, base, depth})
-					}
+					// once done, retrieve the final `data` & `ext` of output
+					data = res.code || res.js || res.css || res.data || res || data;
+					ext = res.ext || res.extension || ext;
+				});
+
+				if (_cat) {
+					_cat.add(f.base, data);
+				} else {
+					// get common 'base' path between glob & current filepath
+					var base = f.dir.split(sep).filter(function (filepath) {
+						return glob.split(sep).indexOf(filepath) !== -1;
+					});
+
+					// attach file to base
+					base = path.join(base, f.name + '.' + ext);
+
+					// complete the promise & write the output
+					yield resolve(dirs, {
+						data: data,
+						base: base,
+						depth: options.depth
+					});
 				}
 			}
+		});
 
-			if (this._.cat) {
-				yield resolve(dirs, {
-					data: this._.cat.content,
-					base: this._.cat.base,
-					write: writeFile,
-					depth
-				})
-			}
-		})
-	}
-}
+		if (_cat) {
+			yield resolve(dirs, {
+				data: _cat.content,
+				base: _cat.base,
+				write: fs.writeFile,
+				depth: options.depth
+			});
+		}
+	});
+};
 
 /** Write utility to help concat and target.
 	@param {String}   dirs  parent directory
