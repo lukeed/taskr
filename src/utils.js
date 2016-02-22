@@ -17,14 +17,3 @@ x.defer = function (asyncFunc) {
 		});
 	};
 };
-
-/**
-	Flatten a nested array recursively.
-	@param {Array}
-	@return [[a],[b],[c]] -> [a,b,c]
-*/
-x.flatten = function (array) {
-	return array.reduce(function (flat, next) {
-		return flat.concat(Array.isArray(next) ? x.flatten(next) : next);
-	}, []);
-};
