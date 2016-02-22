@@ -6,10 +6,10 @@
   "repository": "flyjs/fly",
   "homepage": "https://github.com/flyjs/fly",
   "author": "Jorge Bucaran",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "files": [
     "bin/",
-    "dist/"
+    "lib/"
   ],
   "bin": {
     "fly": "./bin/index"
