@@ -339,23 +339,27 @@ Fly.prototype.target = function (dirs, options) {
 	});
 };
 
-/** Write utility to help concat and target.
-	@param {String}   dirs  parent directory
-	@param {String}   base  directory/file
-	@param {Mixed}    data
-	@param {Integer}  depth number of parent directories to keep
-	@param {Function} write promisified writer function
-*/
-function* resolve (dirs, { base, data, depth, write = writeFile }) {
-	if (depth > -1) {
-		base = dirpaths(base, depth);
+/**
+ * Write utility to help concat and target.
+ * @param {String}   dirs  					parent directory
+ * @param {String}   options.base  	directory/file
+ * @param {Mixed}    options.data
+ * @param {Integer}  options.depth 	number of parent directories to keep
+ * @param {Function} options.write 	promisified writer function
+ */
+function* resolve(dirs, options) {
+	var opts = options || {};
+	var writer = opts.hasOwnProperty('writer') ? opts.writer : fs.writeFile;
+
+	if (opts.depth > -1) {
+		opts.base = dirpaths(opts.base, opts.depth);
 	}
 
-	for (let dir of flatten(dirs)) {
-		const file = join(dir, base)
-		mkdirp.sync(dirname(file))
-		yield write(file, data)
-	}
+	flatten(dirs).map(function * (dir) {
+		var file = path.join(dir, opts.base);
+		mkdirp.sync(path.dirname(file));
+		yield writer(file, opts.data);
+	});
 }
 
 /**
