@@ -1,6 +1,7 @@
 'use strict';
 
 var co = require('co');
+var fs = require('fs');
 var path = require('path');
 var util = require('util');
 var debug = require('debug');
@@ -11,13 +12,14 @@ var assign = require('object-assign');
 var Cat = require('concat-with-sourcemaps');
 
 var Emitter = require('./emitter');
-var utils = require('./utils');
+
+var sep = path.sep;
+var _ = utils.debug('fly');
+var clear = utils.defer(require('./rimraf'));
 
 // import { dirname, join, parse, sep } from "path"
 // import { readFile, writeFile } from "mz/fs"
 // import { log, alert, error, defer, flatten } from "./utils"
-var _ = utils.debug('fly');
-var clear = utils.defer(require('./rimraf'));
 
 function Fly(options) {
 	if (!(this instanceof Fly)) {
@@ -280,7 +282,6 @@ Fly.prototype.target = function (dirs, options) {
 	var self = this;
 	var _cat = self._.concat;
 	var _filters = self._.filters;
-	var sep = path.sep;
 
 	// @todo: utilize `unwrap` here?
 	return co.call(self, function * () {
