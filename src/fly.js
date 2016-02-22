@@ -248,7 +248,7 @@ Fly.prototype.start = function (tasks, options) {
  * @param  {String|Array} paths The paths to delete
  * @return {void}
  */
-Fly.prototype.clear = function(paths) {
+Fly.prototype.clear = function (paths) {
 	paths = Array.isArray(paths) ? paths : [paths];
 
 	_('clear %o', paths);
@@ -258,17 +258,18 @@ Fly.prototype.clear = function(paths) {
 	});
 };
 
-module.exports = class Fly extends Emitter {
+/**
+ * Concatenate active `files` to single file.
+ * @param  {String} filename  The single output file
+ * @return {Fly}      				The current Fly instance.
+ */
+Fly.prototype.concat = function (filename) {
+	this._.cat = new Cat(false, filename, '\n');
+	this._.cat.base = filename;
+	return this;
+};
 
-	/**
-		Writer based in fs/mz writeFile.
-		@param {String} file name
-	 */
-	concat (base) {
-		this._.cat = new Cat(false, base, "\n")
-		this._.cat.base = base
-		return this
-	}
+module.exports = class Fly extends Emitter {
 
 	/**
 		Resolve a yieldable sequence.
