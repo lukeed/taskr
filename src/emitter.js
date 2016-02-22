@@ -10,9 +10,9 @@ function Emitter() {
  * @param  {Function} cb   	handler
  * @return {Emitter}
  */
-Emitter.prototype.on = function(name, cb) {
+Emitter.prototype.on = function (name, cb) {
 	(this.events[name] = this.events[name] || []).push(cb);
-  return this;
+	return this;
 };
 
 /**
@@ -20,9 +20,9 @@ Emitter.prototype.on = function(name, cb) {
  * @param {String} name 	The name of the event to emit.
  * @param {Object} obj 		The data to send
  */
-Emitter.prototype.emit = function(name, obj) {
-  (this.events[name] || []).forEach((event) => event.call(this, obj));
-  return this;
+Emitter.prototype.emit = function (name, obj) {
+	(this.events[name] || []).forEach((event) => event.call(this, obj));
+	return this;
 };
 
 module.exports = Emitter;
