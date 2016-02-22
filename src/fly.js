@@ -368,10 +368,17 @@ function* resolve(dirs, options) {
  * @param  {Integer}  depth   The number of levels to retain
  * @return {String}
  */
-function dirpaths (full, depth) {
+function dirpaths(full, depth) {
 	var arr = full.split(sep);
 	var len = arr.length;
-	return (depth == 0) ? arr[len - 1] : (depth >= len) ? full : arr.slice(len - 1 - depth).join(sep);
+
+	if (depth === 0) {
+		return arr[len - 1];
+	} else if (depth >= len) {
+		return full;
+	}
+
+	return arr.slice(len - 1 - depth).join(sep);
 }
 
 /**
