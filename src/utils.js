@@ -1,5 +1,4 @@
 'use strict';
-var globby = require('globby');
 var x = module.exports;
 
 /**
@@ -17,16 +16,6 @@ x.defer = function (asyncFunc) {
 			asyncFunc(value, options || cb, options && cb);
 		});
 	};
-};
-
-/**
-	Expand a Glob selection, via Globby
-	@param {String || Array}  pattern(s) to match
-	@param {Object}           options
-	@return {Promise}
-*/
-x.expand = function (pattern, options) {
-	return globby(pattern, options);
 };
 
 /**
