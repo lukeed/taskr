@@ -5,6 +5,7 @@ var paths = {
 };
 
 x.default = function * () {
+	/** @desc The default task. */
 	yield this.source(paths.src).xo();
 	yield this.clear(paths.dist);
 	yield this.log('Building Fly...')
