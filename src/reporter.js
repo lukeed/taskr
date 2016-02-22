@@ -40,7 +40,7 @@ module.exports = function () {
 		})
 
 		.on('task_complete', function (obj) {
-			var time = timeInfo(obj.duration);
+			var time = formatTime(obj.duration);
 			log(
 				'Finished ' + fmt.complete + ' in ' + fmt.secs,
 				obj.task, time.duration, time.scale
@@ -53,21 +53,21 @@ module.exports = function () {
 };
 
 /**
-	Conditionally format task duration.
-	@param  {Number} duration The task's duration, in ms
-	@param  {String} scale    The time scale for output
-	@return {Object}
-*/
-function timeInfo(duration, scale) {
-	scale = scale || 'ms';
+ * Format the task's time duration
+ * @param  {Integer} 	time 		The task's duration, in ms
+ * @param  {String} 	unit 		The unit of time measurement
+ * @return {Object}
+ */
+function formatTime(time, unit) {
+	unit = unit || 'ms';
 
-	if (duration >= 1000) {
-		duration = Math.round((duration / 1000) * 10) / 10;
-		scale = 's';
+	if (time >= 1000) {
+		time = Math.round((time / 1000) * 10) / 10;
+		unit = 's';
 	}
 
 	return {
-		duration: duration,
-		scale: scale
+		duration: time,
+		scale: unit
 	};
 }
