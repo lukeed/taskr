@@ -26,11 +26,16 @@ function Fly(options) {
 		throw new TypeError('Fly cannot be invoked without \'new\'');
 	}
 
-	// constructor defaults
-	options = options || {};
-	var host = options.host || {};
-	var file = options.file || '.';
-	var plugins = options.plugins || [];
+	options = assign({
+		file: '.',
+		host: {},
+		plugins: []
+	}, options || {});
+
+	// shorter aliases
+	var host = options.host;
+	var file = options.file;
+	var plugins = options.plugins;
 
 	// ~ `super()`
 	Emitter.call(this);
