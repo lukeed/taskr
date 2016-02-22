@@ -1,23 +1,38 @@
-import fmt from "../fmt"
+var fmt = require('../fmt');
+var assign = require('object-assign');
+
 /**
-  List tasks in a fly instance.
-  @param {Object} fly instance
-  @param {{ bare:Boolean }} unstyled
+ * List available tasks within a Fly instance
+ * @param  {Object} host          The given Fly instance
+ * @param  {Boolean} options.bare Unstyled output
  */
-export function list (host, { bare }) {
-  if (!bare) console.log(`\n${fmt.dim.bold("Available tasks")}`)
-  each(host instanceof Function
-    ? Object.assign(host, { default: host })
-    : host, (task, desc) =>
-      console.log(`${bare ? "%s" : "  " + fmt.title + "\t" + desc}`, task))
-  if (!bare) console.log()
-}
+module.exports = function (host, options) {
+	options = assign({bare: false}, options || {});
+	host = (typeof host === 'function') ? assign(host, {default: host}) : host;
+
+	if (!options.bare) {
+		console.log('\n' + fmt.dim.bold('Available tasks'));
+	}
+
+	each(host, function (task, desc) {
+		console.log((options.bare ? '%s' : ' ') + fmt.title + '\t' + desc, task);
+	});
+
+	if (!options.bare) {
+		console.log();
+	}
+};
+
 /**
-  Run handler for each task and description field in host.
+ * Run a handler for each task + its description
+ * @param  {Fly} host
+ * @param  {Function} handler
+ * @return {String}
  */
-function each (host, handler) {
-  Object.keys(host).forEach((task) => {
-    const desc = /^\s*\/\*\*\s*@desc\s+(.*)\s*\*\//gm.exec(`${host[task]}`)
-    handler(task, desc ? desc.pop() : "")
-  })
+function each(host, handler) {
+	var rgx = /^\s*\/\*\*\s*@desc\s+(.*)\s*\*\//gm;
+	Object.keys(host).forEach(function (taskname) {
+		var desc = rgx.exec(host[taskname]);
+		handler(taskname, desc ? desc.pop() : '');
+	});
 }
