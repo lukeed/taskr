@@ -6,11 +6,13 @@ var path = require('path');
 var util = require('util');
 var debug = require('debug');
 var mkdirp = require('mkdirp');
-var expand = require('globby');
 var chokidar = require('chokidar');
 var assign = require('object-assign');
 var Cat = require('concat-with-sourcemaps');
+var expand = require('globby');
+var flatten = require('flatten');
 
+var utils = require('./utils');
 var Emitter = require('./emitter');
 
 var sep = path.sep;

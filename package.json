@@ -21,6 +21,7 @@
     "concat-with-sourcemaps": "^1.0.2",
     "dateformat": "^1.0.12",
     "debug": "^2.2.0",
+    "flatten": "^1.0.2",
     "globby": "^4.0.0",
     "interpret": "^1.0.0",
     "mkdirp": "^0.5.1",
