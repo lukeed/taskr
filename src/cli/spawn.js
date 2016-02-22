@@ -1,27 +1,54 @@
-import Fly from "../fly"
-import { join, dirname } from "path"
-import { find, filter, bind, alert } from "../utils"
+'use strict';
+
+var path = require('path');
+var Fly = require('../fly');
+var utils = require('../utils');
+// import { join, dirname } from "path"
+// import { find, filter, bind, alert } from "../utils"
+
 /**
-  Create a new Fly instance.
-  @param {String} path to a flyfile
-  @return {Fly} fly instance ✈
+ * Create a new Fly instance
+ * @param {String} filepath 		 The path to a Flyfile
+ * @param {Function} hook        The method to attach flyfile to instance
+ * @return {Fly} 								 The new Fly instance
  */
-export function* spawn (path, hook = bind) {
-  const file = yield find(path, hook)
-  return new Fly({
-    file, host: require(file), plugins: getPlugins(dirname(file), hook)
-  })
-}
+module.exports = function * (filepath, hook) {
+	hook = hook || utils.bind;
+
+	var file = yield utils.find(filepath, hook);
+
+	return new Fly({
+		file: file,
+		host: require(file),
+		plugins: getPlugins(path.dirname(file), hook)
+	});
+};
+
 /**
-  Load and return plugins in path/node_modules
-  Bind require to compile plugins on the fly.
-*/
-function getPlugins (path, hook = bind) {
-  hook(null, {presets: ['es2015', 'stage-0'], only: [/fly-[-\w]+\/[-\w]+\./, /[fF]lyfile\.js/] })
-  return filter(load(join(path, "package")), (name) => {
-    return { name, plugin: load(join(path, "node_modules", name)) }
-  })
-  function load (file) {
-    try { return require(file) } catch (e) { alert(`${e.message}`) }
-  }
+ * Load and Return collection of plugins from `base` + /node_modules.
+ * Bind require to compile plugins on the fly.
+ *
+ * @param  {String} base 		The base directory to look for node_modules
+ * @param  {Function} hook 	The function to bind plugins to main Fly instance
+ * @return {Object}      		The
+ */
+function getPlugins(base, hook) {
+	hook = hook || utils.bind;
+
+	// hook(null, {presets: ['es2015', 'stage-0'], only: [/fly-[-\w]+\/[-\w]+\./, /[fF]lyfile\.js/] })
+
+	return utils.filter(load(path.join(base, 'package')), function (name) {
+		return {
+			name: name,
+			plugin: load(path.join(base, 'node_modules', name))
+		};
+	});
+}
+
+function load(file) {
+	try {
+		return require(file);
+	} catch (e) {
+		utils.alert(e.message);
+	}
 }
