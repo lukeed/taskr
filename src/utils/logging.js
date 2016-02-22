@@ -1,63 +1,78 @@
-import clor from "clor"
-import datefmt from "dateformat"
-import pretty from "prettyjson"
-import debug from "debug"
-const _ = debug("fly:log")
+'use strict';
+
+var datefmt = require('dateformat');
+var pretty = require('prettyjson');
+var arrify = require('arrify');
+var debug = require('debug');
+var clor = require('clor');
+var _ = debug('fly:log');
 
 /**
-  Apply args to console[method] and add a date stamp.
-  Bind `this` to an object with the following options
-  @prop {Color String} date stamp color
-  @prop {String} console method to use
-  @prop {[String]} custom style to append to args
-*/
-function stamp(...args) {
-  if (process.env.DEBUG) {
-    _.apply(_, args)
-  } else {
-    process.stdout.write(`[${clor[this.color](
-      datefmt(new Date(), "HH:MM:ss"))}] `)
-    console[this.method].apply(console, this.custom
-      ? [this.custom].concat(args) : args)
-  }
-}
+ * Apply args to the `console[method]` & Add a date stamp.
+ * Bind `this` to an object with the following options:
+ *
+ * @param  {String} args.date 		The color string to use for the date
+ * @param  {String} args.method 	The `console` method to use
+ * @param  {String} args.custom 	The custom styling to append to args
+ */
+function stamp(args) {
+	args = arrify(args);
 
-/**
-  Log utilities.
-*/
-function log(...args) {
-  stamp.apply({ method: "log", color: "magenta" }, args)
-  return this
-}
+	if (process.env.DEBUG) {
+		_.apply(_, args);
+	} else {
+		// print the curr time.
+		var time = clor[this.color](datefmt(new Date(), 'HH:MM:ss'));
+		process.stdout.write('[' + time + ']');
 
-function error(...args) {
-  stamp.apply({ method: "error", color: "red" }, args)
-  return this
-}
-
-function alert(...args) {
-  if (process.env.VERBOSE)
-    stamp.apply({
-      custom: `${clor.yellow.bold("%s")}`,
-      method: "log",
-      color: "yellow"
-    }, args)
-  return this
+		// custom opts ?
+		var opts = this.custom ? [this.custom].concat(args) : args;
+		console[this.method].apply(console, opts);
+	}
 }
 
 /**
-  prettyjson wrapper and stack tracer.
-  @param {Object} error object
-*/
+ * Logging Utilities
+ */
+
+function log(args) {
+	stamp.apply({method: 'log', color: 'magenta'}, arrify(args));
+	return this;
+}
+
+function error(args) {
+	stamp.apply({method: 'error', color: 'red'}, arrify(args));
+	return this;
+}
+
+function alert(args) {
+	if (process.env.VERBOSE) {
+		stamp.apply({
+			custom: clor.yellow.bold('%s'),
+			method: 'log',
+			color: 'yellow'
+		}, arrify(args));
+	}
+	return this;
+}
+
+/**
+ * PrettyJSON wrapper & stack tracer
+ * @param  {Object} e The Error object
+ */
 function trace(e) {
-  console.error(pretty.render(e)
-    .replace(/(\sFunction|\sObject)\./g, `${clor.blue("$1")}.`)
-    .replace(/\((~?\/.*)\)/g, `(${clor.gray("$1")})`)
-    .replace(/:([0-9]*):([0-9]*)/g, ` ${clor.yellow("$1")}:${clor.yellow("$2")}`)
-    .replace(new RegExp(process.env.HOME, "g"), "~")
-  )
+	var msg = pretty.render(e)
+		.replace(/(\sFunction|\sObject)\./g, clor.blue('$1') + '.')
+		.replace(/\((~?\/.*)\)/g, '(' + clor.gray('$1') + ')')
+		.replace(/:([0-9]*):([0-9]*)/g, ' ' + clor.yellow('$1') + ':' + clor.yellow('$2'))
+		.replace(new RegExp(process.env.HOME, 'g'), '~');
+	console.error(msg);
 }
 
 module.exports = {
-  trace, alert, error, log, stamp
-}
+	alert: alert,
+	error: error,
+	log: log,
+	stamp: stamp,
+	trace: trace
+};
