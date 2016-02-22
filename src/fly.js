@@ -144,6 +144,31 @@ Fly.prototype.watch = function(globs, tasks, options) {
 	});
 };
 
+/**
+ * Unwrap/Expand source globs as single files, then run fn.
+ * @param  {Function} onResolved  The callback to run on 'success'.
+ * @param  {Function} onRejected  The callback to run on 'error'.
+ * @return {Promise}
+ */
+Fly.prototype.unwrap = function(onResolved, onRejected) {
+	var self = this;
+	var globs = self._.globs;
+
+	var p = new Promise(function (resolve, reject) {
+		// unwrap all globs
+		return Promise.all(self._.globs.map(function (glob) {
+			return expand(glob);
+		})).then(function (files) {
+			// then attach 'files' array to instance
+			return resolve.call(self, files.reduce(function (arr, item) {
+				return arr.concat(item);
+			}));
+		}).catch(reject);
+	});
+
+	return p.then(onResolved).catch(onRejected);
+};
+
 module.exports = class Fly extends Emitter {
 
 	/**
