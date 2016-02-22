@@ -6,10 +6,11 @@ var util = require('util');
 var debug = require('debug');
 var mkdirp = require('mkdirp');
 var chokidar = require('chokidar');
-var assign = require('object-assign');
 var Cat = require('concat-with-sourcemaps');
-var expand = require('globby');
+var assign = require('object-assign');
 var flatten = require('flatten');
+var expand = require('globby');
+var arrify = require('arrify');
 // promisify `fs` methods
 var thenify = require('thenify-all');
 var fs = thenify(require('fs'), {}, ['readFile', 'writeFile']);
@@ -72,7 +73,7 @@ function Fly(options) {
 	process.chdir(this.root);
 }
 
-// `Fly extends emitter`...
+// `Fly extends Emitter`...
 util.inherits(Fly, Emitter);
 module.exports = Fly;
 
@@ -96,7 +97,6 @@ Fly.prototype.source = function (globs) {
 	return this;
 };
 
-/**
 /**
  * Add filter / transform function.
  * Create a closure bound to the current Fly instance.
@@ -219,8 +219,8 @@ Fly.prototype.exec = function * (task, value, instance) {
  * @return {Promise}
  */
 Fly.prototype.start = function (tasks, options) {
-	tasks = tasks || 'default';
-	options = assign({}, {
+	tasks = arrify(tasks || 'default');
+	options = assign({
 		parallel: false,
 		value: null
 	}, options || {});
@@ -252,7 +252,7 @@ Fly.prototype.start = function (tasks, options) {
  * @return {void}
  */
 Fly.prototype.clear = function (paths) {
-	paths = Array.isArray(paths) ? paths : [paths];
+	paths = arrify(paths);
 
 	_('clear %o', paths);
 
@@ -281,7 +281,7 @@ Fly.prototype.concat = function (filename) {
  * @return {Promise}
  */
 Fly.prototype.target = function (dirs, options) {
-	dirs = Array.isArray(dirs) ? dirs : [dirs];
+	dirs = arrify(dirs);
 	options = assign({}, {depth: -1}, options || {});
 
 	var self = this;

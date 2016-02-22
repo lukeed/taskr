@@ -15,6 +15,7 @@
     "fly": "./bin/index"
   },
   "dependencies": {
+    "arrify": "^1.0.1",
     "chokidar": "^1.4.0",
     "clor": "^2.0.0",
     "co": "^4.5.4",
