@@ -16,7 +16,7 @@ var fs = thenify(require('fs'), {}, ['stat']);
  * @return {String}   						 The path to the Flyfile
  */
 module.exports = function * (filepath, bind) {
-	bind = bind || function(_) {
+	bind = bind || function (_) {
 		return _;
 	};
 
@@ -28,6 +28,8 @@ module.exports = function * (filepath, bind) {
 	if (stats.isDirectory()) {
 		var glob = fileOptions();
 		froot = yield globby(froot + path.sep + glob);
+		console.log('inside utils.find', froot);
+		froot = froot[0];
 	}
 
 	return froot;
@@ -43,5 +45,5 @@ function fileOptions() {
 
 	return [names, extns].map(function (obj) {
 		return '{' + obj.join('|') + '}';
-	}).join('.')
+	}).join('.');
 }
