@@ -1,7 +1,6 @@
 'use strict';
 
 var co = require('co');
-var fs = require('fs');
 var path = require('path');
 var util = require('util');
 var debug = require('debug');
@@ -11,17 +10,16 @@ var assign = require('object-assign');
 var Cat = require('concat-with-sourcemaps');
 var expand = require('globby');
 var flatten = require('flatten');
-
+// promisify `fs` methods
+var thenify = require('thenify-all');
+var fs = thenify(require('fs'), {}, ['readFile', 'writeFile']);
+// locals
 var utils = require('./utils');
 var Emitter = require('./emitter');
-
+// shorthands
 var sep = path.sep;
 var _ = utils.debug('fly');
 var clear = utils.defer(require('./rimraf'));
-
-// import { dirname, join, parse, sep } from "path"
-// import { readFile, writeFile } from "mz/fs"
-// import { log, alert, error, defer, flatten } from "./utils"
 
 function Fly(options) {
 	if (!(this instanceof Fly)) {
