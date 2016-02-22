@@ -173,7 +173,7 @@ Fly.prototype.unwrap = function (onResolved, onRejected) {
  * @param  {String} task     The name of the task
  * @param  {Mixed}  value    The initial value to pass into `task`
  * @param  {Object} instance The Fly instance `task` should be bound to
- * @return {[type]}          [description]
+ * @return {Mixed}           The task's resulting value.
  */
 Fly.prototype.exec = function * (task, value, instance) {
 	instance = instance || this;
@@ -203,27 +203,47 @@ Fly.prototype.exec = function * (task, value, instance) {
 	return value;
 };
 
-module.exports = class Fly extends Emitter {
+/**
+ * Run a task sequence of 1 or more.
+ * Each task's return value is piped into the next task of sequence.
+ *
+ * @param  {Array}  tasks   The list of tasks to start
+ * @param  {Object} options The options to begin.
+ * @return {Promise}
+ */
+Fly.prototype.start = function (tasks, options) {
+	tasks = tasks || 'default';
+	options = assign({}, {
+		parallel: false,
+		value: null
+	}, options || {});
 
-	/**
-		Run one or more tasks. Each task's return value cascades on to the next
-		task in a sequence.
-		@param {Array} list of tasks
-		@return {Promise}
-	 */
-	start (tasks = "default", { parallel = false, value } = {}) {
-		_(`start %o in ${parallel ? "parallel" : "sequence"}`, tasks)
-		return co.call(this, function* (tasks) {
-			if (parallel) {
-				yield tasks.map((task) =>
-					this.exec(task, value, Object.create(this)))
+	_('start %o in ' + (options.parallel ? 'parallel' : 'sequence'), tasks);
+
+	var self = this;
+	var value = options.value;
+
+	return co.call(
+		self,
+		function * (tasks) {
+			if (options.parallel) {
+				yield tasks.map(function (task) {
+					return self.exec(task, value, Object.create(self));
+				});
 			} else {
-				for (let task of tasks) value = yield this.exec(task, value)
+				tasks.map(function * (task) {
+					value = yield self.exec(task, value);
+				});
 			}
-			return value
-		}, [].concat(tasks).filter((task) => ~Object.keys(this.host)
-			.indexOf(task) || !this.emit("task_not_found", { task })))
-	}
+			return value;
+		},
+		[].concat(tasks).filter(function (task) {
+			return Object.keys(self.host).indexOf(task) !== -1 || !self.emit('task_not_found', {task: task});
+		})
+	);
+};
+
+module.exports = class Fly extends Emitter {
 
 	/**
 		Deferred rimraf wrapper.
