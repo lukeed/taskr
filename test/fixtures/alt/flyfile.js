@@ -1,3 +1,3 @@
 module.exports.a = function* () {}
-export async function b () {}
-export function* c () {}
+// export async function b () {}
+// export function* c () {}
