@@ -43,18 +43,10 @@
     "xo": "^0.12.0"
   },
   "scripts": {
-    "setup": "npm i && npm run test && npm run symlink",
-    "symlink": "ln -s $PWD/bin/index /usr/local/bin/fly",
     "coverage": "isparta cover test/*.js",
     "coveralls": "npm run coverage -s && coveralls < coverage/lcov.info",
     "postcoveralls": "rimraf coverage",
-    "postbuild": "npm test -s",
-    "test": "xo && tape test/utils.js | tspec",
-    "deploy": "git pull --rebase origin master && git push origin master",
-    "patch": "npm version patch && npm publish",
-    "minor": "npm version minor && npm publish",
-    "major": "npm version major && npm publish",
-    "postpublish": "git push origin master --follow-tags"
+    "test": "xo && tape test/utils.js | tspec"
   },
   "keywords": [
     "cli",
