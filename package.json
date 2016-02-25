@@ -20,7 +20,6 @@
     "clor": "^2.0.0",
     "co": "^4.5.4",
     "concat-with-sourcemaps": "^1.0.2",
-    "dateformat": "^1.0.12",
     "debug": "^2.2.0",
     "flatten": "^1.0.2",
     "globby": "^4.0.0",
@@ -37,6 +36,7 @@
   },
   "devDependencies": {
     "coveralls": "^2.11.4",
+    "fly-xo": "^1.0.2",
     "isparta": "^4.0.0",
     "tap-nyan": "^0.0.2",
     "tap-spec": "^4.1.1",
