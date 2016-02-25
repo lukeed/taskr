@@ -1,15 +1,13 @@
-var x = module.exports;
-var paths = {
-	src: 'lib/**/*.js',
-	dist: 'dist'
-};
+'use strict';
 
-x.default = function * () {
+var src = 'lib/**/*.js';
+
+module.exports.default = function * () {
 	/** @desc Fly's default development task. */
-	yield this.source(paths.src).xo();
-	yield this.clear(paths.dist);
+	yield this.source(src).xo();
 	yield this
 		.log('Building Fly...')
-		.source(paths.src)
-		.target(paths.dist);
+		.source(src)
+		.target('tmp');
+	yield this.clear('tmp');
 };
