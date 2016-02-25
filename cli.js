@@ -2,7 +2,7 @@
 'use strict';
 
 var node = process.argv[0];
-var fly = require('path').join(__dirname, '..', 'lib');
+var fly = require('path').join(__dirname, 'lib');
 var args = [].concat(fly).concat(process.argv.slice(2));
 
 /**
