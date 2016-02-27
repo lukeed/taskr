@@ -60,10 +60,10 @@ test('✈  cli.list', function (t) {
 test('✈  cli.spawn', function (t) {
 	t.plan(6);
 
-	Array.prototype.concat([
-		join('test', 'fixtures', 'alt'),
-		join('test', 'fixtures', 'alt', 'flyfile.js')
-	]).map(function (fpath) {
+	var alt = join('test', 'fixtures', 'alt');
+	var file = join('test', 'fixtures', 'alt', 'flyfile.js');
+
+	[alt, file].map(function (fpath) {
 		return ({
 			flypath: fpath,
 			spawn: co.wrap(cli.spawn)(fpath, function (_) {
