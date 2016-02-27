@@ -46,7 +46,7 @@ test('✈  cli.list', function (t) {
 				return true;
 			}
 			if (key === 'a' || key === 'b') {
-				return true
+				return true;
 			} else if (key === 'c') {
 				t.ok(true, 'message / bare ' + bare);
 			} else {
