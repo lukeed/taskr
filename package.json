@@ -19,6 +19,7 @@
     "co": "^4.5.4",
     "concat-with-sourcemaps": "^1.0.2",
     "debug": "^2.2.0",
+    "find-up": "^1.1.0",
     "flatten": "^1.0.2",
     "globby": "^4.0.0",
     "interpret": "^1.0.0",
