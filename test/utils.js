@@ -75,15 +75,21 @@ test('utils.defer (asyncFunc /w options) ✈', function (t) {
 // 	})
 // })
 
-test('utils.find (path) ✈', function (t) {
+test('utils.find (path) ✈', function * (t) {
 	t.plan(2);
 	var src = './utils';
 	var expect = 'Flyfile.js';
 
-	co(function * () {
-		t.equal(basename(yield utils.find( join(fixtures, expected) )), expected, 'find Flyifle given a file');
-		t.equal(basename(yield utils.find( fixtures )), expected, 'find Flyfile given a path');
+	var file1 = yield utils.find(join(fixtures, expected));
+	console.log('HI');
+	co(function () {
+		console.log('FIRST');
+		console.log('INSIDE HERE');
 	});
+		// var file2 = yield utils.find(fixtures);
+		// t.equal(basename(val), expected, 'find Flyifle given a file');
+		// t.equal(basename(file2), expected, 'find Flyfile given a path');
+	// });
 });
 
 // test('utils.bind (module) ✈', function (t) {

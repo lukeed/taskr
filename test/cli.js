@@ -8,7 +8,8 @@ var cli = require('../lib/cli');
 var pkg = require('../package');
 var join = require('path').join;
 
-var flypath = join(process.cwd(), 'test', 'fixtures', 'flyfile.js');
+var fixtures = join(process.cwd(), 'test', 'fixtures');
+var flypath = join(fixtures, 'flyfile.js');
 
 test('✈  cli', function (t) {
 	t.ok(cli !== undefined, 'is defined');
@@ -44,16 +45,12 @@ test('✈  cli.list', function (t) {
 			if (!bare && actual === '\n\x1b[2m\x1b[1mAvailable tasks\x1b[0m') {
 				return true;
 			}
-			switch (key) {
-				case 'a':
-					return true;
-				case 'b':
-					return true;
-				case 'c':
-					t.ok(true, 'message / bare ' + bare);
-					break;
-				default:
-					t.ok(false, message);
+			if (key === 'a' || key === 'b') {
+				return true
+			} else if (key === 'c') {
+				t.ok(true, 'message / bare ' + bare);
+			} else {
+				t.ok(false, message);
 			}
 		});
 	});
@@ -61,21 +58,19 @@ test('✈  cli.list', function (t) {
 });
 
 test('✈  cli.spawn', function (t) {
-	t.plan(6);
-	[
+	t.plan(2);
+
+	var flies = Array.prototype.concat([
 		join('test', 'fixtures', 'alt'),
 		join('test', 'fixtures', 'alt', 'flyfile.js')
-		// join("test", "fixtures", "alt", "flyfile.js")
-	].map(function (fpath) {
+	]).map(function (fpath) {
 		return ({
 			flypath: fpath,
 			spawn: co.wrap(cli.spawn)(fpath, function (_) {
-				console.log('in spawn cb', _);
 				return _;
 			})
 		});
 	}).forEach(function (_) {
-		console.log('im in foreach', _);
 		_.spawn.then(function (fly) {
 			console.log('this is fly', fly);
 			t.ok(fly instanceof Fly && fly.host && Array.isArray(fly.plugins),
