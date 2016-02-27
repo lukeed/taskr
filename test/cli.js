@@ -66,9 +66,7 @@ test('✈  cli.spawn', function (t) {
 	[alt, file].map(function (fpath) {
 		return ({
 			flypath: fpath,
-			spawn: co.wrap(cli.spawn)(fpath, function (_) {
-				return _;
-			})
+			spawn: co.wrap(cli.spawn)(fpath)
 		});
 	}).forEach(function (_) {
 		_.spawn.then(function (fly) {
