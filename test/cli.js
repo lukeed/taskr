@@ -58,9 +58,9 @@ test('✈  cli.list', function (t) {
 });
 
 test('✈  cli.spawn', function (t) {
-	t.plan(2);
+	t.plan(6);
 
-	var flies = Array.prototype.concat([
+	Array.prototype.concat([
 		join('test', 'fixtures', 'alt'),
 		join('test', 'fixtures', 'alt', 'flyfile.js')
 	]).map(function (fpath) {
@@ -72,7 +72,6 @@ test('✈  cli.spawn', function (t) {
 		});
 	}).forEach(function (_) {
 		_.spawn.then(function (fly) {
-			console.log('this is fly', fly);
 			t.ok(fly instanceof Fly && fly.host && Array.isArray(fly.plugins),
 				'spawn a fly instance using ' + _.flypath);
 
