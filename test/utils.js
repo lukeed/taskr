@@ -43,6 +43,8 @@ test('utils.defer (asyncFunc /w options) ✈', function (t) {
 });
 
 test('utils.find (flyfile) ✈', function (t) {
+	t.plan(4);
+
 	var name = 'flyfile.js';
 	var full = join(fixtures, name);
 
@@ -51,43 +53,40 @@ test('utils.find (flyfile) ✈', function (t) {
 		t.equal(fp, full, 'finds the right one!');
 	});
 
+	utils.find(full).then(function (fp) {
+		var f = fp.substr(1); // find-up PR -- remove preceding `/` from `//Users/...`
+		t.equal(f, full, 'finds a flyfile, given a filepath');
+	});
+
 	var dir = join(fixtures, 'one'); // test dir
 	utils.find(name, dir).then(function (fp) {
 		t.equal(fp, full, 'finds a flyfile, traversing upwards');
+	});
+});
+
+test('utils.read', function (t) {
+	var fp = join(fixtures, 'a.js');
+	utils.read(fp).then(function (data) {
+		t.equal(data, 'const pi = 3.14\n', 'reads a file\'s contents');
 		t.end();
 	});
 });
 
-// test('utils.flatten (array) ✈', function (t) {
-// 	t.deepEqual(utils.flatten([[[1],[2]],[3,4],[[[[5,6]]]],[7],[8]]),
-// 		[1,2,3,4,5,6,7,8], 'flattens arrays');
-// 	t.end();
-// });
+test('utils.write', function (t) {
+	var fp = join(fixtures, 'test.js');
+	var data = 'hello';
 
-// test("utils.expand (pattern, options) ✈", function (t) {
-// 	t.plan(4)
-// 	const expected = ["a.js", "b.js", "Flyfile.js", "sample.babel.js"]
+	utils.write(fp, data).then(function () {
+		return utils.find(fp).then(function (f) {
+			t.true(f !== undefined, 'file was created');
 
-// 	utils.expand("./utils/**/*.js").then((files) => {
-// 		files.map((file) => basename(file)).forEach((file) => {
-// 			t.ok(!!~expected.indexOf(file), 'expands and handles globs: ' + file)
-// 		})
-// 	})
-// })
-
-// test("utils.expand (negated glob) ✈", function (t) {
-// 	t.plan(1)
-
-// 	const glob1 = ["./utils/**/*.js"]
-// 	const glob2 = glob1.concat("!./utils/a.js")
-
-// 	utils.expand(glob1).then(all => {
-// 		const count = all.length - 1
-// 		utils.expand(glob2).then(files => {
-// 			t.ok(files.length === count, "handle glob file exclusions")
-// 		})
-// 	})
-// })
+			return utils.read(fp).then(function (d) {
+				t.deepEqual(d, data, 'file had data');
+				t.end();
+			});
+		});
+	});
+});
 
 // test('utils.bind (module) ✈', function (t) {
 // 	const coffee = require(
