@@ -1,96 +1,113 @@
 'use strict';
 
-var co = require('co');
+// var co = require('co');
 var fs = require('fs');
 var path = require('path');
 var test = require('tape').test;
 var plugins = require('../lib/plugins');
+var utils = require('../lib/utils');
 
 var fixtures = path.join(process.cwd(), 'test', 'fixtures');
+var alt = path.join(fixtures, 'alt');
+var pkg = path.join(alt, 'package.json');
 
-test('utils.filter ({ pkg, regex, blacklist = []}) ✈', function (t) {
-	// const pkgs = [
-	// 	{
-	// 		msg: "reads fly-* deps",
-	// 		expected: ["fly-a", "fly-b", "fly-c"],
-	// 		dependencies: {
-	// 			"fly-a": "0.0.0",
-	// 			"a": "0.0.0"
-	// 		},
-	// 		devDependencies: {
-	// 			"a": "0.0.0",
-	// 			"fly-b": "0.0.0"
-	// 		},
-	// 		peerDependencies: {
-	// 			"x": "0.0.0",
-	// 			"fly-c": "0.0.0"
-	// 		}
-	// 	},
-	// 	{
-	// 		msg: "skips blacklisted deps",
-	// 		expected: ["fly-a", "fly-b", "fly-z"],
-	// 		blacklist: ["fly-c", "fly-d"],
-	// 		dependencies: {
-	// 			"fly-a": "0.0.0",
-	// 			"fly-b": "0.0.0",
-	// 			"fly-c": "0.0.0",
-	// 			"fly-d": "0.0.0"
-	// 		},
-	// 		devDependencies: {
-	// 			"fly-z": "0.0.0",
-	// 			"b": "0.0.0"
-	// 		}
-	// 	},
-	// 	{
-	// 		msg: "return [] for no fly-* pkg",
-	// 		expected: [],
-	// 		dependencies: {
-	// 			"a": "0.0.0",
-	// 			"b": "0.0.0",
-	// 			"c": "0.0.0",
-	// 			"d": "0.0.0"
-	// 		},
-	// 		devDependencies: {
-	// 			"e": "0.0.0",
-	// 			"f": "0.0.0"
-	// 		}
-	// 	},
-	// 	{
-	// 		msg: "return [] for no dep pkg",
-	// 		expected: [],
-	// 		dependencies: {},
-	// 		devDependencies: {}
-	// 	},
-	// 	{
-	// 		msg: "skip fly-utils by default",
-	// 		expected: ["fly-utl", "fly-til", "fly-uti"],
-	// 		dependencies: {
-	// 			"fly-utl": "0.0.0",
-	// 			"fly-til": "0.0.0",
-	// 			"fly-uti": "0.0.0",
-	// 			"fly-utils": "0.0.0"
-	// 		},
-	// 		devDependencies: {}
-	// 	},
-	// ];
+test('fly plugins ✈', function (t) {
+	t.ok(plugins !== undefined, 'plugins object is real');
 
-	var alt = path.join(fixtures, 'alt');
-	var data = fs.readFileSync(path.join(alt, 'package.json'), 'utf8');
-	var expected = JSON.parse(data).dependencies;
-	var results = plugins.find(alt);
-
-	// t.equal(plugins.find(undefined), undefined, 'return undefined pkg');
-	t.true(plugins.find(undefined) !== results, 'traverse upwards');
-	t.true(results !== undefined, 'successfully find a pkg file');
-	t.deepEqual(results.dependencies, expected, 'successfully find a pkg file');
-
-	t.deepEqual(plugins.parse(undefined), [], 'return empty list for undefined pkg');
-	t.deepEqual(plugins.parse({}), [], 'return empty list for undefined pkg');
-	t.true(plugins.parse(results).length > 0, 'successfully return a list of fly plugins');
-
-	// pkgs.forEach(function (pkg) {
-	// 	t.deepEqual(utils.filter(pkg, function (_) {return _}, pkg.blacklist), pkg.expected, pkg.msg)
-	// });
+	['load', 'parse', 'readPackages'].forEach(function (cmd) {
+		t.ok(plugins[cmd] !== undefined, cmd + ' is defined');
+	});
 
 	t.end();
-})
+});
+
+test('utils.find (package.json)', function (t) {
+	var name = 'package.json';
+
+	utils.find(name, alt).then(function (fp) {
+		t.ok(fp !== undefined, 'finds a package.json file');
+		t.equal(fp, pkg, 'finds the right one!');
+	});
+
+	utils.find(name, fixtures).then(function (fp) {
+		t.equal(fp, path.resolve(process.cwd(), name), 'traverse upwards if not found');
+		t.end();
+	});
+});
+
+test('plugins.readPackages', function (t) {
+	var expect = JSON.parse(fs.readFileSync(pkg, 'utf8'));
+
+	plugins.readPackages(alt).then(function (contents) {
+		t.ok(contents !== undefined, 'found package.json file contents');
+		t.deepEqual(contents.dependencies, expect.dependencies, 'correctly read the contents');
+		t.end();
+	});
+});
+
+test('plugins.parse (simple)', function (t) {
+	var expect = ['fly-fake-plugin'];
+
+	plugins.readPackages(alt).then(function (data) {
+		t.deepEqual(plugins.parse(data), expect, 'returns an array of fly-* plugin names');
+		t.end();
+	});
+});
+
+test('plugins.parse (multiple levels)', function (t) {
+	var tests = [{
+		msg: 'reads all levels of  fly-* deps',
+		expected: ['fly-a', 'fly-b', 'fly-c'],
+		dependencies: {
+			'fly-a': '*',
+			'dep-a': '*'
+		},
+		devDependencies: {
+			'dep-a': '*',
+			'fly-b': '*'
+		},
+		peerDependencies: {
+			'dep-x': '*',
+			'fly-c': '*'
+		}
+	}, {
+		msg: 'skips blacklisted deps',
+		expected: ['fly-a', 'fly-b', 'fly-z'],
+		blacklist: ['fly-c', 'fly-d'],
+		dependencies: {
+			'fly-a': '*',
+			'fly-b': '*',
+			'fly-c': '*',
+			'fly-d': '*'
+		},
+		devDependencies: {
+			'fly-z': '*',
+			'dep-b': '*'
+		}
+	}, {
+		msg: 'return [] for no fly-* pkg',
+		expected: [],
+		dependencies: {
+			'dep-a': '*',
+			'dep-b': '*',
+			'dep-c': '*',
+			'dep-d': '*'
+		},
+		devDependencies: {
+			'dep-e': '*',
+			'dep-f': '*'
+		}
+	}, {
+		msg: 'return [] for no dep pkg',
+		expected: [],
+		dependencies: {},
+		devDependencies: {}
+	}];
+
+	tests.forEach(function (data) {
+		var blk = data.hasOwnProperty('blacklist') ? data.blacklist : [];
+		t.deepEqual(plugins.parse(data, blk), data.expected, data.msg);
+	});
+
+	t.end();
+});
