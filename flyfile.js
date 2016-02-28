@@ -7,7 +7,6 @@ module.exports.default = function * () {
 	yield this.source(src).xo();
 	yield this
 		.log('Building Fly...')
-		.source(src)
-		.target('tmp');
+		.source(src).target('tmp');
 	yield this.clear('tmp');
 };
