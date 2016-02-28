@@ -52,7 +52,6 @@ test('utils.find (flyfile) ✈', function (t) {
 	});
 
 	var dir = join(fixtures, 'one'); // test dir
-	console.log('TEST DIR "ONE"', dir);
 	utils.find(name, dir).then(function (fp) {
 		t.equal(fp, full, 'finds a flyfile, traversing upwards');
 		t.end();
