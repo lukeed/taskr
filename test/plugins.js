@@ -23,6 +23,7 @@ test('fly plugins ✈', function (t) {
 
 test('utils.find (package.json)', function (t) {
 	var name = 'package.json';
+	var ours = path.resolve(fixtures, '../..', name); // fly's package.json
 
 	utils.find(name, alt).then(function (fp) {
 		t.ok(fp !== undefined, 'finds a package.json file');
@@ -30,7 +31,7 @@ test('utils.find (package.json)', function (t) {
 	});
 
 	utils.find(name, fixtures).then(function (fp) {
-		t.equal(fp, path.resolve(process.cwd(), name), 'traverse upwards if not found');
+		t.equal(fp, ours, 'traverse upwards if not found');
 		t.end();
 	});
 });

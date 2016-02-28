@@ -42,6 +42,23 @@ test('utils.defer (asyncFunc /w options) ✈', function (t) {
 	});
 });
 
+test('utils.find (flyfile) ✈', function (t) {
+	var name = 'flyfile.js';
+	var full = join(fixtures, name);
+
+	utils.find(name, fixtures).then(function (fp) {
+		t.ok(fp !== undefined, 'finds a flyfile, given a directory');
+		t.equal(fp, full, 'finds the right one!');
+	});
+
+	var dir = join(fixtures, 'one'); // test dir
+	console.log('TEST DIR "ONE"', dir);
+	utils.find(name, dir).then(function (fp) {
+		t.equal(fp, full, 'finds a flyfile, traversing upwards');
+		t.end();
+	});
+});
+
 // test('utils.flatten (array) ✈', function (t) {
 // 	t.deepEqual(utils.flatten([[[1],[2]],[3,4],[[[[5,6]]]],[7],[8]]),
 // 		[1,2,3,4,5,6,7,8], 'flattens arrays');
@@ -72,23 +89,6 @@ test('utils.defer (asyncFunc /w options) ✈', function (t) {
 // 		})
 // 	})
 // })
-
-test('utils.find (flyfile) ✈', function (t) {
-	// var src = './utils';
-	var name = 'flyfile.js';
-	var full = join(fixtures, name);
-
-	utils.find(name, fixtures).then(function (fp) {
-		t.ok(fp !== undefined, 'finds a flyfile, given a directory');
-		t.equal(fp, full, 'finds the right one!');
-	});
-
-	var dir = join(fixtures, 'one'); // test dir
-	utils.find(name, dir).then(function (fp) {
-		t.equal(fp, full, 'finds a flyfile, traversing upwards');
-		t.end();
-	});
-});
 
 // test('utils.bind (module) ✈', function (t) {
 // 	const coffee = require(
