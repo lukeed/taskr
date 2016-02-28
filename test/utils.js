@@ -1,23 +1,21 @@
-var co = require('co');
+// var co = require('co');
 var path = require('path');
 var test = require('tape').test;
 var utils = require('../lib/utils');
-
 var join = path.join;
-var basename = path.basename;
 
 var fixtures = join(process.cwd(), 'test', 'fixtures', 'utils');
 
 function asyncFunc(value, handler) {
-  setTimeout(function () {
-  	return (handler(undefined, value));
-  }, 100);
+	setTimeout(function () {
+		return (handler(undefined, value));
+	}, 100);
 }
 
 function asyncFuncWithOptions(value, options, handler) {
 	setTimeout(function () {
-  	return (handler(undefined, value));
-  }, options.time);
+		return (handler(undefined, value));
+	}, options.time);
 }
 
 test('fly utilities ✈', function (t) {
@@ -25,7 +23,7 @@ test('fly utilities ✈', function (t) {
 
 	['bind', 'defer', 'find', 'log', 'error', 'alert', 'stamp', 'trace']
 		.forEach(function (prop) {
-			t.ok(utils[prop] !== undefined, prop +' is defined');
+			t.ok(utils[prop] !== undefined, prop + ' is defined');
 		});
 	t.end();
 });
@@ -75,21 +73,21 @@ test('utils.defer (asyncFunc /w options) ✈', function (t) {
 // 	})
 // })
 
-test('utils.find (path) ✈', function * (t) {
-	t.plan(2);
-	var src = './utils';
-	var expect = 'Flyfile.js';
+test('utils.find (flyfile) ✈', function (t) {
+	// var src = './utils';
+	var name = 'flyfile.js';
+	var full = join(fixtures, name);
 
-	var file1 = yield utils.find(join(fixtures, expected));
-	console.log('HI');
-	co(function () {
-		console.log('FIRST');
-		console.log('INSIDE HERE');
+	utils.find(name, fixtures).then(function (fp) {
+		t.ok(fp !== undefined, 'finds a flyfile, given a directory');
+		t.equal(fp, full, 'finds the right one!');
 	});
-		// var file2 = yield utils.find(fixtures);
-		// t.equal(basename(val), expected, 'find Flyifle given a file');
-		// t.equal(basename(file2), expected, 'find Flyfile given a path');
-	// });
+
+	var dir = join(fixtures, 'one'); // test dir
+	utils.find(name, dir).then(function (fp) {
+		t.equal(fp, full, 'finds a flyfile, traversing upwards');
+		t.end();
+	});
 });
 
 // test('utils.bind (module) ✈', function (t) {
