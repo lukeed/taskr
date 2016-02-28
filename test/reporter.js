@@ -12,7 +12,7 @@ var fakeEmitter = function (event, t) {
 	});
 };
 
-test('✈  reporter', (t) => {
+test('✈  reporter', function (t) {
 	var ctx = fakeEmitter();
 	t.deepEqual(reporter.call(ctx), ctx, 'return the bound object');
 	[
