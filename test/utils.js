@@ -1,4 +1,4 @@
-// var co = require('co');
+var fs = require('fs');
 var path = require('path');
 var test = require('tape').test;
 var utils = require('../lib/utils');
@@ -82,6 +82,10 @@ test('utils.write', function (t) {
 
 			return utils.read(fp).then(function (d) {
 				t.deepEqual(d, data, 'file had data');
+
+				// delete test file
+				fs.unlinkSync(fp);
+
 				t.end();
 			});
 		});
