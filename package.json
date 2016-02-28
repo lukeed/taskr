@@ -46,7 +46,7 @@
     "coverage": "isparta cover test/*.js",
     "coveralls": "npm run coverage -s && coveralls < coverage/lcov.info",
     "postcoveralls": "rimraf coverage",
-    "test": "xo && tape test/cli.js | tspec"
+    "test": "xo && tape test/*.js | tspec"
   },
   "keywords": [
     "cli",
@@ -70,7 +70,6 @@
   },
   "xo": {
     "ignore": [
-      "test/**/*.js",
       "examples/**/*.js"
     ],
     "rules": {
