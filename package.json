@@ -1,29 +1,30 @@
 {
   "name": "fly",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Modern Build System",
-  "main": "dist/index.js",
+  "license": "MIT",
+  "repository": "flyjs/fly",
+  "homepage": "https://github.com/flyjs/fly",
+  "author": "Jorge Bucaran",
+  "main": "lib/index.js",
+  "bin": "cli.js",
   "files": [
-    "bin/",
-    "dist/"
+    "lib",
+    "cli.js"
   ],
-  "bin": {
-    "fly": "./bin/index"
-  },
   "dependencies": {
-    "babel-polyfill": "^6.5.0",
-    "babel-preset-es2015": "^6.5.0",
-    "babel-preset-stage-0": "^6.5.0",
+    "arrify": "^1.0.1",
     "chokidar": "^1.4.0",
     "clor": "^2.0.0",
     "co": "^4.5.4",
     "concat-with-sourcemaps": "^1.0.2",
-    "dateformat": "^1.0.12",
     "debug": "^2.2.0",
+    "find-up": "^1.1.0",
+    "flatten": "^1.0.2",
     "globby": "^4.0.0",
     "interpret": "^1.0.0",
     "mkdirp": "^0.5.1",
-    "mz": "^2.0.0",
+    "object-assign": "^4.0.1",
     "parsec": "^1.3.0",
     "prettyjson": "^1.1.2",
     "rimraf": "^2.4.2",
@@ -31,41 +32,19 @@
     "update-notifier": "^0.5.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.3.0",
-    "babel-eslint": "^4.1.4",
-    "coffee-script": "^1.10.0",
-    "eslint": "^1.10.1",
-    "fly-babel": "^0.7.0",
-    "fly-eslint": "^1.0.0",
-    "tap-nyan": "^0.0.2",
+    "coveralls": "^2.11.4",
+    "fly-xo": "^1.0.2",
+    "isparta": "^4.0.0",
     "tap-spec": "^4.1.1",
     "tape": "^4.2.2",
     "touch": "^1.0.0",
-    "coveralls": "^2.11.4",
-    "isparta": "^4.0.0"
+    "xo": "^0.12.0"
   },
   "scripts": {
-    "setup": "npm i && npm run test && npm run symlink",
-    "symlink": "ln -s $PWD/bin/index /usr/local/bin/fly",
-    "clean": "rimraf dist",
-    "lint": "eslint src test",
-    "coverage": "babel-node ./node_modules/.bin/isparta cover test/*.js",
+    "coverage": "isparta cover test/*.js",
     "coveralls": "npm run coverage -s && coveralls < coverage/lcov.info",
     "postcoveralls": "rimraf coverage",
-    "prebuild": "npm run lint -s && npm run clean -s",
-    "build": "babel --presets es2015,stage-0 src -d dist",
-    "postbuild": "npm test -s",
-    "test": "babel-node --presets es2015,stage-0 ./node_modules/tape/bin/tape test/*.js | tspec",
-    "deploy": "git pull --rebase origin master && git push origin master",
-    "prepublish": "npm run build -s",
-    "patch": "npm version patch && npm publish",
-    "minor": "npm version minor && npm publish",
-    "major": "npm version major && npm publish",
-    "postpublish": "git push origin master --follow-tags"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/flyjs/fly.git"
+    "test": "xo && node --harmony `which tape` test/*.js | `which tspec`"
   },
   "keywords": [
     "cli",
@@ -83,14 +62,16 @@
     "build system",
     "task runner"
   ],
-  "author": "Jorge Bucaran",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/flyjs/fly/issues"
-  },
   "engines": {
     "iojs": ">= 1.0.0",
     "node": ">= 0.12.0"
   },
-  "homepage": "https://github.com/flyjs/fly"
+  "xo": {
+    "ignore": [
+      "examples/**/*.js"
+    ],
+    "rules": {
+      "no-loop-func": 0
+    }
+  }
 }

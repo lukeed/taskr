@@ -1,11 +1,15 @@
-export function test (f, handler) {
-  const ctx = this
-  const log = console.log
-  console.log = function _log () {
-    console.log = log
-    if (handler.apply(ctx, Array.prototype
-      .slice.call(arguments))) console.log = _log
-  }
-  f.call()
-  console.log = log
-}
+module.exports = function (f, handler) {
+	var ctx = this;
+	var log = console.log;
+
+	console.log = function _log() {
+		var args = [].slice.call(arguments);
+		console.log = log;
+		if (handler.apply(ctx, args)) {
+			console.log = _log;
+		}
+	};
+
+	f.call();
+	console.log = log;
+};
