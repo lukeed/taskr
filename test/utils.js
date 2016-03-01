@@ -67,7 +67,7 @@ test('utils.find (flyfile) ✈', function (t) {
 test('utils.read', function (t) {
 	var fp = join(fixtures, 'a.js');
 	utils.read(fp).then(function (data) {
-		t.equal(data, 'const pi = 3.14\n', 'reads a file\'s contents');
+		t.equal(data.toString(), 'const pi = 3.14\n', 'reads a file\'s contents');
 		t.end();
 	});
 });
@@ -81,7 +81,7 @@ test('utils.write', function (t) {
 			t.true(f !== undefined, 'file was created');
 
 			return utils.read(fp).then(function (d) {
-				t.deepEqual(d, data, 'file had data');
+				t.deepEqual(d.toString(), data, 'file had data');
 
 				// delete test file
 				fs.unlinkSync(fp);
