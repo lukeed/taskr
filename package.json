@@ -5,7 +5,18 @@
   "license": "MIT",
   "repository": "flyjs/fly",
   "homepage": "https://github.com/flyjs/fly",
-  "author": "Jorge Bucaran",
+  "author": {
+    "name": "Jorge Bucaran",
+    "email": "j@bucaran.me",
+    "url": "https://github.com/bucaran"
+  },
+  "contributors": [
+    {
+      "name": "Luke Edwards",
+      "email": "luke@lukeed.com",
+      "url": "https://lukeed.com"
+    }
+  ],
   "main": "lib/index.js",
   "bin": "cli.js",
   "files": [
