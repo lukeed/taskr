@@ -54,8 +54,7 @@ test('utils.find (flyfile) ✈', function (t) {
 	});
 
 	utils.find(full).then(function (fp) {
-		var f = fp.substr(1); // find-up PR -- remove preceding `/` from `//Users/...`
-		t.equal(f, full, 'finds a flyfile, given a filepath');
+		t.equal(fp, full, 'finds a flyfile, given a filepath');
 	});
 
 	var dir = join(fixtures, 'one'); // test dir
