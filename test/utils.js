@@ -63,10 +63,17 @@ test('utils.find (flyfile) ✈', function (t) {
 	});
 });
 
-test('utils.read', function (t) {
+test('utils.read (file)', function (t) {
 	var fp = join(fixtures, 'a.js');
 	utils.read(fp).then(function (data) {
 		t.equal(data.toString(), 'const pi = 3.14\n', 'reads a file\'s contents');
+		t.end();
+	});
+});
+
+test('utils.read (dir)', function (t) {
+	utils.read(fixtures).then(function (data) {
+		t.true(data === null, 'will not attempt to read a directory');
 		t.end();
 	});
 });
