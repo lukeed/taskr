@@ -1,102 +1,104 @@
-var fs = require('fs');
-var path = require('path');
-var test = require('tape').test;
-var utils = require('../lib/utils');
-var join = path.join;
+var fs = require('fs')
+var path = require('path')
+var test = require('tape').test
+var utils = require('../lib/utils')
+var join = path.join
 
-var fixtures = join(process.cwd(), 'test', 'fixtures', 'utils');
+var fixtures = join(process.cwd(), 'test', 'fixtures', 'utils')
 
 function asyncFunc(value, handler) {
 	setTimeout(function () {
-		return (handler(undefined, value));
-	}, 100);
+		return (handler(undefined, value))
+	}, 100)
 }
 
 function asyncFuncWithOptions(value, options, handler) {
 	setTimeout(function () {
-		return (handler(undefined, value));
-	}, options.time);
+		return (handler(undefined, value))
+	}, options.time)
 }
 
 test('fly utilities ✈', function (t) {
-	t.ok(utils !== undefined, 'it\'s real');
+	t.ok(utils !== undefined, 'it\'s real')
 
-	['bind', 'defer', 'find', 'log', 'error', 'alert', 'stamp', 'trace']
-		.forEach(function (prop) {
-			t.ok(utils[prop] !== undefined, prop + ' is defined');
-		});
-	t.end();
-});
+	var methods = ['bind', 'defer', 'find', 'log', 'error', 'alert', 'stamp', 'trace']
+
+	methods.forEach(function (prop) {
+		t.ok(utils[prop] !== undefined, prop + ' is defined')
+	})
+
+	t.end()
+})
 
 test('utils.defer (asyncFunc) ✈', function (t) {
-	t.plan(1);
+	t.plan(1)
 	utils.defer(asyncFunc)(42).then(function (value) {
-		t.equal(value, 42, 'promisifies an async func');
-	});
-});
+		t.equal(value, 42, 'promisifies an async func')
+	})
+})
 
 test('utils.defer (asyncFunc /w options) ✈', function (t) {
-	t.plan(1);
+	t.plan(1)
 	utils.defer(asyncFuncWithOptions)(1985, {time: 100}).then(function (value) {
-		t.equal(value, 1985, 'promisifies an async func w/ options');
-	});
-});
+		t.equal(value, 1985, 'promisifies an async func w/ options')
+	})
+})
 
 test('utils.find (flyfile) ✈', function (t) {
-	t.plan(4);
+	t.plan(4)
 
-	var name = 'flyfile.js';
-	var full = join(fixtures, name);
+	var name = 'flyfile.js'
+	var full = join(fixtures, name)
 
 	utils.find(name, fixtures).then(function (fp) {
-		t.ok(fp !== undefined, 'finds a flyfile, given a directory');
-		t.equal(fp, full, 'finds the right one!');
-	});
+		t.ok(fp !== undefined, 'finds a flyfile, given a directory')
+		t.equal(fp, full, 'finds the right one!')
+	})
 
 	utils.find(full).then(function (fp) {
-		t.equal(fp, full, 'finds a flyfile, given a filepath');
-	});
+		t.equal(fp, full, 'finds a flyfile, given a filepath')
+	})
 
-	var dir = join(fixtures, 'one'); // test dir
+	var dir = join(fixtures, 'one') // test dir
 	utils.find(name, dir).then(function (fp) {
-		t.equal(fp, full, 'finds a flyfile, traversing upwards');
-	});
-});
+		t.equal(fp, full, 'finds a flyfile, traversing upwards')
+	})
+})
 
 test('utils.read (file)', function (t) {
-	var fp = join(fixtures, 'a.js');
+	var fp = join(fixtures, 'a.js')
 	utils.read(fp).then(function (data) {
-		t.equal(data.toString(), 'const pi = 3.14\n', 'reads a file\'s contents');
-		t.end();
-	});
-});
+		t.equal(data.toString(), 'const pi = 3.14\n', 'reads a file\'s contents')
+		t.end()
+	})
+})
 
 test('utils.read (dir)', function (t) {
 	utils.read(fixtures).then(function (data) {
-		t.true(data === null, 'will not attempt to read a directory');
-		t.end();
-	});
-});
+		t.true(data === null, 'will not attempt to read a directory')
+		t.end()
+	})
+})
 
 test('utils.write', function (t) {
-	var fp = join(fixtures, 'test.js');
-	var data = 'hello';
+	var fp = join(fixtures, 'test.js')
+	var data = 'hello'
 
 	utils.write(fp, data).then(function () {
 		return utils.find(fp).then(function (f) {
-			t.true(f !== undefined, 'file was created');
+			t.true(f !== undefined, 'file was created')
 
 			return utils.read(fp).then(function (d) {
-				t.deepEqual(d.toString(), data, 'file had data');
+				t.deepEqual(d.toString(), data, 'file had data')
 
 				// delete test file
-				fs.unlinkSync(fp);
+				fs.unlinkSync(fp)
 
-				t.end();
-			});
-		});
-	});
-});
+				t.end()
+			})
+		})
+	})
+})
 
 // test('utils.bind (module) ✈', function (t) {
 // 	const coffee = require(

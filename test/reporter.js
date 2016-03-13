@@ -1,21 +1,22 @@
-var test = require('tape').test;
-var reporter = require('../lib/reporter');
+var test = require('tape').test
+var reporter = require('../lib/reporter')
 
 var fakeEmitter = function (event, t) {
 	return ({
 		on: function (e) {
 			if (e === event) {
-				t.ok(true, 'notify ' + event + ' events');
+				t.ok(true, 'notify ' + event + ' events')
 			}
-			return this;
+			return this
 		}
-	});
-};
+	})
+}
 
 test('✈  reporter', function (t) {
-	var ctx = fakeEmitter();
-	t.deepEqual(reporter.call(ctx), ctx, 'return the bound object');
-	[
+	var ctx = fakeEmitter()
+	t.deepEqual(reporter.call(ctx), ctx, 'return the bound object')
+
+	var evts = [
 		'fly_run',
 		'flyfile_not_found',
 		'fly_watch',
@@ -25,11 +26,14 @@ test('✈  reporter', function (t) {
 		'task_start',
 		'task_complete',
 		'task_not_found'
-	].forEach(function (event) {
-		return reporter.call(fakeEmitter(event, t));
-	});
-	t.end();
-});
+	]
+
+	evts.forEach(function (event) {
+		return reporter.call(fakeEmitter(event, t))
+	})
+
+	t.end()
+})
 
 // test('✈  timeInfo', function (t) {
 //   var timeInfo = require('../src/reporter/timeInfo').default
