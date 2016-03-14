@@ -455,7 +455,7 @@ If a plugin does not fall in any of the categories described above, it should re
 
 ```js
 module.exports = function () {
-	var self = this
+  var self = this
   this.notify = function (options) {
     // ...
     return self
@@ -469,7 +469,7 @@ Wrap async functions with `Fly.prototype.defer`. This creates a new function tha
 
 ```js
 this.filter("myPlugin", (data, options) {
-	var self = this
+  var self = this
   return self.defer(myFilter)(data, options)
 })
 ```
