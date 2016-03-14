@@ -60,6 +60,6 @@ make(arg)
 
 + Do you really need a variable? You can initialize a constant. _Let's_ avoid mutation if possible.
 
-> These rules are not set in stone. Feel free to open an issue with suggestions and/or feedback.
+> We proudly use the [XO](https://github.com/sindresorhus/xo) setup, with the minor exception of semicolons.
 
 :heart:
