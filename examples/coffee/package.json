@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "coffee-script": "^1.9.3",
-    "fly-coffee": "*"
-  }
-}

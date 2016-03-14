@@ -1,6 +1,8 @@
 export default function* () {
-  yield this
-    .source("fly")
-    .filter(s => `${s}`.toUpperCase())
-    .target("dist")
+	yield this
+		.source('fly')
+		.filter(function (data) {
+			return data.toString().toUpperCase()
+		})
+		.target('dist')
 }

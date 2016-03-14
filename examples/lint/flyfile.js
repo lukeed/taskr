@@ -1,3 +1,3 @@
-export default async function () {
-  await this.source("*.js").eslint()
+module.exports.default = function * () {
+	yield this.source('*.js').eslint()
 }
