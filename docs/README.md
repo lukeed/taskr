@@ -22,24 +22,24 @@
 
 
 # Documentation
-_Fly_ is a task automation tool, very much in the same vein of [gulp](http://gulpjs.com/), [Grunt](http://gruntjs.com/), [etc](https://gist.github.com/callumacrae/9231589).
+_Fly_ is a task automation tool, very much in the same vein of [Gulp](http://gulpjs.com/), [Grunt](http://gruntjs.com/), [etc](https://gist.github.com/callumacrae/9231589).
 
-_Fly_ is written from the ground up to take advantage of ES6 [new features](https://github.com/lukehoban/es6features) such as generators and promises.
+_Fly_ is written from the ground up to take advantage of generators and promises.
 
-Similar to gulp, _Fly_ favors _code_ over configuration.
+Similar to Gulp, _Fly_ favors _code_ over configuration.
 
 ## Features
 
-> Fly requires  [generator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) support, i.e, `iojs` / `node >= 0.11`.
+> Fly requires [generator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) support, i.e, `iojs` / `node >= 0.11`.
 
 * Fly shuns the [stream](https://nodejs.org/api/stream.html)-based implementation common in other build systems and favors promises and generator based flow-control via [co-routines](https://github.com/tj/co).
 
-* Fly is itself written in ES6, but tasks can be written in [other languages](https://github.com/tkellen/js-interpret#extensions).
+* Fly is itself written in pure EcmaScript5, which makes it very lightweight and quick. You won't have to install a thousand sub-dependencies and tasks will complete faster than their Gulp or Grunt equivalents. 
 
-+ Tasks are described using ES6 [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) or ES7 [async](http://jakearchibald.com/2014/es7-async-functions/) functions and async flow is controlled with [`yield`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield):
++ By default, Tasks are described using [generator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) functions and so the asynchronous flow is controlled with [`yield`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield):
 
   ```js
-  export default function* () {
+  module.exports.default = function * () {
     yield this.source("index.js").uglify().target("dist")
   }
   ```
@@ -47,15 +47,17 @@ Similar to gulp, _Fly_ favors _code_ over configuration.
 + Fly allows tasks to cascade results. A task's return value is the argument of the next task in a running sequence.
 
   ```js
-  export default function* () {
+  var x = module.exports
+  
+  x.default = function * () {
     yield this.start(["first", "second"])
   }
 
-  export function* first () {
+  x.first = function * () {
     return { secret: 42 }
   }
 
-  export function* second ({ secret }) {
+  x.second = function * ({ secret }) {
     this.log(`The secret is ${secret}`)
   }
   ```
@@ -63,10 +65,10 @@ Similar to gulp, _Fly_ favors _code_ over configuration.
 + Fly API allows you to compose tasks similar to a pipeline, but it's not limited to the stream metaphor.
 
   ```js
-  export default function* () {
+  module.exports.default = function * () {
     yield this
       .source("src/**/*.js")
-      .babel()
+      .eslint()
       .uglify()
       .concat("all.min.js")
       .target("dist")
@@ -76,43 +78,40 @@ Similar to gulp, _Fly_ favors _code_ over configuration.
 + Fly supports concurrent tasks via `Fly.prototype.start([tasks], { parallel: true })`:
 
   ```js
-  export default function* () {
+  module.exports.default = function * () {
     yield this.start(["task1", "task2", "task3"], { parallel: true })
   }
   ```
 
 + Use `Fly.prototype.filter(Function)` to add a transform in the sequence. If your function is async wrap it with `Fly.prototype.defer`.
 
-+ Plugins are automatically loaded, just include it in your `package.json` and under `node_modules`.
++ Plugins are automatically loaded -- just include it in your `package.json` and under `node_modules`.
 
 + Use JSDoc's `/** @desc description */` to describe tasks. The text is displayed when listing tasks on the terminal with `fly -l`.
 
   ```js
-  export function* task () {
-    /** @desc Does something hip. */
+  module.exports.task = function * () {
+    /** @desc This is the task description. */
   }
   ```
 
 ## _Flyfiles_
 
-Similar to other build systems, _Fly_ reads a `flyfile` (case insensitive) to run your tasks.
+Similar to other build systems, _Fly_ reads a `flyfile.js` (case sensitive) to run your tasks.
 
-Flyfiles must include the extension of the language they are written in, `.js` for ES5/6/7, `.coffee` for CoffeeScript, etc.
-
-> ES6/7 is supported out of the box. Other JavaScript variants require the corresponding module to transpile them on the _fly_.
+<!-- > ES6/7 is supported out of the box. Other JavaScript variants require the corresponding module to transpile them on the _fly_. -->
 
 ### Examples
 
-A Flyfile exports its tasks as generators / async functions:
+A Flyfile exports its tasks as generator functions:
 
-_ES5_:
 ```js
 exports.default = function* () {
   yield this.source("*")...target("./")
 }
 ```
 
-_ES6_:
+<!-- _ES6_:
 ```js
 export default function* () {
   yield this.source("*")...target("./")
@@ -125,6 +124,7 @@ export default async function () {
   await this.source("*")...target("./")
 }
 ```
+-->
 
 See inside `examples/` for a large collection Flyfile samples.
 
@@ -153,7 +153,7 @@ fly -f examples/
 Or
 
 ```
-fly -f path/to/another/Flyfile
+fly -f path/to/another/Flyfile.js
 ```
 
 #### `-l  --list[=bare]`
@@ -173,7 +173,7 @@ Display the version number.
 Begin a _yieldable_ sequence.
 
 ```js
-export default function* () {
+module.exports.default = function * () {
   yield this.source("styles/*.scss", "styles/*.sass")...
 }
 ```
@@ -207,11 +207,13 @@ The optional config for destination folder(s).
 The number of parent directories of the source to retain in the target(s). See [Depths](#depths).
 
 ```js
-export default function* () {
+module.exports.default = function * () {
   yield this
     .source("*")
     ...
-    .filter((data) => data.toString())
+    .filter(function (data) {
+      return data.toString()
+    })
     ...
     .target(["dist", "build", "test"])
 }
@@ -226,7 +228,7 @@ Concatenate files read with `Fly.prototype.source`.
 Clears / Deletes all paths including sub directories.
 
 ```js
-export default function* () {
+module.exports.default = function * () {
   yield this.clear("dist/main.js", "dist/plugins/**/*.js");
   ...
 }
@@ -303,10 +305,12 @@ Add a sync/async transform into the `source → target` sequence. Use `Fly.proto
 > Filters/Plugins are responsible to convert the incoming raw data to a `String` if they are processing text.
 
 ```js
-export default function* () {
+module.exports.default = function * () {
   yield this
     .source("*.txt")
-    .filter((data) => `${data}`.replace(/(\w+)\s(\w+)/g, "$2 $1"))
+    .filter(function (data) {
+      return data.replace(/(\w+)\s(\w+)/g, "$2 $1")
+     })
     .target("swap")
 }
 ```
@@ -330,7 +334,7 @@ Run the specified tasks (or the `default` one if `tasks.length === 0`).
   + Can be yielded inside other tasks.
 
   ```js
-  export default function* () {
+  module.exports.default = function * () {
     yield this.start(["lint", "test", "build"])
   }
   ```
@@ -340,13 +344,13 @@ Run the specified tasks (or the `default` one if `tasks.length === 0`).
   + Use the `value` option to pass a value into the first task. Return values cascade on to subsequent tasks.
 
   ```js
-  export default function* () {
+  module.exports.default = function * () {
     yield this.start(["a", "b", "c"])
     ...
     return 42
   }
 
-  export default function* (secret) {
+  module.exports.default = function * (secret) {
     this.log(`The secret is ${secret}`) // The secret is 42
   }
   ```
@@ -354,8 +358,8 @@ Run the specified tasks (or the `default` one if `tasks.length === 0`).
   + To run tasks in parallel use `parallel: true`. The following causes `html`, `css` and `js` tasks to start at the same time.
 
   ```js
-  export default function* () {
-    yield this.start(["html", "css", "js"], { parallel: true })
+  module.exports.default = function * () {
+    yield this.start(["html", "css", "js"], {parallel: true})
   }
   ```
 
@@ -366,11 +370,9 @@ Run the specified tasks when a change is detected in any of the paths expanded f
 > Note: `tasks`, and `options` will be passed to `Fly.prototype.start`
 
 ```js
-export function* watch(){
+module.exports.watch = function * () {
  yield this.watch("app/lib/**/*.scss", "styles");
- yield this.watch("app/lib/**/*.js", ["js", "lint"], { 
-        parallel: true 
-       });
+ yield this.watch("app/lib/**/*.js", ["js", "lint"], {parallel: true});
 }
 ```
 
@@ -384,10 +386,14 @@ This method can be used when creating plugins that need to expand the source glo
 
 
 ```js
-export default function () {
+module.exports = function () {
   this.myLint = function (options) {
-    const lint = createLinter(options)
-    return this.unwrap((files) => files.forEach((f) => lint(f)))
+    var lint = createLinter(options)
+    return this.unwrap(function (files) {
+    	files.forEach(function (f) {
+    		lint(f)
+    	})
+    })
   }
 }
 ```
@@ -419,7 +425,7 @@ Plugins are node modules that export at least one default method. This method ru
 
 ```js
 module.exports = function () {
-  this.myPlugin = (data) => /* process raw data */
+  this.myPlugin = function (data) {/* process raw data */}
 }
 ```
 
@@ -429,8 +435,8 @@ Use `Fly.prototype.filter` to avoid name collisions with other existing filters.
 
 ```js
 module.exports = function () {
-  return this.filter("myFilter", (data, options) => {
-    return { code /* or `css` or `data` */, ext, map }
+  return this.filter("myFilter", function (data, options) {
+    return {code /* or `css` or `data` */, ext, map}
   })
 }
 ```
@@ -440,7 +446,7 @@ If the method should be _yielded_ inside a task, you must return a promise inste
 ```js
 module.exports = function () {
   this.myPlugin = function (options) {
-    return new Promise((resolve, reject) => {...})
+    return new Promise(function (resolve, reject) {/* ... */})
   }
 }
 ```
@@ -449,9 +455,10 @@ If a plugin does not fall in any of the categories described above, it should re
 
 ```js
 module.exports = function () {
-  this.notify = (options) => {
-    ...
-    return this
+	var self = this
+  this.notify = function (options) {
+    // ...
+    return self
   }
 }
 ```
@@ -461,8 +468,9 @@ module.exports = function () {
 Wrap async functions with `Fly.prototype.defer`. This creates a new function that returns a promise. Call this function with `source` and `options`.
 
 ```js
-this.filter("myPlugin", (data, options) => {
-  return this.defer(myFilter)(data, options)
+this.filter("myPlugin", (data, options) {
+	var self = this
+  return self.defer(myFilter)(data, options)
 })
 ```
 
