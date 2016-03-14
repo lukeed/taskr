@@ -1,17 +1,12 @@
-const paths = {
-  src: "src/**/*.js",
-  dist: "dist"
-}
+'use strict'
 
-export default function* () {
-  yield this
-    .source(paths.src).eslint()
+var src = 'lib/**/*.js'
 
-  yield this.clear(paths.dist)
-  yield this.log("Building Fly...")
-    .source(paths.src)
-    .babel({
-      presets: ["es2015", "stage-0"]
-    })
-    .target(paths.dist)
+module.exports.default = function * () {
+	/** @desc Fly's default development task. */
+	yield this.source(src).xo()
+	yield this
+		.log('Building Fly...')
+		.source(src).target('tmp')
+	yield this.clear('tmp')
 }
