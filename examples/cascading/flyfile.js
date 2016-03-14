@@ -1,15 +1,17 @@
-export function* first () {
-  return { secret: 42 }
+var x = module.exports
+
+x.first = function * () {
+	return {secret: 42}
 }
 
-export function* second ({ secret }) {
-  return { secret }
+x.second = function * (obj) {
+	return {secret: obj.secret}
 }
 
-export function* third ({ secret }) {
-  this.log(`The secret is ${secret}`)
+x.third = function * (obj) {
+	this.log('The secret is ' + obj.secret)
 }
 
-export default function* () {
-  yield this.start(["first", "second", "third"])
+x.default = function * () {
+	yield this.start(['first', 'second', 'third'])
 }
