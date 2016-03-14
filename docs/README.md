@@ -106,10 +106,72 @@ Similar to other build systems, _Fly_ reads a `flyfile.js` (case sensitive) to r
 A Flyfile exports its tasks as generator functions:
 
 ```js
-exports.default = function* () {
+module.exports.default = function * () {
   yield this.source("*")...target("./")
 }
 ```
+
+When declaring multiple tasks (as is often the case), it is recommended that you store the `module.exports` as a simple variable to avoid repetitive boilerplate:
+
+```js
+var x = module.exports
+
+x.default = function * () {
+  yield this.start('styles', 'scripts')
+}
+
+x.styles = function * () {
+  yield this.source('src/styles/*.css')
+    // ...
+    .concat('main.css')
+    .target('dist/css')
+}
+
+x.scripts = function * () {
+  yield this.source('src/scripts/*.js')
+    .eslint()
+    // ...
+    .concat('main.js')
+    .target('dist/js')
+}
+```
+
+It is also recommended to declare a `paths` object to easily maintain and configure your application tasks' relevant directories.
+
+```js
+var x = module.exports
+var paths = {
+  css: {
+    src: 'src/styles/*.css',
+    dist: 'dist/css'
+  },
+  js: {
+    src: 'src/scripts/*.js',
+    dist: 'dist/js'
+  }
+}
+
+x.default = function * () {
+  yield this.start('styles', 'scripts')
+}
+
+x.styles = function * () {
+  yield this.source(paths.css.src)
+    // ...
+    .concat('main.css')
+    .target(paths.css.dist)
+}
+
+x.scripts = function * () {
+  yield this.source(paths.js.src)
+    .eslint()
+    // ...
+    .concat('main.js')
+    .target(paths.js.dist)
+}
+```
+
+> This also means that you can separate your pathing configuration from your task definitions. Then you can `require()` your `paths` object into your flyfile. 
 
 <!-- _ES6_:
 ```js
@@ -126,7 +188,7 @@ export default async function () {
 ```
 -->
 
-See inside `examples/` for a large collection Flyfile samples.
+Browse the `examples/` folder for additional Flyfile samples.
 
 ## CLI
 
