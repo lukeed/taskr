@@ -1,16 +1,22 @@
-import { test } from "tape"
-import Emitter from "../src/emitter"
-class Subscriber extends Emitter {}
+var util = require('util')
+var test = require('tape').test
+var Emitter = require('../lib/emitter')
 
-test("✈  Emitter", (t) => {
-  t.ok(Emitter !== undefined, "is defined")
+function Subscriber() {
+	Emitter.call(this)
+}
+util.inherits(Subscriber, Emitter)
 
-  const e = new Subscriber()
-  t.deepEqual(e.events, [], "inherit events collection")
+test('✈  Emitter', function (t) {
+	t.ok(Emitter !== undefined, 'is defined')
 
-  e.on("my_event", (data) => {
-    t.deepEqual(data, { data: 1 }, "notify events")
-    t.end()
-  })
-  e.emit("my_event", { data: 1 })
+	var e = new Subscriber()
+	t.deepEqual(e.events, [], 'inherit events collection')
+
+	e.on('my_event', function (data) {
+		t.deepEqual(data, {data: 1}, 'notify events')
+		t.end()
+	})
+
+	e.emit('my_event', {data: 1})
 })

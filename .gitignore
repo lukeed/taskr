@@ -1,6 +1,5 @@
 logs
 *.log
-dist
 lib-cov
 coverage
 .lock-wscript
