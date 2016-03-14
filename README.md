@@ -80,26 +80,34 @@ npm install fly
 
 ### _Flyfile_
 
-> Flyfiles can be written in ES5/[6][es6-example]/[7][es7-example] and [other](https://github.com/jashkenas/coffeescript/wiki/List-of-languages-that-compile-to-JS) variants.
+> Flyfiles are written in ES5, with immediate plans for continuing "native" [ES6][es6-example] and [ES7][es7-example] support via an extension, for those who want it. :)
 
 ```js
-const paths = {
-  scripts: ["src/**/*.js", "!src/ignore/**/*.js"]
+var x = module.exports
+var paths = {
+  scripts: ['src/**/*.js', '!src/ignore/**/*.js']
 }
 
-export default function* () {
-  yield this.watch(paths.scripts, "build")
+x.default = function * () {
+  yield this.watch(paths.scripts, 'build')
 }
 
-export function* build () {
-  yield this.clear("dist")
+x.build = function * () {
+  yield this
+    .source(paths.scripts)
+    .eslint({
+      rules: {
+        'no-extra-semi': 0
+      }
+    })
+    
   yield this
     .source(paths.scripts)
     .babel({
-      presets: ["es2015", "stage-0"]
+      presets: ['es2015', 'stage-0']
     })
-    .concat("app.js")
-    .target("dist")
+    .concat('app.js')
+    .target('dist')
 }
 ```
 
