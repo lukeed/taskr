@@ -8,4 +8,7 @@ var args = ['--harmony'].concat(fly).concat(process.argv.slice(2))
 /**
  * Spawn a new Node process
  */
-require('child_process').spawn(node, args, {stdio: 'inherit'})
+var proc = require('child_process').spawn(node, args, {stdio: 'inherit'})
+proc.on('close', function (code) {
+	process.exitCode = code
+})
