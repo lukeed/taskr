@@ -1,7 +1,7 @@
 var test = require('tape').test
 var reporter = require('../lib/reporter')
 
-var fakeEmitter = function (event, t) {
+function fakeEmitter(event, t) {
 	return ({
 		on: function (e) {
 			if (e === event) {
