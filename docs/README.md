@@ -34,7 +34,7 @@ Similar to Gulp, _Fly_ favors _code_ over configuration.
 
 * Fly shuns the [stream](https://nodejs.org/api/stream.html)-based implementation common in other build systems and favors promises and generator based flow-control via [co-routines](https://github.com/tj/co).
 
-* Fly is itself written in pure EcmaScript5, which makes it very lightweight and quick. You won't have to install a thousand sub-dependencies and tasks will complete faster than their Gulp or Grunt equivalents. 
+* Fly is itself written in pure EcmaScript5, which makes it very lightweight and quick. You won't have to install a thousand sub-dependencies and tasks will complete faster than their Gulp or Grunt equivalents.
 
 + By default, Tasks are described using [generator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) functions and so the asynchronous flow is controlled with [`yield`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield):
 
@@ -48,7 +48,7 @@ Similar to Gulp, _Fly_ favors _code_ over configuration.
 
   ```js
   var x = module.exports
-  
+
   x.default = function * () {
     yield this.start(["first", "second"])
   }
@@ -99,9 +99,9 @@ Similar to Gulp, _Fly_ favors _code_ over configuration.
 
 Similar to other build systems, _Fly_ reads a `flyfile.js` (case sensitive) to run your tasks.
 
-<!-- > ES6/7 is supported out of the box. Other JavaScript variants require the corresponding module to transpile them on the _fly_. -->
+By default, Fly only supports flyfiles written with [ES5](#es5-example) syntax. However, if you prefer [ES6](#es6-example) or [ES7](#es7-example), all you need to do is install [fly-esnext](https://github.com/lukeed/fly-esnext)!
 
-### Examples
+### ES5 Example
 
 A Flyfile exports its tasks as generator functions:
 
@@ -109,34 +109,20 @@ A Flyfile exports its tasks as generator functions:
 module.exports.default = function * () {
   yield this.source("*")...target("./")
 }
-```
 
-When declaring multiple tasks (as is often the case), it is recommended that you store the `module.exports` as a simple variable to avoid repetitive boilerplate:
+// or
+exports.default = function * () {
+  yield this.source("*")...target("./")
+}
 
-```js
-var x = module.exports
-
+// or
+var x = module.exports;
 x.default = function * () {
-  yield this.start('styles', 'scripts')
-}
-
-x.styles = function * () {
-  yield this.source('src/styles/*.css')
-    // ...
-    .concat('main.css')
-    .target('dist/css')
-}
-
-x.scripts = function * () {
-  yield this.source('src/scripts/*.js')
-    .eslint()
-    // ...
-    .concat('main.js')
-    .target('dist/js')
+  yield this.source("*")...target("./")
 }
 ```
 
-It is also recommended to declare a `paths` object to easily maintain and configure your application tasks' relevant directories.
+It is recommended to declare a `paths` object to easily maintain and configure your application tasks' relevant directories.
 
 ```js
 var x = module.exports
@@ -171,22 +157,41 @@ x.scripts = function * () {
 }
 ```
 
-> This also means that you can separate your pathing configuration from your task definitions. Then you can `require()` your `paths` object into your flyfile. 
+> This also means that you can separate your pathing configuration from your task definitions. Then you can `require()` your `paths` object into your flyfile.
 
-<!-- _ES6_:
+### ES6 Example
+
 ```js
-export default function* () {
-  yield this.source("*")...target("./")
+const paths = {
+	scripts: ["src/*.js", "!src/ignore.js"]
+}
+
+export default function * () {
+	yield this.start("lint")
+  yield this.source(paths.scripts)...target("dist")
+}
+
+export function * lint() {
+	yield this....
 }
 ```
 
-_ES7_:
+### ES7 Example
+
 ```js
+const paths = {
+	scripts: ["src/*.js", "!src/ignore.js"]
+}
+
 export default async function () {
+	await this.start("lint")
   await this.source("*")...target("./")
 }
+
+export async function lint() {
+	await this....
+}
 ```
--->
 
 Browse the `examples/` folder for additional Flyfile samples.
 
@@ -269,7 +274,7 @@ The optional config for destination folder(s).
 The number of parent directories of the source to retain in the target(s). See [Depths](#depths).
 
 ```js
-module.exports.default = function * () {
+exports.default = function * () {
   yield this
     .source("*")
     ...
@@ -298,7 +303,7 @@ module.exports.default = function * () {
 
 ### Depths
 
-A source's directory structure isn't always desirable in the output; however, it is preserved by default if no `config` parameter is found. 
+A source's directory structure isn't always desirable in the output; however, it is preserved by default if no `config` parameter is found.
 
 But, by specifying a `depth` value, you are dictating how many _parent directories_ of a file to keep.
 
@@ -483,6 +488,8 @@ Log a debug message. Set `DEBUG="*"` or `DEBUG="fly*"` to filter the content. Se
 
 > Search the registry for new plugins by ["fly" keyword](https://www.npmjs.com/browse/keyword/fly).
 
+> Fly plugins only support ES5 syntax by default. To use or write ES6/ES7 plugins, install (fly-esnext)[https://github.com/lukeed/fly-esnext].
+
 Plugins are node modules that export at least one default method. This method runs when a new Fly instance is created and is bound to the current Fly instance.
 
 ```js
@@ -534,6 +541,32 @@ this.filter("myPlugin", (data, options) {
   var self = this
   return self.defer(myFilter)(data, options)
 })
+```
+
+### ES6/ES7 Plugins
+
+If a plugin is throwing a syntax error, chances are that it's using ES6 or ES7 syntax. To fix this, you must install [fly-esnext](https://github.com/lukeed/fly-esnext).
+
+_ES6/ES7 Examples_:
+
+```js
+export default function () {
+  this.filter("myPlugin", (data, options) => {
+    return this.defer(myFilter)(data, options)
+  })
+}
+
+export default function () {
+  this.myPlugin = (options) => new Promise((resolve, reject) => {
+    // ...
+  })
+}
+
+export default function () {
+  this.notify = (options) => {
+    return this
+  }
+}
 ```
 
 ## Hacking
