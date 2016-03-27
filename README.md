@@ -80,7 +80,9 @@ npm install fly
 
 ### _Flyfile_
 
-> Flyfiles are written in ES5, with immediate plans for continuing "native" [ES6][es6-example] and [ES7][es7-example] support via an extension, for those who want it. :)
+#### ES5
+
+Out of the box, Flyfiles are written in native ES5:
 
 ```js
 var x = module.exports
@@ -93,16 +95,44 @@ x.default = function * () {
 }
 
 x.build = function * () {
-  yield this
-    .source(paths.scripts)
+  yield this.source(paths.scripts)
     .eslint({
-      rules: {
-        'no-extra-semi': 0
-      }
+      rules: {'no-extra-semi': 0}
     })
-    
-  yield this
-    .source(paths.scripts)
+
+  yield this.source(paths.scripts)
+    .babel({
+      presets: ['es2015', 'stage-0']
+    })
+    .concat('app.js')
+    .target('dist')
+}
+```
+
+#### ES2015 and ES7 Support
+
+If you'd prefer to write [flyfiles](https://github.com/bucaran/fly/blob/master/docs/README.md#flyfiles) and [plugins](https://github.com/bucaran/fly/blob/master/docs/README.md#plugins) with ES6 or ES7 syntax, all you have to do is download [fly-esnext](https://github.com/lukeed/fly-esnext)! Seriously. :)
+
+```
+npm i -D fly-esnext
+```
+
+```js
+const paths = {
+  scripts: ['src/**/*.js', '!src/ignore/**/*.js']
+}
+
+export default async function () {
+  await this.watch(paths.scripts, 'build')
+}
+
+export async function build() {
+  await this.source(paths.scripts)
+    .eslint({
+      rules: {'no-extra-semi': 0}
+    })
+
+  await this.source(paths.scripts)
     .babel({
       presets: ['es2015', 'stage-0']
     })
