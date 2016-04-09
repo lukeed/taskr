@@ -134,26 +134,30 @@ test('✈  fly.unwrap', function (t) {
 	t.plan(4)
 	var fly = new Fly()
 
-	var xFiles = ['a.x', 'b.x', 'c.x']
-	var yFiles = ['a.y', 'b.y', 'c.y']
-	var files = xFiles.concat(yFiles)
+	var gen = function (arr) {
+		return arr.map(function (f) {
+			f = join(fixtures, f)
+			touch(f)
+			return f
+		})
+	}
 
-	files.map(function (file) {
-		var f = join(fixtures, file)
-		touch(f)
-		return f
-	})
+	var xFiles = gen(['a.x', 'b.x', 'c.x'])
+	var yFiles = gen(['a.y', 'b.y', 'c.y'])
+	var files = xFiles.concat(yFiles)
+	var x = join(fixtures, '*.x')
+	var y = join(fixtures, '*.y')
 
 	co(function * () {
-		yield fly.source('*.x').unwrap(function (f) {
+		yield fly.source(x).unwrap(function (f) {
 			t.deepEqual(f, xFiles, 'unwrap source globs with single entry point')
 		})
 
-		yield fly.source(['*.y']).unwrap(function (f) {
+		yield fly.source([y]).unwrap(function (f) {
 			t.deepEqual(f, yFiles, 'unwrap source globs with single entry point in array')
 		})
 
-		var result = yield fly.source(['*.x', '*.y']).unwrap(function (f) {
+		var result = yield fly.source([x, y]).unwrap(function (f) {
 			t.deepEqual(f, files, 'unwrap source globs with multiple entry points')
 			return 42
 		})
@@ -330,17 +334,15 @@ test('✈  fly.target', function (t) {
 	t.plan(1)
 
 	co(function * () {
-		process.chdir(fixtures)
-
 		var fly = new Fly()
 
-		yield fly.source('*.txt').filter(function (data) {
+		yield fly.source(fixtures + '/*.txt').filter(function (data) {
 			return data.toString().toUpperCase()
-		}).target('.')
+		}).target(fixtures)
 
-		yield fly.source('*.txt').filter(function (data) {
+		yield fly.source(fixtures + '/*.txt').filter(function (data) {
 			t.ok(data.toString() === 'FOO BAR\n', 'resolve source, filters and writers')
 			return data.toString().toLowerCase()
-		}).target('.')
+		}).target(fixtures)
 	})
 })
