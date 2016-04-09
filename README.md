@@ -71,18 +71,17 @@ _Fly_ has [callback _heaven_](http://jakearchibald.com/2014/es7-async-functions/
 
 See the [documentation](/docs/README.md) to learn more about Fly.
 
-## Usage
-### Install
+## Install
 
 ```
 npm install fly
 ```
 
-### _Flyfile_
+## `flyfile.js` Samples
 
-#### ES5
+### ES5
 
-Out of the box, Flyfiles are written in native ES5:
+Out of the box, a `flyfile.js` should be written in native ES5:
 
 ```js
 var x = module.exports
@@ -109,9 +108,9 @@ x.build = function * () {
 }
 ```
 
-#### ES2015 and ES7 Support
+### ES2015 and ES7 Support
 
-If you'd prefer to write [flyfiles](https://github.com/bucaran/fly/blob/master/docs/README.md#flyfiles) and [plugins](https://github.com/bucaran/fly/blob/master/docs/README.md#plugins) with ES6 or ES7 syntax, all you have to do is download [fly-esnext](https://github.com/lukeed/fly-esnext)! Seriously. :)
+If you'd prefer to write your [`flyfile.js`](https://github.com/bucaran/fly/blob/master/docs/README.md#flyfiles) and [plugins](https://github.com/bucaran/fly/blob/master/docs/README.md#plugins) with ES6 or ES7 syntax, all you have to do is download [fly-esnext](https://github.com/lukeed/fly-esnext)! Seriously. :)
 
 ```
 npm i -D fly-esnext
