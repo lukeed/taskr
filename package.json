@@ -1,6 +1,6 @@
 {
   "name": "fly",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Modern Build System",
   "license": "MIT",
   "repository": "flyjs/fly",
