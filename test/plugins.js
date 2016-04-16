@@ -36,10 +36,17 @@ test('utils.find (package.json)', function (t) {
 	})
 })
 
+test('plugins.findPkg', function (t) {
+	plugins.findPkg(alt).then(function (fp) {
+		t.equal(fp, pkg, 'found a package.json file!')
+		t.end()
+	})
+})
+
 test('plugins.readPackages', function (t) {
 	var expect = JSON.parse(fs.readFileSync(pkg, 'utf8'))
 
-	plugins.readPackages(alt).then(function (contents) {
+	plugins.readPackages(pkg).then(function (contents) {
 		t.ok(contents !== undefined, 'found package.json file contents')
 		t.deepEqual(contents.dependencies, expect.dependencies, 'correctly read the contents')
 		t.end()
@@ -49,7 +56,7 @@ test('plugins.readPackages', function (t) {
 test('plugins.parse (simple)', function (t) {
 	var expect = ['fly-fake-plugin']
 
-	plugins.readPackages(alt).then(function (data) {
+	plugins.readPackages(pkg).then(function (data) {
 		t.deepEqual(plugins.parse(data), expect, 'returns an array of fly-* plugin names')
 		t.end()
 	})
