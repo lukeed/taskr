@@ -273,10 +273,36 @@ test('✈  fly.clear', function (t) {
 })
 
 test('✈  fly.concat', function (t) {
+	t.plan(4)
+
 	var fly = new Fly()
-	fly.concat('f')
-	t.equal(fly._.cat.base, 'f', 'add concat writer')
-	t.end()
+	var outfile = 'combined.md'
+	var dest = join(fixtures, 'dest')
+
+	co(function * () {
+		fly.concat('f')
+		t.equal(fly._.cat.base, 'f', 'add concat writer, with base reference')
+	})
+
+	co(function * () {
+		// assemble non-expected order
+		yield fly.source([
+			join(fixtures, 'one/two/two-2.md'),
+			join(fixtures, 'one/two/two-1.md'),
+			join(fixtures, 'one/one.md')
+		]).concat(outfile).target(dest)
+
+		fs.readdir(dest, function (_, files) {
+			t.equal(files.length, 1, 'combined to a single file')
+			t.deepEqual(files, [outfile], 'concatenated file is correctly named')
+
+			fs.readFile(join(dest, outfile), 'utf8', function (e, data) {
+				t.deepEqual(data, '# SECOND LEVEL, SECOND FILE\n\n# SECOND LEVEL, FIRST FILE\n\n# FIRST LEVEL\n', 'concatenated file data is ordered correctly')
+			})
+		})
+
+		yield fly.clear(dest)
+	})
 })
 
 test('✈  fly.flatten', function (t) {
@@ -290,8 +316,7 @@ test('✈  fly.flatten', function (t) {
 	var resultsZero = ['one.md', 'two-1.md', 'two-2.md']
 	var resultsOne = ['one', 'two']
 
-	function * matches(dir, expect) {
-		var data = fs.readdirSync(dir)
+	function matches(data, expect) {
 		return (expect.length === data.length) && expect.every(function (u, i) {
 			return u === data[i]
 		})
@@ -301,7 +326,11 @@ test('✈  fly.flatten', function (t) {
 		var tar = dest + '-1'
 
 		yield fly.source(src).target(tar)
-		t.ok(yield matches(tar, resultsNormal), 'retain normal pathing if desired depth not specified')
+
+		fs.readdir(tar, function (_, data) {
+			t.ok(matches(data, resultsNormal), 'retain normal pathing if desired depth not specified')
+		})
+
 		yield fly.clear(tar)
 	})
 
@@ -309,7 +338,11 @@ test('✈  fly.flatten', function (t) {
 		var tar = dest + '-2'
 
 		yield fly.source(src).target(tar, {depth: 0})
-		t.ok(yield matches(tar, resultsZero), 'move all files to same directory, no parents')
+
+		fs.readdir(tar, function (_, data) {
+			t.ok(matches(data, resultsZero), 'move all files to same directory, no parents')
+		})
+
 		yield fly.clear(tar)
 	})
 
@@ -317,7 +350,11 @@ test('✈  fly.flatten', function (t) {
 		var tar = dest + '-3'
 
 		yield fly.source(src).target(tar, {depth: 1})
-		t.ok(yield matches(tar, resultsOne), 'keep one parent directory per file')
+
+		fs.readdir(tar, function (_, data) {
+			t.ok(matches(data, resultsOne), 'keep one parent directory per file')
+		})
+
 		yield fly.clear(tar)
 	})
 
@@ -325,7 +362,11 @@ test('✈  fly.flatten', function (t) {
 		var tar = dest + '-4'
 
 		yield fly.source(src).target(tar, {depth: 5})
-		t.ok(yield matches(tar, resultsNormal), 'retain full path if desired depth exceeds path depth')
+
+		fs.readdir(tar, function (_, data) {
+			t.ok(matches(data, resultsNormal), 'retain full path if desired depth exceeds path depth')
+		})
+
 		yield fly.clear(tar)
 	})
 })
