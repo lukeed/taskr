@@ -273,10 +273,36 @@ test('✈  fly.clear', function (t) {
 })
 
 test('✈  fly.concat', function (t) {
+	t.plan(4)
+
 	var fly = new Fly()
-	fly.concat('f')
-	t.equal(fly._.cat.base, 'f', 'add concat writer')
-	t.end()
+	var outfile = 'combined.md'
+	var dest = join(fixtures, 'dest')
+
+	co(function * () {
+		fly.concat('f')
+		t.equal(fly._.cat.base, 'f', 'add concat writer, with base reference')
+	})
+
+	co(function * () {
+		// assemble non-expected order
+		yield fly.source([
+			join(fixtures, 'one/two/two-2.md'),
+			join(fixtures, 'one/two/two-1.md'),
+			join(fixtures, 'one/one.md')
+		]).concat(outfile).target(dest)
+
+		fs.readdir(dest, function (_, files) {
+			t.equal(files.length, 1, 'combined to a single file')
+			t.deepEqual(files, [outfile], 'concatenated file is correctly named')
+
+			fs.readFile(join(dest, outfile), 'utf8', function (e, data) {
+				t.deepEqual(data, '# SECOND LEVEL, SECOND FILE\n\n# SECOND LEVEL, FIRST FILE\n\n# FIRST LEVEL\n', 'concatenated file data is ordered correctly')
+			})
+		})
+
+		yield fly.clear(dest)
+	})
 })
 
 test('✈  fly.flatten', function (t) {
