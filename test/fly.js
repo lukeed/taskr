@@ -316,8 +316,7 @@ test('✈  fly.flatten', function (t) {
 	var resultsZero = ['one.md', 'two-1.md', 'two-2.md']
 	var resultsOne = ['one', 'two']
 
-	function * matches(dir, expect) {
-		var data = fs.readdirSync(dir)
+	function matches(data, expect) {
 		return (expect.length === data.length) && expect.every(function (u, i) {
 			return u === data[i]
 		})
@@ -327,7 +326,11 @@ test('✈  fly.flatten', function (t) {
 		var tar = dest + '-1'
 
 		yield fly.source(src).target(tar)
-		t.ok(yield matches(tar, resultsNormal), 'retain normal pathing if desired depth not specified')
+
+		fs.readdir(tar, function (_, data) {
+			t.ok(matches(data, resultsNormal), 'retain normal pathing if desired depth not specified')
+		})
+
 		yield fly.clear(tar)
 	})
 
@@ -335,7 +338,11 @@ test('✈  fly.flatten', function (t) {
 		var tar = dest + '-2'
 
 		yield fly.source(src).target(tar, {depth: 0})
-		t.ok(yield matches(tar, resultsZero), 'move all files to same directory, no parents')
+
+		fs.readdir(tar, function (_, data) {
+			t.ok(matches(data, resultsZero), 'move all files to same directory, no parents')
+		})
+
 		yield fly.clear(tar)
 	})
 
@@ -343,7 +350,11 @@ test('✈  fly.flatten', function (t) {
 		var tar = dest + '-3'
 
 		yield fly.source(src).target(tar, {depth: 1})
-		t.ok(yield matches(tar, resultsOne), 'keep one parent directory per file')
+
+		fs.readdir(tar, function (_, data) {
+			t.ok(matches(data, resultsOne), 'keep one parent directory per file')
+		})
+
 		yield fly.clear(tar)
 	})
 
@@ -351,7 +362,11 @@ test('✈  fly.flatten', function (t) {
 		var tar = dest + '-4'
 
 		yield fly.source(src).target(tar, {depth: 5})
-		t.ok(yield matches(tar, resultsNormal), 'retain full path if desired depth exceeds path depth')
+
+		fs.readdir(tar, function (_, data) {
+			t.ok(matches(data, resultsNormal), 'retain full path if desired depth exceeds path depth')
+		})
+
 		yield fly.clear(tar)
 	})
 })
