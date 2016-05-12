@@ -9,3 +9,4 @@ node_modules
 pids
 *.pid
 *.seed
+test/fixtures/**/dist
