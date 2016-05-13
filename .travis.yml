@@ -1,10 +1,10 @@
-sudo: false
 language: node_js
 node_js:
-  - "0.12"
-  - "iojs"
-  - "4"
-  - "stable"
+  - '6'
+  - '5'
+  - '4'
+  - '0.12'
+  - 'iojs'
 
 git:
   depth: 1
