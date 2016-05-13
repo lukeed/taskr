@@ -372,18 +372,30 @@ test('✈  fly.flatten', function (t) {
 })
 
 test('✈  fly.target', function (t) {
-	t.plan(1)
+	t.plan(5)
 
 	co(function * () {
 		var fly = new Fly()
 
-		yield fly.source(fixtures + '/*.txt').filter(function (data) {
+		yield fly.source(join(fixtures, '*.txt')).filter(function (data) {
 			return data.toString().toUpperCase()
 		}).target(fixtures)
 
-		yield fly.source(fixtures + '/*.txt').filter(function (data) {
+		yield fly.source(join(fixtures, '*.txt')).filter(function (data) {
 			t.ok(data.toString() === 'FOO BAR\n', 'resolve source, filters and writers')
 			return data.toString().toLowerCase()
 		}).target(fixtures)
+
+		yield fly
+			.source(join(fixtures, 'packages', '*', 'src', '**', '*.js'))
+			// .babel() could go here
+			.target(join(fixtures, 'packages'), {insert: 'dist'})
+
+		yield fly
+			.source(join(fixtures, 'packages', '*', 'dist', '**', '*.js'))
+			.filter(function (data, file) {
+				t.ok(['one.js', 'two.js', 'nested.js'].indexOf(file.filename) > -1, 'nested packages resolve correct ' + file.filename)
+			})
+			.target(join(fixtures, 'packages'))
 	})
 })

@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "fly-babel": "*",
+    "fly-esnext": "*",
+    "babel-preset-es2015": "*",
+    "babel-preset-stage-0": "*"
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "stage-0"
+    ]
+  }
+}

@@ -235,13 +235,21 @@ Display the version number.
 
 ### IO
 
-#### `Fly.prototype.source (...globs)`
+#### `Fly.prototype.source (...globs, options)`
 
 Begin a _yieldable_ sequence.
 
 ```js
 module.exports.default = function * () {
   yield this.source("styles/*.scss", "styles/*.sass")...
+}
+```
+
+The options are passed to [`node-glob`](https://github.com/isaacs/node-glob#options)
+
+```js
+module.exports.default = function * () {
+  yield this.source("styles/*.scss", "styles/*.sass", { ignore: 'styles/vendors/**/*' })...
 }
 ```
 
@@ -273,35 +281,7 @@ The optional config for destination folder(s).
 
 The number of parent directories of the source to retain in the target(s). See [Depths](#depths).
 
-```js
-exports.default = function * () {
-  yield this
-    .source("*")
-    ...
-    .filter(function (data) {
-      return data.toString()
-    })
-    ...
-    .target(["dist", "build", "test"])
-}
-```
-
-#### `Fly.prototype.concat (name)`
-
-Concatenate files read with `Fly.prototype.source`.
-
-#### `Fly.prototype.clear (...paths)`
-
-Clears / Deletes all paths including sub directories.
-
-```js
-module.exports.default = function * () {
-  yield this.clear("dist/main.js", "dist/plugins/**/*.js");
-  ...
-}
-```
-
-### Depths
+##### Depths
 
 A source's directory structure isn't always desirable in the output; however, it is preserved by default if no `config` parameter is found.
 
@@ -319,7 +299,7 @@ app
       |- two.jpg
 ```
 
-#### Depth: Default
+###### Depth: Default
 
 ```js
 yield this.source('app/images/**/*.jpg').target('dest/img')
@@ -328,7 +308,7 @@ The direct descendents of `dest/img` are:
 * `img.jpg`
 * `one/`
 
-#### Depth: 0
+###### Depth: 0
 ```js
 yield this.source('app/images/**/*.jpg').target('dest/img', {depth: 0})
 ```
@@ -337,7 +317,7 @@ The direct descendents of `dest/img` are:
 * `one.jpg`
 * `two.jpg`
 
-#### Depth: 1
+###### Depth: 1
 ```js
 yield this.source('app/images/**/*.jpg').target('dest/img', {depth: 1})
 ```
@@ -346,7 +326,7 @@ The direct descendents of `dest/img` are:
 * `one/`
 * `two/`
 
-#### Depth: 2
+###### Depth: 2
 ```js
 yield this.source('app/images/**/*.jpg').target('dest/img', {depth: 2})
 ```
@@ -358,8 +338,56 @@ The direct descendents of `dest/img` are:
 
 **Note:** In this example, anything greater than `depth: 2` returns the original structure because it is/exceeds the original nesting depth.
 
----
 
+**config.insert**
+
+> Type: `function` || `string` || `array`
+
+> Default: `null`
+
+It's a way to modify the output path for each file. If `insert` is a function it will be passed the base path and you can modify it from there an return a string. This is very useful for [monorepos](https://twitter.com/hashtag/monorepo) but can be used in other cases.
+
+```js
+exports.default = function * () {
+  yield this
+    .source('packages/*/src/**/*.js')
+    .babel()
+    .target('packages', { insert: 'dist' })
+}
+```
+
+```js
+exports.default = function * () {
+  yield this
+    .source('packages/*/src/**/*.js')
+    .babel()
+    .target('packages', {
+      insert: function(base) { // This is what `insert` is doing behind the scenes
+        base = base.split(path.sep)
+        base.splice(1, 0, 'dist')
+        return base.join(path.sep)
+      }
+    })
+}
+```
+
+Outputs files to `packages/[package name]/dist/**/*.js`.
+
+#### `Fly.prototype.concat (name)`
+
+Concatenate files read with `Fly.prototype.source`.
+
+#### `Fly.prototype.clear (...paths)`
+
+Clears / Deletes all paths including sub directories.
+
+```js
+module.exports.default = function * () {
+  yield this.clear("dist/main.js", "dist/plugins/**/*.js");
+  ...
+}
+```
+---
 
 ### Filters
 
