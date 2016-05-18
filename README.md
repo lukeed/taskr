@@ -8,7 +8,7 @@ Generator-based build system.
 
 ## Features
 
-* Modern build system for [Node.js](https://nodejs.org/) based in [_co_-routines](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127), [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
+* Based in [_co_-routines](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127), [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
 * [Callback _heaven_](http://jakearchibald.com/2014/es7-async-functions/)
 * [Concurrent tasks](https://github.com/flyjs/fly/blob/master/docs/README.md#features)
 * [Robust error handling](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127)
