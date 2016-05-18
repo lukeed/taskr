@@ -2,7 +2,7 @@
 [![](http://img.shields.io/npm/dm/fly.svg)](https://npmjs.org/package/fly)
 [![](https://img.shields.io/npm/v/fly.svg)](https://npmjs.org/package/fly)
 
-# Fly
+# fly
 
 Generator-based build system.
 
@@ -86,10 +86,6 @@ export async function build() {
     .target('dist')
 }
 ```
-
-[fly]:            https://www.github.com/Bj/fly
-[es6-example]:    https://github.com/Bj/fly/blob/master/examples/babel/flyfile.js
-[es7-example]:    https://github.com/Bj/fly/blob/master/examples/async/flyfile.js
 
 <div align="center">
 <a href="https://github.com/Bj/fly">
