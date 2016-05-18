@@ -1,19 +1,11 @@
-<div align="center">
-<a href="https://github.com/Bj/fly">
-		<img width=200px src="https://cloud.githubusercontent.com/assets/8317250/8733685/0be81080-2c40-11e5-98d2-c634f076ccd7.png">
-</a>
-</div>
-
 [![](https://img.shields.io/npm/v/fly.svg)](https://npmjs.org/package/fly)
 [![](https://img.shields.io/travis/Bj/fly.svg)](https://travis-ci.org/Bj/fly)
 [![](https://img.shields.io/npm/l/fly.svg)](https://github.com/Bj/fly/blob/master/LICENSE)
 [![](http://img.shields.io/npm/dm/fly.svg)](https://npmjs.org/package/fly)
 
-
-
 # Fly
 
-*Fly* is a generator-based build system.
+Generator-based build system.
 
 ## Features
 
@@ -111,3 +103,9 @@ export async function build() {
 
 [es6-example]:    https://github.com/Bj/fly/blob/master/examples/babel/flyfile.js
 [es7-example]:    https://github.com/Bj/fly/blob/master/examples/async/flyfile.js
+
+<div align="center">
+<a href="https://github.com/Bj/fly">
+<img width=150px src="https://cloud.githubusercontent.com/assets/8317250/8733685/0be81080-2c40-11e5-98d2-c634f076ccd7.png">
+</a>
+</div>
