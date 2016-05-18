@@ -1,6 +1,6 @@
 # fly
 
-[![](https://img.shields.io/travis/Bj/fly.svg)](https://travis-ci.org/Bj/fly)
+[![](https://img.shields.io/travis/brj/fly.svg)](https://travis-ci.org/brj/fly)
 [![](http://img.shields.io/npm/dm/fly.svg)](https://npmjs.org/package/fly)
 [![](https://img.shields.io/npm/v/fly.svg)](https://npmjs.org/package/fly)
 
@@ -56,7 +56,7 @@ x.build = function * () {
 
 ### ES2015 and beyond
 
-If you'd prefer to write your [`flyfile.js`](https://github.com/Bj/fly/blob/master/docs/README.md#flyfiles) and [plugins](https://github.com/Bj/fly/blob/master/docs/README.md#plugins) with ES6 or ES7 syntax, install [fly-esnext](https://github.com/lukeed/fly-esnext) and that's it :)
+If you'd prefer to write your [`flyfile.js`](https://github.com/brj/fly/blob/master/docs/README.md#flyfiles) and [plugins](https://github.com/brj/fly/blob/master/docs/README.md#plugins) with ES6 or ES7 syntax, install [fly-esnext](https://github.com/lukeed/fly-esnext) and that's it :)
 
 ```
 npm i -D fly-esnext
@@ -87,7 +87,7 @@ export async function build() {
 ```
 
 <div align="center">
-<a href="https://github.com/Bj/fly">
+<a href="https://github.com/brj/fly">
 <img width=100px src="https://cloud.githubusercontent.com/assets/8317250/8733685/0be81080-2c40-11e5-98d2-c634f076ccd7.png">
 </a>
 </div>
