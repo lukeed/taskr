@@ -1,7 +1,6 @@
-[![](https://img.shields.io/npm/v/fly.svg)](https://npmjs.org/package/fly)
 [![](https://img.shields.io/travis/Bj/fly.svg)](https://travis-ci.org/Bj/fly)
-[![](https://img.shields.io/npm/l/fly.svg)](https://github.com/Bj/fly/blob/master/LICENSE)
 [![](http://img.shields.io/npm/dm/fly.svg)](https://npmjs.org/package/fly)
+[![](https://img.shields.io/npm/v/fly.svg)](https://npmjs.org/package/fly)
 
 # Fly
 
@@ -9,11 +8,15 @@ Generator-based build system.
 
 ## Features
 
-_Fly_ is a modern [build system](https://en.wikipedia.org/wiki/Build_automation) for [Node](https://nodejs.org/) based in [_co_-routines](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127), [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
+* Modern build system for [Node.js](https://nodejs.org/) based in [_co_-routines](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127), [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
 
-_Fly_ has [callback _heaven_](http://jakearchibald.com/2014/es7-async-functions/), [concurrent tasks](https://github.com/flyjs/fly/blob/master/docs/README.md#features), [robust error handling](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127), [cascading tasks](https://github.com/flyjs/fly/blob/master/CHANGELOG.md#cascading-tasks) and a simple [API](https://github.com/flyjs/fly/blob/master/docs/README.md#api).
+* [Callback _heaven_](http://jakearchibald.com/2014/es7-async-functions/)
+* [Concurrent tasks](https://github.com/flyjs/fly/blob/master/docs/README.md#features)
+* [Robust error handling](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127)
+* [Cascading tasks](https://github.com/flyjs/fly/blob/master/CHANGELOG.md#cascading-tasks) 
+* Tiny [API](https://github.com/flyjs/fly/blob/master/docs/README.md#api).
 
-See the [documentation](/docs/README.md) to learn more about Fly.
+See the [documentation](/docs/README.md) to learn more.
 
 ## Install
 
@@ -21,7 +24,7 @@ See the [documentation](/docs/README.md) to learn more about Fly.
 npm install fly
 ```
 
-## *flyfile.js* Samples
+## *flyfile.js*
 
 ### ES5
 
@@ -52,9 +55,9 @@ x.build = function * () {
 }
 ```
 
-### ES2015 and ES7 Support
+### ES2015 and beyond
 
-If you'd prefer to write your [`flyfile.js`](https://github.com/Bj/fly/blob/master/docs/README.md#flyfiles) and [plugins](https://github.com/Bj/fly/blob/master/docs/README.md#plugins) with ES6 or ES7 syntax, all you have to do is download [fly-esnext](https://github.com/lukeed/fly-esnext)! Seriously. :)
+If you'd prefer to write your [`flyfile.js`](https://github.com/Bj/fly/blob/master/docs/README.md#flyfiles) and [plugins](https://github.com/Bj/fly/blob/master/docs/README.md#plugins) with ES6 or ES7 syntax, install [fly-esnext](https://github.com/lukeed/fly-esnext) and that's it :)
 
 ```
 npm i -D fly-esnext
@@ -84,23 +87,7 @@ export async function build() {
 }
 ```
 
-<!-- -->
-
-[author]:         http://github.com/Bj
-[contributors]:   https://github.com/Bj/fly/graphs/contributors
-
 [fly]:            https://www.github.com/Bj/fly
-
-[npm-pkg-link]:   https://www.npmjs.org/package/fly
-[npm-ver-link]:   https://img.shields.io/npm/v/fly.svg?style=flat-square
-
-[dl-badge]:       http://img.shields.io/npm/dm/fly.svg?style=flat-square
-
-[travis-badge]:   http://img.shields.io/travis/Bj/fly.svg?style=flat-square
-[travis-link]:    https://travis-ci.org/Bj/fly
-
-[mit-badge]:      https://img.shields.io/badge/license-MIT-444444.svg?style=flat-square
-
 [es6-example]:    https://github.com/Bj/fly/blob/master/examples/babel/flyfile.js
 [es7-example]:    https://github.com/Bj/fly/blob/master/examples/async/flyfile.js
 
