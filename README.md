@@ -1,8 +1,8 @@
+# fly
+
 [![](https://img.shields.io/travis/Bj/fly.svg)](https://travis-ci.org/Bj/fly)
 [![](http://img.shields.io/npm/dm/fly.svg)](https://npmjs.org/package/fly)
 [![](https://img.shields.io/npm/v/fly.svg)](https://npmjs.org/package/fly)
-
-# fly
 
 Generator-based build system.
 
