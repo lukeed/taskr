@@ -1,7 +1,7 @@
 > New Generation Build System
 
 <div align="center">
-  <a href="https://github.com/bucaran/fly">
+  <a href="https://github.com/Bj/fly">
     <img width=280px src="https://cloud.githubusercontent.com/assets/8317250/8733685/0be81080-2c40-11e5-98d2-c634f076ccd7.png">
   </a>
 </div>
@@ -22,8 +22,8 @@
          alt="Coverage Status">
   </a>
 
-  <a href="https://travis-ci.org/bucaran/fly">
-    <img src="https://img.shields.io/travis/bucaran/fly.svg?style=flat-square"
+  <a href="https://travis-ci.org/Bj/fly">
+    <img src="https://img.shields.io/travis/Bj/fly.svg?style=flat-square"
          alt="Build Status">
   </a>
 
@@ -32,17 +32,17 @@
          alt="Downloads">
   </a>
 
-  <a href="https://david-dm.org/bucaran/fly">
-    <img src="https://david-dm.org/bucaran/fly.svg?style=flat-square"
+  <a href="https://david-dm.org/Bj/fly">
+    <img src="https://david-dm.org/Bj/fly.svg?style=flat-square"
          alt="Dependency Status">
   </a>
 
-  <a href="https://github.com/bucaran/fly/blob/master/LICENSE">
+  <a href="https://github.com/Bj/fly/blob/master/LICENSE">
     <img src="https://img.shields.io/npm/l/fly.svg?style=flat-square"
          alt="License">
   </a>
 
-  <a href="https://gitter.im/bucaran/fly">
+  <a href="https://gitter.im/Bj/fly">
     <img src="https://img.shields.io/badge/gitter-join-FF2B6E.svg?style=flat-square"
          alt="Gitt">
   </a>
@@ -55,7 +55,7 @@
   |
   <b><a href="/docs/README.md">Documentation</a></b>
   |
-  <b><a href="https://github.com/bucaran/fly/wiki#plugins">Plugins</a></b>
+  <b><a href="https://github.com/Bj/fly/wiki#plugins">Plugins</a></b>
   |
   <b><a href="#contributing">Contributing</a></b>
 
@@ -110,7 +110,7 @@ x.build = function * () {
 
 ### ES2015 and ES7 Support
 
-If you'd prefer to write your [`flyfile.js`](https://github.com/bucaran/fly/blob/master/docs/README.md#flyfiles) and [plugins](https://github.com/bucaran/fly/blob/master/docs/README.md#plugins) with ES6 or ES7 syntax, all you have to do is download [fly-esnext](https://github.com/lukeed/fly-esnext)! Seriously. :)
+If you'd prefer to write your [`flyfile.js`](https://github.com/Bj/fly/blob/master/docs/README.md#flyfiles) and [plugins](https://github.com/Bj/fly/blob/master/docs/README.md#plugins) with ES6 or ES7 syntax, all you have to do is download [fly-esnext](https://github.com/lukeed/fly-esnext)! Seriously. :)
 
 ```
 npm i -D fly-esnext
@@ -146,20 +146,20 @@ Contributions are _absolutely_ welcome. Check out our [contribution guide](/CONT
 
 <!-- -->
 
-[author]:         http://github.com/bucaran
-[contributors]:   https://github.com/bucaran/fly/graphs/contributors
+[author]:         http://github.com/Bj
+[contributors]:   https://github.com/Bj/fly/graphs/contributors
 
-[fly]:            https://www.github.com/bucaran/fly
+[fly]:            https://www.github.com/Bj/fly
 
 [npm-pkg-link]:   https://www.npmjs.org/package/fly
 [npm-ver-link]:   https://img.shields.io/npm/v/fly.svg?style=flat-square
 
 [dl-badge]:       http://img.shields.io/npm/dm/fly.svg?style=flat-square
 
-[travis-badge]:   http://img.shields.io/travis/bucaran/fly.svg?style=flat-square
-[travis-link]:    https://travis-ci.org/bucaran/fly
+[travis-badge]:   http://img.shields.io/travis/Bj/fly.svg?style=flat-square
+[travis-link]:    https://travis-ci.org/Bj/fly
 
 [mit-badge]:      https://img.shields.io/badge/license-MIT-444444.svg?style=flat-square
 
-[es6-example]:    https://github.com/bucaran/fly/blob/master/examples/babel/flyfile.js
-[es7-example]:    https://github.com/bucaran/fly/blob/master/examples/async/flyfile.js
+[es6-example]:    https://github.com/Bj/fly/blob/master/examples/babel/flyfile.js
+[es7-example]:    https://github.com/Bj/fly/blob/master/examples/async/flyfile.js
