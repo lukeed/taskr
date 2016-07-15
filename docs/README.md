@@ -412,21 +412,21 @@ Run the specified tasks (or the `default` one if `tasks.length === 0`).
 
   ```js
   module.exports.default = function * () {
-      this.log(`In ${yield this.start(['z'])} We Trust`) // In Chino We Trust.
+    this.log(`In ${yield this.start(['z'])} We Trust`) // In Chino We Trust.
   }
 
   module.exports.z = function * () {
-      yield this.start(["a", "b"], {value: 'Coffee'})
-      return 'Chino'
+    yield this.start(["a", "b"], {value: 'Coffee'})
+    return 'Chino'
   }
 
   module.exports.a = function * (value) {
-      this.log(`Start with ${value}`) // Start with Coffee
-      return 'Kafuu'
+    this.log(`Start with ${value}`) // Start with Coffee
+    return 'Kafuu'
   }
 
   module.exports.b = function * (value) {
-      this.log(`Continue with ${value}`) // Continue with Kafuu
+    this.log(`Continue with ${value}`) // Continue with Kafuu
   }
   ```
 
