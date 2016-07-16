@@ -581,13 +581,13 @@ export default function () {
 
 ```
 git clone https://github.com/flyjs/fly
-npm run setup
+npm install && npm test && npm link
 fly -v
 ```
 
-The above clones the repository, installs dependencies, tests and symlinks `bin/index.js` to `usr/local/bin/fly`, effectively allowing you to run `fly` from any directory.
+The above clones the repository, installs dependencies, runs tests and symlinks current fly to your `npm-global`, effectively allowing you to run `fly` from any directory.
 
-> To undo this run `rm /usr/local/bin/fly`.
+> To undo this run `npm unlink fly`.
 
 Install the examples via _Fly_:
 
