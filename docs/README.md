@@ -163,16 +163,16 @@ x.scripts = function * () {
 
 ```js
 const paths = {
-	scripts: ["src/*.js", "!src/ignore.js"]
+  scripts: ["src/*.js", "!src/ignore.js"]
 }
 
 export default function * () {
-	yield this.start("lint")
+  yield this.start("lint")
   yield this.source(paths.scripts)...target("dist")
 }
 
 export function * lint() {
-	yield this....
+  // yield this...
 }
 ```
 
@@ -180,16 +180,16 @@ export function * lint() {
 
 ```js
 const paths = {
-	scripts: ["src/*.js", "!src/ignore.js"]
+  scripts: ["src/*.js", "!src/ignore.js"]
 }
 
 export default async function () {
-	await this.start("lint")
+  await this.start("lint")
   await this.source("*")...target("./")
 }
 
 export async function lint() {
-	await this....
+  // await this...
 }
 ```
 
@@ -241,7 +241,8 @@ Begin a _yieldable_ sequence.
 
 ```js
 module.exports.default = function * () {
-  yield this.source("styles/*.scss", "styles/*.sass")...
+  yield this.source("styles/*.scss", "styles/*.sass")
+  // ...
 }
 ```
 
@@ -277,11 +278,11 @@ The number of parent directories of the source to retain in the target(s). See [
 exports.default = function * () {
   yield this
     .source("*")
-    ...
+    // ...
     .filter(function (data) {
       return data.toString()
     })
-    ...
+    // ...
     .target(["dist", "build", "test"])
 }
 ```
@@ -297,7 +298,7 @@ Clears / Deletes all paths including sub directories.
 ```js
 module.exports.default = function * () {
   yield this.clear("dist/main.js", "dist/plugins/**/*.js");
-  ...
+  // ...
 }
 ```
 
@@ -394,7 +395,7 @@ You can specify a name for the filter with `Fly.prototype.filter (name, filter)`
 
 ### Tasks
 
-#### `Fly.prototype.start ([tasks], options)`
+#### `Fly.prototype.start (tasks[, options])`
 
 Run the specified tasks (or the `default` one if `tasks.length === 0`).
 
@@ -438,16 +439,16 @@ Run the specified tasks (or the `default` one if `tasks.length === 0`).
   }
   ```
 
-#### `Fly.prototype.watch (globs, tasks, options)`
+#### `Fly.prototype.watch (globs, tasks[, options])`
 
 Run the specified tasks when a change is detected in any of the paths expanded from globs. Returns a promise.
 
-> Note: `tasks`, and `options` will be passed to `Fly.prototype.start`
+> **Note:** `tasks`, and `options` will be passed to `Fly.prototype.start`
 
 ```js
 module.exports.watch = function * () {
- yield this.watch("app/lib/**/*.scss", "styles");
- yield this.watch("app/lib/**/*.js", ["js", "lint"], {parallel: true});
+   yield this.watch("app/lib/**/*.scss", "styles");
+  yield this.watch("app/lib/**/*.js", ["js", "lint"], {parallel: true});
 }
 ```
 
