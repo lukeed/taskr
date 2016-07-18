@@ -412,13 +412,21 @@ Run the specified tasks (or the `default` one if `tasks.length === 0`).
 
   ```js
   module.exports.default = function * () {
-    yield this.start(["a", "b", "c"])
-    ...
-    return 42
+    this.log(`In ${yield this.start(['z'])} We Trust`) // In Chino We Trust.
   }
 
-  module.exports.default = function * (secret) {
-    this.log(`The secret is ${secret}`) // The secret is 42
+  module.exports.z = function * () {
+    yield this.start(["a", "b"], {value: 'Coffee'})
+    return 'Chino'
+  }
+
+  module.exports.a = function * (value) {
+    this.log(`Start with ${value}`) // Start with Coffee
+    return 'Kafuu'
+  }
+
+  module.exports.b = function * (value) {
+    this.log(`Continue with ${value}`) // Continue with Kafuu
   }
   ```
 
@@ -573,13 +581,13 @@ export default function () {
 
 ```
 git clone https://github.com/flyjs/fly
-npm run setup
+npm install && npm test && npm link
 fly -v
 ```
 
-The above clones the repository, installs dependencies, tests and symlinks `bin/index.js` to `usr/local/bin/fly`, effectively allowing you to run `fly` from any directory.
+The above clones the repository, installs dependencies, runs tests and symlinks current fly to your `npm-global`, effectively allowing you to run `fly` from any directory.
 
-> To undo this run `rm /usr/local/bin/fly`.
+> To undo this run `npm unlink fly`.
 
 Install the examples via _Fly_:
 
@@ -600,3 +608,4 @@ To get started writing Flyfiles, check out our [quickstart guide][quickstart].
 
 
 [quickstart]: https://github.com/flyjs/fly/wiki/Quickstart
+
