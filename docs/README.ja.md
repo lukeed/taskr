@@ -16,6 +16,8 @@
 |
 <b><a href="#プラグイン">プラグイン</a></b>
 |
+<b><a href="README.zh-cn.md">简体中文</a></b>
+|
 <b><a href="README.md">English</a></b>
 
 
