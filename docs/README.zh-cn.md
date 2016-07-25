@@ -26,9 +26,9 @@
 # 概要
 _Fly_ 是一款类似于 [Gulp](http://gulpjs.com/), [Grunt](http://gruntjs.com/), [etc](https://gist.github.com/callumacrae/9231589) 的自动化构建工具。
 
-_Fly_ 从底层开始新写的一个项目，具备 generator 和 promise 的优势。
+_Fly_ 是一个全新的项目，从底层开始，全部用ECMAScript 5重新构建，具备 generator 和 promise 的优势。
 
-与 Gulp 类似, _Fly_ 使用 _代码_ 来作为配置文件。
+_Fly_ 与 Gulp 类似, 使用 _代码_ 来作为配置文件。
 
 ## 特性
 
@@ -36,7 +36,7 @@ _Fly_ 从底层开始新写的一个项目，具备 generator 和 promise 的优
 
 * Fly 不同于其他构建系统，没有使用基于 [stream](https://nodejs.org/api/stream.html) 的控制流实现，而是通过 [co-routines](https://github.com/tj/co) 采用了基于 promises 和 generator 的实现。
 
-* Fly 本身是纯 ECMAScript5 写成的, 因此非常轻量和快速。它不需要安装一大堆依赖，并且执行任务的速度比 Gulp/Grunt 等同类工具都要快。
+* Fly 本身是纯 ECMAScript5 写成的, 因此非常轻量和快速。它不需要安装一大堆依赖，却能比 Gulp/Grunt 等同类工具都要快。
 
 + 默认情况下, 任务（Task）用 [generator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) 函数描述，通过 [`yield`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield) 来控制异步控制流:
 
@@ -89,7 +89,7 @@ _Fly_ 从底层开始新写的一个项目，具备 generator 和 promise 的优
 
 + 插件是自动加载的 -- 只需在 `package.json` 中记录依赖，以及安装到 `node_modules`。
 
-+ 使用 JSDoc 的 `/** @desc description */` 来描述任务说明。在终端中使用 `fly -l` 就能够显示这些说明。
++ 使用 JSDoc 的 `/** @desc description */` 来描述任务。在终端中使用 `fly -l` 显示这些说明。
 
   ```js
   module.exports.task = function * () {
