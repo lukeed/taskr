@@ -409,21 +409,27 @@ module.exports.default = function * () {
 
 #### 选项
 
->>>>>>>>>>>>>>>>>>暂待上游修正
-  + Use the `value` option to pass a value into the first task. Return values cascade on to subsequent tasks.
+  + 使用 `value` 选项可以给第一个任务传入参数。任务的返回值会串接到随后的任务的输入参数中。
 
   ```js
   module.exports.default = function * () {
-    yield this.start(["a", "b", "c"])
-    ...
-    return 42
+    this.log(`In ${yield this.start(['z'])} We Trust`) // In Chino We Trust.
   }
 
-  module.exports.default = function * (secret) {
-    this.log(`The secret is ${secret}`) // The secret is 42
+  module.exports.z = function * () {
+    yield this.start(["a", "b"], {value: 'Coffee'})
+    return 'Chino'
+  }
+
+  module.exports.a = function * (value) {
+    this.log(`Start with ${value}`) // Start with Coffee
+    return 'Kafuu'
+  }
+
+  module.exports.b = function * (value) {
+    this.log(`Continue with ${value}`) // Continue with Kafuu
   }
   ```
-<<<<<<<<<<<<<<<<<<暂待上游修正
 
   + 使用 `parallel: true` 选项来同时执行多个任务。下面这个例子让 `html`, `css` and `js` 三个任务同时执行。
 
@@ -575,15 +581,15 @@ export default function () {
 
 ```
 git clone https://github.com/flyjs/fly
+npm install && npm test && npm link
 npm run setup
 fly -v
 ```
 
 >>>>>>>>>>>>>>>>待上游更新
-上面命令 clone 了 fly 仓库，还会安装依赖，执行测试，以及创建 `bin/index.js` 的软链接到 `usr/local/bin/fly` ，让你能够在任意目录执行 `fly`。
+上面命令 clone 了 fly 仓库，还会安装依赖，执行测试，以及将当前的 fly 软链接到 npm 全局目录，让你能够在任意目录执行 clone 下来的这份 `fly`。
 
-> To undo this run `rm /usr/local/bin/fly`.
-<<<<<<<<<<<<<<<<待上游更新
+> 要撤销上述操作，执行 `npm unlink fly`.
 
 
 通过 _Fly_ 安装使用用例:
