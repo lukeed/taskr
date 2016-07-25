@@ -19,7 +19,8 @@
 <b><a href="#hacking">Hacking</a></b>
 |
 <b><a href="README.ja.md">日本語</a></b>
-
+|
+<b><a href="README.zh-cn.md">简体中文</a></b>
 
 # Documentation
 _Fly_ is a task automation tool, very much in the same vein of [Gulp](http://gulpjs.com/), [Grunt](http://gruntjs.com/), [etc](https://gist.github.com/callumacrae/9231589).
