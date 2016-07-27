@@ -23,7 +23,7 @@ See the [documentation](/docs/README.md) to learn more.
 npm install fly
 ```
 
-## *flyfile.js*
+## flyfile.js
 
 ### ES5
 
