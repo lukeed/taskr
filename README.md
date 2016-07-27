@@ -86,8 +86,3 @@ export async function build() {
 }
 ```
 
-<div align="center">
-<a href="https://github.com/brj/fly">
-<img width=100px src="https://cloud.githubusercontent.com/assets/8317250/8733685/0be81080-2c40-11e5-98d2-c634f076ccd7.png">
-</a>
-</div>
