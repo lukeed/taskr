@@ -3,6 +3,7 @@
 [![](https://img.shields.io/travis/bucaran/fly.svg)](https://travis-ci.org/bucaran/fly)
 [![](http://img.shields.io/npm/dm/fly.svg)](https://npmjs.org/package/fly)
 [![](https://img.shields.io/npm/v/fly.svg)](https://npmjs.org/package/fly)
+[![](https://flyjs.herokuapp.com/badge.svg)](https://flyjs.herokuapp.com)
 
 Generator-based build system.
 
