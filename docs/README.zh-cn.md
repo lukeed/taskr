@@ -24,6 +24,7 @@
 
 
 # 概要
+
 _Fly_ 是一款类似于 [Gulp](http://gulpjs.com/), [Grunt](http://gruntjs.com/), [etc](https://gist.github.com/callumacrae/9231589) 的自动化构建工具。
 
 _Fly_ 是一个全新的项目，从底层开始，全部用ECMAScript 5重新构建，具备 generator 和 promise 的优势。
@@ -454,6 +455,7 @@ module.exports.watch = function * () {
 
 
 ### 其他
+
 #### `Fly.prototype.unwrap (onFulfilled, onRejected)`
 
 展开 source globs，返回一个 promise。
@@ -476,12 +478,15 @@ module.exports = function () {
 ### Instrumentation
 
 #### `Fly.prototype.log (...args)`
+
 输出一条带时间戳的日志。
 
 #### `Fly.prototype.error (...args)`
+
 输出一条带时间戳的错误日志。
 
 #### `Fly.prototype.alert (...args)`
+
 在 `process.env.VERBOSE` 的时候，输出一条带时间戳的日志。
 
 #### `Fly.prototype.debug (...args)`
@@ -586,7 +591,6 @@ npm run setup
 fly -v
 ```
 
->>>>>>>>>>>>>>>>待上游更新
 上面命令 clone 了 fly 仓库，还会安装依赖，执行测试，以及将当前的 fly 软链接到 npm 全局目录，让你能够在任意目录执行 clone 下来的这份 `fly`。
 
 > 要撤销上述操作，执行 `npm unlink fly`.
