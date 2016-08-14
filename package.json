@@ -53,9 +53,6 @@
     "xo": "^0.12.0"
   },
   "scripts": {
-    "coverage": "isparta cover test/*.js",
-    "coveralls": "npm run coverage -s && coveralls < coverage/lcov.info",
-    "postcoveralls": "rimraf coverage",
     "test": "xo && node --harmony ./node_modules/.bin/tape test/*.js | tap-spec"
   },
   "keywords": [
@@ -71,8 +68,8 @@
     "generator",
     "coroutine",
     "automation",
-    "build system",
-    "task runner"
+    "task runner",
+    "build system"
   ],
   "engines": {
     "iojs": ">= 1.0.0",
