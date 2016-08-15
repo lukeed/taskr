@@ -236,7 +236,7 @@ Display the version number.
 
 ### IO
 
-#### `Fly.prototype.source (...globs)`
+#### `Fly.prototype.source (...globs, options)`
 
 Begin a _yieldable_ sequence.
 
@@ -244,6 +244,15 @@ Begin a _yieldable_ sequence.
 module.exports.default = function * () {
   yield this.source("styles/*.scss", "styles/*.sass")
   // ...
+}
+```
+
+#### Options
+  The options are passed to [`node-glob`](https://github.com/isaacs/node-glob#options)
+
+```js
+module.exports.default = function * () {
+  yield this.source("styles/*.scss", "styles/*.sass", { ignore: 'styles/vendors/**/*' })...
 }
 ```
 
