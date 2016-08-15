@@ -123,7 +123,7 @@ test('✈  fly.watch', function (t) {
 			fly.host.default = function * (data) {
 				watcher.unwatch(glob)
 				t.ok(true, 'run given tasks when glob changes')
-				t.equal(data, 42, 'pass options into task via start on change')
+				t.equal(data, glob, 'pass options into task via start on change')
 			}
 			touch(file)
 		}, 100)
