@@ -76,7 +76,8 @@
     "node": ">= 0.12.0"
   },
   "xo": {
-    "semicolon": false,
+    "semicolon": true,
+    "esnext": true,
     "ignore": [
       "examples/**/*.js"
     ],
