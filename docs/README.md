@@ -236,7 +236,7 @@ Display the version number.
 
 ### IO
 
-#### `Fly.prototype.source (...globs)`
+#### `Fly.prototype.source (...globs, options)`
 
 Begin a _yieldable_ sequence.
 
@@ -244,6 +244,15 @@ Begin a _yieldable_ sequence.
 module.exports.default = function * () {
   yield this.source("styles/*.scss", "styles/*.sass")
   // ...
+}
+```
+
+#### Options
+  The options are passed to [`node-glob`](https://github.com/isaacs/node-glob#options)
+
+```js
+module.exports.default = function * () {
+  yield this.source("styles/*.scss", "styles/*.sass", { ignore: 'styles/vendors/**/*' })...
 }
 ```
 
@@ -448,8 +457,24 @@ Run the specified tasks when a change is detected in any of the paths expanded f
 
 ```js
 module.exports.watch = function * () {
-   yield this.watch("app/lib/**/*.scss", "styles");
+  yield this.watch("app/lib/**/*.scss", "styles");
   yield this.watch("app/lib/**/*.js", ["js", "lint"], {parallel: true});
+}
+```
+
+The watch function will run each task that's passed into `tasks`, and will pass in the file that changed into the given tasks.
+The first time the task is run it will not a single file so a glob will need to be passed.
+
+```js
+module.exports.js = function * (file) {
+  yield this
+    .source(file || 'app/lib/js/**/*.js')
+    .babel()
+    .target('dist')
+}
+
+module.exports.watch = function * () {
+  yield this.watch('app/lib/**/*.js', 'js');
 }
 ```
 

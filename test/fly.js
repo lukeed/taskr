@@ -123,7 +123,7 @@ test('✈  fly.watch', function (t) {
 			fly.host.default = function * (data) {
 				watcher.unwatch(glob)
 				t.ok(true, 'run given tasks when glob changes')
-				t.equal(data, 42, 'pass options into task via start on change')
+				t.equal(data, glob, 'pass options into task via start on change')
 			}
 			touch(file)
 		}, 100)
@@ -256,6 +256,62 @@ test('✈  fly.start (order)', function (t, state) {
 	}
 })
 
+test('✈  fly.start (arguments)', function (t) {
+	t.plan(6)
+	var fly = new Fly({
+		// when running in a sequence both b and c wait while a blocks.
+		// when running in parallel, b and c run while a blocks. state
+		// can only be 3 when each task runs in order.
+		host: {
+			a: function * () {
+				t.pass('test a was run')
+			},
+			b: function * () {
+				t.pass('test b was run')
+			},
+			c: function * () {
+				t.pass('test c was run')
+			}
+		}
+	})
+
+	co(function * () {
+		yield fly.start('a', 'b', 'c', {parallel: true})
+		yield fly.start(['a', 'b', 'c'], {parallel: true})
+	})
+})
+
+test('✈  fly.start (options)', function (t) {
+	t.plan(6)
+	var file = 'fakefile.js'
+	var fly = new Fly({
+		// when running in a sequence both b and c wait while a blocks.
+		// when running in parallel, b and c run while a blocks. state
+		// can only be 3 when each task runs in order.
+		host: {
+			a: function * (one) {
+				t.equals(file, one, 'one is the same as ' + file)
+			},
+			b: function * (one) {
+				t.equals(file, one, 'one is the same as ' + file)
+			},
+			c: function * (one) {
+				t.equals(file, one, 'one is the same as ' + file)
+			}
+		}
+	})
+
+	co(function * () {
+		yield fly.start('a', 'b', 'c', {parallel: true, value: file})
+		fly.host.a = function * (one, two, three) {
+			t.equals(one, 'one.js', 'one is one.js')
+			t.equals(two, 'two.js', 'two is two.js')
+			t.equals(three, 'three.js', 'three is three.js')
+		}
+		yield fly.start('a', {value: ['one.js', 'two.js', 'three.js']})
+	})
+})
+
 test('✈  fly.clear', function (t) {
 	t.plan(1)
 	var paths = ['tmp1', 'tmp2', 'tmp3'].map(function (file) {
@@ -267,7 +323,7 @@ test('✈  fly.clear', function (t) {
 	var fly = new Fly()
 
 	co(function * () {
-		yield fly.clear(paths)
+		yield fly.clear.apply(null, paths)
 		t.ok(true, 'clear files from a given list of paths')
 	})
 })
