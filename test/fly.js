@@ -267,7 +267,7 @@ test('✈  fly.clear', function (t) {
 	var fly = new Fly()
 
 	co(function * () {
-		yield fly.clear(paths)
+		yield fly.clear.apply(null, paths)
 		t.ok(true, 'clear files from a given list of paths')
 	})
 })
