@@ -44,9 +44,7 @@
     "update-notifier": "^0.5.0"
   },
   "devDependencies": {
-    "coveralls": "^2.11.4",
     "fly-xo": "^1.0.2",
-    "isparta": "^4.0.0",
     "tap-spec": "^4.1.1",
     "tape": "^4.2.2",
     "touch": "^1.0.0",
