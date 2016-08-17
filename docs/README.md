@@ -236,7 +236,7 @@ Display the version number.
 
 ### IO
 
-#### `Fly.prototype.source (...globs, options)`
+#### `Fly.prototype.source (globs, [options])`
 
 Begin a _yieldable_ sequence.
 
@@ -247,16 +247,23 @@ module.exports.default = function * () {
 }
 ```
 
-#### Options
-  The options are passed to [`node-glob`](https://github.com/isaacs/node-glob#options)
+##### options
+  If needed, any options will be passed to [`node-glob`](https://github.com/isaacs/node-glob#options).
 
-```js
-module.exports.default = function * () {
-  yield this.source("styles/*.scss", "styles/*.sass", { ignore: 'styles/vendors/**/*' })...
-}
-```
+  > **Important:** Should you need the `options` parameter **and** multiple glob selections, your `globs` must be defined as an array. However, a single glob selection may remain a string.
 
-#### `Fly.prototype.target (targets[, {config}])`
+  ```js
+  module.exports.default = function * () {
+    // single glob + options:
+    yield this.source("styles/*.scss", {ignore: 'styles/vendors/**/*'})
+    yield this.source(["styles/*.scss"], {ignore: 'styles/vendors/**/*'})
+
+    // multiple globs + options:
+    yield this.source(["styles/*.scss", "styles/*.sass"], {ignore: 'styles/vendors/**/*'})
+  }
+  ```
+
+#### `Fly.prototype.target (targets[, config])`
 
 Resolve a _yieldable_ sequence. Reduce the data source applying filters and write the result to `targets`.
 
