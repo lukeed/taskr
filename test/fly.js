@@ -256,31 +256,6 @@ test('✈  fly.start (order)', function (t, state) {
 	}
 })
 
-test('✈  fly.start (arguments)', function (t) {
-	t.plan(6)
-	var fly = new Fly({
-		// when running in a sequence both b and c wait while a blocks.
-		// when running in parallel, b and c run while a blocks. state
-		// can only be 3 when each task runs in order.
-		host: {
-			a: function * () {
-				t.pass('test a was run')
-			},
-			b: function * () {
-				t.pass('test b was run')
-			},
-			c: function * () {
-				t.pass('test c was run')
-			}
-		}
-	})
-
-	co(function * () {
-		yield fly.start('a', 'b', 'c', {parallel: true})
-		yield fly.start(['a', 'b', 'c'], {parallel: true})
-	})
-})
-
 test('✈  fly.start (options)', function (t) {
 	t.plan(6)
 	var file = 'fakefile.js'
@@ -302,7 +277,7 @@ test('✈  fly.start (options)', function (t) {
 	})
 
 	co(function * () {
-		yield fly.start('a', 'b', 'c', {parallel: true, value: file})
+		yield fly.start(['a', 'b', 'c'], {parallel: true, value: file})
 		fly.host.a = function * (one, two, three) {
 			t.equals(one, 'one.js', 'one is one.js')
 			t.equals(two, 'two.js', 'two is two.js')
@@ -323,7 +298,7 @@ test('✈  fly.clear', function (t) {
 	var fly = new Fly()
 
 	co(function * () {
-		yield fly.clear.apply(null, paths)
+		yield fly.clear(paths)
 		t.ok(true, 'clear files from a given list of paths')
 	})
 })
