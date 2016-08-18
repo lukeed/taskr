@@ -70,8 +70,7 @@
     "build system"
   ],
   "engines": {
-    "iojs": ">= 1.0.0",
-    "node": ">= 0.12.0"
+    "node": ">= 4.6.0"
   },
   "xo": {
     "semicolon": true,
