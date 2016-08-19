@@ -29,13 +29,12 @@ test('✈  cli.version', function (t) {
 	t.end()
 })
 
-test('✈  cli.help', function (t) {
-	tlog.call(t, cli.help, function (actual) {
-		t.equal(actual, '\n\x1b[2m\x1b[1mUsage\x1b[0m\n  fly [options] [tasks]\n\n\x1b[2m\x1b[1mOptions\x1b[0m\n  \x1b[2m\x1b[1m-\x1b[0m\x1b[1mh \x1b[0m\x1b[2m\x1b[1m --\x1b[0m\x1b[1mhelp\x1b[0m     Display this help.\n  \x1b[2m\x1b[1m-\x1b[0m\x1b[1mf \x1b[0m\x1b[2m\x1b[1m --\x1b[0m\x1b[1mfile\x1b[0m     Use an alternate Flyfile.\n  \x1b[2m\x1b[1m-\x1b[0m\x1b[1ml \x1b[0m\x1b[2m\x1b[1m --\x1b[0m\x1b[1mlist\x1b[0m     Display available tasks.\n  \x1b[2m\x1b[1m-\x1b[0m\x1b[1mv \x1b[0m\x1b[2m\x1b[1m --\x1b[0m\x1b[1mversion\x1b[0m  Display version.\n  ',
-			'show fly help')
-	})
-	t.end()
-})
+test('✈  cli.help', t => {
+	tlog.call(t, cli.help, actual => {
+		t.true(/Options/gm.test(actual), 'show fly help');
+	});
+	t.end();
+});
 
 test('✈  cli.list', function (t) {
 	var message = 'list tasks in a fly instance'
