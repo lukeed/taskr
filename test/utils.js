@@ -99,17 +99,3 @@ test('utils.write', function (t) {
 		})
 	})
 })
-
-// test('utils.bind (module) ✈', function (t) {
-// 	const coffee = require(
-// 		utils.bind(join(process.cwd(), './utils/sample.coffee'))
-// 	)
-// 	t.equal(coffee.getSecret(), 42, 'binds to coffee-script')
-
-// 	// const babel = require(
-// 	//   utils.bind(join(process.cwd(), "./utils/sample.babel.js"))
-// 	// )
-// 	// t.equal(babel.getSecret(), 42, "binds to babel")
-
-// 	t.end()
-// })
