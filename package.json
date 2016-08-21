@@ -34,7 +34,6 @@
     "find-up": "^1.1.0",
     "flatten": "^1.0.2",
     "globby": "^4.0.0",
-    "interpret": "^1.0.0",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "prettyjson": "^1.1.2",
