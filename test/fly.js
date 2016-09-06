@@ -216,6 +216,8 @@ test('✈  fly.start', function (t) {
 		var result = yield fly.start(['a', 'b', 'c'], {value: value})
 		t.equal(result, value + 3, 'return last task value')
 	})
+
+	t.end()
 })
 
 test('✈  fly.start (order)', function (t, state) {
@@ -254,6 +256,8 @@ test('✈  fly.start (order)', function (t, state) {
 			return setTimeout(resolve, 200)
 		})
 	}
+
+	t.end()
 })
 
 test('✈  fly.start (options)', function (t) {
@@ -285,6 +289,7 @@ test('✈  fly.start (options)', function (t) {
 		}
 		yield fly.start('a', {value: ['one.js', 'two.js', 'three.js']})
 	})
+	t.end()
 })
 
 test('✈  fly.clear', function (t) {
@@ -301,6 +306,7 @@ test('✈  fly.clear', function (t) {
 		yield fly.clear(paths)
 		t.ok(true, 'clear files from a given list of paths')
 	})
+	t.end()
 })
 
 test('✈  fly.concat', function (t) {
@@ -334,6 +340,7 @@ test('✈  fly.concat', function (t) {
 
 		yield fly.clear(dest)
 	})
+	t.end()
 })
 
 test('✈  fly.flatten', function (t) {
@@ -400,6 +407,7 @@ test('✈  fly.flatten', function (t) {
 
 		yield fly.clear(tar)
 	})
+	t.end()
 })
 
 test('✈  fly.target', function (t) {

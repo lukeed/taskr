@@ -6,6 +6,7 @@ var path = require('path')
 var test = require('tape').test
 var plugins = require('../lib/plugins')
 var utils = require('../lib/utils')
+var Fly = require('../lib/fly')
 
 var fixtures = path.join(process.cwd(), 'test', 'fixtures')
 var alt = path.join(fixtures, 'alt')
@@ -118,4 +119,46 @@ test('plugins.parse (multiple levels)', function (t) {
 	})
 
 	t.end()
+})
+
+test('fly plugins ✈ plugins should have isolated context', function (t) {
+	var plugin = {
+		name: 'verbose',
+		plugin: function () {
+			this.root = 'hacked'
+			this.filter('transform', function () {
+			})
+		}
+	}
+
+	var correctPlugin = {
+		name: 'verbose',
+		plugin: function () {
+			this.filter('transform', function () {
+				this.root = 'hacked'
+			})
+		}
+	}
+
+	t.throws(function () {
+		// fixture instance
+		var fly = new Fly({
+			file: 'fixture.js',
+			host: {},
+			plugins: [plugin]
+		})
+
+		fly.transform()
+	})
+
+	t.doesNotThrow(function () {
+		var fly = new Fly({
+			file: 'fixture.js',
+			host: {},
+			plugins: [correctPlugin]
+		})
+
+		fly.transform()
+		t.equal(fly.root, '.', 'fly instance not rewritten from plugin context')
+	})
 })
