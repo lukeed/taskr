@@ -161,4 +161,6 @@ test('fly plugins ✈ plugins should have isolated context', function (t) {
 		fly.transform()
 		t.equal(fly.root, '.', 'fly instance not rewritten from plugin context')
 	})
+
+	t.end()
 })
