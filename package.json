@@ -77,6 +77,7 @@
       "examples/**/*.js"
     ],
     "rules": {
+      "babel/object-shorthand": 0,
       "no-loop-func": 0
     }
   }
