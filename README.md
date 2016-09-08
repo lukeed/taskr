@@ -4,7 +4,7 @@
 [![](http://img.shields.io/npm/dm/fly.svg)](https://npmjs.org/package/fly)
 [![](https://img.shields.io/npm/v/fly.svg)](https://npmjs.org/package/fly)
 
-Generator-based build system.
+Node.js build system based in [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*).
 
 ## Features
 
