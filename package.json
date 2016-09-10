@@ -78,6 +78,8 @@
     ],
     "rules": {
       "babel/object-shorthand": 0,
+      "no-unused-expressions": 1,
+      "guard-for-in": 1,
       "no-loop-func": 0
     }
   }
