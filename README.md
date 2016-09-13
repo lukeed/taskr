@@ -3,9 +3,8 @@
 [![](https://img.shields.io/travis/flyjs/fly.svg)](https://travis-ci.org/flyjs/fly)
 [![](http://img.shields.io/npm/dm/fly.svg)](https://npmjs.org/package/fly)
 [![](https://img.shields.io/npm/v/fly.svg)](https://npmjs.org/package/fly)
-[![](https://flyjs.herokuapp.com/badge.svg)](https://flyjs.herokuapp.com)
 
-Generator-based build system.
+Node.js build system based in [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*).
 
 ## Features
 
