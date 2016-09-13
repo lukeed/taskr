@@ -6,6 +6,7 @@ var path = require('path')
 var test = require('tape').test
 var plugins = require('../lib/plugins')
 var utils = require('../lib/utils')
+var Fly = require('../lib/fly')
 
 var fixtures = path.join(process.cwd(), 'test', 'fixtures')
 var alt = path.join(fixtures, 'alt')
@@ -115,6 +116,52 @@ test('plugins.parse (multiple levels)', function (t) {
 	tests.forEach(function (data) {
 		var blk = data.hasOwnProperty('blacklist') ? data.blacklist : []
 		t.deepEqual(plugins.parse(data, blk), data.expected, data.msg)
+	})
+
+	t.end()
+})
+
+test('Fly should throws error when sealed property modified', function (t) {
+	var pluginMock = {
+		name: 'mock',
+		plugin: function () {
+			this.root = 'hacked'
+			this.filter('transform', function () {})
+		}
+	}
+
+	t.throws(function () {
+		var fly = new Fly({
+			file: 'mock.js',
+			host: {},
+			plugins: [pluginMock]
+		})
+
+		fly.transform()
+	})
+
+	t.end()
+})
+
+test('Fly should safely apply changes within plugin context', function (t) {
+	var pluginMock = {
+		name: 'mock',
+		plugin: function () {
+			this.filter('transform', function () {
+				this.root = 'hacked'
+			})
+		}
+	}
+
+	t.doesNotThrow(function () {
+		var fly = new Fly({
+			file: 'mock.js',
+			host: {},
+			plugins: [pluginMock]
+		})
+
+		fly.transform()
+		t.equal(fly.root, '.', 'fly instance not rewritten from plugin context')
 	})
 
 	t.end()
