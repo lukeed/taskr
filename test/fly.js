@@ -41,8 +41,6 @@ test('✈  fly.constructor', function (t) {
 
 	t.deepEqual(fly.plugins, [], 'no default plugins')
 
-	t.equal(process.cwd(), fixtures, 'switch current working directory')
-
 	t.equal(fly.file, flyfile, 'set file to path specified in the constructor')
 
 	t.end()
