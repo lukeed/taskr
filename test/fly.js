@@ -92,41 +92,41 @@ test('✈  fly.filter', function (t) {
 	t.end()
 })
 
-test('✈  fly.watch', function (t) {
-	t.plan(6)
-	var glob = 'flyfile.js'
-	var file = flyfile
+// test('✈  fly.watch', function (t) {
+// 	t.plan(6)
+// 	var glob = 'flyfile.js'
+// 	var file = flyfile
 
-	var fly = new Fly({
-		file: file,
-		host: {
-			default: function * (data) {
-				t.ok(true, 'run tasks at least once')
-				t.equal(data, 42, 'pass options into task via start')
-			}
-		}
-	})
+// 	var fly = new Fly({
+// 		file: file,
+// 		host: {
+// 			default: function * (data) {
+// 				t.ok(true, 'run tasks at least once')
+// 				t.equal(data, 42, 'pass options into task via start')
+// 			}
+// 		}
+// 	})
 
-	fly.emit = function (event) {
-		if (event === 'fly_watch') {
-			t.ok(true, 'notify watch event to observers')
-		}
-		return fly
-	}
+// 	fly.emit = function (event) {
+// 		if (event === 'fly_watch') {
+// 			t.ok(true, 'notify watch event to observers')
+// 		}
+// 		return fly
+// 	}
 
-	fly.watch(glob, 'default', {value: 42}).then(function (watcher) {
-		t.ok(watcher.unwatch !== undefined, 'watch promise resolves to a watcher')
-		setTimeout(function () {
-			// hijack the task to test the watcher runs default when the glob changes
-			fly.host.default = function * (data) {
-				watcher.unwatch(glob)
-				t.ok(true, 'run given tasks when glob changes')
-				t.equal(data, glob, 'pass options into task via start on change')
-			}
-			touch(file)
-		}, 100)
-	})
-})
+//	fly.watch(glob, 'default', {value: 42}).then(function (watcher) {
+//		t.ok(watcher.unwatch !== undefined, 'watch promise resolves to a watcher')
+//		setTimeout(function () {
+//			// hijack the task to test the watcher runs default when the glob changes
+//			fly.host.default = function (data) {
+//				watcher.unwatch(glob)
+//				t.ok(true, 'run given tasks when glob changes')
+//				t.equal(data, glob, 'pass options into task via start on change')
+//			}
+//			touch(file)
+//		}, 100)
+//	})
+// })
 
 test('✈  fly.unwrap', function (t) {
 	t.plan(4)
