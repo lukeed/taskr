@@ -56,7 +56,7 @@
     "coverage": "isparta cover test/*.js",
     "coveralls": "npm run coverage -s && coveralls < coverage/lcov.info",
     "postcoveralls": "rimraf coverage",
-    "test": "xo && node --harmony `which tape` test/*.js | `which tspec`"
+    "test": "xo && node --harmony ./node_modules/.bin/tape test/*.js | tap-spec"
   },
   "keywords": [
     "cli",
