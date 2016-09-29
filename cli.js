@@ -39,9 +39,10 @@ co(function * () {
 	}
 
 	fly.init();
-
-	// announce start && run `tasks` in `mode`
-	fly.emit('fly_run', {path: fly.file})[o.mode](t);
+	// announce start
+	fly.emit('fly_run', {file: fly.file});
+	// run `tasks` in `mode`
+	fly[o.mode](t);
 })().catch(e => {
 	if (e.type === errorTypes.UnknownOption) {
 		utils.error(`Unknown option ${e.key}. Run fly -h to see available options.`);
