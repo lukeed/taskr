@@ -1,12 +1,16 @@
 var fs = require('fs')
 var co = require('co')
+var path = require('path')
 // var { readFile as read } = require('mz/fs')
 var test = require('tape').test
 var touch = require('touch')
 var Fly = require('../lib/fly')
-var join = require('path').join
 
-var fixtures = join(process.cwd(), 'test', 'fixtures')
+var join = path.join
+var resolve = path.resolve
+var relative = path.relative
+
+var fixtures = relative('.', resolve('test', 'fixtures'))
 var flyfile = join(fixtures, 'flyfile.js')
 
 test('✈  fly', function (t) {
