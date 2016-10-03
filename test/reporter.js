@@ -1,39 +1,45 @@
-var test = require('tape').test
-var reporter = require('../lib/reporter')
+'use strict';
 
-function fakeEmitter(event, t) {
-	return ({
-		on: function (e) {
-			if (e === event) {
-				t.ok(true, 'notify ' + event + ' events')
-			}
-			return this
-		}
-	})
+const E = require('events');
+const test = require('tape').test;
+const reporter = require('../lib/reporter');
+
+class Emit extends E {
+	constructor(t) {
+		super()
+		this.ok = t.ok;
+	}
+
+	on(e) {
+		this.ok(true, `listens to the '${e}' event`);
+		return this;
+	}
 }
 
-test('✈  reporter', function (t) {
-	var ctx = fakeEmitter()
-	t.deepEqual(reporter.call(ctx), ctx, 'return the bound object')
-
-	var evts = [
+test('fly.reporter', t => {
+	const all = [
 		'fly_run',
 		'flyfile_not_found',
 		'fly_watch',
+		'fly_watch_event',
 		'plugin_load',
 		'plugin_error',
+		'tasks_force_object',
 		'task_error',
 		'task_start',
 		'task_complete',
 		'task_not_found'
-	]
+	];
 
-	evts.forEach(function (event) {
-		return reporter.call(fakeEmitter(event, t))
-	})
+	t.plan(all.length + 1);
 
-	t.end()
-})
+	const ctx = new Emit(t);
+	const rep = reporter.call(ctx);
+
+	t.deepEqual(rep, ctx, 'returns the bound object');
+
+	all.forEach(e => ctx.emit(e));
+});
 
 // test('✈  timeInfo', function (t) {
 //   var timeInfo = require('../src/reporter/timeInfo').default
