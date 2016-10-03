@@ -85,3 +85,13 @@ test('cli.spawn', co(function * (t) {
 
 	t.end();
 }));
+
+test('cli.options', t => {
+	const d = cli.options(); // defaults
+	t.true(d.pwd === '.', 'defaults `pwd` to `.`');
+	t.true(d.p === d.pwd, 'assigns `p` alias to `pwd`');
+	t.true(d.mode === 'serial', 'defaults `mode` to `serial`');
+	t.true(d.m === d.mode, 'assigns `m` alias to `mode`');
+
+	t.end();
+});
