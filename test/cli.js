@@ -93,5 +93,19 @@ test('cli.options', t => {
 	t.true(d.mode === 'serial', 'defaults `mode` to `serial`');
 	t.true(d.m === d.mode, 'assigns `m` alias to `mode`');
 
+	const val = {
+		p: '/test',
+		m: 'parallel',
+		l: 'bare',
+		_: 'test1 test2'
+	};
+
+	const max = cli.options(`-p=${val.p} -m=${val.m} --list=${val.l} ${val._}`.split(' '));
+
+	t.true(max.p === max.pwd && max.p === val.p, 'assigns `pwd` value');
+	t.true(max.m === max.mode && max.m === val.m, 'assigns `mode` value');
+	t.true(max.l === max.list && max.l === val.l, 'assigns `list` value');
+	t.true(max._.join(' ') === val._, 'assigns `tasks` value');
+
 	t.end();
 });
