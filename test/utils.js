@@ -12,7 +12,7 @@ test('utils', t => {
 	t.ok($ !== undefined, 'are exported');
 
 	['find', 'read', 'write', 'expand',
-	 'error', 'alert', 'stamp', 'trace', 'log']
+	'error', 'alert', 'stamp', 'trace', 'log']
 		.forEach(prop => {
 			t.true($[prop] !== undefined, `utils.${prop} exists`);
 		});
@@ -33,7 +33,7 @@ test('utils.find', co(function * (t) {
 
 	const subdir = join(fixtures, 'sub'); // test dir
 	const out3 = yield $.find(file, subdir);
-	t.equal(out3, full, `via sub-directory path; finds the correct flyfile`)
+	t.equal(out3, full, `via sub-directory path; finds the correct flyfile`);
 
 	const out4 = yield $.find(file, '/fakedir123');
 	t.equal(out4, null, 'if not found; returns `null`');
@@ -74,6 +74,24 @@ test('utils.write', co(function * (t) {
 	yield clear(nest);
 
 	t.end();
+}));
+
+test('utils.expand', co(function * (t) {
+	const glob1 = join(fixtures, '*.html');
+	const glob2 = join(fixtures, '**', '*.js');
+	const glob3 = join(fixtures, '*.zzz');
+
+	const out1 = yield $.expand(glob1);
+	const out2 = yield $.expand(glob2);
+	const out3 = yield $.expand(glob2, {ignore: '**/*.babel.js'});
+	const out4 = yield $.expand(glob3);
+	const out5 = yield $.expand([glob1, glob2]);
+
+	t.true(out1 && out1.length === 1, 'matches shallow globs');
+	t.true(out2 && out2.length === 4, 'matches deep/super globs');
+	t.true(out3 && out3.length === 3, 'accepts `options` object');
+	t.true(Array.isArray(out4) && !out4.length, 'return empty array on no-match');
+	t.true(out5 && out5.length === 5, 'expands multiple globs');
 
 	t.end();
 }));
