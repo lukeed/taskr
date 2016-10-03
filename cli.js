@@ -2,14 +2,12 @@
 'use strict';
 
 const Promise = require('bluebird');
-const co = Promise.coroutine;
-
-const cli = require('./lib/cli');
-const utils = require('./lib/utils');
-const reporter = require('./lib/reporter');
 const notifier = require('update-notifier');
+const reporter = require('./lib/reporter');
+const utils = require('./lib/utils');
+const cli = require('./lib/cli');
 const pkg = require('./package');
-const errorTypes = require('./lib/utils/errors').errorTypes;
+const co = Promise.coroutine;
 
 co(function * () {
 	// check if using latest
@@ -44,15 +42,9 @@ co(function * () {
 	// run `tasks` in `mode`
 	fly[o.mode](t);
 })().catch(e => {
-	if (e.type === errorTypes.UnknownOption) {
-		utils.error(`Unknown option ${e.key}. Run fly -h to see available options.`);
-	} else if (e.type === errorTypes.InvalidKey) {
-		utils.error('Invalid options!');
-		utils.log('Note, options should start with -, and can not contain any special symbols, like {}*#?');
+	if (e.type === 'cli') {
+		utils.error(`CLI Error!\t${e.message}`);
 	} else {
 		utils.trace(e);
 	}
 });
-
-// export Fly
-// module.exports = require('./fly');
