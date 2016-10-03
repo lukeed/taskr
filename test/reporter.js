@@ -6,7 +6,7 @@ const reporter = require('../lib/reporter');
 
 class Emit extends E {
 	constructor(t) {
-		super()
+		super();
 		this.ok = t.ok;
 	}
 
