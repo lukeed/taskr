@@ -20,6 +20,14 @@ test('✈  cli', function (t) {
 	t.end()
 })
 
+function log(func) {
+	const _log = console.log;
+	console.log = s => s; // hijack
+	const out = func(); // save output
+	console.log = _log; // un-hijack
+	return out; // send output
+}
+
 test('✈  cli.version', function (t) {
 	tlog.call(t, function () {
 		cli.version(pkg)
