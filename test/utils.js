@@ -58,7 +58,8 @@ test('utils.read', co(function * (t) {
 }));
 
 test('utils.write', co(function * (t) {
-	const file = join(fixtures, 'nested', 'deeply', 'test.js');
+	const nest = join(fixtures, 'nested');
+	const file = join(nest, 'deeply', 'test.js');
 	const demo = '\nhello\n';
 
 	const done = yield $.write(file, demo);
@@ -70,7 +71,9 @@ test('utils.write', co(function * (t) {
 	const data = yield $.read(file, 'utf8');
 	t.equal(data, demo, 'writes the content to file correctly');
 
-	yield clear(file);
+	yield clear(nest);
+
+	t.end();
 
 	t.end();
 }));
