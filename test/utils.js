@@ -1,96 +1,76 @@
-const fs = require('fs');
-const path = require('path');
+'use strict';
+
+const join = require('path').join;
+const co = require('bluebird').coroutine;
+const clear = require('../lib/api/clear');
 const test = require('tape').test;
-const utils = require('../lib/utils');
-const join = path.join;
+const $ = require('../lib/utils');
 
-const fixtures = join(process.cwd(), 'test', 'fixtures', 'utils');
+const fixtures = join(__dirname, 'fixtures', 'utils');
 
-function asyncFunc(value, handler) {
-	setTimeout(() => handler(undefined, value), 100);
-}
+test('utils', t => {
+	t.ok($ !== undefined, 'are exported');
 
-function asyncFuncWithOptions(value, options, handler) {
-	setTimeout(() => handler(undefined, value), options.time);
-}
-
-test('fly utilities ✈', t => {
-	t.ok(utils !== undefined, 'it\'s real');
-
-	['defer', 'find', 'log', 'error', 'alert', 'stamp', 'trace']
+	['find', 'read', 'write', 'expand',
+	 'error', 'alert', 'stamp', 'trace', 'log']
 		.forEach(prop => {
-			t.ok(utils[prop] !== undefined, `${prop} is defined`);
+			t.true($[prop] !== undefined, `utils.${prop} exists`);
 		});
 
 	t.end();
 });
 
-test('utils.defer (asyncFunc) ✈', t => {
-	t.plan(1);
-	utils.defer(asyncFunc)(42).then(value => {
-		t.equal(value, 42, 'promisifies an async func');
-	});
-});
+test('utils.find', co(function * (t) {
+	const file = 'flyfile.js';
+	const full = join(fixtures, file);
 
-test('utils.defer (asyncFunc w/ options) ✈', t => {
-	t.plan(1);
-	utils.defer(asyncFuncWithOptions)(1985, {time: 100}).then(value => {
-		t.equal(value, 1985, 'promisifies an async func w/ options');
-	});
-});
+	const out1 = yield $.find(file, fixtures);
+	t.true(out1.length && typeof out1 === 'string', 'if found; returns a string');
+	t.equal(out1, full, `via directory path; finds the correct flyfile`);
 
-test('utils.find (flyfile) ✈', t => {
-	t.plan(4);
+	const out2 = yield $.find(full);
+	t.equal(out2, full, `via file path; finds the correct flyfile`);
 
-	const name = 'flyfile.js';
-	const full = join(fixtures, name);
+	const subdir = join(fixtures, 'sub'); // test dir
+	const out3 = yield $.find(file, subdir);
+	t.equal(out3, full, `via sub-directory path; finds the correct flyfile`)
 
-	utils.find(name, fixtures).then(fp => {
-		t.ok(fp !== undefined, 'finds a flyfile, given a directory');
-		t.equal(fp, full, 'finds the right one!');
-	});
+	const out4 = yield $.find(file, '/fakedir123');
+	t.equal(out4, null, 'if not found; returns `null`');
 
-	utils.find(full).then(fp => {
-		t.equal(fp, full, 'finds a flyfile, given a filepath');
-	});
+	t.end();
+}));
 
-	const dir = join(fixtures, 'one'); // test dir
-	utils.find(name, dir).then(fp => {
-		t.equal(fp, full, 'finds a flyfile, traversing upwards');
-	});
-});
+test('utils.read', co(function * (t) {
+	const file = join(fixtures, 'a.js');
+	const out1 = yield $.read(file);
+	const out2 = yield $.read(file, 'utf8');
+	const out3 = yield $.read(file, {encoding: 'utf8'});
+	const out4 = yield $.read(fixtures);
 
-test('utils.read (file)', t => {
-	const fp = join(fixtures, 'a.js');
-	utils.read(fp).then(data => {
-		t.equal(data.toString(), 'const pi = 3.14\n', 'reads file contents');
-		t.end();
-	});
-});
+	t.true(out1 instanceof Buffer, 'returns a Buffer by default');
+	t.equal(typeof out2, 'string', 'accepts `encoding` string as options');
+	t.equal(typeof out3, 'string', 'accepts object as options');
+	t.equal(out3, 'const pi = 3.14\n', `reads file's contents correctly`);
+	t.true(out4 === null, 'does not attempt to read directory paths');
 
-test('utils.read (dir)', t => {
-	utils.read(fixtures).then(data => {
-		t.true(data === null, 'will not attempt to read a directory');
-		t.end();
-	});
-});
+	t.end();
+}));
 
-test('utils.write', t => {
-	const fp = join(fixtures, 'test.js');
-	const data = 'hello';
+test('utils.write', co(function * (t) {
+	const file = join(fixtures, 'nested', 'deeply', 'test.js');
+	const demo = '\nhello\n';
 
-	utils.write(fp, data).then(() => {
-		return utils.find(fp).then(f => {
-			t.true(f !== undefined, 'file was created');
+	const done = yield $.write(file, demo);
+	t.equal(done, undefined, 'returns nothing');
 
-			return utils.read(fp).then(d => {
-				t.deepEqual(d.toString(), data, 'file had data');
+	const seek = yield $.find(file);
+	t.true(seek && seek.length, 'creates the file, including sub-dirs');
 
-				// delete test file
-				fs.unlinkSync(fp);
+	const data = yield $.read(file, 'utf8');
+	t.equal(data, demo, 'writes the content to file correctly');
 
-				t.end();
-			});
-		});
-	});
-});
+	yield clear(file);
+
+	t.end();
+}));
