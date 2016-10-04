@@ -1,12 +1,10 @@
-'use strict'
+'use strict';
 
-var src = 'lib/**/*.js'
+const src = 'lib/**/*.js';
 
 exports.default = function * () {
 	/** @desc Fly's default development task. */
-	yield this.source(src).xo()
-	yield this
-		.log('Building Fly...')
-		.source(src).target('tmp')
-	yield this.clear('tmp')
-}
+	yield this.source(src).xo();
+	yield this.source(src).target('tmp');
+	yield this.clear('tmp');
+};
