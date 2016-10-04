@@ -26,6 +26,7 @@ test('fly.prototype', t => {
 test('fly.constructor', t => {
 	const fake = {
 		file: 'fake',
+		pwd: fixtures,
 		tasks: {a: '1'},
 		plugins: [1, 2, 3]
 	};
@@ -33,6 +34,7 @@ test('fly.constructor', t => {
 	const fly1 = new Fly();
 	t.true(fly1 instanceof Fly, 'instance retains Fly classification');
 	t.true(fly1.file === undefined, '`fly.file` is `undefined` by default');
+	t.true(fly1.root === process.cwd(), '`fly.root` is `process.cwd()` by default');
 	t.true($.isObject(fly1.$), '`fly.$` core utilities are attached');
 	t.true($.isArray(fly1.plugins) && !fly1.plugins.length, '`fly.plugins` is an empty array by default');
 	t.true($.isObject(fly1.tasks) && $.isEmptyObj(fly1.tasks), '`fly.tasks` is an empty object by default');
@@ -41,6 +43,7 @@ test('fly.constructor', t => {
 	const fly2 = new Fly(fake);
 	t.equal(fly2.file, fake.file, 'accept custom `file` value');
 	t.equal(fly2.plugins, fake.plugins, 'accept custom `plugins` value');
+	t.equal(fly2.root, fake.pwd, 'accept custom `root` or `pwd` value');
 	t.equal(fly2.tasks, fake.tasks, 'accept custom `tasks` value');
 
 	t.end();
@@ -283,7 +286,14 @@ test('fly.clear', co(function * (t) {
 	t.end();
 }));
 
-// test('fly.target', co(function * (t) {}));
+test('fly.target', co(function * (t) {
+	const fly1 = new Fly();
+
+	console.log(fly1);
+
+	t.end();
+}));
+
 // test('fly.watch', co(function * (t) {}));
 
 // // test('fly.watch', t => {
