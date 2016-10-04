@@ -44,12 +44,3 @@ test('fly.reporter', t => {
 
 	t.ok(true, 'the `fake_event` was ignored');
 });
-
-// test('✈  timeInfo', function (t) {
-//   var timeInfo = require('../src/reporter/timeInfo').default
-//   t.deepEqual(timeInfo(100), { duration: 100, scale: 'ms' },
-//     'use `ms` units by default.')
-//   t.deepEqual(timeInfo(1000), { duration: 1, scale: 's' },
-//     'convert long units to seconds.')
-//   t.end()
-// })
