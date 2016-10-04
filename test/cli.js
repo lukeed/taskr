@@ -5,7 +5,7 @@ const co = require('bluebird').coroutine;
 const test = require('tape').test;
 
 const cli = require('../lib/cli');
-const $ = require('../lib/-fn');
+const $ = require('../lib/fn');
 const Fly = require('../lib');
 
 const fixtures = join(__dirname, 'fixtures');
