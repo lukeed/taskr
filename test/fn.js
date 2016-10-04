@@ -82,6 +82,13 @@ test('fn.formatTime', t => {
 	t.equal(fn(999), '999ms', 'accepts positive number');
 	t.equal(fn(1000), '1s', 'converts 1000ms');
 	t.equal(fn(2222), '2.2s', 'converts large, quirky number');
+	t.end();
+});
 
+test('fn.getTime', t => {
+	const out = $.getTime();
+	t.equal(typeof out, 'string', 'returns a string');
+	t.equal(out.split(':').length, 3, 'has 3 segments');
+	t.equal(out.length, 8, 'is always 8 characters long');
 	t.end();
 });
