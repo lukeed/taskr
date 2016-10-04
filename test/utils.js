@@ -12,7 +12,7 @@ test('utils', t => {
 	t.ok($ !== undefined, 'are exported');
 
 	['find', 'read', 'write', 'expand',
-	'error', 'alert', 'stamp', 'trace', 'log']
+	'error', 'alert', 'trace', 'log']
 		.forEach(prop => {
 			t.true($[prop] !== undefined, `utils.${prop} exists`);
 		});
