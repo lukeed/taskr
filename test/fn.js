@@ -87,7 +87,6 @@ test('fn.formatTime', t => {
 
 test('fn.getTime', t => {
 	const out = $.getTime();
-	console.log('out', out);
 	t.equal(typeof out, 'string', 'returns a string');
 	t.equal(out.split(':').length, 3, 'has 3 segments');
 	t.equal(out.length, 8, 'is always 8 characters long');
