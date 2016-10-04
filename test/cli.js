@@ -69,19 +69,26 @@ test('cli.list', t => {
 });
 
 test('cli.spawn', co(function * (t) {
-	t.plan(8);
 	const alt = join(fixtures, 'alt');
 	const flyfile = join(alt, 'flyfile.js');
 	const types = [{p: alt, t: 'directory'}, {p: flyfile, t: 'file'}];
 
 	for (const src of types) {
-		const fly = yield cli.spawn(src.p);
-		t.true(fly instanceof Fly && fly.$, `via ${src.t}; spawns Fly with helpers attached`);
-		t.true(fly.file === flyfile, `via ${src.t}; finds flyfile`);
-		t.true($.isObject(fly.tasks) && 'a' in fly.tasks, `via ${src.t}; loads Fly tasks (obj)`);
+		const f = yield cli.spawn(src.p);
+		t.true(f instanceof Fly && f.$, `via ${src.t}; spawns Fly with helpers attached`);
+		t.true(f.file === flyfile, `via ${src.t}; finds flyfile`);
+		t.true($.isObject(f.tasks) && 'a' in f.tasks, `via ${src.t}; loads Fly tasks (obj)`);
 		// @todo: attach plugins; will be object
-		t.true($.isArray(fly.plugins), `via ${src.t}; loads Fly plugins (arr)`);
+		t.true($.isArray(f.plugins), `via ${src.t}; loads Fly plugins (arr)`);
 	}
+
+	const fly1 = yield cli.spawn();
+	t.true(fly1 instanceof Fly, 'via `null`; still spawns Fly');
+	t.true(typeof fly1.file === 'string', 'via `null`; can find a flyfile');
+	t.false(fly1.file === flyfile, 'via `null`; but is not right one');
+
+	const fly2 = yield cli.spawn('/fake12312');
+	t.equal(fly2.file, undefined, 'fake directory; no `fly.file` attached');
 
 	t.end();
 }));
