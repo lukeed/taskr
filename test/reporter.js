@@ -18,6 +18,7 @@ class Emit extends E {
 
 test('fly.reporter', t => {
 	const all = [
+		'fake_event',
 		'fly_run',
 		'flyfile_not_found',
 		'fly_watch',
@@ -39,6 +40,8 @@ test('fly.reporter', t => {
 	t.deepEqual(rep, ctx, 'returns the bound object');
 
 	all.forEach(e => ctx.emit(e));
+
+	t.ok(true, 'the `fake_event` was ignored');
 });
 
 // test('✈  timeInfo', function (t) {
