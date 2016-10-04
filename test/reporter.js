@@ -29,7 +29,8 @@ test('fly.reporter', t => {
 		'task_error',
 		'task_start',
 		'task_complete',
-		'task_not_found'
+		'task_not_found',
+		'serial_error'
 	];
 
 	t.plan(all.length + 1);
