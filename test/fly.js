@@ -196,10 +196,11 @@ test('fly.parallel', co(function * (t) {
 }));
 
 test('fly.serial', co(function * (t) {
-	t.plan(5);
+	t.plan(7);
+
 	const int = 3;
 	const order = [];
-	const fly = new Fly({
+	const fly1 = new Fly({
 		tasks: {
 			a: function * (opts) {
 				yield Promise.delay(2);
@@ -222,9 +223,30 @@ test('fly.serial', co(function * (t) {
 		}
 	});
 
-	const out = yield fly.serial(['a', 'b', 'c'], {val: int});
+	const out = yield fly1.serial(['a', 'b', 'c'], {val: int});
 	t.equal(out, int + 3, 'chain yields final return value');
 	t.deepEqual(order, ['a', 'b', 'c'], 'execute tasks in order, regardless of delay');
+
+	let num = 0;
+	const fly2 = new Fly({
+		tasks: {
+			a: function * () {
+				num++;
+			},
+			c: function * () {
+				num++;
+			},
+			b: function * () {
+				num++;
+				throw new Error();
+			}
+		}
+	});
+
+	fly2.emit = e => (e === 'serial_error') && t.pass('notify when a task within `serial` throws');
+
+	yield fly2.serial(['a', 'b', 'c']);
+	t.equal(num, 2, 'interrupt `serial` on error; only 2 tasks ran');
 }));
 
 test('fly.clear', co(function * (t) {
