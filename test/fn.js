@@ -2,7 +2,7 @@
 'use strict';
 
 const test = require('tape').test;
-const $ = require('../lib/-fn');
+const $ = require('../lib/fn');
 
 test('fn.isArray', t => {
 	const fn = $.isArray;
