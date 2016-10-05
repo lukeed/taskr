@@ -92,3 +92,20 @@ test('fn.getTime', t => {
 	t.equal(out.length, 8, 'is always 8 characters long');
 	t.end();
 });
+
+test('fn.keyUnique', t => {
+	const fn = $.keyUnique;
+	const obj = {a: 1, b: 1, a1: 1, a2: 1, a3: 1};
+
+	const out1 = fn('a', obj);
+	t.equal(typeof out1, 'string', 'returns a string');
+	t.equal(out1, 'a4', 'loops increment multiple times');
+
+	const out2 = fn('b', obj);
+	t.equal(out2, 'b1', 'increments once');
+
+	const out3 = fn('c', obj);
+	t.equal(out3, 'c', 'does nothing if was unique');
+
+	t.end();
+});
