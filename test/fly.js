@@ -78,10 +78,11 @@ test('fly.init', co(function * (t) {
 
 test('fly.source', co(function * (t) {
 	const fly = new Fly();
-	yield fly.source([[['*.a', ['*.b']]], ['*.c']]);
+	const out = yield fly.source([[['*.a', ['*.b']]], ['*.c']]);
 	t.true('globs' in fly._ && 'files' in fly._, 'create `globs` and `files` keys within `fly._`');
 	t.deepEqual(fly._.globs, ['*.a', '*.b', '*.c'], 'flatten nested globs');
 	t.deepEqual(fly._.files, [], 'return empty array if no files matched');
+	t.equal(out, fly, 'returns the bound instance');
 
 	const txt = join(fixtures, '*.txt');
 	yield fly.source(txt);
