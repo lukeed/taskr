@@ -77,7 +77,16 @@ test('fly.init', co(function * (t) {
 }));
 
 test('fly.source', co(function * (t) {
+	t.plan(10);
+
+	const glob = ['*.a', '*.b', '*.c'];
 	const fly = new Fly();
+
+	fly.on('globs_no_match', arr => {
+		t.deepEqual(arr, glob, 'warning receives the globs');
+		t.pass('notify when globs match no files');
+	});
+
 	const out = yield fly.source([[['*.a', ['*.b']]], ['*.c']]);
 	t.true('globs' in fly._ && 'files' in fly._, 'create `globs` and `files` keys within `fly._`');
 	t.deepEqual(fly._.globs, ['*.a', '*.b', '*.c'], 'flatten nested globs');
@@ -90,8 +99,6 @@ test('fly.source', co(function * (t) {
 	t.equal(fly._.globs[0], txt, 'update internal `source` keys each time');
 	t.true($.isArray(fly._.files) && fly._.files.length, 'return an array of relevant files');
 	t.equal(fly._.files[0], join(fixtures, 'foo.txt'), 'find the correct files');
-
-	t.end();
 }));
 
 test('fly.start', co(function * (t) {
