@@ -79,26 +79,28 @@ test('fly.init', co(function * (t) {
 test('fly.source', co(function * (t) {
 	t.plan(10);
 
-	const glob = ['*.a', '*.b', '*.c'];
 	const fly = new Fly();
+	const glob1 = ['*.a', '*.b', '*.c'];
+	const glob2 = join(fixtures, '*.*');
+	const opts1 = {ignore: 'foo'};
 
-	fly.on('globs_no_match', arr => {
-		t.deepEqual(arr, glob, 'warning receives the globs');
+	fly.on('globs_no_match', (g, o) => {
 		t.pass('notify when globs match no files');
+		t.deepEqual(g, glob1, 'warning receives the flattened globs');
+		t.deepEqual(o, opts1, 'warning receives the `globby` options');
 	});
 
-	const out = yield fly.source([[['*.a', ['*.b']]], ['*.c']]);
+	const out = yield fly.source([[['*.a', ['*.b']]], ['*.c']], opts1);
 	t.true('globs' in fly._ && 'files' in fly._, 'create `globs` and `files` keys within `fly._`');
-	t.deepEqual(fly._.globs, ['*.a', '*.b', '*.c'], 'flatten nested globs');
+	t.deepEqual(fly._.globs, glob1, 'flatten nested globs');
 	t.deepEqual(fly._.files, [], 'return empty array if no files matched');
 	t.equal(out, fly, 'returns the bound instance');
 
-	const txt = join(fixtures, '*.txt');
-	yield fly.source(txt);
-	t.true($.isArray(fly._.globs), 'convert single source string to an array');
-	t.equal(fly._.globs[0], txt, 'update internal `source` keys each time');
-	t.true($.isArray(fly._.files) && fly._.files.length, 'return an array of relevant files');
-	t.equal(fly._.files[0], join(fixtures, 'foo.txt'), 'find the correct files');
+	yield fly.source(glob2);
+	t.true($.isArray(fly._.globs), 'wrap a single glob string as an array');
+	t.equal(fly._.globs[0], glob2, 'update internal `source` keys each time');
+	t.true($.isArray(fly._.files), 'return an array of relevant files');
+	t.equal(fly._.files.length, 3, 'accepts wildcard extensions; finds all files');
 }));
 
 test('fly.start', co(function * (t) {
