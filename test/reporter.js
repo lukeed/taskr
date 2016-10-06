@@ -23,6 +23,7 @@ test('fly.reporter', t => {
 		'flyfile_not_found',
 		'fly_watch',
 		'fly_watch_event',
+		'globs_no_match',
 		'plugin_load',
 		'plugin_error',
 		'tasks_force_object',
