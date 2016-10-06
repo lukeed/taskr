@@ -1,5 +1,11 @@
 {
   "dependencies": {
     "fly-fake-plugin": "*"
+  },
+  "devDependencies": {
+    "fake": "*"
+  },
+  "peerDependencies": {
+    "peer": "*"
   }
 }
