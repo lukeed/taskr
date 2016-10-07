@@ -302,7 +302,8 @@ test('fly.clear', co(function * (t) {
 test('fly.target', co(function * (t) {
 	const fly1 = new Fly();
 
-	console.log(fly1);
+	yield fly1.source('hi').target('bye');
+	t.pass('allow chained methods!');
 
 	t.end();
 }));
