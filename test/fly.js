@@ -33,8 +33,8 @@ test('fly.constructor', t => {
 
 	const fly1 = new Fly();
 	t.true(fly1 instanceof Fly, 'instance retains Fly classification');
-	t.true(fly1.file === undefined, '`fly.file` is `undefined` by default');
-	t.true(fly1.root === process.cwd(), '`fly.root` is `process.cwd()` by default');
+	t.equal(fly1.file, undefined, '`fly.file` is `undefined` by default');
+	t.equal(fly1.root, process.cwd(), '`fly.root` is `process.cwd()` by default');
 	t.true($.isObject(fly1.$), '`fly.$` core utilities are attached');
 	t.true($.isArray(fly1.plugins) && !fly1.plugins.length, '`fly.plugins` is an empty array by default');
 	t.true($.isObject(fly1.tasks) && $.isEmptyObj(fly1.tasks), '`fly.tasks` is an empty object by default');
