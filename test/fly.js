@@ -307,10 +307,52 @@ test('fly.clear', co(function * (t) {
 }));
 
 test('fly.target', co(function * (t) {
-	const fly1 = new Fly();
+	const glob1 = join(fixtures, 'one', 'two', '*.md');
+	const glob2 = join(fixtures, 'one', '*.md');
+	const glob3 = join(fixtures, '**', '*.md');
+	const glob4 = join(fixtures, 'one', '**', '*.md');
 
-	yield fly1.source('hi').target('bye');
-	t.pass('allow chained methods!');
+	const dest1 = join(fixtures, '.tmp1');
+	const dest2 = join(fixtures, '.tmp2');
+	const dest3 = join(fixtures, '.tmp3');
+	const dest4 = join(fixtures, '.tmp4');
+	const dest5 = join(fixtures, '.tmp5');
+
+	const fly = new Fly();
+
+	// clean slate
+	yield fly.clear([dest1, dest2, dest3, dest4, dest5]);
+
+	// test #1
+	yield fly.source(glob1).target(dest1);
+	t.pass('allow method chains!');
+	const arr1 = yield fly.$.expand(join(dest1, '*.md'));
+	const str1 = yield fly.$.find(join(dest1, 'two', 'two-1.md'));
+	t.equal(arr1.length, 2, 'via `src/one/two/*.md`; write all files');
+	t.equal(str1, null, 'via `src/one/two/*.md`; did not create sub-dir if unwanted');
+
+	// test #2
+	yield fly.source(glob2).target(dest2);
+	const arr2 = yield fly.$.expand(join(dest2, '*.md'));
+	const str2 = yield fly.$.find(join(dest2, 'one.md'));
+	t.equal(arr2.length, 1, 'via `src/one/*.md`; write all files');
+	t.ok(str2.length, 'via `src/one/*.md`; write to correct tier');
+
+	// test #3
+	yield fly.source(glob3).target(dest3);
+	const arr3 = yield fly.$.expand(join(dest3, '**', '*.md'));
+	const str3 = yield fly.$.find(join(dest3, 'one', 'two', 'two-1.md'));
+	t.ok(str3.length, 'via `src/**/*.md`; create the (nested) child directory');
+	t.equal(arr3.length, 3, 'via `src/**/*.md`; write all files');
+
+	// test #4
+	yield fly.source(glob4).target([dest4, dest5]);
+	const str4 = yield fly.$.find(join(dest4, 'two', 'two-1.md'));
+	const str5 = yield fly.$.find(join(dest5, 'two', 'two-1.md'));
+	t.true(str4.length && str5.length, 'write to multiple targets');
+
+	// clean up
+	yield fly.clear([dest1, dest2, dest3, dest4, dest5]);
 
 	t.end();
 }));
