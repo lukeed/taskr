@@ -77,7 +77,7 @@ test('fly.init', co(function * (t) {
 }));
 
 test('fly.source', co(function * (t) {
-	t.plan(16);
+	t.plan(18);
 
 	const fly = new Fly();
 	const glob1 = ['*.a', '*.b', '*.c'];
@@ -103,9 +103,11 @@ test('fly.source', co(function * (t) {
 	t.equal(fly._.files.length, 3, 'accepts wildcard extensions; finds all files');
 	const f1 = fly._.files[0];
 	t.ok($.isObject(f1), 'array contents are objects');
-	t.ok('data' in f1, 'added `data` key to `pathObject`');
+	t.ok('data' in f1, 'add `data` key to `pathObject`');
+	t.false('root' in f1, 'delete `root` key from `pathObject`');
+	t.false('name' in f1, 'delete `name` key from `pathObject`');
+	t.false('ext' in f1, 'delete `ext` key from `pathObject`');
 	t.ok(Buffer.isBuffer(f1.data), 'file data is a `Buffer`');
-	t.false('base' in f1, 'deleted `base` key from `pathObject`');
 
 	yield fly.source(glob2, {ignore: join(fixtures, 'flyfile.js')});
 	t.equal(fly._.files.length, 2, 'send config options to `globby` (ignore key)');
