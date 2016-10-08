@@ -39,9 +39,9 @@ test('plugins.load', co(function * (t) {
 
 	const out = yield plugs.load(flyfile);
 	t.ok($.isArray(out), 'returns an array');
-	t.ok(out.length === 1, 'filters down to fly-* plugins only');
+	t.equal(out.length, 1, 'filters down to fly-* plugins only');
 	t.ok($.isObject(out[0]), 'is an array of objects');
-	t.ok('name' in out[0] && 'plugin' in out[0], 'objects contain `name` and `plugin` keys');
+	t.ok('name' in out[0] && 'func' in out[0], 'objects contain `name` and `func` keys');
 
 	t.end();
 }));
