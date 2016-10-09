@@ -4,6 +4,7 @@ const join = require('path').join;
 const test = require('tape').test;
 const Promise = require('bluebird');
 const plugs = require('../lib/plugins');
+const cli = require('../lib/cli');
 const $ = require('../lib/fn');
 const co = Promise.coroutine;
 
@@ -42,52 +43,62 @@ test('plugins.load', co(function * (t) {
 	t.equal(out.length, 3, 'filters down to fly-* plugins only');
 	t.ok($.isObject(out[0]), 'is an array of objects');
 	t.ok('name' in out[0] && 'func' in out[0], 'objects contain `name` and `func` keys');
+	t.equal(out[2].func, undefined, 'return `undefined` for faulty plugins');
 
 	t.end();
 }));
 
-// test('Fly should throws error when sealed property modified', function (t) {
-// 	var pluginMock = {
-// 		name: 'mock',
-// 		plugin: function () {
-// 			this.root = 'hacked'
-// 			this.filter('transform', function () {})
-// 		}
-// 	}
+test('fly.plugins', co(function * (t) {
+	const fly = yield cli.spawn(altDir);
 
-// 	t.throws(function () {
-// 		var fly = new Fly({
-// 			file: 'mock.js',
-// 			host: {},
-// 			plugins: [pluginMock]
-// 		})
+	const ext = '*.txt';
+	const src = join(fixtures, ext);
+	const tar = join(fixtures, '.tmp');
 
-// 		fly.transform()
-// 	})
+	fly.tasks = {
+		a: function * () {
+			yield this.source(src).plugOne().target(tar);
 
-// 	t.end()
-// })
+			const out = yield Promise.all(
+				[join(tar, 'foo.txt'), join(tar, 'bar.txt')].map(s => this.$.read(s))
+			);
 
-// test('Fly should safely apply changes within plugin context', function (t) {
-// 	var pluginMock = {
-// 		name: 'mock',
-// 		plugin: function () {
-// 			this.filter('transform', function () {
-// 				this.root = 'hacked'
-// 			})
-// 		}
-// 	}
+			out.forEach((buf, idx) => {
+				if (idx === 0) {
+					t.equal(buf.toString(), `\nrab oof`, 'reverse `foo.txt` content');
+				} else {
+					t.equal(buf.toString(), `\nzab rab`, 'reverse `bar.txt` content');
+				}
+			});
 
-// 	t.doesNotThrow(function () {
-// 		var fly = new Fly({
-// 			file: 'mock.js',
-// 			host: {},
-// 			plugins: [pluginMock]
-// 		})
+			yield this.clear(tar);
+		},
+		b: function * () {
+			yield this.source(src).plugOne().plugTwo().target(tar);
+			t.pass('custom plugins are chainable');
 
-// 		fly.transform()
-// 		t.equal(fly.root, '.', 'fly instance not rewritten from plugin context')
-// 	})
+			const out = yield Promise.all(
+				[join(tar, 'foo.txt'), join(tar, 'bar.txt')].map(s => this.$.read(s))
+			);
 
-// 	t.end()
-// })
+			out.forEach((buf, idx) => {
+				if (idx === 0) {
+					t.equal(buf.toString(), `foo bar\n`, 'double-reverse `foo.txt` content');
+				} else {
+					t.equal(buf.toString(), `bar baz\n`, 'double-reverse `bar.txt` content');
+				}
+			});
+
+			// relied on `plugOne` to finish first
+			t.pass(`await previous plugin's completion`);
+			// handle `non-every` plugins
+			t.pass('handle non-looping plugins (`{every: 0}`)');
+
+			yield this.clear(tar);
+		}
+	};
+
+	yield fly.serial(['a', 'b']);
+
+	t.end();
+}));
