@@ -8,7 +8,6 @@ const Fly = require('../lib');
 const co = Promise.coroutine;
 
 const fixtures = join(__dirname, 'fixtures');
-// const flyfile = join(fixtures, 'flyfile.js');
 
 test('fly.prototype', t => {
 	t.ok(Fly !== undefined, 'is defined');
@@ -100,7 +99,7 @@ test('fly.source', co(function * (t) {
 	t.true($.isArray(fly._.globs), 'wrap a single glob string as an array');
 	t.equal(fly._.globs[0], glob2, 'update internal `source` keys each time');
 	t.true($.isArray(fly._.files), 'return an array of relevant files');
-	t.equal(fly._.files.length, 3, 'accepts wildcard extensions; finds all files');
+	t.equal(fly._.files.length, 4, 'accepts wildcard extensions; finds all files');
 	const f1 = fly._.files[0];
 	t.ok($.isObject(f1), 'array contents are objects');
 	t.ok('data' in f1, 'add `data` key to `pathObject`');
@@ -110,7 +109,7 @@ test('fly.source', co(function * (t) {
 	t.ok(Buffer.isBuffer(f1.data), 'file data is a `Buffer`');
 
 	yield fly.source(glob2, {ignore: join(fixtures, 'flyfile.js')});
-	t.equal(fly._.files.length, 2, 'send config options to `globby` (ignore key)');
+	t.equal(fly._.files.length, 3, 'send config options to `globby` (ignore key)');
 }));
 
 test('fly.start', co(function * (t) {
