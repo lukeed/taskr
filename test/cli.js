@@ -84,8 +84,7 @@ test('cli.spawn', co(function * (t) {
 
 	const fly1 = yield cli.spawn();
 	t.true(fly1 instanceof Fly, 'via `null`; still spawns Fly');
-	t.true(typeof fly1.file === 'string', 'via `null`; can find a flyfile');
-	t.false(fly1.file === flyfile, 'via `null`; but is not right one');
+	t.equal(fly1.file, undefined, 'via `null`; but without a flyfile');
 
 	const fly2 = yield cli.spawn('/fake12312');
 	t.equal(fly2.file, undefined, 'fake directory; no `fly.file` attached');
