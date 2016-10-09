@@ -76,10 +76,10 @@ test('cli.spawn', co(function * (t) {
 	for (const src of types) {
 		const f = yield cli.spawn(src.p);
 		t.true(f instanceof Fly && f.$, `via ${src.t}; spawns Fly with helpers attached`);
-		t.true(f.file === flyfile, `via ${src.t}; finds flyfile`);
+		t.equal(f.file, flyfile, `via ${src.t}; finds flyfile`);
 		t.true($.isObject(f.tasks) && 'a' in f.tasks, `via ${src.t}; loads Fly tasks (obj)`);
-		// @todo: attach plugins; will be object
 		t.true($.isArray(f.plugins), `via ${src.t}; loads Fly plugins (arr)`);
+		t.equal(f.plugins.length, 3, `via ${src.t}; found all plugins`);
 	}
 
 	const fly1 = yield cli.spawn();

@@ -24,7 +24,7 @@ test('plugins.getDependencies', co(function * (t) {
 
 	const out2 = yield plugs.getDependencies(pkgfile);
 	t.true($.isArray(out2), 'via valid file; returns an array');
-	t.equal(out2.length, 3, 'via valid file; find all the available dependencies');
+	t.equal(out2.length, 5, 'via valid file; find all the available dependencies');
 
 	const out3 = yield plugs.getDependencies(join(fixtures, 'asd.json'));
 	t.true($.isArray(out3) && out3.length === 0, 'via 404 file; returns an empty array');
@@ -39,7 +39,7 @@ test('plugins.load', co(function * (t) {
 
 	const out = yield plugs.load(flyfile);
 	t.ok($.isArray(out), 'returns an array');
-	t.equal(out.length, 1, 'filters down to fly-* plugins only');
+	t.equal(out.length, 3, 'filters down to fly-* plugins only');
 	t.ok($.isObject(out[0]), 'is an array of objects');
 	t.ok('name' in out[0] && 'func' in out[0], 'objects contain `name` and `func` keys');
 
