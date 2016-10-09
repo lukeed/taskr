@@ -25,6 +25,7 @@ test('fly.reporter', t => {
 		'fly_watch_event',
 		'globs_no_match',
 		'plugin_load',
+		'plugin_load_error',
 		'plugin_error',
 		'plugin_rename',
 		'tasks_force_object',
