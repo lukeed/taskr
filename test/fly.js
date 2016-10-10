@@ -3,6 +3,7 @@
 const join = require('path').join;
 const Promise = require('bluebird');
 const test = require('tape').test;
+const touch = require('touch');
 const $ = require('../lib/fn');
 const Fly = require('../lib');
 const co = Promise.coroutine;
@@ -356,57 +357,72 @@ test('fly.target', co(function * (t) {
 	t.end();
 }));
 
-// test('fly.watch', co(function * (t) {}));
+test('fly.watch', co(function * (t) {
+	t.plan(15);
 
-// // test('fly.watch', t => {
-// // 	t.plan(6)
-// // 	var glob = 'flyfile.js'
-// // 	var file = flyfile
+	const glob = join(fixtures, '*.js');
+	const file = join(fixtures, 'flyfile.js');
+	const want = ['b', 'a'];
 
-// // 	var fly = new Fly({
-// // 		file: file,
-// // 		host: {
-// // 			default: function * (data) {
-// // 				t.pass('run tasks at least once')
-// // 				t.equal(data, 42, 'pass options into task via start')
-// // 			}
-// // 		}
-// // 	})
+	let val = 10;
+	let order = [];
 
-// // 	fly.emit = function (event) {
-// // 		if (event === 'fly_watch') {
-// // 			t.pass('notify watch event to observers')
-// // 		}
-// // 		return fly
-// // 	}
+	const fly = new Fly({
+		tasks: {
+			a: function * (o) {
+				order.push('a');
+				t.pass('execute tasks when `watch` starts');
+				t.equal(o.val, val, 'retain `serial` options behavior');
+				return ++val;
+			},
+			b: function * (o) {
+				order.push('b');
+				t.equal(o.val, val, 'pass (initial) options to tasks on init');
+				return ++val;
+			}
+		}
+	});
 
-// //	fly.watch(glob, 'default', {value: 42}).then(function (watcher) {
-// //		t.ok(watcher.unwatch !== undefined, 'watch promise resolves to a watcher')
-// //		setTimeout(function () {
-// //			// hijack the task to test the watcher runs default when the glob changes
-// //			fly.host.default = function (data) {
-// //				watcher.unwatch(glob)
-// //				t.pass('run given tasks when glob changes')
-// //				t.equal(data, glob, 'pass options into task via start on change')
-// //			}
-// //			touch(file)
-// //		}, 100)
-// //	})
-// // })
+	fly.emit = function (e, obj) {
+		if (e === 'fly_watch') {
+			t.pass('notify when `watch` starts');
+		}
 
-// test('fly.target', t => {
-// 	t.plan(1)
+		if (e === 'fly_watch_event') {
+			t.pass('notify when `watch` events occur');
+			t.equal(obj.action, 'changed', 'receive the correct event `type`');
+			t.equal(obj.file, file, 'receive the relevant `file` for given event');
+			t.true('prevs' in fly._, 'add the `prevs` key to `fly._` internals');
+			t.true($.isArray(fly._.prevs), 'the `fly._.prevs` key is an array');
+			t.equal(fly._.prevs[0], glob, 'save the previous `glob` to `fly._.prevs`');
+		}
+	};
 
-// 	co(function * () {
-// 		var fly = new Fly()
+	const ctx = yield fly.watch(glob, want, {val: val});
+	t.deepEqual(order, want, 'run `watch` task chain in `serial` mode');
+	t.equal(val, 12, 'truly `await` for chain completion');
 
-// 		yield fly.source(fixtures + '/*.txt').filter(function (data) {
-// 			return data.toString().toUpperCase()
-// 		}).target(fixtures)
+	// reset
+	order = [];
 
-// 		yield fly.source(fixtures + '/*.txt').filter(function (data) {
-// 			t.ok(data.toString() === 'FOO BAR\n', 'resolve source, filters and writers')
-// 			return data.toString().toLowerCase()
-// 		}).target(fixtures)
-// 	})
-// })
+	// hijack / overwrite tasks
+	fly.tasks = {
+		a: function * (o) {
+			order.push('a');
+			t.equal(o.src, file, 'receives new `src` key after `watch_event`');
+			// end of tests...
+			t.deepEqual(order, want, 're-run chain in correct order');
+			// stop watcher
+			ctx.unwatch(glob);
+			// stop tests
+			t.end();
+		},
+		b: function * (o) {
+			order.push('b');
+			t.equal(o.src, file, 'receive new `src` key after `watch_event`');
+		}
+	};
+
+	// force trigger
+	setTimeout(() => touch(file), 100);
+}));
