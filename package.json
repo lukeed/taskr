@@ -25,38 +25,26 @@
   ],
   "dependencies": {
     "arrify": "^1.0.1",
-    "chokidar": "^1.4.0",
-    "clor": "^2.0.0",
-    "co": "^4.5.4",
-    "concat-with-sourcemaps": "^1.0.2",
-    "debug": "^2.2.0",
-    "deep-equal": "^1.0.1",
-    "find-up": "^1.1.0",
+    "bluebird": "^3.4.6",
+    "chalk": "^1.1.3",
+    "chokidar": "^1.6.0",
+    "find-up": "^2.0.0",
     "flatten": "^1.0.2",
-    "globby": "^4.0.0",
-    "interpret": "^1.0.0",
+    "globby": "^6.0.0",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
-    "object-assign": "^4.0.1",
     "prettyjson": "^1.1.2",
     "rimraf": "^2.4.2",
-    "source-map": "^0.5.3",
     "update-notifier": "^0.5.0"
   },
   "devDependencies": {
-    "coveralls": "^2.11.4",
-    "fly-xo": "^1.0.2",
-    "isparta": "^4.0.0",
     "tap-spec": "^4.1.1",
     "tape": "^4.2.2",
     "touch": "^1.0.0",
     "xo": "^0.12.0"
   },
   "scripts": {
-    "coverage": "isparta cover test/*.js",
-    "coveralls": "npm run coverage -s && coveralls < coverage/lcov.info",
-    "postcoveralls": "rimraf coverage",
-    "test": "xo && node --harmony ./node_modules/.bin/tape test/*.js | tap-spec"
+    "test": "xo && tape test/*.js | tap-spec"
   },
   "keywords": [
     "cli",
@@ -71,19 +59,22 @@
     "generator",
     "coroutine",
     "automation",
-    "build system",
-    "task runner"
+    "task runner",
+    "build system"
   ],
   "engines": {
-    "iojs": ">= 1.0.0",
-    "node": ">= 0.12.0"
+    "node": ">= 4.6.0"
   },
   "xo": {
-    "semicolon": false,
+    "semicolon": true,
+    "esnext": true,
     "ignore": [
       "examples/**/*.js"
     ],
     "rules": {
+      "babel/object-shorthand": 0,
+      "no-unused-expressions": 1,
+      "guard-for-in": 1,
       "no-loop-func": 0
     }
   }

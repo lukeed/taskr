@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "fly-less": "*",
-    "fly-sass": "*",
-    "fly-stylus": "*"
-  }
-}
