@@ -1,11 +1,3 @@
-logs
-*.log
-lib-cov
-coverage
-.lock-wscript
-build/Release
 node_modules
-# Runtime data
-pids
-*.pid
-*.seed
+coverage
+*.log
