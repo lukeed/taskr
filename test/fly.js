@@ -326,10 +326,11 @@ test('fly.target', co(function * (t) {
 	// test #1
 	yield fly.source(glob1).target(dest1);
 	t.pass('allow method chains!');
+	const val1 = join(dest1, 'two', 'two-1.md');
+	const str1 = yield fly.$.find(val1);
 	const arr1 = yield fly.$.expand(join(dest1, '*.md'));
-	const str1 = yield fly.$.find(join(dest1, 'two', 'two-1.md'));
 	t.equal(arr1.length, 2, 'via `src/one/two/*.md`; write all files');
-	t.equal(str1, null, 'via `src/one/two/*.md`; did not create sub-dir if unwanted');
+	t.ok(str1 && str1 !== val1, 'via `src/one/two/*.md`; did not create sub-dir if unwanted');
 
 	// test #2
 	yield fly.source(glob2).target(dest2);
