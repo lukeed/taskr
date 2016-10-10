@@ -40,6 +40,7 @@
   "devDependencies": {
     "tap-spec": "^4.1.1",
     "tape": "^4.2.2",
+    "touch": "^1.0.0",
     "xo": "^0.12.0"
   },
   "scripts": {
