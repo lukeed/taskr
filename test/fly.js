@@ -395,6 +395,9 @@ test('fly.watch', co(function * (t) {
 			t.true('prevs' in fly._, 'add the `prevs` key to `fly._` internals');
 			t.true($.isArray(fly._.prevs), 'the `fly._.prevs` key is an array');
 			t.equal(fly._.prevs[0], glob, 'save the previous `glob` to `fly._.prevs`');
+			console.log('stopping watcher');
+			/* eslint no-use-before-define:0 */
+			ctx.unwatch(glob); // STOP WATCHER
 		}
 	};
 
@@ -410,12 +413,7 @@ test('fly.watch', co(function * (t) {
 		a: function * (o) {
 			order.push('a');
 			t.equal(o.src, file, 'receives new `src` key after `watch_event`');
-			// end of tests...
 			t.deepEqual(order, want, 're-run chain in correct order');
-			// stop watcher
-			ctx.unwatch(glob);
-			// stop tests
-			t.end();
 		},
 		b: function * (o) {
 			order.push('b');
