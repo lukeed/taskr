@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "fly-earl": "*",
-    "earlgrey-runtime": "*"
-  }
-}

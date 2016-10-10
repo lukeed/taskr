@@ -1,2 +1,0 @@
-Rule #1: Do not modify this file.
-Rule #2: Do not follow rule #1.
