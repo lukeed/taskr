@@ -1,115 +1,97 @@
-var fs = require('fs')
-var path = require('path')
-var test = require('tape').test
-var utils = require('../lib/utils')
-var join = path.join
+'use strict';
 
-var fixtures = join(process.cwd(), 'test', 'fixtures', 'utils')
+const join = require('path').join;
+const co = require('bluebird').coroutine;
+const clear = require('../lib/api/clear');
+const test = require('tape').test;
+const $ = require('../lib/utils');
 
-function asyncFunc(value, handler) {
-	setTimeout(function () {
-		return (handler(undefined, value))
-	}, 100)
-}
+const fixtures = join(__dirname, 'fixtures', 'utils');
 
-function asyncFuncWithOptions(value, options, handler) {
-	setTimeout(function () {
-		return (handler(undefined, value))
-	}, options.time)
-}
+test('utils', t => {
+	t.ok($ !== undefined, 'are exported');
 
-test('fly utilities ✈', function (t) {
-	t.ok(utils !== undefined, 'it\'s real')
+	['find', 'read', 'write', 'expand',
+	'error', 'alert', 'trace', 'log']
+		.forEach(prop => {
+			t.true($[prop] !== undefined, `utils.${prop} exists`);
+		});
 
-	var methods = ['bind', 'defer', 'find', 'log', 'error', 'alert', 'stamp', 'trace']
+	t.end();
+});
 
-	methods.forEach(function (prop) {
-		t.ok(utils[prop] !== undefined, prop + ' is defined')
-	})
+test('utils.find', co(function * (t) {
+	const file = 'flyfile.js';
+	const full = join(fixtures, file);
 
-	t.end()
-})
+	const out1 = yield $.find(file, fixtures);
+	t.true(out1.length && typeof out1 === 'string', 'if found; returns a string');
+	t.equal(out1, full, `via directory path; finds the correct flyfile`);
 
-test('utils.defer (asyncFunc) ✈', function (t) {
-	t.plan(1)
-	utils.defer(asyncFunc)(42).then(function (value) {
-		t.equal(value, 42, 'promisifies an async func')
-	})
-})
+	const out2 = yield $.find(full);
+	t.equal(out2, full, `via file path; finds the correct flyfile`);
 
-test('utils.defer (asyncFunc /w options) ✈', function (t) {
-	t.plan(1)
-	utils.defer(asyncFuncWithOptions)(1985, {time: 100}).then(function (value) {
-		t.equal(value, 1985, 'promisifies an async func w/ options')
-	})
-})
+	const subdir = join(fixtures, 'sub'); // test dir
+	const out3 = yield $.find(file, subdir);
+	t.equal(out3, full, `via sub-directory path; finds the correct flyfile`);
 
-test('utils.find (flyfile) ✈', function (t) {
-	t.plan(4)
+	const out4 = yield $.find(file, '/fakedir123');
+	t.equal(out4, null, 'if not found; returns `null`');
 
-	var name = 'flyfile.js'
-	var full = join(fixtures, name)
+	t.end();
+}));
 
-	utils.find(name, fixtures).then(function (fp) {
-		t.ok(fp !== undefined, 'finds a flyfile, given a directory')
-		t.equal(fp, full, 'finds the right one!')
-	})
+test('utils.read', co(function * (t) {
+	const file = join(fixtures, 'a.js');
+	const out1 = yield $.read(file);
+	const out2 = yield $.read(file, 'utf8');
+	const out3 = yield $.read(file, {encoding: 'utf8'});
+	const out4 = yield $.read(fixtures);
 
-	utils.find(full).then(function (fp) {
-		t.equal(fp, full, 'finds a flyfile, given a filepath')
-	})
+	t.true(out1 instanceof Buffer, 'returns a Buffer by default');
+	t.equal(typeof out2, 'string', 'accepts `encoding` string as options');
+	t.equal(typeof out3, 'string', 'accepts object as options');
+	t.equal(out3, 'const pi = 3.14\n', `reads file's contents correctly`);
+	t.true(out4 === null, 'does not attempt to read directory paths');
 
-	var dir = join(fixtures, 'one') // test dir
-	utils.find(name, dir).then(function (fp) {
-		t.equal(fp, full, 'finds a flyfile, traversing upwards')
-	})
-})
+	t.end();
+}));
 
-test('utils.read (file)', function (t) {
-	var fp = join(fixtures, 'a.js')
-	utils.read(fp).then(function (data) {
-		t.equal(data.toString(), 'const pi = 3.14\n', 'reads a file\'s contents')
-		t.end()
-	})
-})
+test('utils.write', co(function * (t) {
+	const nest = join(fixtures, 'nested');
+	const file = join(nest, 'deeply', 'test.js');
+	const demo = '\nhello\n';
 
-test('utils.read (dir)', function (t) {
-	utils.read(fixtures).then(function (data) {
-		t.true(data === null, 'will not attempt to read a directory')
-		t.end()
-	})
-})
+	const done = yield $.write(file, demo);
+	t.equal(done, undefined, 'returns nothing');
 
-test('utils.write', function (t) {
-	var fp = join(fixtures, 'test.js')
-	var data = 'hello'
+	const seek = yield $.find(file);
+	t.true(seek && seek.length, 'creates the file, including sub-dirs');
 
-	utils.write(fp, data).then(function () {
-		return utils.find(fp).then(function (f) {
-			t.true(f !== undefined, 'file was created')
+	const data = yield $.read(file, 'utf8');
+	t.equal(data, demo, 'writes the content to file correctly');
 
-			return utils.read(fp).then(function (d) {
-				t.deepEqual(d.toString(), data, 'file had data')
+	yield clear(nest);
 
-				// delete test file
-				fs.unlinkSync(fp)
+	t.end();
+}));
 
-				t.end()
-			})
-		})
-	})
-})
+test('utils.expand', co(function * (t) {
+	const glob1 = join(fixtures, '*.html');
+	const glob2 = join(fixtures, '**', '*.js');
+	const glob3 = join(fixtures, '*.zzz');
 
-// test('utils.bind (module) ✈', function (t) {
-// 	const coffee = require(
-// 		utils.bind(join(process.cwd(), './utils/sample.coffee'))
-// 	)
-// 	t.equal(coffee.getSecret(), 42, 'binds to coffee-script')
+	const out1 = yield $.expand(glob1);
+	const out2 = yield $.expand(glob2);
+	const out3 = yield $.expand(glob2, {ignore: '**/*.babel.js'});
+	const out4 = yield $.expand(glob3);
+	const out5 = yield $.expand([glob1, glob2]);
 
-// 	// const babel = require(
-// 	//   utils.bind(join(process.cwd(), "./utils/sample.babel.js"))
-// 	// )
-// 	// t.equal(babel.getSecret(), 42, "binds to babel")
+	t.true(out1 && out1.length === 1, 'matches shallow globs');
+	t.true(out2 && out2.length === 4, 'matches deep/super globs');
+	t.true(out3 && out3.length === 3, 'accepts `options` object');
+	t.true(Array.isArray(out4) && !out4.length, 'return empty array on no-match');
+	t.true(out5 && out5.length === 5, 'expands multiple globs');
 
-// 	t.end()
-// })
+	t.end();
+}));

@@ -1,422 +1,427 @@
-var fs = require('fs')
-var co = require('co')
-var path = require('path')
-// var { readFile as read } = require('mz/fs')
-var test = require('tape').test
-var touch = require('touch')
-var Fly = require('../lib/fly')
+'use strict';
 
-var join = path.join
-var resolve = path.resolve
-var relative = path.relative
+const join = require('path').join;
+const Promise = require('bluebird');
+const test = require('tape').test;
+const touch = require('touch');
+const $ = require('../lib/fn');
+const Fly = require('../lib');
+const co = Promise.coroutine;
 
-var fixtures = relative('.', resolve('test', 'fixtures'))
-var flyfile = join(fixtures, 'flyfile.js')
+const fixtures = join(__dirname, 'fixtures');
 
-test('✈  fly', function (t) {
-	t.ok(Fly !== undefined, 'is defined')
+test('fly.prototype', t => {
+	t.ok(Fly !== undefined, 'is defined');
+	const _ = Fly.prototype;
 
-	var methods = [
-		'source', 'filter', 'watch', 'unwrap', 'exec',
-		'start', 'write', 'clear', 'concat', 'target', 'emit'
-	]
+	['source', 'target', 'emit', 'on', 'clear',
+	'start', 'serial', 'parallel']
+		.forEach(cmd => {
+			t.equal(typeof _[cmd], 'function', `fly.${cmd} is defined`);
+		});
 
-	methods.forEach(function (method) {
-		t.ok(method !== undefined, method + ' is defined')
-	})
+	t.end();
+});
 
-	t.end()
-})
+test('fly.constructor', t => {
+	const fake = {
+		file: 'fake',
+		pwd: fixtures,
+		tasks: {a: '1'},
+		plugins: [1, 2, 3]
+	};
 
-test('✈  fly.constructor', function (t) {
-	var fly = new Fly({
-		file: flyfile,
-		host: {
-			task: function () {
-				t.equal(fly, this, 'bind tasks to fly instance')
-			}
-		}
-	})
+	const fly1 = new Fly();
+	t.true(fly1 instanceof Fly, 'instance retains Fly classification');
+	t.equal(fly1.file, undefined, '`fly.file` is `undefined` by default');
+	t.equal(fly1.root, process.cwd(), '`fly.root` is `process.cwd()` by default');
+	t.true($.isObject(fly1.$), '`fly.$` core utilities are attached');
+	t.true($.isArray(fly1.plugins) && !fly1.plugins.length, '`fly.plugins` is an empty array by default');
+	t.true($.isObject(fly1.tasks) && $.isEmptyObj(fly1.tasks), '`fly.tasks` is an empty object by default');
+	t.true($.isEmptyObj(fly1._), '`fly._` is an empty object on init');
 
-	t.ok(fly !== undefined, 'create fly instance')
+	const fly2 = new Fly(fake);
+	t.equal(fly2.file, fake.file, 'accept custom `file` value');
+	t.equal(fly2.plugins, fake.plugins, 'accept custom `plugins` value');
+	t.equal(fly2.root, fake.pwd, 'accept custom `root` or `pwd` value');
+	t.equal(fly2.tasks, fake.tasks, 'accept custom `tasks` value');
 
-	t.ok(fly.tasks.task !== undefined, 'load task from host')
-	fly.tasks.task()
+	t.end();
+});
 
-	t.deepEqual(fly.plugins, [], 'no default plugins')
-
-	t.equal(fly.file, flyfile, 'set file to path specified in the constructor')
-
-	t.end()
-})
-
-test('✈  fly.source', function (t) {
-	var fly = new Fly()
-	fly.source([[[[['*.a', ['*.b']]], ['*.c']]]])
-	t.deepEqual(fly._.globs, ['*.a', '*.b', '*.c'], 'flatten globs')
-	t.deepEqual(fly._.filters, [], 'init empty filter list')
-	t.end()
-})
-
-test('✈  fly.filter', function (t) {
-	var fly = new Fly()
-
-	fly.filter(function (src) {
-		return src.toLowerCase()
-	})
-
-	t.equal(fly._.filters.length, 1, 'add filter to filter collection')
-
-	t.equal(fly._.filters[0].cb('FLY'), 'fly', 'add transform cb for anonymous filters')
-
-	fly.filter('myFilter', function (data) {
-		return {
-			code: data.toString().toUpperCase(),
-			ext: '.foo'
-		}
-	})
-
-	t.ok(fly.myFilter instanceof Function, 'add transform cb to fly instance for named filters')
-
-	fly.myFilter({secret: 42})
-
-	t.equal(fly._.filters[1].cb('fly').code, 'FLY', 'create transform cb function for named filter')
-	t.equal(fly._.filters[1].cb('fly').ext, '.foo', 'read extension from filter')
-	t.equal(fly._.filters[1].options.secret, 42, 'read options from filter')
-
-	try {
-		fly.filter('myFilter')
-	} catch (e) {
-		t.ok(true, 'throw an error if filter already exists')
-	}
-
-	fly.source('')
-	t.deepEqual(fly._.filters, [], 'reset filter each time source is called')
-
-	t.end()
-})
-
-// test('✈  fly.watch', function (t) {
-// 	t.plan(6)
-// 	var glob = 'flyfile.js'
-// 	var file = flyfile
-
-// 	var fly = new Fly({
-// 		file: file,
-// 		host: {
-// 			default: function * (data) {
-// 				t.ok(true, 'run tasks at least once')
-// 				t.equal(data, 42, 'pass options into task via start')
-// 			}
-// 		}
-// 	})
-
-// 	fly.emit = function (event) {
-// 		if (event === 'fly_watch') {
-// 			t.ok(true, 'notify watch event to observers')
-// 		}
-// 		return fly
-// 	}
-
-//	fly.watch(glob, 'default', {value: 42}).then(function (watcher) {
-//		t.ok(watcher.unwatch !== undefined, 'watch promise resolves to a watcher')
-//		setTimeout(function () {
-//			// hijack the task to test the watcher runs default when the glob changes
-//			fly.host.default = function (data) {
-//				watcher.unwatch(glob)
-//				t.ok(true, 'run given tasks when glob changes')
-//				t.equal(data, glob, 'pass options into task via start on change')
-//			}
-//			touch(file)
-//		}, 100)
-//	})
-// })
-
-test('✈  fly.unwrap', function (t) {
-	t.plan(4)
-	var fly = new Fly()
-
-	var gen = function (arr) {
-		return arr.map(function (f) {
-			f = join(fixtures, f)
-			touch(f)
-			return f
-		})
-	}
-
-	var xFiles = gen(['a.x', 'b.x', 'c.x'])
-	var yFiles = gen(['a.y', 'b.y', 'c.y'])
-	var files = xFiles.concat(yFiles)
-	var x = join(fixtures, '*.x')
-	var y = join(fixtures, '*.y')
-
-	co(function * () {
-		yield fly.source(x).unwrap(function (f) {
-			t.deepEqual(f, xFiles, 'unwrap source globs with single entry point')
-		})
-
-		yield fly.source([y]).unwrap(function (f) {
-			t.deepEqual(f, yFiles, 'unwrap source globs with single entry point in array')
-		})
-
-		var result = yield fly.source([x, y]).unwrap(function (f) {
-			t.deepEqual(f, files, 'unwrap source globs with multiple entry points')
-			return 42
-		})
-
-		t.equal(result, 42, 'result is the return value from fulfilled handler')
-
-		yield fly.clear(files)
-	})
-})
-
-test('✈  fly.*exec', function (t) {
-	t.plan(4)
-
-	var fly = new Fly({
-		host: {
-			task: function * (data) {
-				t.ok(true, 'run a task')
-				t.equal(data, 'rosebud', 'pass an initial value to task')
-			}
-		}
-	})
-
-	fly.emit = function (event) {
-		if (event === 'task_start') {
-			t.ok(true, 'notify start event to observers')
-		}
-		if (event === 'task_complete') {
-			t.ok(true, 'notify complete event to observers')
-		}
-		return fly
-	}
-
-	co(fly.exec.bind(fly), 'task', 'rosebud')
-})
-
-test('✈  fly.start', function (t) {
-	t.plan(3)
-	var value = 42
-	var fly = new Fly({
-		host: {
-			a: function * (data) {
-				return data + 1
-			},
-			b: function * (data) {
-				return data + 1
-			},
-			c: function * (data) {
-				t.ok(true, 'run a given list of tasks')
-				t.equal(data, value + 2, 'cascade return values')
-				return data + 1
-			}
-		}
-	})
-
-	co(function * () {
-		var result = yield fly.start(['a', 'b', 'c'], {value: value})
-		t.equal(result, value + 3, 'return last task value')
-	})
-})
-
-test('✈  fly.start (order)', function (t, state) {
-	t.plan(2)
-	state = 0
-	var fly = new Fly({
-		// when running in a sequence both b and c wait while a blocks.
-		// when running in parallel, b and c run while a blocks. state
-		// can only be 3 when each task runs in order.
-		host: {
+test('fly.init', co(function * (t) {
+	const RDY = '_ready';
+	const fly1 = new Fly({
+		tasks: {
 			a: function * () {
-				yield block()
-				if (state === 0) {
-					state++
-				}
+				t.equal(this, fly1, 'bind tasks to fly instance');
+			}
+		}
+	});
+
+	t.false(fly1[RDY], 'is not ready before `fly.init`');
+
+	fly1.init();
+
+	t.true(fly1[RDY], 'is ready after `fly.init`');
+
+	fly1.tasks.a();
+
+	const fly2 = new Fly({tasks: [1, 2, 3]});
+	fly2.on('tasks_force_object', () => {
+		t.pass('emit an error if `tasks` is not an object');
+	});
+	fly2.init();
+
+	t.end();
+}));
+
+test('fly.source', co(function * (t) {
+	t.plan(18);
+
+	const fly = new Fly();
+	const glob1 = ['*.a', '*.b', '*.c'];
+	const glob2 = join(fixtures, '*.*');
+	const opts1 = {ignore: 'foo'};
+
+	fly.on('globs_no_match', (g, o) => {
+		t.pass('notify when globs match no files');
+		t.deepEqual(g, glob1, 'warning receives the flattened globs');
+		t.deepEqual(o, opts1, 'warning receives the `globby` options');
+	});
+
+	const out = yield fly.source([[['*.a', ['*.b']]], ['*.c']], opts1);
+	t.true('globs' in fly._ && 'files' in fly._, 'create `globs` and `files` keys within `fly._`');
+	t.deepEqual(fly._.globs, glob1, 'flatten nested globs');
+	t.deepEqual(fly._.files, [], 'return empty array if no files matched');
+	t.equal(out, fly, 'returns the bound instance');
+
+	yield fly.source(glob2);
+	t.true($.isArray(fly._.globs), 'wrap a single glob string as an array');
+	t.equal(fly._.globs[0], glob2, 'update internal `source` keys each time');
+	t.true($.isArray(fly._.files), 'return an array of relevant files');
+	t.equal(fly._.files.length, 4, 'accepts wildcard extensions; finds all files');
+	const f1 = fly._.files[0];
+	t.ok($.isObject(f1), 'array contents are objects');
+	t.ok('data' in f1, 'add `data` key to `pathObject`');
+	t.false('root' in f1, 'delete `root` key from `pathObject`');
+	t.false('name' in f1, 'delete `name` key from `pathObject`');
+	t.false('ext' in f1, 'delete `ext` key from `pathObject`');
+	t.ok(Buffer.isBuffer(f1.data), 'file data is a `Buffer`');
+
+	yield fly.source(glob2, {ignore: join(fixtures, 'flyfile.js')});
+	t.equal(fly._.files.length, 3, 'send config options to `globby` (ignore key)');
+}));
+
+test('fly.start', co(function * (t) {
+	let val;
+	const RDY = '_ready';
+
+	t.plan(14);
+
+	const fly1 = new Fly({
+		tasks: {
+			a: function * () {
+				val = 5;
+				t.pass('execute a task programmatically');
+			}
+		}
+	});
+
+	t.false(fly1[RDY], 'not yet initialized');
+	yield fly1.start('a');
+	t.equal(val, 5, 'truly `await` a task\'s completion');
+	t.true(fly1[RDY], 'ran `fly.init` because was not initialized');
+
+	const fly2 = new Fly({
+		tasks: {
+			a: function * () {},
+			err: function * () {
+				throw new Error();
+			}
+		}
+	});
+
+	fly2.emit = e => {
+		if (e === 'task_not_found') {
+			t.pass('notify when task not found');
+		} else if (e === 'task_start') {
+			t.pass('notify when task starts');
+		} else if (e === 'task_complete') {
+			t.pass('notify when task completes');
+		} else if (e === 'task_error') {
+			t.pass('notify when task errors');
+		}
+	};
+
+	yield fly2.start('a');
+	try {
+		yield fly2.start('err');
+	} catch (e) {
+		t.pass('task threw its own error');
+	}
+
+	const demo = {val: 5};
+	const fly3 = new Fly({
+		tasks: {
+			a: function * (obj) {
+				t.ok(obj.val === demo.val, 'pass a value to a task');
+				t.ok('src' in obj, 'a `src` key always exists');
+				t.ok(obj.src === null, 'the `src` key defaults to null');
+				yield this.start('b');
+				return obj.val;
 			},
 			b: function * () {
-				state++
+				t.pass('start a task from within a task');
+				yield Promise.resolve(4);
+				return 4;
+			}
+		}
+	});
+
+	const out = yield fly3.start('a', demo);
+	t.equal(out, demo.val, 'tasks can return values directly');
+}));
+
+test('fly.parallel', co(function * (t) {
+	t.plan(6);
+	let int = 0;
+	const order = [];
+	const demo = {val: 10};
+
+	const fly = new Fly({
+		tasks: {
+			a: function * (opts) {
+				yield Promise.delay(9);
+				t.equal(opts.val, demo.val, 'task-a got initial `opts` object');
+				order.push('a');
+				return int++;
+			},
+			b: function * (opts) {
+				yield Promise.delay(6);
+				t.equal(opts.val, demo.val, 'task-b got initial `opts` object');
+				order.push('b');
+				return int++;
+			},
+			c: function * (opts) {
+				yield Promise.delay(3);
+				t.equal(opts.val, demo.val, 'task-c got initial `opts` object');
+				order.push('c');
+				return int++;
+			}
+		}
+	});
+
+	const out = yield fly.parallel(['a', 'b', 'c'], demo);
+	t.equal(out, undefined, 'chain yields no return');
+	t.equal(int, 3, 'wait for the entire chain\'s completion');
+	t.notDeepEqual(order, ['a', 'b', 'c'], 'execution order is random');
+}));
+
+test('fly.serial', co(function * (t) {
+	t.plan(7);
+
+	const int = 3;
+	const order = [];
+	const fly1 = new Fly({
+		tasks: {
+			a: function * (opts) {
+				yield Promise.delay(2);
+				t.equal(opts.val, int, 'task-a got initial `opts` object');
+				order.push('a');
+				return opts.val + 1;
+			},
+			b: function * (opts) {
+				yield Promise.delay(1);
+				t.equal(opts.val, int + 1, 'task-b got mutated `opts` object');
+				order.push('b');
+				return opts.val + 1;
+			},
+			c: function * (opts) {
+				yield Promise.delay(0);
+				t.equal(opts.val, int + 2, 'task-c got mutated `opts` object');
+				order.push('c');
+				return opts.val + 1;
+			}
+		}
+	});
+
+	const out = yield fly1.serial(['a', 'b', 'c'], {val: int});
+	t.equal(out, int + 3, 'chain yields final return value');
+	t.deepEqual(order, ['a', 'b', 'c'], 'execute tasks in order, regardless of delay');
+
+	let num = 0;
+	const fly2 = new Fly({
+		tasks: {
+			a: function * () {
+				num++;
 			},
 			c: function * () {
-				state++
+				num++;
+			},
+			b: function * () {
+				num++;
+				throw new Error();
 			}
 		}
-	})
+	});
 
-	co(function * () {
-		yield fly.start(['a', 'b', 'c'], {parallel: false})
-		t.ok(state === 3, 'run tasks in sequence')
-		state = 0 // reset
-		yield fly.start(['a', 'b', 'c'], {parallel: true})
-		t.ok(state !== 3, 'run tasks in parallel')
-	})
+	fly2.emit = e => (e === 'serial_error') && t.pass('notify when a task within `serial` throws');
 
-	function block() {
-		return new Promise(function (resolve) {
-			return setTimeout(resolve, 200)
-		})
+	yield fly2.serial(['a', 'b', 'c']);
+	t.equal(num, 2, 'interrupt `serial` on error; only 2 tasks ran');
+}));
+
+test('fly.clear', co(function * (t) {
+	const files = ['a.foo', 'b.foo', 'c.foo'].map(f => join(fixtures, f));
+	const dirs = ['tmp1', 'tmp2', 'tmp3'].map(d => join(fixtures, d));
+	const file = join(fixtures, 'foo.bar');
+	const fly = new Fly();
+	const data = 'hi';
+
+	// prepare new fixture files
+	yield fly.$.write(file, data);
+
+	for (const d of dirs) {
+		yield fly.$.write(join(d, 'foo.z'), data);
 	}
-})
 
-test('✈  fly.start (options)', function (t) {
-	t.plan(6)
-	var file = 'fakefile.js'
-	var fly = new Fly({
-		// when running in a sequence both b and c wait while a blocks.
-		// when running in parallel, b and c run while a blocks. state
-		// can only be 3 when each task runs in order.
-		host: {
-			a: function * (one) {
-				t.equals(file, one, 'one is the same as ' + file)
+	for (const f of files) {
+		yield fly.$.write(f, data);
+	}
+
+	const out1 = yield fly.clear(file);
+	t.ok(out1 === undefined, 'has no return value');
+	t.false(yield fly.$.find(file), 'delete a single file by its full path');
+
+	yield fly.clear(dirs);
+	const out2 = yield fly.$.expand(dirs);
+	t.false(out2.length, 'delete an array of directory paths');
+
+	const glob = join(fixtures, '*.foo');
+	yield fly.clear(glob);
+	const out3 = yield fly.$.expand(glob);
+	t.false(out3.length, 'delete a glob of matching files');
+
+	t.end();
+}));
+
+test('fly.target', co(function * (t) {
+	const glob1 = join(fixtures, 'one', 'two', '*.md');
+	const glob2 = join(fixtures, 'one', '*.md');
+	const glob3 = join(fixtures, '**', '*.md');
+	const glob4 = join(fixtures, 'one', '**', '*.md');
+
+	const dest1 = join(fixtures, '.tmp1');
+	const dest2 = join(fixtures, '.tmp2');
+	const dest3 = join(fixtures, '.tmp3');
+	const dest4 = join(fixtures, '.tmp4');
+	const dest5 = join(fixtures, '.tmp5');
+
+	const fly = new Fly();
+
+	// clean slate
+	yield fly.clear([dest1, dest2, dest3, dest4, dest5]);
+
+	// test #1
+	yield fly.source(glob1).target(dest1);
+	t.pass('allow method chains!');
+	const val1 = join(dest1, 'two', 'two-1.md');
+	const str1 = yield fly.$.find(val1);
+	const arr1 = yield fly.$.expand(join(dest1, '*.md'));
+	t.equal(arr1.length, 2, 'via `src/one/two/*.md`; write all files');
+	t.ok(str1 && str1 !== val1, 'via `src/one/two/*.md`; did not create sub-dir if unwanted');
+
+	// test #2
+	yield fly.source(glob2).target(dest2);
+	const arr2 = yield fly.$.expand(join(dest2, '*.md'));
+	const str2 = yield fly.$.find(join(dest2, 'one.md'));
+	t.equal(arr2.length, 1, 'via `src/one/*.md`; write all files');
+	t.ok(str2.length, 'via `src/one/*.md`; write to correct tier');
+
+	// test #3
+	yield fly.source(glob3).target(dest3);
+	const arr3 = yield fly.$.expand(join(dest3, '**', '*.md'));
+	const str3 = yield fly.$.find(join(dest3, 'one', 'two', 'two-1.md'));
+	t.ok(str3.length, 'via `src/**/*.md`; create the (nested) child directory');
+	t.equal(arr3.length, 3, 'via `src/**/*.md`; write all files');
+
+	// test #4
+	yield fly.source(glob4).target([dest4, dest5]);
+	const str4 = yield fly.$.find(join(dest4, 'two', 'two-1.md'));
+	const str5 = yield fly.$.find(join(dest5, 'two', 'two-1.md'));
+	t.true(str4.length && str5.length, 'write to multiple targets');
+
+	// clean up
+	yield fly.clear([dest1, dest2, dest3, dest4, dest5]);
+
+	t.end();
+}));
+
+test('fly.watch', co(function * (t) {
+	t.plan(15);
+
+	const glob = join(fixtures, '*.js');
+	const file = join(fixtures, 'flyfile.js');
+	const want = ['b', 'a'];
+
+	let val = 10;
+	let order = [];
+
+	const fly = new Fly({
+		tasks: {
+			a: function * (o) {
+				order.push('a');
+				t.pass('execute tasks when `watch` starts');
+				t.equal(o.val, val, 'retain `serial` options behavior');
+				return ++val;
 			},
-			b: function * (one) {
-				t.equals(file, one, 'one is the same as ' + file)
-			},
-			c: function * (one) {
-				t.equals(file, one, 'one is the same as ' + file)
+			b: function * (o) {
+				order.push('b');
+				t.equal(o.val, val, 'pass (initial) options to tasks on init');
+				return ++val;
 			}
 		}
-	})
+	});
 
-	co(function * () {
-		yield fly.start(['a', 'b', 'c'], {parallel: true, value: file})
-		fly.host.a = function * (one, two, three) {
-			t.equals(one, 'one.js', 'one is one.js')
-			t.equals(two, 'two.js', 'two is two.js')
-			t.equals(three, 'three.js', 'three is three.js')
+	fly.emit = function (e, obj) {
+		if (e === 'fly_watch') {
+			t.pass('notify when `watch` starts');
 		}
-		yield fly.start('a', {value: ['one.js', 'two.js', 'three.js']})
-	})
-})
 
-test('✈  fly.clear', function (t) {
-	t.plan(1)
-	var paths = ['tmp1', 'tmp2', 'tmp3'].map(function (file) {
-		var f = join(fixtures, file)
-		touch(f)
-		return f
-	})
+		if (e === 'fly_watch_event') {
+			t.pass('notify when `watch` events occur');
+			t.equal(obj.action, 'changed', 'receive the correct event `type`');
+			t.equal(obj.file, file, 'receive the relevant `file` for given event');
+			t.true('prevs' in fly._, 'add the `prevs` key to `fly._` internals');
+			t.true($.isArray(fly._.prevs), 'the `fly._.prevs` key is an array');
+			t.equal(fly._.prevs[0], glob, 'save the previous `glob` to `fly._.prevs`');
+		}
+	};
 
-	var fly = new Fly()
+	const ctx = yield fly.watch(glob, want, {val: val});
+	t.deepEqual(order, want, 'run `watch` task chain in `serial` mode');
+	t.equal(val, 12, 'truly `await` for chain completion');
 
-	co(function * () {
-		yield fly.clear(paths)
-		t.ok(true, 'clear files from a given list of paths')
-	})
-})
+	// reset
+	order = [];
 
-test('✈  fly.concat', function (t) {
-	t.plan(4)
+	// hijack / overwrite tasks
+	fly.tasks = {
+		a: function * (o) {
+			order.push('a');
+			t.equal(o.src, file, 'receives new `src` key after `watch_event`');
+			t.deepEqual(order, want, 're-run chain in correct order');
+			// stop watching.
+			ctx.unwatch(glob);
+			ctx.close();
+		},
+		b: function * (o) {
+			order.push('b');
+			t.equal(o.src, file, 'receive new `src` key after `watch_event`');
+		}
+	};
 
-	var fly = new Fly()
-	var outfile = 'combined.md'
-	var dest = join(fixtures, 'dest')
-
-	co(function * () {
-		fly.concat('f')
-		t.equal(fly._.cat.base, 'f', 'add concat writer, with base reference')
-	})
-
-	co(function * () {
-		// assemble non-expected order
-		yield fly.source([
-			join(fixtures, 'one/two/two-2.md'),
-			join(fixtures, 'one/two/two-1.md'),
-			join(fixtures, 'one/one.md')
-		]).concat(outfile).target(dest)
-
-		fs.readdir(dest, function (_, files) {
-			t.equal(files.length, 1, 'combined to a single file')
-			t.deepEqual(files, [outfile], 'concatenated file is correctly named')
-
-			fs.readFile(join(dest, outfile), 'utf8', function (e, data) {
-				t.deepEqual(data, '# SECOND LEVEL, SECOND FILE\n\n# SECOND LEVEL, FIRST FILE\n\n# FIRST LEVEL\n', 'concatenated file data is ordered correctly')
-			})
-		})
-
-		yield fly.clear(dest)
-	})
-})
-
-test('✈  fly.flatten', function (t) {
-	t.plan(4)
-	var fly = new Fly()
-
-	var src = join(fixtures, '**/*.md')
-	var dest = join(fixtures, 'dest')
-
-	var resultsNormal = ['one']
-	var resultsZero = ['one.md', 'two-1.md', 'two-2.md']
-	var resultsOne = ['one', 'two']
-
-	function matches(data, expect) {
-		return (expect.length === data.length) && expect.every(function (u, i) {
-			return u === data[i]
-		})
-	}
-
-	co(function * () {
-		var tar = dest + '-1'
-
-		yield fly.source(src).target(tar)
-
-		fs.readdir(tar, function (_, data) {
-			t.ok(matches(data, resultsNormal), 'retain normal pathing if desired depth not specified')
-		})
-
-		yield fly.clear(tar)
-	})
-
-	co(function * () {
-		var tar = dest + '-2'
-
-		yield fly.source(src).target(tar, {depth: 0})
-
-		fs.readdir(tar, function (_, data) {
-			t.ok(matches(data, resultsZero), 'move all files to same directory, no parents')
-		})
-
-		yield fly.clear(tar)
-	})
-
-	co(function * () {
-		var tar = dest + '-3'
-
-		yield fly.source(src).target(tar, {depth: 1})
-
-		fs.readdir(tar, function (_, data) {
-			t.ok(matches(data, resultsOne), 'keep one parent directory per file')
-		})
-
-		yield fly.clear(tar)
-	})
-
-	co(function* () {
-		var tar = dest + '-4'
-
-		yield fly.source(src).target(tar, {depth: 5})
-
-		fs.readdir(tar, function (_, data) {
-			t.ok(matches(data, resultsNormal), 'retain full path if desired depth exceeds path depth')
-		})
-
-		yield fly.clear(tar)
-	})
-})
-
-test('✈  fly.target', function (t) {
-	t.plan(1)
-
-	co(function * () {
-		var fly = new Fly()
-
-		yield fly.source(fixtures + '/*.txt').filter(function (data) {
-			return data.toString().toUpperCase()
-		}).target(fixtures)
-
-		yield fly.source(fixtures + '/*.txt').filter(function (data) {
-			t.ok(data.toString() === 'FOO BAR\n', 'resolve source, filters and writers')
-			return data.toString().toLowerCase()
-		}).target(fixtures)
-	})
-})
+	// force trigger
+	setTimeout(() => touch(file), 100);
+}));

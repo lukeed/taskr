@@ -1,168 +1,104 @@
-'use strict'
+'use strict';
 
-// var co = require('co')
-var fs = require('fs')
-var path = require('path')
-var test = require('tape').test
-var plugins = require('../lib/plugins')
-var utils = require('../lib/utils')
-var Fly = require('../lib/fly')
+const join = require('path').join;
+const test = require('tape').test;
+const Promise = require('bluebird');
+const plugs = require('../lib/plugins');
+const cli = require('../lib/cli');
+const $ = require('../lib/fn');
+const co = Promise.coroutine;
 
-var fixtures = path.join(process.cwd(), 'test', 'fixtures')
-var alt = path.join(fixtures, 'alt')
-var pkg = path.join(alt, 'package.json')
+const fixtures = join(__dirname, 'fixtures');
+const altDir = join(fixtures, 'alt');
+const pkgfile = join(altDir, 'package.json');
+const flyfile = join(altDir, 'flyfile.js');
 
-test('fly plugins ✈', function (t) {
-	t.ok(plugins !== undefined, 'plugins object is real')
+test('plugins', t => {
+	t.ok(Object.keys(plugs).length, 'export some methods');
+	['load', 'getDependencies'].forEach(k => t.ok(plugs[k] !== undefined, `${k} is defined`));
+	t.end();
+});
 
-	Array.prototype.concat('load', 'parse', 'readPackages').forEach(function (cmd) {
-		t.ok(plugins[cmd] !== undefined, cmd + ' is defined')
-	})
+test('plugins.getDependencies', co(function * (t) {
+	const out1 = yield plugs.getDependencies();
+	t.true($.isArray(out1) && out1.length === 0, 'via `null` input; returns an empty array');
 
-	t.end()
-})
+	const out2 = yield plugs.getDependencies(pkgfile);
+	t.true($.isArray(out2), 'via valid file; returns an array');
+	t.equal(out2.length, 5, 'via valid file; find all the available dependencies');
 
-test('utils.find (package.json)', function (t) {
-	var name = 'package.json'
-	var ours = path.resolve(fixtures, '../..', name) // fly's package.json
+	const out3 = yield plugs.getDependencies(join(fixtures, 'asd.json'));
+	t.true($.isArray(out3) && out3.length === 0, 'via 404 file; returns an empty array');
 
-	utils.find(name, alt).then(function (fp) {
-		t.ok(fp !== undefined, 'finds a package.json file')
-		t.equal(fp, pkg, 'finds the right one!')
-	})
+	t.end();
+}));
 
-	utils.find(name, fixtures).then(function (fp) {
-		t.equal(fp, ours, 'traverse upwards if not found')
-		t.end()
-	})
-})
+test('plugins.load', co(function * (t) {
+	// const out1 = yield plugs.load(join('/fake123', 'flyfile.js'));
+	// t.true($.isArray(out1) && out1.length === 0, 'via invalid file; returns an empty array');
+		// ^^ logs error message to test; disrupts formatting
 
-test('plugins.findPkg', function (t) {
-	plugins.findPkg(alt).then(function (fp) {
-		t.equal(fp, pkg, 'found a package.json file!')
-		t.end()
-	})
-})
+	const out = yield plugs.load(flyfile);
+	t.ok($.isArray(out), 'returns an array');
+	t.equal(out.length, 3, 'filters down to fly-* plugins only');
+	t.ok($.isObject(out[0]), 'is an array of objects');
+	t.ok('name' in out[0] && 'func' in out[0], 'objects contain `name` and `func` keys');
+	t.equal(out[2].func, undefined, 'return `undefined` for faulty plugins');
 
-test('plugins.readPackages', function (t) {
-	var expect = JSON.parse(fs.readFileSync(pkg, 'utf8'))
+	t.end();
+}));
 
-	plugins.readPackages(pkg).then(function (contents) {
-		t.ok(contents !== undefined, 'found package.json file contents')
-		t.deepEqual(contents.dependencies, expect.dependencies, 'correctly read the contents')
-		t.end()
-	})
-})
+test('fly.plugins', co(function * (t) {
+	const fly = yield cli.spawn(altDir);
 
-test('plugins.parse (simple)', function (t) {
-	var expect = ['fly-fake-plugin']
+	const ext = '*.txt';
+	const src = join(fixtures, ext);
+	const tar = join(fixtures, '.tmp');
 
-	plugins.readPackages(pkg).then(function (data) {
-		t.deepEqual(plugins.parse(data), expect, 'returns an array of fly-* plugin names')
-		t.end()
-	})
-})
+	fly.tasks = {
+		a: function * () {
+			yield this.source(src).plugOne().target(tar);
 
-test('plugins.parse (multiple levels)', function (t) {
-	var tests = [{
-		msg: 'reads all levels of  fly-* deps',
-		expected: ['fly-a', 'fly-b', 'fly-c'],
-		dependencies: {
-			'fly-a': '*',
-			'dep-a': '*'
+			const out = yield Promise.all(
+				[join(tar, 'foo.txt'), join(tar, 'bar.txt')].map(s => this.$.read(s))
+			);
+
+			out.forEach((buf, idx) => {
+				if (idx === 0) {
+					t.equal(buf.toString(), `\nrab oof`, 'reverse `foo.txt` content');
+				} else {
+					t.equal(buf.toString(), `\nzab rab`, 'reverse `bar.txt` content');
+				}
+			});
+
+			yield this.clear(tar);
 		},
-		devDependencies: {
-			'dep-a': '*',
-			'fly-b': '*'
-		},
-		peerDependencies: {
-			'dep-x': '*',
-			'fly-c': '*'
+		b: function * () {
+			yield this.source(src).plugOne().plugTwo().target(tar);
+			t.pass('custom plugins are chainable');
+
+			const out = yield Promise.all(
+				[join(tar, 'foo.txt'), join(tar, 'bar.txt')].map(s => this.$.read(s))
+			);
+
+			out.forEach((buf, idx) => {
+				if (idx === 0) {
+					t.equal(buf.toString(), `foo bar\n`, 'double-reverse `foo.txt` content');
+				} else {
+					t.equal(buf.toString(), `bar baz\n`, 'double-reverse `bar.txt` content');
+				}
+			});
+
+			// relied on `plugOne` to finish first
+			t.pass(`await previous plugin's completion`);
+			// handle `non-every` plugins
+			t.pass('handle non-looping plugins (`{every: 0}`)');
+
+			yield this.clear(tar);
 		}
-	}, {
-		msg: 'skips blacklisted deps',
-		expected: ['fly-a', 'fly-b', 'fly-z'],
-		blacklist: ['fly-c', 'fly-d'],
-		dependencies: {
-			'fly-a': '*',
-			'fly-b': '*',
-			'fly-c': '*',
-			'fly-d': '*'
-		},
-		devDependencies: {
-			'fly-z': '*',
-			'dep-b': '*'
-		}
-	}, {
-		msg: 'return [] for no fly-* pkg',
-		expected: [],
-		dependencies: {
-			'dep-a': '*',
-			'dep-b': '*',
-			'dep-c': '*',
-			'dep-d': '*'
-		},
-		devDependencies: {
-			'dep-e': '*',
-			'dep-f': '*'
-		}
-	}, {
-		msg: 'return [] for no dep pkg',
-		expected: [],
-		dependencies: {},
-		devDependencies: {}
-	}]
+	};
 
-	tests.forEach(function (data) {
-		var blk = data.hasOwnProperty('blacklist') ? data.blacklist : []
-		t.deepEqual(plugins.parse(data, blk), data.expected, data.msg)
-	})
+	yield fly.serial(['a', 'b']);
 
-	t.end()
-})
-
-test('Fly should throws error when sealed property modified', function (t) {
-	var pluginMock = {
-		name: 'mock',
-		plugin: function () {
-			this.root = 'hacked'
-			this.filter('transform', function () {})
-		}
-	}
-
-	t.throws(function () {
-		var fly = new Fly({
-			file: 'mock.js',
-			host: {},
-			plugins: [pluginMock]
-		})
-
-		fly.transform()
-	})
-
-	t.end()
-})
-
-test('Fly should safely apply changes within plugin context', function (t) {
-	var pluginMock = {
-		name: 'mock',
-		plugin: function () {
-			this.filter('transform', function () {
-				this.root = 'hacked'
-			})
-		}
-	}
-
-	t.doesNotThrow(function () {
-		var fly = new Fly({
-			file: 'mock.js',
-			host: {},
-			plugins: [pluginMock]
-		})
-
-		fly.transform()
-		t.equal(fly.root, '.', 'fly instance not rewritten from plugin context')
-	})
-
-	t.end()
-})
+	t.end();
+}));
