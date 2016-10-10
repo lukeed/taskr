@@ -1,6 +1,7 @@
 # fly
 
 [![](https://img.shields.io/travis/flyjs/fly.svg)](https://travis-ci.org/flyjs/fly)
+[![Build status: Windows](https://ci.appveyor.com/api/projects/status/github/flyjs/fly?svg=true)](https://ci.appveyor.com/project/lukeed/fly)
 [![](http://img.shields.io/npm/dm/fly.svg)](https://npmjs.org/package/fly)
 [![](https://img.shields.io/npm/v/fly.svg)](https://npmjs.org/package/fly)
 
@@ -12,7 +13,7 @@ Node.js build system based in [generators](https://developer.mozilla.org/en-US/d
 * [Callback _heaven_](http://jakearchibald.com/2014/es7-async-functions/)
 * [Concurrent tasks](https://github.com/flyjs/fly/blob/master/docs/README.md#features)
 * [Robust error handling](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127)
-* [Cascading tasks](https://github.com/flyjs/fly/blob/master/CHANGELOG.md#cascading-tasks) 
+* [Cascading tasks](https://github.com/flyjs/fly/blob/master/CHANGELOG.md#cascading-tasks)
 * Tiny [API](https://github.com/flyjs/fly/blob/master/docs/README.md#api).
 
 See the [documentation](/docs/README.md) to learn more.
