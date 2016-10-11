@@ -16,7 +16,7 @@ Node.js build system based in [generators](https://developer.mozilla.org/en-US/d
 * [Cascading tasks](https://github.com/flyjs/fly/blob/master/CHANGELOG.md#cascading-tasks)
 * Tiny [API](https://github.com/flyjs/fly/blob/master/docs/README.md#api).
 
-See the [documentation](/docs/README.md) to learn more.
+See the [documentation](/readme.md) to learn more.
 
 ## Install
 
