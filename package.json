@@ -72,6 +72,7 @@
       "examples/**/*.js"
     ],
     "rules": {
+      "no-use-extend-native/no-use-extend-native": 0,
       "babel/object-shorthand": 0,
       "no-unused-expressions": 1,
       "guard-for-in": 1,
