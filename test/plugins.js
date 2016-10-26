@@ -6,6 +6,7 @@ const Promise = require('bluebird');
 const plugs = require('../lib/plugins');
 const cli = require('../lib/cli');
 const $ = require('../lib/fn');
+const Fly = require('../lib');
 const co = Promise.coroutine;
 
 const fixtures = join(__dirname, 'fixtures');
@@ -101,4 +102,75 @@ test('fly.plugins', co(function * (t) {
 	yield fly.serial(['a', 'b']);
 
 	t.end();
+}));
+
+test('fly.plugins\' parameters', co(function * (t) {
+	t.plan(15);
+
+	const ext = '*.txt';
+	const src = join(fixtures, ext);
+	const tar = join(fixtures, '.tmp');
+
+	const fly = new Fly({
+		plugins: [{
+			func: function () {
+				this.plugin('p0', {}, function * (one) {
+					// x2 bcuz 2 files
+					t.true($.isObject(one), '1st param is a `file` object; (`every: 1`)');
+				});
+			}
+		}, {
+			func: function () {
+				this.plugin('p1', {every: 0}, function * (one, two, thr) {
+					t.true($.isArray(one), '1st param is a `files` array; (`every: 0`)');
+					t.deepEqual(two, {}, '2nd param defaults to empty object');
+					t.equal(thr, undefined, '3rd param defaults as undefined');
+				});
+			}
+		}, {
+			func: function () {
+				this.plugin('p2', {every: 0}, function * (_, two, thr) {
+					t.equal(two, 'hi', '2nd param can be a `string`');
+					t.equal(thr, undefined, '3rd param remains undefined');
+				});
+			}
+		}, {
+			func: function () {
+				this.plugin('p3', {every: 0}, function * (_, two, thr) {
+					t.deepEqual(two, ['hi'], '2nd param can be an `array`');
+					t.equal(thr, undefined, '3rd param remains undefined');
+				});
+			}
+		}, {
+			func: function () {
+				this.plugin('p4', {every: 0}, function * (_, two, thr) {
+					t.deepEqual(two, {a: 'hi'}, '2nd param can be a custom `object`');
+					t.equal(thr, undefined, '3rd param remains undefined');
+				});
+			}
+		}, {
+			func: function () {
+				this.plugin('p5', {every: 0}, function * (_, two, thr) {
+					t.deepEqual(thr, {a: 'hi'}, '3rd param can be assigned');
+					t.equal(two, 'hello', '2nd param also assigned');
+				});
+			}
+		}],
+		tasks: {
+			a: function * () {
+				yield this.source(src).p0().target(tar);
+				yield this.source(src).p1().target(tar);
+				yield this.source(src).p2('hi').target(tar);
+				yield this.source(src).p3(['hi']).target(tar);
+				yield this.source(src).p4({a: 'hi'}).target(tar);
+				yield this.source(src).p5('hello', {a: 'hi'}).target(tar);
+				yield this.clear(tar);
+			}
+		}
+	});
+
+	t.true('p0' in fly, 'attach first custom plugin (`p0`) to fly');
+	t.true('p5' in fly, 'attach first custom plugin (`p0`) to fly');
+
+	yield fly.start('a');
 }));
