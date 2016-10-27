@@ -66,7 +66,6 @@
     "node": ">= 4.6.0"
   },
   "xo": {
-    "semicolon": true,
     "esnext": true,
     "ignore": [
       "examples/**/*.js"
