@@ -16,7 +16,9 @@ Node.js build system based in [generators](https://developer.mozilla.org/en-US/d
 * [Cascading tasks](https://github.com/flyjs/fly/blob/v1.4.1/CHANGELOG.md#cascading-tasks)
 * Tiny [API](https://github.com/flyjs/fly/blob/v1.4.1/docs/README.md#api).
 
-See the [documentation](https://github.com/flyjs/fly/blob/v1.4.1/docs/README.md) to learn more. Note that internal documentation covers the latest stable release, [v1.4.1](https://github.com/flyjs/fly/releases/tag/v1.4.1). Documentation for v2 will be available soon.
+See the [documentation](https://github.com/flyjs/fly/blob/v1.4.1/docs/README.md) to learn more.
+
+> Note: Documentation reflects the latest stable release, [v1.4.1](https://github.com/flyjs/fly/releases/tag/v1.4.1). Documentation for v2 will be available soon.
 
 ## Install
 
