@@ -93,18 +93,18 @@ test('fn.getTime', t => {
 	t.end();
 });
 
-test('fn.keyUnique', t => {
-	const fn = $.keyUnique;
-	const obj = {a: 1, b: 1, a1: 1, a2: 1, a3: 1};
+test('fn.valUniq', t => {
+	const fn = $.valUniq;
+	const arr = ['a', 'b', 'a1', 'a2', 'a3'];
 
-	const out1 = fn('a', obj);
+	const out1 = fn('a', arr);
 	t.equal(typeof out1, 'string', 'returns a string');
 	t.equal(out1, 'a4', 'loops increment multiple times');
 
-	const out2 = fn('b', obj);
+	const out2 = fn('b', arr);
 	t.equal(out2, 'b1', 'increments once');
 
-	const out3 = fn('c', obj);
+	const out3 = fn('c', arr);
 	t.equal(out3, 'c', 'does nothing if was unique');
 
 	t.end();
