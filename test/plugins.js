@@ -16,9 +16,25 @@ const flyfile = join(altDir, 'flyfile.js');
 
 test('plugins', t => {
 	t.ok(Object.keys(plugs).length, 'export some methods');
-	['load', 'getDependencies'].forEach(k => t.ok(plugs[k] !== undefined, `${k} is defined`));
+	['load', 'getDependencies', 'getPackage'].forEach(k => t.ok(plugs[k] !== undefined, `${k} is defined`));
 	t.end();
 });
+
+test('plugins.getPackage', co(function * (t) {
+	const out1 = yield plugs.getPackage(altDir);
+	t.true($.isObject(out1), 'returns an object');
+	t.true('file' in out1 && 'data' in out1, 'object has `file` and `data` keys');
+	t.equal(out1.file, pkgfile, 'finds the correct `package.json` file');
+	t.true($.isObject(out1.data), 'the `object.data` is also an object');
+	t.true('dependencies' in out1.data, 'the `object.data` contains all `package.json` contents');
+
+	// "fly" > "pkg" tests
+	const subDir = join(altDir, 'sub');
+	const out2 = yield plugs.getPackage(subDir);
+	t.equal(out2.file, pkgfile, 'read `fly.pkg` config to find alternate `package.json` file');
+
+	t.end();
+}));
 
 test('plugins.getDependencies', co(function * (t) {
 	const out1 = yield plugs.getDependencies();
