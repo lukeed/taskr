@@ -37,15 +37,16 @@ test('plugins.getPackage', co(function * (t) {
 }));
 
 test('plugins.getDependencies', co(function * (t) {
-	const out1 = yield plugs.getDependencies();
+	const out1 = plugs.getDependencies();
 	t.true($.isArray(out1) && out1.length === 0, 'via `null` input; returns an empty array');
 
-	const out2 = yield plugs.getDependencies(pkgfile);
+	const pkg = yield plugs.getPackage(pkgfile);
+	const out2 = plugs.getDependencies(pkg.data);
 	t.true($.isArray(out2), 'via valid file; returns an array');
 	t.equal(out2.length, 5, 'via valid file; find all the available dependencies');
 
-	const out3 = yield plugs.getDependencies(join(fixtures, 'asd.json'));
-	t.true($.isArray(out3) && out3.length === 0, 'via 404 file; returns an empty array');
+	const out3 = plugs.getDependencies({});
+	t.true($.isArray(out3) && out3.length === 0, 'via `{}`; returns an empty array');
 
 	t.end();
 }));
