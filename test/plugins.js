@@ -16,20 +16,37 @@ const flyfile = join(altDir, 'flyfile.js');
 
 test('plugins', t => {
 	t.ok(Object.keys(plugs).length, 'export some methods');
-	['load', 'getDependencies'].forEach(k => t.ok(plugs[k] !== undefined, `${k} is defined`));
+	['load', 'getDependencies', 'getPackage'].forEach(k => t.ok(plugs[k] !== undefined, `${k} is defined`));
 	t.end();
 });
 
+test('plugins.getPackage', co(function * (t) {
+	const out1 = yield plugs.getPackage(altDir);
+	t.true($.isObject(out1), 'returns an object');
+	t.true('file' in out1 && 'data' in out1, 'object has `file` and `data` keys');
+	t.equal(out1.file, pkgfile, 'finds the correct `package.json` file');
+	t.true($.isObject(out1.data), 'the `object.data` is also an object');
+	t.true('dependencies' in out1.data, 'the `object.data` contains all `package.json` contents');
+
+	// "fly" > "pkg" tests
+	const subDir = join(altDir, 'sub');
+	const out2 = yield plugs.getPackage(subDir);
+	t.equal(out2.file, pkgfile, 'read `fly.pkg` config to find alternate `package.json` file');
+
+	t.end();
+}));
+
 test('plugins.getDependencies', co(function * (t) {
-	const out1 = yield plugs.getDependencies();
+	const out1 = plugs.getDependencies();
 	t.true($.isArray(out1) && out1.length === 0, 'via `null` input; returns an empty array');
 
-	const out2 = yield plugs.getDependencies(pkgfile);
+	const pkg = yield plugs.getPackage(pkgfile);
+	const out2 = plugs.getDependencies(pkg.data);
 	t.true($.isArray(out2), 'via valid file; returns an array');
 	t.equal(out2.length, 5, 'via valid file; find all the available dependencies');
 
-	const out3 = yield plugs.getDependencies(join(fixtures, 'asd.json'));
-	t.true($.isArray(out3) && out3.length === 0, 'via 404 file; returns an empty array');
+	const out3 = plugs.getDependencies({});
+	t.true($.isArray(out3) && out3.length === 0, 'via `{}`; returns an empty array');
 
 	t.end();
 }));
