@@ -317,8 +317,18 @@ test('fly.target', co(function * (t) {
 	const dest3 = join(fixtures, '.tmp3');
 	const dest4 = join(fixtures, '.tmp4');
 	const dest5 = join(fixtures, '.tmp5');
+	const dest6 = join(fixtures, '.tmp6');
 
-	const fly = new Fly();
+	const fly = new Fly({
+		plugins: [{
+			name: 'fakeConcat',
+			func: function () {
+				this.plugin('fakeConcat', {every: 0}, function * (all) {
+					this._.files = [{dir: all[0].dir, base: 'fake.foo', data: new Buffer('bar')}];
+				});
+			}
+		}]
+	});
 
 	// clean slate
 	yield fly.clear([dest1, dest2, dest3, dest4, dest5]);
@@ -352,8 +362,14 @@ test('fly.target', co(function * (t) {
 	const str5 = yield fly.$.find(join(dest5, 'two', 'two-1.md'));
 	t.true(str4.length && str5.length, 'write to multiple targets');
 
+	yield fly.source(glob4).target(dest6).fakeConcat().target(`${dest6}/sub`);
+	t.pass('allow `target()` to be chained');
+	const str6 = yield fly.$.find(join(dest6, 'two', 'two-1.md'));
+	const str7 = yield fly.$.find(join(dest6, 'sub', 'fake.foo'));
+	t.true(str6.length && str7.length, 'perform all actions in double-target chain');
+
 	// clean up
-	yield fly.clear([dest1, dest2, dest3, dest4, dest5]);
+	yield fly.clear([dest1, dest2, dest3, dest4, dest5, dest6]);
 
 	t.end();
 }));
