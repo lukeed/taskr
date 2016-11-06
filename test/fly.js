@@ -15,7 +15,7 @@ test('fly.prototype', t => {
 	const _ = Fly.prototype;
 
 	['source', 'target', 'emit', 'on', 'clear',
-	'start', 'serial', 'parallel']
+	'start', 'serial', 'parallel', 'run']
 		.forEach(cmd => {
 			t.equal(typeof _[cmd], 'function', `fly.${cmd} is defined`);
 		});
@@ -270,6 +270,45 @@ test('fly.serial', co(function * (t) {
 
 	yield fly2.serial(['a', 'b', 'c']);
 	t.equal(num, 2, 'interrupt `serial` on error; only 2 tasks ran');
+}));
+
+test('fly.run', co(function * (t) {
+	t.plan(9);
+	const src = join(fixtures, '*.txt');
+	const tar = join(fixtures, '.tmp');
+
+	const fly = new Fly({
+		tasks: {
+			a: function * (o) {
+				const t = o.val;
+				yield this.source(src).run({}, function * (file) {
+					t.true($.isObject(file), 'iterate thru each `file` by default');
+					t.true('data' in file, 'entire `file` object is accessed');
+					file.data = new Buffer(file.data.toString().toUpperCase());
+				}).target(tar);
+			},
+			b: function * (o) {
+				const t = o.val;
+				yield this.source(src).run({every: 0}, function * (files) {
+					t.true($.isArray(files), 'allow inline `run` to use `every: 0`');
+				}).target(tar);
+			}
+		}
+	});
+
+	yield fly.start('a', {val: t});
+	const arr1 = yield fly.$.expand(`${tar}/*.txt`);
+	t.equal(arr1.length, 2, 'place files in target destination after `inline` method');
+	const str1 = yield fly.$.read(`${tar}/foo.txt`, 'utf8');
+	const str2 = yield fly.$.read(`${tar}/bar.txt`, 'utf8');
+	t.equal(str1, 'FOO BAR\n', 'capitalize file contents individually');
+	t.equal(str2, 'BAR BAZ\n', 'capitalize file contents individually');
+	yield fly.clear(tar);
+
+	yield fly.start('b', {val: t});
+	const arr2 = yield fly.$.expand(`${tar}/*.txt`);
+	t.equal(arr2.length, 2, 'place files in target destination after `inline` method');
+	yield fly.clear(tar);
 }));
 
 test('fly.clear', co(function * (t) {
