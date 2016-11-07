@@ -9,5 +9,10 @@
   },
   "peerDependencies": {
     "peer": "*"
+  },
+  "fly": {
+    "requires": [
+      "./local-plugin.js"
+    ]
   }
 }
