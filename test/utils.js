@@ -66,6 +66,10 @@ test('utils.write', co(function * (t) {
 	const done = yield $.write(file, demo);
 	t.equal(done, undefined, 'returns nothing');
 
+	yield $.write(nest, demo);
+	const nada = yield $.read(nest);
+	t.equal(nada, null, 'does not attempt to write to directory');
+
 	const seek = yield $.find(file);
 	t.true(seek && seek.length, 'creates the file, including sub-dirs');
 
