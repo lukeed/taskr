@@ -218,6 +218,53 @@ test('fly.parallel', co(function * (t) {
 	t.notDeepEqual(order, ['a', 'b', 'c'], 'execution order is random');
 }));
 
+test('fly.parallel (sources)', co(function * (t) {
+	t.plan(8);
+	const ops = {every: 0, files: 0};
+	const tmp = join(fixtures, '.tmp');
+	// globs
+	const foo = join(fixtures, '*.js');
+	const bar = join(fixtures, '*.map');
+	const baz = join(fixtures, '*.txt');
+	const bat = join(fixtures, 'bar.txt');
+
+	const fly = new Fly({
+		tasks: {
+			a: function * () {
+				yield this.source(foo).run(ops, function * (globs) {
+					console.log('inside a', foo, globs[0]);
+					t.equal(globs[0], foo, 'plugin receives correct `glob` parameter value');
+					t.equal(this._.globs[0], foo, 'source glob is assigned to instance');
+				}).target(tmp);
+			},
+			b: function * () {
+				yield this.source(bar).run(ops, function * (globs) {
+					console.log('inside b', bar, globs[0]);
+					t.equal(globs[0], bar, 'plugin receives correct `glob` parameter value');
+					t.equal(this._.globs[0], bar, 'source glob is assigned to instance');
+				}).target(tmp);
+			},
+			c: function * () {
+				yield this.source(baz).run(ops, function * (globs) {
+					console.log('inside c', baz, globs[0]);
+					t.equal(globs[0], baz, 'plugin receives correct `glob` parameter value');
+					t.equal(this._.globs[0], baz, 'source glob is assigned to instance');
+				}).target(tmp);
+			},
+			d: function * () {
+				yield this.source(bat).run(ops, function * (globs) {
+					console.log('inside d', bat, globs[0]);
+					t.equal(globs[0], bat, 'plugin receives correct `glob` parameter value');
+					t.equal(this._.globs[0], bat, 'source glob is assigned to instance');
+				}).target(tmp);
+			}
+		}
+	});
+
+	yield fly.parallel(['a', 'b', 'c', 'd']);
+	yield fly.clear(tmp);
+}));
+
 test('fly.serial', co(function * (t) {
 	t.plan(7);
 
