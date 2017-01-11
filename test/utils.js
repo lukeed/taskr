@@ -2,8 +2,8 @@
 
 const join = require('path').join;
 const co = require('bluebird').coroutine;
-const clear = require('../lib/api/clear');
 const test = require('tape').test;
+const del = require('./helpers');
 const $ = require('../lib/utils');
 
 const fixtures = join(__dirname, 'fixtures', 'utils');
@@ -76,7 +76,7 @@ test('utils.write', co(function * (t) {
 	const data = yield $.read(file, 'utf8');
 	t.equal(data, demo, 'writes the content to file correctly');
 
-	yield clear(nest);
+	yield del(nest);
 
 	t.end();
 }));

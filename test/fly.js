@@ -4,21 +4,22 @@ const join = require('path').join;
 const Promise = require('bluebird');
 const test = require('tape').test;
 const touch = require('touch');
+const del = require('./helpers');
 const $ = require('../lib/fn');
 const Fly = require('../lib');
-const co = Promise.coroutine;
 
+const co = Promise.coroutine;
 const fixtures = join(__dirname, 'fixtures');
 
 test('fly.prototype', t => {
 	t.ok(Fly !== undefined, 'is defined');
 	const _ = Fly.prototype;
 
-	['source', 'target', 'emit', 'on', 'clear',
-	'start', 'serial', 'parallel', 'run']
-		.forEach(cmd => {
-			t.equal(typeof _[cmd], 'function', `fly.${cmd} is defined`);
-		});
+	['source', 'target', 'emit', 'on',
+		'start', 'serial', 'parallel', 'run']
+	.forEach(cmd => {
+		t.equal(typeof _[cmd], 'function', `fly.${cmd} is defined`);
+	});
 
 	t.end();
 });
@@ -262,7 +263,7 @@ test('fly.parallel (sources)', co(function * (t) {
 	});
 
 	yield fly.parallel(['a', 'b', 'c', 'd']);
-	yield fly.clear(tmp);
+	yield del(tmp);
 }));
 
 test('fly.serial', co(function * (t) {
@@ -350,46 +351,12 @@ test('fly.run', co(function * (t) {
 	const str2 = yield fly.$.read(`${tar}/bar.txt`, 'utf8');
 	t.equal(str1, 'FOO BAR\n', 'capitalize file contents individually');
 	t.equal(str2, 'BAR BAZ\n', 'capitalize file contents individually');
-	yield fly.clear(tar);
+	yield del(tar);
 
 	yield fly.start('b', {val: t});
 	const arr2 = yield fly.$.expand(`${tar}/*.txt`);
 	t.equal(arr2.length, 2, 'place files in target destination after `inline` method');
-	yield fly.clear(tar);
-}));
-
-test('fly.clear', co(function * (t) {
-	const files = ['a.foo', 'b.foo', 'c.foo'].map(f => join(fixtures, f));
-	const dirs = ['tmp1', 'tmp2', 'tmp3'].map(d => join(fixtures, d));
-	const file = join(fixtures, 'foo.bar');
-	const fly = new Fly();
-	const data = 'hi';
-
-	// prepare new fixture files
-	yield fly.$.write(file, data);
-
-	for (const d of dirs) {
-		yield fly.$.write(join(d, 'foo.z'), data);
-	}
-
-	for (const f of files) {
-		yield fly.$.write(f, data);
-	}
-
-	const out1 = yield fly.clear(file);
-	t.ok(out1 === undefined, 'has no return value');
-	t.false(yield fly.$.find(file), 'delete a single file by its full path');
-
-	yield fly.clear(dirs);
-	const out2 = yield fly.$.expand(dirs);
-	t.false(out2.length, 'delete an array of directory paths');
-
-	const glob = join(fixtures, '*.foo');
-	yield fly.clear(glob);
-	const out3 = yield fly.$.expand(glob);
-	t.false(out3.length, 'delete a glob of matching files');
-
-	t.end();
+	yield del(tar);
 }));
 
 test('fly.target', co(function * (t) {
@@ -417,7 +384,7 @@ test('fly.target', co(function * (t) {
 	});
 
 	// clean slate
-	yield fly.clear([dest1, dest2, dest3, dest4, dest5]);
+	yield del([dest1, dest2, dest3, dest4, dest5]);
 
 	// test #1
 	yield fly.source(glob1).target(dest1);
@@ -455,7 +422,7 @@ test('fly.target', co(function * (t) {
 	t.true(str6.length && str7.length, 'perform all actions in double-target chain');
 
 	// clean up
-	yield fly.clear([dest1, dest2, dest3, dest4, dest5, dest6]);
+	yield del([dest1, dest2, dest3, dest4, dest5, dest6]);
 
 	t.end();
 }));

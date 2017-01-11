@@ -3,10 +3,12 @@
 const join = require('path').join;
 const test = require('tape').test;
 const Promise = require('bluebird');
+const del = require('./helpers');
 const plugs = require('../lib/plugins');
 const cli = require('../lib/cli');
 const $ = require('../lib/fn');
 const Fly = require('../lib');
+
 const co = Promise.coroutine;
 
 const fixtures = join(__dirname, 'fixtures');
@@ -100,7 +102,7 @@ test('fly.plugins', co(function * (t) {
 				}
 			});
 
-			yield this.clear(tar);
+			yield del(tar);
 		},
 		b: function * () {
 			yield this.source(src).plugOne().plugTwo().target(tar);
@@ -123,7 +125,7 @@ test('fly.plugins', co(function * (t) {
 			// handle `non-every` plugins
 			t.pass('handle non-looping plugins (`{every: 0}`)');
 
-			yield this.clear(tar);
+			yield del(tar);
 		}
 	};
 
@@ -192,7 +194,7 @@ test('fly.plugins\' parameters', co(function * (t) {
 				yield this.source(src).p3(['hi']).target(tar);
 				yield this.source(src).p4({a: 'hi'}).target(tar);
 				yield this.source(src).p5('hello', {a: 'hi'}).target(tar);
-				yield this.clear(tar);
+				yield del(tar);
 			}
 		}
 	});
