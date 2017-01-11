@@ -38,7 +38,7 @@
   "devDependencies": {
     "rimraf": "^2.5.4",
     "tap-spec": "^4.1.1",
-    "tape": "^4.2.2",
+    "tape": "^4.6.3",
     "xo": "^0.12.0"
   },
   "scripts": {
