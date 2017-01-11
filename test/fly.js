@@ -3,7 +3,6 @@
 const join = require('path').join;
 const Promise = require('bluebird');
 const test = require('tape').test;
-const touch = require('touch');
 const del = require('./helpers');
 const $ = require('../lib/fn');
 const Fly = require('../lib');
@@ -427,70 +426,3 @@ test('fly.target', co(function * (t) {
 	t.end();
 }));
 
-test('fly.watch', co(function * (t) {
-	t.plan(15);
-
-	const glob = join(fixtures, '*.js');
-	const file = join(fixtures, 'flyfile.js');
-	const want = ['b', 'a'];
-
-	let val = 10;
-	let order = [];
-
-	const fly = new Fly({
-		tasks: {
-			a: function * (f, o) {
-				order.push('a');
-				t.pass('execute tasks when `watch` starts');
-				t.equal(o.val, val, 'retain `serial` options behavior');
-				return ++val;
-			},
-			b: function * (f, o) {
-				order.push('b');
-				t.equal(o.val, val, 'pass (initial) options to tasks on init');
-				return ++val;
-			}
-		}
-	});
-
-	fly.emit = function (e, obj) {
-		if (e === 'fly_watch') {
-			t.pass('notify when `watch` starts');
-		}
-
-		if (e === 'fly_watch_event') {
-			t.pass('notify when `watch` events occur');
-			t.equal(obj.action, 'changed', 'receive the correct event `type`');
-			t.equal(obj.file, file, 'receive the relevant `file` for given event');
-			t.true('prevs' in fly._, 'add the `prevs` key to `fly._` internals');
-			t.true($.isArray(fly._.prevs), 'the `fly._.prevs` key is an array');
-			t.equal(fly._.prevs[0], glob, 'save the previous `glob` to `fly._.prevs`');
-		}
-	};
-
-	const ctx = yield fly.watch(glob, want, {val: val});
-	t.deepEqual(order, want, 'run `watch` task chain in `serial` mode');
-	t.equal(val, 12, 'truly `await` for chain completion');
-
-	// reset
-	order = [];
-
-	// hijack / overwrite tasks
-	fly.tasks = {
-		a: function * (f, o) {
-			order.push('a');
-			t.equal(o.src, file, 'receives new `src` key after `watch_event`');
-			t.deepEqual(order, want, 're-run chain in correct order');
-			// stop watching.
-			ctx.unwatch(glob);
-			ctx.close();
-		},
-		b: function * (f, o) {
-			order.push('b');
-			t.equal(o.src, file, 'receive new `src` key after `watch_event`');
-		}
-	};
-
-	// force trigger
-	setTimeout(() => touch(file), 100);
-}));
