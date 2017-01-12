@@ -1,8 +1,8 @@
 'use strict';
 
-const join = require('path').join;
 const co = require('bluebird').coroutine;
-const test = require('tape').test;
+const join = require('path').join;
+const test = require('tape');
 
 const cli = require('../lib/cli');
 const $ = require('../lib/fn');

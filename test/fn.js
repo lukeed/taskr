@@ -1,7 +1,7 @@
 /* eslint no-array-constructor:0,no-new-object:0,no-new-func:0,prefer-arrow-callback:0 */
 'use strict';
 
-const test = require('tape').test;
+const test = require('tape');
 const $ = require('../lib/fn');
 
 test('fn.isArray', t => {

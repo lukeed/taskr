@@ -1,8 +1,9 @@
 'use strict';
 
-const join = require('path').join;
-const test = require('tape').test;
 const Promise = require('bluebird');
+const join = require('path').join;
+const test = require('tape');
+
 const del = require('./helpers');
 const plugs = require('../lib/plugins');
 const cli = require('../lib/cli');

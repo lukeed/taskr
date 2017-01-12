@@ -1,7 +1,8 @@
 'use strict';
 
 const E = require('events');
-const test = require('tape').test;
+const test = require('tape');
+
 const reporter = require('../lib/reporter');
 
 class Emit extends E {
