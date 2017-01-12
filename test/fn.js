@@ -109,3 +109,10 @@ test('fn.getUniques', t => {
 	t.deepEqual(fn(['a', 'a', 'b', 'a', 'c', 'a', 'd']), ['a', 'b', 'c', 'd']);
 	t.end();
 });
+
+test('fn.flatten', t => {
+	const fn = $.flatten;
+	t.deepEqual(fn(['a', 'b', ['c'], 'd', ['e']]), ['a', 'b', 'c', 'd', 'e'], 'flatten nested arrays');
+	t.deepEqual(fn([[['a', ['b']]], ['c']]), ['a', 'b', 'c'], 'flatten deeply nested arrays');
+	t.end();
+});
