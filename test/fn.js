@@ -70,11 +70,11 @@ test("fn.toArray", t => {
 
 test("fn.formatTime", t => {
 	const fn = $.formatTime
-	t.equal(fn(-1), "-1ms", "accepts negative numbers")
-	t.equal(fn(0), "0ms", "accepts zero")
-	t.equal(fn(999), "999ms", "accepts positive number")
-	t.equal(fn(1000), "1s", "converts 1000ms")
-	t.equal(fn(2222), "2.2s", "converts large, quirky number")
+	t.equal(fn([0, -1e6]), "-1ms", "accepts negative numbers")
+	t.equal(fn([0, 0]), "0ms", "accepts zero")
+	t.equal(fn([0, 0.999e9]), "999ms", "accepts positive number")
+	t.equal(fn([1, 0]), "1.00s", "simple seconds")
+	t.equal(fn([2, 2.2e7]), "2.02s", "converts large, quirky number")
 	t.end()
 })
 
