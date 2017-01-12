@@ -11,7 +11,7 @@ const co = Promise.coroutine;
 
 co(function * () {
 	// check if using latest
-	notifier({pkg: pkg}).notify();
+	notifier({pkg}).notify();
 
 	// get command options
 	const o = cli.options();

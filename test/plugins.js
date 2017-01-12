@@ -88,7 +88,7 @@ test('fly.plugins', co(function * (t) {
 	const tar = join(fixtures, '.tmp');
 
 	fly.tasks = {
-		a: function * () {
+		* a() {
 			yield this.source(src).plugOne().target(tar);
 
 			const out = yield Promise.all(
@@ -105,7 +105,7 @@ test('fly.plugins', co(function * (t) {
 
 			yield del(tar);
 		},
-		b: function * () {
+		* b() {
 			yield this.source(src).plugOne().plugTwo().target(tar);
 			t.pass('custom plugins are chainable');
 
@@ -144,14 +144,14 @@ test('fly.plugins\' parameters', co(function * (t) {
 
 	const fly = new Fly({
 		plugins: [{
-			func: function () {
+			func() {
 				this.plugin('p0', {}, function * (one) {
 					// x2 bcuz 2 files
 					t.true($.isObject(one), '1st param is a `file` object; (`every: 1`)');
 				});
 			}
 		}, {
-			func: function () {
+			func() {
 				this.plugin('p1', {every: 0}, function * (one, two, thr) {
 					t.true($.isArray(one), '1st param is a `files` array; (`every: 0`)');
 					t.deepEqual(two, {}, '2nd param defaults to empty object');
@@ -159,28 +159,28 @@ test('fly.plugins\' parameters', co(function * (t) {
 				});
 			}
 		}, {
-			func: function () {
+			func() {
 				this.plugin('p2', {every: 0}, function * (_, two, thr) {
 					t.equal(two, 'hi', '2nd param can be a `string`');
 					t.equal(thr, undefined, '3rd param remains undefined');
 				});
 			}
 		}, {
-			func: function () {
+			func() {
 				this.plugin('p3', {every: 0}, function * (_, two, thr) {
 					t.deepEqual(two, ['hi'], '2nd param can be an `array`');
 					t.equal(thr, undefined, '3rd param remains undefined');
 				});
 			}
 		}, {
-			func: function () {
+			func() {
 				this.plugin('p4', {every: 0}, function * (_, two, thr) {
 					t.deepEqual(two, {a: 'hi'}, '2nd param can be a custom `object`');
 					t.equal(thr, undefined, '3rd param remains undefined');
 				});
 			}
 		}, {
-			func: function () {
+			func() {
 				this.plugin('p5', {every: 0}, function * (_, two, thr) {
 					t.deepEqual(thr, {a: 'hi'}, '3rd param can be assigned');
 					t.equal(two, 'hello', '2nd param also assigned');
@@ -188,7 +188,7 @@ test('fly.plugins\' parameters', co(function * (t) {
 			}
 		}],
 		tasks: {
-			a: function * () {
+			* a() {
 				yield this.source(src).p0().target(tar);
 				yield this.source(src).p1().target(tar);
 				yield this.source(src).p2('hi').target(tar);

@@ -54,7 +54,7 @@ test('fly.init', co(function * (t) {
 	const RDY = '_ready';
 	const fly1 = new Fly({
 		tasks: {
-			a: function * (f) {
+			* a(f) {
 				t.equal(f, fly1, 'pass fly instance to tasks');
 			}
 		}
@@ -122,7 +122,7 @@ test('fly.start', co(function * (t) {
 
 	const fly1 = new Fly({
 		tasks: {
-			a: function * () {
+			* a() {
 				val = 5;
 				t.pass('execute a task programmatically');
 			}
@@ -136,8 +136,8 @@ test('fly.start', co(function * (t) {
 
 	const fly2 = new Fly({
 		tasks: {
-			a: function * () {},
-			err: function * () {
+			* a() {},
+			* err() {
 				throw new Error();
 			}
 		}
@@ -165,14 +165,14 @@ test('fly.start', co(function * (t) {
 	const demo = {val: 5};
 	const fly3 = new Fly({
 		tasks: {
-			a: function * (f, obj) {
+			* a(f, obj) {
 				t.ok(obj.val === demo.val, 'pass a value to a task');
 				t.ok('src' in obj, 'a `src` key always exists');
 				t.ok(obj.src === null, 'the `src` key defaults to null');
 				yield f.start('b');
 				return obj.val;
 			},
-			b: function * () {
+			* b() {
 				t.pass('start a task from within a task');
 				yield Promise.resolve(4);
 				return 4;
@@ -192,19 +192,19 @@ test('fly.parallel', co(function * (t) {
 
 	const fly = new Fly({
 		tasks: {
-			a: function * (f, opts) {
+			* a(f, opts) {
 				yield Promise.delay(9);
 				t.equal(opts.val, demo.val, 'task-a got initial `opts` object');
 				order.push('a');
 				return int++;
 			},
-			b: function * (f, opts) {
+			* b(f, opts) {
 				yield Promise.delay(6);
 				t.equal(opts.val, demo.val, 'task-b got initial `opts` object');
 				order.push('b');
 				return int++;
 			},
-			c: function * (f, opts) {
+			* c(f, opts) {
 				yield Promise.delay(3);
 				t.equal(opts.val, demo.val, 'task-c got initial `opts` object');
 				order.push('c');
@@ -235,28 +235,28 @@ test('fly.parallel', co(function * (t) {
 
 // 	const fly = new Fly({
 // 		tasks: {
-// 			a: function * (f) {
+// 			* a(f) {
 // 				yield f.source(foo).run(ops, function * (globs) {
 // 					console.log('inside a', foo, globs[0]);
 // 					t.equal(globs[0], foo, 'plugin receives correct `glob` parameter value');
 // 					t.equal(f._.globs[0], foo, 'source glob is assigned to instance');
 // 				}).target(tmp);
 // 			},
-// 			b: function * (f) {
+// 			* b(f) {
 // 				yield f.source(bar).run(ops, function * (globs) {
 // 					console.log('inside b', bar, globs[0]);
 // 					t.equal(globs[0], bar, 'plugin receives correct `glob` parameter value');
 // 					t.equal(f._.globs[0], bar, 'source glob is assigned to instance');
 // 				}).target(tmp);
 // 			},
-// 			c: function * (f) {
+// 			* c(f) {
 // 				yield f.source(baz).run(ops, function * (globs) {
 // 					console.log('inside c', baz, globs[0]);
 // 					t.equal(globs[0], baz, 'plugin receives correct `glob` parameter value');
 // 					t.equal(f._.globs[0], baz, 'source glob is assigned to instance');
 // 				}).target(tmp);
 // 			},
-// 			d: function * (f) {
+// 			* d(f) {
 // 				yield f.source(bat).run(ops, function * (globs) {
 // 					console.log('inside d', bat, globs[0]);
 // 					t.equal(globs[0], bat, 'plugin receives correct `glob` parameter value');
@@ -277,19 +277,19 @@ test('fly.serial', co(function * (t) {
 	const order = [];
 	const fly1 = new Fly({
 		tasks: {
-			a: function * (f, opts) {
+			* a(f, opts) {
 				yield Promise.delay(2);
 				t.equal(opts.val, int, 'task-a got initial `opts` object');
 				order.push('a');
 				return opts.val + 1;
 			},
-			b: function * (f, opts) {
+			* b(f, opts) {
 				yield Promise.delay(1);
 				t.equal(opts.val, int + 1, 'task-b got mutated `opts` object');
 				order.push('b');
 				return opts.val + 1;
 			},
-			c: function * (f, opts) {
+			* c(f, opts) {
 				yield Promise.delay(0);
 				t.equal(opts.val, int + 2, 'task-c got mutated `opts` object');
 				order.push('c');
@@ -305,13 +305,13 @@ test('fly.serial', co(function * (t) {
 	let num = 0;
 	const fly2 = new Fly({
 		tasks: {
-			a: function * () {
+			* a() {
 				num++;
 			},
-			c: function * () {
+			* c() {
 				num++;
 			},
-			b: function * () {
+			* b() {
 				num++;
 				throw new Error();
 			}
@@ -331,7 +331,7 @@ test('fly.run', co(function * (t) {
 
 	const fly = new Fly({
 		tasks: {
-			a: function * (f, o) {
+			* a(f, o) {
 				const t = o.val;
 				yield f.source(src).run({}, function * (file) {
 					t.true($.isObject(file), 'iterate thru each `file` by default');
@@ -339,7 +339,7 @@ test('fly.run', co(function * (t) {
 					file.data = new Buffer(file.data.toString().toUpperCase());
 				}).target(tar);
 			},
-			b: function * (f, o) {
+			* b(f, o) {
 				const t = o.val;
 				yield f.source(src).run({every: 0}, function * (files) {
 					t.true($.isArray(files), 'allow inline `run` to use `every: 0`');
@@ -379,7 +379,7 @@ test('fly.target', co(function * (t) {
 	const fly = new Fly({
 		plugins: [{
 			name: 'fakeConcat',
-			func: function () {
+			func() {
 				this.plugin('fakeConcat', {every: 0}, function * (all) {
 					this._.files = [{dir: all[0].dir, base: 'fake.foo', data: new Buffer('bar')}];
 				});
