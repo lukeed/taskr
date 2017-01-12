@@ -94,22 +94,22 @@ test("cli.spawn", co(function * (t) {
 }))
 
 test("cli.options", t => {
-	const d = cli.options() // defaults
-	t.true(d.pwd === ".", "defaults `pwd` to `.`")
-	t.true(d.p === d.pwd, "assigns `p` alias to `pwd`")
-	t.true(d.mode === "serial", "defaults `mode` to `serial`")
-	t.true(d.m === d.mode, "assigns `m` alias to `mode`")
+	const o = cli.options() // defaults
+	t.true(o.cwd === ".", "defaults `cwd` to `.`")
+	t.true(o.d === o.cwd, "assigns `d` alias to `cwd`")
+	t.true(o.mode === "serial", "defaults `mode` to `serial`")
+	t.true(o.m === o.mode, "assigns `m` alias to `mode`")
 
 	const val = {
-		p: "/test",
+		d: "/test",
 		m: "parallel",
 		l: "bare",
 		_: "test1 test2"
 	}
 
-	const max = cli.options(`-p=${val.p} -m=${val.m} --list=${val.l} ${val._}`.split(" "))
+	const max = cli.options(`-d=${val.d} -m=${val.m} --list=${val.l} ${val._}`.split(" "))
 
-	t.true(max.p === max.pwd && max.p === val.p, "assigns `pwd` value")
+	t.true(max.d === max.cwd && max.d === val.d, "assigns `cwd` value")
 	t.true(max.m === max.mode && max.m === val.m, "assigns `mode` value")
 	t.true(max.l === max.list && max.l === val.l, "assigns `list` value")
 	t.true(max._.join(" ") === val._, "assigns `tasks` value")
