@@ -4,26 +4,6 @@
 const test = require('tape');
 const $ = require('../lib/fn');
 
-test('fn.isArray', t => {
-	const fn = $.isArray;
-
-	t.true(fn([]), `true: []`);
-	t.true(fn([1]), `true: [1]`);
-	t.true(fn(new Array()), `true: new Array()`);
-	t.true(fn(Array.prototype), `true: Array.prototype`);
-
-	t.false(fn(), `false: blank`);
-	t.false(fn({}), `false: {}`);
-	t.false(fn(null), `false: null`);
-	t.false(fn(undefined), `false: undefined`);
-	t.false(fn(15), `false: 15`);
-	t.false(fn('Array'), `false: 'Array'`);
-	t.false(fn(true), `false: true`);
-	t.false(fn(false), `false: false`);
-
-	t.end();
-});
-
 test('fn.isObject', t => {
 	const fn = $.isObject;
 

@@ -78,7 +78,7 @@ test('cli.spawn', co(function * (t) {
 		t.true(f instanceof Fly && f.$, `via ${src.t}; spawns Fly with helpers attached`);
 		t.equal(f.file, flyfile, `via ${src.t}; finds flyfile`);
 		t.true($.isObject(f.tasks) && 'a' in f.tasks, `via ${src.t}; loads Fly tasks (obj)`);
-		t.true($.isArray(f.plugins), `via ${src.t}; loads Fly plugins (arr)`);
+		t.true(Array.isArray(f.plugins), `via ${src.t}; loads Fly plugins (arr)`);
 		t.equal(f.plugins.length, 4, `via ${src.t}; found all plugins`);
 	}
 

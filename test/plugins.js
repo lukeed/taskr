@@ -52,26 +52,26 @@ test('plugins.getPackage', co(function * (t) {
 
 test('plugins.getDependencies', co(function * (t) {
 	const out1 = plugs.getDependencies();
-	t.true($.isArray(out1) && out1.length === 0, 'via `null` input; returns an empty array');
+	t.true(Array.isArray(out1) && out1.length === 0, 'via `null` input; returns an empty array');
 
 	const pkg = yield plugs.getPackage(pkgfile);
 	const out2 = plugs.getDependencies(pkg.data);
-	t.true($.isArray(out2), 'via valid file; returns an array');
+	t.true(Array.isArray(out2), 'via valid file; returns an array');
 	t.equal(out2.length, 5, 'via valid file; find all the available dependencies');
 
 	const out3 = plugs.getDependencies({});
-	t.true($.isArray(out3) && out3.length === 0, 'via `{}`; returns an empty array');
+	t.true(Array.isArray(out3) && out3.length === 0, 'via `{}`; returns an empty array');
 
 	t.end();
 }));
 
 test('plugins.load', co(function * (t) {
 	// const out1 = yield plugs.load(join('/fake123', 'flyfile.js'));
-	// t.true($.isArray(out1) && out1.length === 0, 'via invalid file; returns an empty array');
+	// t.true(Array.isArray(out1) && out1.length === 0, 'via invalid file; returns an empty array');
 		// ^^ logs error message to test; disrupts formatting
 
 	const out = yield plugs.load(flyfile);
-	t.ok($.isArray(out), 'returns an array');
+	t.ok(Array.isArray(out), 'returns an array');
 	t.equal(out.length, 4, 'filters down to fly-* plugins only');
 	t.ok($.isObject(out[0]), 'is an array of objects');
 	t.ok('name' in out[0] && 'func' in out[0], 'objects contain `name` and `func` keys');
@@ -153,7 +153,7 @@ test('fly.plugins\' parameters', co(function * (t) {
 		}, {
 			func() {
 				this.plugin('p1', {every: 0}, function * (one, two, thr) {
-					t.true($.isArray(one), '1st param is a `files` array; (`every: 0`)');
+					t.true(Array.isArray(one), '1st param is a `files` array; (`every: 0`)');
 					t.deepEqual(two, {}, '2nd param defaults to empty object');
 					t.equal(thr, undefined, '3rd param defaults as undefined');
 				});

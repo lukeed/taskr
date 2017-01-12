@@ -37,9 +37,9 @@ test('fly.constructor', t => {
 	t.equal(fly1.file, undefined, '`fly.file` is `undefined` by default');
 	t.equal(fly1.root, process.cwd(), '`fly.root` is `process.cwd()` by default');
 	t.true($.isObject(fly1.$), '`fly.$` core utilities are attached');
-	t.true($.isArray(fly1.plugins) && !fly1.plugins.length, '`fly.plugins` is an empty array by default');
-	t.true($.isObject(fly1.tasks) && $.isEmptyObj(fly1.tasks), '`fly.tasks` is an empty object by default');
 	t.true($.isEmptyObj(fly1._), '`fly._` is an empty object on init');
+	t.true($.isObject(fly1.tasks) && $.isEmptyObj(fly1.tasks), '`fly.tasks` is an empty object by default');
+	t.true(Array.isArray(fly1.plugins) && !fly1.plugins.length, '`fly.plugins` is an empty array by default');
 
 	const fly2 = new Fly(fake);
 	t.equal(fly2.file, fake.file, 'accept custom `file` value');
@@ -98,9 +98,9 @@ test('fly.source', co(function * (t) {
 	t.equal(out, fly, 'returns the bound instance');
 
 	yield fly.source(glob2);
-	t.true($.isArray(fly._.globs), 'wrap a single glob string as an array');
+	t.true(Array.isArray(fly._.globs), 'wrap a single glob string as an array');
 	t.equal(fly._.globs[0], glob2, 'update internal `source` keys each time');
-	t.true($.isArray(fly._.files), 'return an array of relevant files');
+	t.true(Array.isArray(fly._.files), 'return an array of relevant files');
 	t.equal(fly._.files.length, 4, 'accepts wildcard extensions; finds all files');
 	const f1 = fly._.files[0];
 	t.ok($.isObject(f1), 'array contents are objects');
@@ -342,7 +342,7 @@ test('fly.run', co(function * (t) {
 			* b(f, o) {
 				const t = o.val;
 				yield f.source(src).run({every: 0}, function * (files) {
-					t.true($.isArray(files), 'allow inline `run` to use `every: 0`');
+					t.true(Array.isArray(files), 'allow inline `run` to use `every: 0`');
 				}).target(tar);
 			}
 		}
