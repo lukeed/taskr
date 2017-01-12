@@ -69,6 +69,7 @@
     "rules": {
       "no-use-extend-native/no-use-extend-native": 0,
       "no-unused-expressions": 1,
+      "prefer-spread": 1,
       "guard-for-in": 1,
       "no-loop-func": 0
     }
