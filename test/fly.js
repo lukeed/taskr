@@ -132,7 +132,7 @@ test("fly.start", co(function* (t) {
 
 	t.false(fly1[RDY], "not yet initialized")
 	yield fly1.start("a")
-	t.equal(val, 5, "truly `await` a task\"s completion")
+	t.equal(val, 5, "truly `await` a task's completion")
 	t.true(fly1[RDY], "ran `fly.init` because was not initialized")
 
 	const fly2 = new Fly({
@@ -216,7 +216,7 @@ test("fly.parallel", co(function* (t) {
 
 	const out = yield fly.parallel(["a", "b", "c"], demo)
 	t.equal(out, undefined, "chain yields no return")
-	t.equal(int, 3, "wait for the entire chain\"s completion")
+	t.equal(int, 3, "wait for the entire chain's completion")
 	t.notDeepEqual(order, ["a", "b", "c"], "execution order is random")
 }))
 

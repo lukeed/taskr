@@ -135,7 +135,7 @@ test("fly.plugins", co(function* (t) {
 	t.end()
 }))
 
-test("fly.plugins\" parameters", co(function* (t) {
+test("fly.plugins' parameters", co(function* (t) {
 	t.plan(15)
 
 	const ext = "*.txt"
