@@ -122,3 +122,10 @@ test('fn.valUniq', t => {
 
 	t.end();
 });
+
+test('fn.getUniques', t => {
+	const fn = $.getUniques;
+	t.deepEqual(fn([1, 2, 2, 3, 1, 2, 4]), [1, 2, 3, 4]);
+	t.deepEqual(fn(['a', 'a', 'b', 'a', 'c', 'a', 'd']), ['a', 'b', 'c', 'd']);
+	t.end();
+});
