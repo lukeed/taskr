@@ -1,8 +1,10 @@
 language: node_js
+
 node_js:
-  - 6
-  - 5
-  - 4.6
+  - '8'
+  - '7'
+  - '6'
+  - '4.6'
 
 git:
   depth: 1
@@ -10,4 +12,3 @@ git:
 branches:
   only:
     - master
-    - v2
