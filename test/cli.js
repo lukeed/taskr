@@ -83,6 +83,7 @@ test("cli.spawn", co(function * (t) {
 		t.equal(f.plugins.length, 4, `via ${src.t} found all plugins`)
 	}
 
+
 	const fly1 = yield cli.spawn()
 	t.true(fly1 instanceof Fly, "via `null` still spawns Fly")
 	t.equal(fly1.file, undefined, "via `null` but without a flyfile")
