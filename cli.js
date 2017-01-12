@@ -2,7 +2,6 @@
 'use strict';
 
 const Promise = require('bluebird');
-const notifier = require('update-notifier');
 const reporter = require('./lib/reporter');
 const utils = require('./lib/utils');
 const cli = require('./lib/cli');
@@ -10,9 +9,6 @@ const pkg = require('./package');
 const co = Promise.coroutine;
 
 co(function * () {
-	// check if using latest
-	notifier({pkg}).notify();
-
 	// get command options
 	const o = cli.options();
 	const t = o._.length ? o._ : ['default'];
