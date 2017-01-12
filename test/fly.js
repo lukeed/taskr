@@ -28,7 +28,7 @@ test("fly.prototype", t => {
 test("fly.constructor", t => {
 	const fake = {
 		file: "fake",
-		pwd: fixtures,
+		cwd: fixtures,
 		tasks: { a: "1" },
 		plugins: [1, 2, 3]
 	}
@@ -45,7 +45,7 @@ test("fly.constructor", t => {
 	const fly2 = new Fly(fake)
 	t.equal(fly2.file, fake.file, "accept custom `file` value")
 	t.equal(fly2.plugins, fake.plugins, "accept custom `plugins` value")
-	t.equal(fly2.root, fake.pwd, "accept custom `root` or `pwd` value")
+	t.equal(fly2.root, fake.cwd, "accept custom `root` or `cwd` value")
 	t.equal(fly2.tasks, fake.tasks, "accept custom `tasks` value")
 
 	t.end()
