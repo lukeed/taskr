@@ -75,6 +75,19 @@ test('fn.isEmptyObj', t => {
 	t.end();
 });
 
+test('fn.toArray', t => {
+	const fn = $.toArray;
+	t.deepEqual(fn([]), [], 'keeps `[]` as is');
+	t.deepEqual(fn(null), [], 'converts `null` to empty array');
+	t.deepEqual(fn(undefined), [], 'converts `undefined` to empty array');
+	t.deepEqual(fn(-1), [-1], 'converts `-1` to `[-1]`');
+	t.deepEqual(fn(0), [0], 'converts `0` to `[0]`');
+	t.deepEqual(fn(1), [1], 'converts `1` to `[1]`');
+	t.deepEqual(fn('foo'), ['foo']);
+	t.deepEqual(fn(['foo']), ['foo']);
+	t.end();
+});
+
 test('fn.formatTime', t => {
 	const fn = $.formatTime;
 	t.equal(fn(-1), '-1ms', 'accepts negative numbers');
