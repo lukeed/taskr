@@ -88,7 +88,7 @@ test('fly.source', co(function * (t) {
 	fly.on('globs_no_match', (g, o) => {
 		t.pass('notify when globs match no files');
 		t.deepEqual(g, glob1, 'warning receives the flattened globs');
-		t.deepEqual(o, opts1, 'warning receives the `globby` options');
+		t.deepEqual(o, opts1, 'warning receives the `expand` options');
 	});
 
 	const out = yield fly.source([[['*.a', ['*.b']]], ['*.c']], opts1);
@@ -111,7 +111,7 @@ test('fly.source', co(function * (t) {
 	t.ok(Buffer.isBuffer(f1.data), 'file data is a `Buffer`');
 
 	yield fly.source(glob2, {ignore: join(fixtures, 'flyfile.js')});
-	t.equal(fly._.files.length, 3, 'send config options to `globby` (ignore key)');
+	t.equal(fly._.files.length, 3, 'send config options to `expand` (ignore key)');
 }));
 
 test('fly.start', co(function * (t) {
