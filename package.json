@@ -35,11 +35,10 @@
     "devDependencies": {
         "rimraf": "^2.5.4",
         "tap-spec": "^4.1.1",
-        "tape": "^4.6.3",
-        "xo": "^0.12.0"
+        "tape": "^4.6.3"
     },
     "scripts": {
-        "test": "xo && tape test/*.js | tap-spec"
+        "test": "tape test/*.js | tap-spec"
     },
     "keywords": [
         "cli",
@@ -59,18 +58,5 @@
     ],
     "engines": {
         "node": ">= 4.6.0"
-    },
-    "xo": {
-        "esnext": true,
-        "ignore": [
-            "examples/**/*.js"
-        ],
-        "rules": {
-            "no-use-extend-native/no-use-extend-native": 0,
-            "no-unused-expressions": 1,
-            "prefer-spread": 1,
-            "guard-for-in": 1,
-            "no-loop-func": 0
-        }
     }
 }

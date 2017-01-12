@@ -35,31 +35,31 @@ Out of the box, a `flyfile.js` should be written in native ES5:
 ```js
 var x = module.exports
 var paths = {
-  scripts: ['src/**/*.js', '!src/ignore/**/*.js']
+  scripts: ["src/**/*.js", "!src/ignore/**/*.js"]
 }
 
 x.default = function * () {
-  yield this.watch(paths.scripts, 'build')
+  yield this.watch(paths.scripts, "build")
 }
 
 x.build = function * () {
   yield this.source(paths.scripts)
     .eslint({
-      rules: {'no-extra-semi': 0}
+      rules: {"no-extra-semi": 0}
     })
 
   yield this.source(paths.scripts)
     .babel({
-      presets: ['es2015', 'stage-0']
+      presets: ["es2015", "stage-0"]
     })
-    .concat('app.js')
-    .target('dist')
+    .concat("app.js")
+    .target("dist")
 }
 ```
 
 ### ES2015 and beyond
 
-If you'd prefer to write your [`flyfile.js`](https://github.com/flyjs/fly/blob/v1.4.1/docs/README.md#flyfiles) and [plugins](https://github.com/flyjs/fly/blob/v1.4.1/docs/README.md#plugins) with ES6 or ES7 syntax, install [fly-esnext](https://github.com/lukeed/fly-esnext) and that's it :)
+If you"d prefer to write your [`flyfile.js`](https://github.com/flyjs/fly/blob/v1.4.1/docs/README.md#flyfiles) and [plugins](https://github.com/flyjs/fly/blob/v1.4.1/docs/README.md#plugins) with ES6 or ES7 syntax, install [fly-esnext](https://github.com/lukeed/fly-esnext) and that"s it :)
 
 ```
 npm i -D fly-esnext
@@ -67,25 +67,25 @@ npm i -D fly-esnext
 
 ```js
 const paths = {
-  scripts: ['src/**/*.js', '!src/ignore/**/*.js']
+  scripts: ["src/**/*.js", "!src/ignore/**/*.js"]
 }
 
 export default async function () {
-  await this.watch(paths.scripts, 'build')
+  await this.watch(paths.scripts, "build")
 }
 
 export async function build() {
   await this.source(paths.scripts)
     .eslint({
-      rules: {'no-extra-semi': 0}
+      rules: {"no-extra-semi": 0}
     })
 
   await this.source(paths.scripts)
     .babel({
-      presets: ['es2015', 'stage-0']
+      presets: ["es2015", "stage-0"]
     })
-    .concat('app.js')
-    .target('dist')
+    .concat("app.js")
+    .target("dist")
 }
 ```
 

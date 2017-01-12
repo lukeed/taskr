@@ -1,7 +1,7 @@
-'use strict';
+"use strict"
 
 module.exports = function () {
-	this.plugin('localPlugin', {}, function * () {
+	this.plugin("localPlugin", {}, function * () {
 		// hi
-	});
-};
+	})
+}
