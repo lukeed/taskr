@@ -88,11 +88,11 @@ test("fly.plugins", co(function* (t) {
 	const tar = join(fixtures, ".tmp")
 
 	fly.tasks = {
-		* a() {
-			yield this.source(src).plugOne().target(tar)
+		* a(f) {
+			yield f.source(src).plugOne().target(tar)
 
 			const out = yield Promise.all(
-				[join(tar, "foo.txt"), join(tar, "bar.txt")].map(s => this.$.read(s))
+				[join(tar, "foo.txt"), join(tar, "bar.txt")].map(s => f.$.read(s))
 			)
 
 			out.forEach((buf, idx) => {
@@ -105,12 +105,12 @@ test("fly.plugins", co(function* (t) {
 
 			yield del(tar)
 		},
-		* b() {
-			yield this.source(src).plugOne().plugTwo().target(tar)
+		* b(f) {
+			yield f.source(src).plugOne().plugTwo().target(tar)
 			t.pass("custom plugins are chainable")
 
 			const out = yield Promise.all(
-				[join(tar, "foo.txt"), join(tar, "bar.txt")].map(s => this.$.read(s))
+				[join(tar, "foo.txt"), join(tar, "bar.txt")].map(s => f.$.read(s))
 			)
 
 			out.forEach((buf, idx) => {
@@ -188,13 +188,13 @@ test("fly.plugins' parameters", co(function* (t) {
 			}
 		}],
 		tasks: {
-			* a() {
-				yield this.source(src).p0().target(tar)
-				yield this.source(src).p1().target(tar)
-				yield this.source(src).p2("hi").target(tar)
-				yield this.source(src).p3(["hi"]).target(tar)
-				yield this.source(src).p4({ a: "hi" }).target(tar)
-				yield this.source(src).p5("hello", { a: "hi" }).target(tar)
+			* a(f) {
+				yield f.source(src).p0().target(tar)
+				yield f.source(src).p1().target(tar)
+				yield f.source(src).p2("hi").target(tar)
+				yield f.source(src).p3(["hi"]).target(tar)
+				yield f.source(src).p4({ a: "hi" }).target(tar)
+				yield f.source(src).p5("hello", { a: "hi" }).target(tar)
 				yield del(tar)
 			}
 		}
