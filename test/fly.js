@@ -238,28 +238,28 @@ test("fly.parallel", co(function* (t) {
 // 		tasks: {
 // 			* a(f) {
 // 				yield f.source(foo).run(ops, function * (globs) {
-// 					console.log("inside a", foo, globs[0])
+// 					console.log(`inside a\n\tsrc: ${foo}\n\tgot: ${globs[0]}\n\tok?: ${globs[0]===foo}`)
 // 					t.equal(globs[0], foo, "plugin receives correct `glob` parameter value")
 // 					t.equal(f._.globs[0], foo, "source glob is assigned to instance")
 // 				}).target(tmp)
 // 			},
 // 			* b(f) {
 // 				yield f.source(bar).run(ops, function * (globs) {
-// 					console.log("inside b", bar, globs[0])
+// 					console.log(`inside b\n\tsrc: ${bar}\n\tgot: ${globs[0]}\n\tok?: ${globs[0]===bar}`)
 // 					t.equal(globs[0], bar, "plugin receives correct `glob` parameter value")
 // 					t.equal(f._.globs[0], bar, "source glob is assigned to instance")
 // 				}).target(tmp)
 // 			},
 // 			* c(f) {
 // 				yield f.source(baz).run(ops, function * (globs) {
-// 					console.log("inside c", baz, globs[0])
+// 					console.log(`inside c\n\tsrc: ${baz}\n\tgot: ${globs[0]}\n\tok?: ${globs[0]===baz}`)
 // 					t.equal(globs[0], baz, "plugin receives correct `glob` parameter value")
 // 					t.equal(f._.globs[0], baz, "source glob is assigned to instance")
 // 				}).target(tmp)
 // 			},
 // 			* d(f) {
 // 				yield f.source(bat).run(ops, function * (globs) {
-// 					console.log("inside d", bat, globs[0])
+// 					console.log(`inside d\n\tsrc: ${bat}\n\tgot: ${globs[0]}\n\tok?: ${globs[0]===bat}`)
 // 					t.equal(globs[0], bat, "plugin receives correct `glob` parameter value")
 // 					t.equal(f._.globs[0], bat, "source glob is assigned to instance")
 // 				}).target(tmp)
