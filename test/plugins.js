@@ -19,20 +19,10 @@ const flyfile = join(altDir, "flyfile.js")
 
 test("plugins", t => {
 	t.ok(Object.keys(plugs).length, "export some methods")
-	const methods = ["wrapper", "load", "getDependencies", "getPackage"]
+	const methods = ["load", "getDependencies", "getPackage"]
 	methods.forEach(k => t.ok(plugs[k] !== undefined, `${k} is defined`))
 	t.end()
 })
-
-test("plugins.wrapper", co(function* (t) {
-	const fly = new Fly()
-	const func = function* () { }
-	const out = plugs.wrapper.apply(fly, [{}, func])
-	// kind of useless test, oh well
-	t.equal(typeof out, "function", "returns a function")
-	t.notEqual(out, func, "is not the original function")
-	t.end()
-}))
 
 test("plugins.getPackage", co(function* (t) {
 	const out1 = yield plugs.getPackage(altDir)
