@@ -95,12 +95,20 @@ test("utils.expand", co(function* (t) {
 	const out3 = yield $.expand(glob2, { ignore: "**/*.babel.js" })
 	const out4 = yield $.expand(glob3)
 	const out5 = yield $.expand([glob1, glob2])
+	const out6 = yield $.expand([glob2, '!**/flyfile.js'], { ignore: "**/*.babel.js" })
 
 	t.true(out1 && out1.length === 1, "matches shallow globs")
 	t.true(out2 && out2.length === 4, "matches deep/super globs")
 	t.true(out3 && out3.length === 3, "accepts `options` object")
 	t.true(Array.isArray(out4) && !out4.length, "return empty array on no-match")
 	t.true(out5 && out5.length === 5, "expands multiple globs")
+	t.true(out6 && out6.length === 2, "accepts addl `ignore` patterns")
+
+	try {
+		yield $.expand(123)
+	} catch (err) {
+		t.true(/must be strings/.test(err.toString()), "only accepts strings")
+	}
 
 	t.end()
 }))
