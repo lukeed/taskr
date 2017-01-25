@@ -134,7 +134,7 @@ test("fly.constructor (exits)", t => {
 test("fly.start", co(function* (t) {
 	let val
 
-	t.plan(12)
+	t.plan(13)
 
 	const fly1 = new Fly({
 		tasks: {
@@ -170,6 +170,7 @@ test("fly.start", co(function* (t) {
 	}
 
 	yield fly2.start("a")
+	yield fly2.start("b")
 	try {
 		yield fly2.start("err")
 	} catch (e) {
