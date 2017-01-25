@@ -4,9 +4,9 @@ const co = require("bluebird").coroutine
 const join = require("path").join
 const test = require("tape")
 
+const Fly = require("../lib/fly")
 const cli = require("../lib/cli")
 const $ = require("../lib/fn")
-const Fly = require("../lib")
 
 const fixtures = join(__dirname, "fixtures")
 const flypath = join(fixtures, "flyfile.js")
@@ -76,11 +76,11 @@ test("cli.spawn", co(function * (t) {
 
 	for (const src of types) {
 		const f = yield cli.spawn(src.p)
-		t.true(f instanceof Fly && f.$, `via ${src.t} spawns Fly with helpers attached`)
+		t.true(f instanceof Fly, `via ${src.t} spawns Fly`)
 		t.equal(f.file, flyfile, `via ${src.t} finds flyfile`)
 		t.true($.isObject(f.tasks) && "a" in f.tasks, `via ${src.t} loads Fly tasks (obj)`)
-		t.true(Array.isArray(f.plugins), `via ${src.t} loads Fly plugins (arr)`)
-		t.equal(f.plugins.length, 4, `via ${src.t} found all plugins`)
+		t.equal(Object.keys(f.plugins).length, 3, `via ${src.t} found all VALID plugins`)
+		t.true($.isObject(f.plugins), `via ${src.t} loads Fly plugins (obj)`)
 	}
 
 	const fly1 = yield cli.spawn()
