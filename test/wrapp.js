@@ -3,7 +3,7 @@ const wrapp = require("../lib/wrapp")
 const co = require("bluebird").coroutine
 
 test("wrapp", co(function * (t) {
-	t.plan(11)
+	t.plan(12)
 	const globs = ['baz']
 	const files = ['foo', 'bar']
 	const ctx = {_: {files, globs}}
@@ -14,6 +14,7 @@ test("wrapp", co(function * (t) {
 	}
 
 	const bar = function * (src) {
+		t.deepEqual(this, ctx, "internal context is preserved")
 		t.deepEqual(src, globs, "receive all globs; no loop")
 	}
 
