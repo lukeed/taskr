@@ -437,3 +437,22 @@ test("fly.serial", co(function* (t) {
 // 	t.end()
 // }))
 
+test("fly.plugin (conflict)", co(function * (t) {
+	t.plan(6)
+	const expect = ["foo", "foo1"]
+	const fly = new Fly({
+		tasks: { *a(f) {} }
+	})
+
+	fly.on("plugin_rename", (old, nxt) => {
+		t.pass("emits `plugin_rename` on name conflict")
+		t.notEqual(old, nxt, "new name differs from original")
+		t.equal(old, "foo", "old name is preserved")
+		t.equal(nxt, "foo1", "new name is changed")
+	})
+
+	Array("foo", "foo").forEach(name => fly.plugin({ name, *func(){} }))
+
+	t.equal(Object.keys(fly.plugins).length, 2, "still mounts both plugins")
+	t.deepEqual(fly.plugNames, expect, "stores both plugin names, with change")
+}))

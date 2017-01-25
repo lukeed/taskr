@@ -69,7 +69,7 @@ test("plugins.load", co(function* (t) {
 	t.end()
 }))
 
-test("fly.plugins", co(function* (t) {
+test("fly.plugins (auto-load)", co(function* (t) {
 	t.plan(7)
 	const fly = yield cli.spawn(altDir)
 
@@ -129,7 +129,7 @@ test("fly.plugins", co(function* (t) {
 	yield fly.serial(["a", "b"])
 }))
 
-test("fly.plugins' parameters", co(function* (t) {
+test("fly.plugins (params)", co(function* (t) {
 	t.plan(15)
 
 	const ext = "*.txt"
