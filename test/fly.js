@@ -59,11 +59,18 @@ test("fly.constructor (values)", t => {
 })
 
 test("fly.constructor (exits)", t => {
-	// test for `tasks_force_object`
-
 	const fn = () => this.plugin("hello", {}, function * () {})
-	const fly = new Fly({ plugins: [fn] })
-	t.true($.isEmptyObj(fly.plugins), "stops before `plugins` loop if no `tasks` or `file`")
+	const plugins = { plugins: [fn] }
+
+	const fly1 = new Fly({ plugins, tasks: ['foo'] })
+	// test for `tasks_force_object` ?
+	fly1.on("tasks_force_object", () => console.log('HELLO?'))
+	t.true(!fly1.file && !fly1.plugins, "exits EARLY if invalid `tasks` type")
+
+	const fly2 = new Fly({ plugins })
+	t.true(fly2.hasOwnProperty('file') && fly2.hasOwnProperty('tasks'), "constructs shape")
+	t.true($.isEmptyObj(fly2.plugins), "stops before `plugins` loop if no `tasks` or `file`")
+
 	t.end()
 })
 
