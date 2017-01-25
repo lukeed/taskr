@@ -58,6 +58,15 @@ test("fly.constructor (values)", t => {
 	t.end()
 })
 
+test("fly.constructor (exits)", t => {
+	// test for `tasks_force_object`
+
+	const fn = () => this.plugin("hello", {}, function * () {})
+	const fly = new Fly({ plugins: [fn] })
+	t.true($.isEmptyObj(fly.plugins), "stops before `plugins` loop if no `tasks` or `file`")
+	t.end()
+})
+
 // test("fly.init", co(function* (t) {
 // 	const RDY = "_ready"
 // 	const fly1 = new Fly({
