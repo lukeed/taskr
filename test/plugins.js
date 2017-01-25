@@ -70,6 +70,7 @@ test("plugins.load", co(function* (t) {
 }))
 
 test("fly.plugins", co(function* (t) {
+	t.plan(7)
 	const fly = yield cli.spawn(altDir)
 
 	const ext = "*.txt"
@@ -77,51 +78,55 @@ test("fly.plugins", co(function* (t) {
 	const tar = join(fixtures, ".tmp")
 
 	fly.tasks = {
-		* a(f) {
-			yield f.source(src).plugOne().target(tar)
+		a: {
+			data: {},
+			func: co(function * (f) {
+				yield f.source(src).plugOne().target(tar)
 
-			const out = yield Promise.all(
-				[join(tar, "foo.txt"), join(tar, "bar.txt")].map(s => f.$.read(s))
-			)
+				const out = yield Promise.all(
+					[join(tar, "foo.txt"), join(tar, "bar.txt")].map(s => f.$.read(s))
+				)
 
-			out.forEach((buf, idx) => {
-				if (idx === 0) {
-					t.equal(buf.toString(), `\nrab oof`, "reverse `foo.txt` content")
-				} else {
-					t.equal(buf.toString(), `\nzab rab`, "reverse `bar.txt` content")
-				}
+				out.forEach((buf, idx) => {
+					if (idx === 0) {
+						t.equal(buf.toString(), `\nrab oof`, "reverse `foo.txt` content")
+					} else {
+						t.equal(buf.toString(), `\nzab rab`, "reverse `bar.txt` content")
+					}
+				})
+
+				yield del(tar)
 			})
-
-			yield del(tar)
 		},
-		* b(f) {
-			yield f.source(src).plugOne().plugTwo().target(tar)
-			t.pass("custom plugins are chainable")
+		b: {
+			data: {},
+			func: co(function * (f) {
+				yield f.source(src).plugOne().plugTwo().target(tar)
+				t.pass("custom plugins are chainable")
 
-			const out = yield Promise.all(
-				[join(tar, "foo.txt"), join(tar, "bar.txt")].map(s => f.$.read(s))
-			)
+				const out = yield Promise.all(
+					[join(tar, "foo.txt"), join(tar, "bar.txt")].map(s => f.$.read(s))
+				)
 
-			out.forEach((buf, idx) => {
-				if (idx === 0) {
-					t.equal(buf.toString(), `foo bar\n`, "double-reverse `foo.txt` content")
-				} else {
-					t.equal(buf.toString(), `bar baz\n`, "double-reverse `bar.txt` content")
-				}
+				out.forEach((buf, idx) => {
+					if (idx === 0) {
+						t.equal(buf.toString(), `foo bar\n`, "double-reverse `foo.txt` content")
+					} else {
+						t.equal(buf.toString(), `bar baz\n`, "double-reverse `bar.txt` content")
+					}
+				})
+
+				// relied on `plugOne` to finish first
+				t.pass(`await previous plugin"s completion`)
+				// handle `non-every` plugins
+				t.pass("handle non-looping plugins (`{every: 0}`)")
+
+				yield del(tar)
 			})
-
-			// relied on `plugOne` to finish first
-			t.pass(`await previous plugin"s completion`)
-			// handle `non-every` plugins
-			t.pass("handle non-looping plugins (`{every: 0}`)")
-
-			yield del(tar)
 		}
 	}
 
 	yield fly.serial(["a", "b"])
-
-	t.end()
 }))
 
 test("fly.plugins' parameters", co(function* (t) {
