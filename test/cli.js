@@ -114,5 +114,11 @@ test("cli.options", t => {
 	t.true(max.l === max.list && max.l === val.l, "assigns `list` value")
 	t.true(max._.join(" ") === val._, "assigns `tasks` value")
 
+	try {
+		cli.options(['--foo=bar'])
+	} catch (err) {
+		t.true(/Invalid option/.test(err.toString()), "throws error if unknown argument")
+	}
+
 	t.end()
 })

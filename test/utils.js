@@ -173,3 +173,13 @@ test("utils.trace", t => {
 
 	t.end()
 })
+
+test("utils.logging", t => {
+	Array("log", "error", "alert").forEach(fn => {
+		const out = $[fn](`hello from utils.${fn}`)
+		t.deepEqual(out, $, `can chain with addl helpers (utils.${fn})`)
+	})
+	// process.env.VERBOSE = true
+	// $.alert("this is an alert")
+	t.end()
+})
