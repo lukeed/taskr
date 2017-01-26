@@ -190,51 +190,52 @@ test("task.target", co(function * (t) {
 test("task.run (w/function)", co(function * (t) {
 	t.plan(10)
 	const src = join(fixtures, "*.txt")
-	const tar1 = join(fixtures, ".tmp1")
-	const tar2 = join(fixtures, ".tmp2")
 
 	const fly = new Fly({
 		tasks: {
 			*foo(f) {
+				const tar = join(fixtures, ".tmp1")
 				yield f.source(src).run({}, function * (file) {
 					t.true($.isObject(file), "iterates thru each `file` (default)")
 					t.true(file.hasOwnProperty("data"), "receives entire `file` object")
 					file.data = new Buffer(file.data.toString().toUpperCase())
 					yield Promise.resolve()
-				}).target(tar1)
+				}).target(tar)
 
-				const arr = yield f.$.expand(`${tar1}/*.txt`)
+				const arr = yield f.$.expand(`${tar}/*.txt`)
 				t.equal(arr.length, 2, "place files in target destination after `inline` method (every:1)")
-				const str1 = yield f.$.read(`${tar1}/foo.txt`, "utf8")
-				const str2 = yield f.$.read(`${tar1}/bar.txt`, "utf8")
+				const str1 = yield f.$.read(`${tar}/foo.txt`, "utf8")
+				const str2 = yield f.$.read(`${tar}/bar.txt`, "utf8")
 				t.equal(str1, "FOO BAR\n", "capitalize file contents individually")
 				t.equal(str2, "BAR BAZ\n", "capitalize file contents individually")
+				yield del(tar)
 			},
 			*bar(f) {
+				const tar = join(fixtures, ".tmp2")
 				yield f.source(src).run({ every: 0 }, function * (files) {
 					t.true(Array.isArray(files), "customizes inline plugin behavior")
 					t.equal(files.length, 2, "receives array of ALL current files (every:0)")
-				}).target(tar2)
+				}).target(tar)
 
-				const arr = yield f.$.expand(`${tar2}/*.txt`)
+				const arr = yield f.$.expand(`${tar}/*.txt`)
 				t.equal(arr.length, 2, "place files in target destination after `inline` method (every:0)")
+				yield del(tar)
 			}
 		}
 	})
 
 	yield fly.parallel(["foo", "bar"])
-	yield del([tar1, tar2])
 }))
 
 test("task.run (w/object)", co(function * (t) {
 	t.plan(10)
 	const src = join(fixtures, "*.txt")
-	const tar1 = join(fixtures, ".tmp1")
-	const tar2 = join(fixtures, ".tmp2")
 
 	const fly = new Fly({
 		tasks: {
 			*foo(f) {
+				const tar = join(fixtures, ".tmp3")
+
 				yield f.source(src).run({
 					*func(file) {
 						t.true($.isObject(file), "iterates thru each `file` (default)")
@@ -242,32 +243,35 @@ test("task.run (w/object)", co(function * (t) {
 						file.data = new Buffer(file.data.toString().toUpperCase())
 						yield Promise.resolve()
 					}
-				}).target(tar1)
+				}).target(tar)
 
-				const arr = yield f.$.expand(`${tar1}/*.txt`)
+				const arr = yield f.$.expand(`${tar}/*.txt`)
 				t.equal(arr.length, 2, "place files in target destination after `inline` method (every:1)")
-				const str1 = yield f.$.read(`${tar1}/foo.txt`, "utf8")
-				const str2 = yield f.$.read(`${tar1}/bar.txt`, "utf8")
+				const str1 = yield f.$.read(`${tar}/foo.txt`, "utf8")
+				const str2 = yield f.$.read(`${tar}/bar.txt`, "utf8")
 				t.equal(str1, "FOO BAR\n", "capitalize file contents individually")
 				t.equal(str2, "BAR BAZ\n", "capitalize file contents individually")
+				yield del(tar)
 			},
 			*bar(f) {
+				const tar = join(fixtures, ".tmp4")
+
 				yield f.source(src).run({
 					every: 0,
 					*func(files) {
 						t.true(Array.isArray(files), "customizes inline plugin behavior")
 						t.equal(files.length, 2, "receives array of ALL current files (every:0)")
 					}
-				}).target(tar2)
+				}).target(tar)
 
-				const arr = yield f.$.expand(`${tar2}/*.txt`)
+				const arr = yield f.$.expand(`${tar}/*.txt`)
 				t.equal(arr.length, 2, "place files in target destination after `inline` method (every:0)")
+				yield del(tar)
 			}
 		}
 	})
 
 	yield fly.parallel(["foo", "bar"])
-	yield del([tar1, tar2])
 }))
 
 test("task.exec", co(function * (t) {
