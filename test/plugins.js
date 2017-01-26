@@ -42,15 +42,15 @@ test("plugins.getPackage", co(function* (t) {
 
 test("plugins.getDependencies", co(function* (t) {
 	const out1 = plugs.getDependencies()
-	t.true(Array.isArray(out1) && out1.length === 0, "via `null` input returns an empty array")
+	t.true(Array.isArray(out1) && out1.length === 0, "via `null`; input returns an empty array")
 
-	const pkg = yield plugs.getPackage(pkgfile)
+	const pkg = yield plugs.getPackage(altDir)
 	const out2 = plugs.getDependencies(pkg.data)
-	t.true(Array.isArray(out2), "via valid file returns an array")
-	t.equal(out2.length, 5, "via valid file find all the available dependencies")
+	t.true(Array.isArray(out2), "via dir; returns an array")
+	t.equal(out2.length, 5, "via dir; find all the available dependencies")
 
 	const out3 = plugs.getDependencies({})
-	t.true(Array.isArray(out3) && out3.length === 0, "via `{}` returns an empty array")
+	t.true(Array.isArray(out3) && out3.length === 0, "via `{}`; returns an empty array")
 
 	t.end()
 }))

@@ -150,7 +150,7 @@ test("task.target", co(function * (t) {
 				const str = yield f.$.find(v)
 				const arr = yield f.$.expand(g)
 				t.equal(arr.length, 2, "via `src/one/two/*.md` write all files")
-				t.ok(str && str !== v, "via `src/one/two/*.md` did not create sub-dir if unwanted")
+				t.equal(str, null, "via `src/one/two/*.md` did not create sub-dir if unwanted")
 			},
 			*b(f) {
 				yield f.source(glob2).target(dest2)

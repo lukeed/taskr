@@ -36,10 +36,6 @@ test("utils.find", co(function* (t) {
 	const out2 = yield $.find(full)
 	t.equal(out2, full, `via file path finds the correct flyfile`)
 
-	const subdir = join(fixtures, "sub") // test dir
-	const out3 = yield $.find(file, subdir)
-	t.equal(out3, full, `via sub-directory path finds the correct flyfile`)
-
 	const out4 = yield $.find(file, "/fakedir123")
 	t.equal(out4, null, "if not found returns `null`")
 

@@ -72,16 +72,13 @@ test("cli.list", t => {
 test("cli.spawn", co(function * (t) {
 	const alt = join(fixtures, "alt")
 	const flyfile = join(alt, "flyfile.js")
-	const types = [{p: alt, t: "directory"}, {p: flyfile, t: "file"}]
 
-	for (const src of types) {
-		const f = yield cli.spawn(src.p)
-		t.true(f instanceof Fly, `via ${src.t} spawns Fly`)
-		t.equal(f.file, flyfile, `via ${src.t} finds flyfile`)
-		t.true($.isObject(f.tasks) && "a" in f.tasks, `via ${src.t} loads Fly tasks (obj)`)
-		t.equal(Object.keys(f.plugins).length, 3, `via ${src.t} found all VALID plugins`)
-		t.true($.isObject(f.plugins), `via ${src.t} loads Fly plugins (obj)`)
-	}
+	const f = yield cli.spawn(alt)
+	t.true(f instanceof Fly, "via dir; spawns Fly")
+	t.equal(f.file, flyfile, "via dir; finds flyfile")
+	t.true($.isObject(f.tasks) && "a" in f.tasks, "via dir; loads Fly tasks (obj)")
+	t.equal(Object.keys(f.plugins).length, 3, "via dir; found all VALID plugins")
+	t.true($.isObject(f.plugins), "via dir; loads Fly plugins (obj)")
 
 	const fly1 = yield cli.spawn()
 	t.true(fly1 instanceof Fly, "via `null` still spawns Fly")
