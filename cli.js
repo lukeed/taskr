@@ -21,7 +21,7 @@ co(function* () {
 		return cli.version(pkg)
 	}
 
-	const fly = yield cli.spawn(o.pwd)
+	const fly = yield cli.spawn(o.cwd)
 	reporter.call(fly)
 
 	if (!fly.file) {
