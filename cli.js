@@ -32,12 +32,11 @@ co(function* () {
 		return cli.list(fly.tasks, o.list === "bare")
 	}
 
-	fly.init()
 	// announce start
 	fly.emit("fly_run", fly.file)
 	// run `tasks` in `mode`
 	fly[o.mode](t)
-	
+
 })().catch(e => {
 	if (e.type === "cli") {
 		utils.error(`CLI Error!\t${e.message}`)
