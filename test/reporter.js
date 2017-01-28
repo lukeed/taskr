@@ -28,6 +28,7 @@ test("fly.reporter", t => {
 		"plugin_load",
 		"plugin_load_error",
 		"plugin_error",
+		"plugin_warning",
 		"plugin_rename",
 		"tasks_force_object",
 		"task_error",
