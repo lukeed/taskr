@@ -3,6 +3,12 @@ environment:
     - nodejs_version: "7"
     - nodejs_version: "6"
 
+max_jobs: 4
+clone_depth: 1
+branches:
+  only:
+  - master
+
 version: "{build}"
 
 install:

@@ -1,7 +1,7 @@
 # fly
 
 [![](https://img.shields.io/travis/flyjs/fly.svg)](https://travis-ci.org/flyjs/fly)
-[![Build status: Windows](https://ci.appveyor.com/api/projects/status/github/flyjs/fly?svg=true)](https://ci.appveyor.com/project/flyjs/fly)
+[![Build status](https://ci.appveyor.com/api/projects/status/jjw7gor0edirylu5/branch/master?svg=true)](https://ci.appveyor.com/project/lukeed/fly/branch/master)
 [![](http://img.shields.io/npm/dm/fly.svg)](https://npmjs.org/package/fly)
 [![](https://img.shields.io/npm/v/fly.svg)](https://npmjs.org/package/fly)
 
