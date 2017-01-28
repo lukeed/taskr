@@ -37,10 +37,10 @@ co(function* () {
 	// run `tasks` in `mode`
 	fly[o.mode](t)
 
-})().catch(e => {
-	if (e.type === "cli") {
-		utils.error(`CLI Error!\t${e.message}`)
+})().catch(err => {
+	if (err.type === "cli") {
+		utils.error(`CLI Error! ${err.message}`)
 	} else {
-		utils.trace(e)
+		console.error(utils.trace(err.stack))
 	}
 })
