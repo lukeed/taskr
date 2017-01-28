@@ -35,7 +35,7 @@ test("Task.constructor (plugins)", co(function * (t) {
 }))
 
 test("task.constructor (internal)", co(function * (t) {
-	t.plan(27)
+	t.plan(30)
 
 	const fly = new Fly({
 		tasks: {
@@ -49,6 +49,9 @@ test("task.constructor (internal)", co(function * (t) {
 					t.true(Array.isArray(f._[str]), `task._.${str} is an array`)
 					t.equal(f._[str].length, 0, `task._.${str} is empty`)
 				})
+				t.true(f.hasOwnProperty("root"), "task exposes a `root` key")
+				t.equal(typeof f.root, "string", "task's `root` is a string")
+				t.equal(f.root, process.cwd(), "task inherits `root` value")
 			},
 			*bar(f, o) {
 				t.true(o !== undefined, "task receives a 2nd parameter")
