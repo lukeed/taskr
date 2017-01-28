@@ -199,3 +199,19 @@ test("fly.plugins (params)", co(function* (t) {
 
 	yield fly.start("a")
 }))
+
+test("fly.plugin (export fn params)", co(function * (t) {
+	t.plan(3)
+	const fly = yield cli.spawn(altDir)
+
+	fly.tasks = {
+		foo: {
+			data: [],
+			func: co(function * (f) {
+				yield f.localPlugin({ t })
+			})
+		}
+	}
+
+	yield fly.start("foo")
+}))
