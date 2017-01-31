@@ -5,16 +5,6 @@
 <h1 align="center">fly</h1>
 
 <div align="center">
-	<strong>Fasten your seatbelt. :rocket:</strong>
-</div>
-
-<div align="center">
-	A generator & coroutine-based task runner.
-</div>
-
-<br />
-
-<div align="center">
 	<!-- NPM version -->
 	<a href="https://npmjs.org/package/fly">
 		<img src="https://img.shields.io/npm/v/fly.svg" alt="NPM version"/>
@@ -24,9 +14,9 @@
 		<img src="https://img.shields.io/travis/flyjs/fly.svg" alt="Build Status"/>
 	</a>
 	<!-- Test Coverage -->
-	<a href="https://codecov.io/github/yoshuawuyts/choo">
-		<img src="https://img.shields.io/codecov/c/github/yoshuawuyts/choo/master.svg" alt="Test Coverage"/>
-	</a>
+	<!-- <a href="https://codecov.io/github/flyjs/fly"> -->
+		<!-- <img src="https://img.shields.io/codecov/c/github/flyjs/fly/master.svg" alt="Test Coverage"/> -->
+	<!-- </a> -->
 	<!-- AppVeyor -->
 	<a href="https://ci.appveyor.com/project/lukeed/fly/branch/master">
 		<img src="https://ci.appveyor.com/api/projects/status/jjw7gor0edirylu5/branch/master?svg=true" alt="Windows Status"/>
@@ -36,6 +26,16 @@
 		<img src="https://img.shields.io/npm/dm/fly.svg" alt="Downloads"/>
 	</a>
 </div>
+
+<div align="center">
+	A generator & coroutine-based task runner.
+</div>
+
+<div align="center">
+	<strong>Fasten your seatbelt. :rocket:</strong>
+</div>
+
+<br />
 
 Fly is a highly performant task automatation tool, much like Gulp or Grunt, but written with concurrency in mind. With Fly, everything is a [coroutine](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127#.vpryf5tyb), which allows for cascading and composable tasks; but unlike Gulp, it's not limited to the stream metaphor.
 
