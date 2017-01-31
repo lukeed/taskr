@@ -53,9 +53,9 @@ Fly is extremely extensible, so _anything_ can be a task. Our core system will a
 	* [Flyfiles](#flyfiles)
 - [CLI](#cli)
 - [API](#api)
-	* [Fly](#fly)
+	* [Fly](#fly-1)
 	* [Plugin](#plugin)
-	* [Task](#task)
+	* [Task](#task-1)
 	* [Utilities](#utilities)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -76,7 +76,7 @@ Fly is extremely extensible, so _anything_ can be a task. Our core system will a
 
 ## Example
 
-Here's a simple [`flyfile`](#flyfiles) (with [shorthand generator methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Method_definitions#Shorthand_generator_methods)) depicting a [parallel](#parallel) chain.
+Here's a simple [`flyfile`](#flyfiles) (with [shorthand generator methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Method_definitions#Shorthand_generator_methods)) depicting a [parallel](#flyparalleltasks-options) chain.
 
 ```js
 const sass = "src/{admin,client}/*.sass"
@@ -109,7 +109,7 @@ If it helps, imagine you're dining in a restaraunt and Fly is the food runner. F
 
 ### Plugins
 
-Because Fly is single-minded and cares only about executing a [task](), **everything else is a plugin**. This keeps development with Fly easy, approachable, and lightweight.
+Because Fly is single-minded and cares only about executing [tasks](#tasks), **everything else is a plugin**. This keeps development with Fly easy, approachable, and lightweight.
 
 You see, installing Fly gives access to a reliable task runner. You decide what it _can do_, provide it functionality, and dictate when to do it. You're in full control.
 
@@ -125,7 +125,7 @@ Tasks are used to tell Fly what to do. They are written as generator functions &
 
 Upon runtime, tasks are cheap to create, so are also destroyed once completed. This also helps Fly remain efficient; history won't weigh it down.
 
-Lastly, tasks have the power to [start]() other Tasks, including [serial]() and [parallel]() chains!
+Lastly, tasks have the power to [start](#taskstarttask-options) other Tasks, including [serial](#taskserialtasks-options) and [parallel](#taskparalleltasks-options) chains!
 
 ### Flyfiles
 
@@ -386,7 +386,7 @@ module.exports = {
 }
 ```
 
-Each Task also receives an `opts` object, consisting of `src` and `val` keys. Although `src` is primarily used for [`fly-watch`](), the `val` key can be used or set at any time see [`fly.serial`]().
+Each Task also receives an `opts` object, consisting of `src` and `val` keys. Although `src` is primarily used for [`fly-watch`](https://github.com/flyjs/fly-watch), the `val` key can be used or set at any time see [`fly.serial`](#flyserialtasks-options).
 
 All methods and values below are exposed within a Task's function.
 
@@ -409,7 +409,7 @@ Type: `Array`<br>
 The Task's glob patterns, from `task.source()`. Used to populate `task._.files`.
 ##### task._.prevs
 Type: `Array`<br>
-The Task's last-known (aka, outdated) set of glob patterns. USed **only** for [`fly-watch`]().
+The Task's last-known (aka, outdated) set of glob patterns. USed **only** for [`fly-watch`](https://github.com/flyjs/fly-watch).
 
 #### task.source(globs, [options])
 ##### globs
@@ -440,7 +440,7 @@ Perform an inline plugin.
 
 ##### options
 Type: `Object`<br>
-The See [plugin options](#plugin-options).
+The See [plugin options](#plugin).
 ##### generator
 Type: `Function`<br>
 The action to perform; must be a `Generator` function.
@@ -455,13 +455,13 @@ exports.foo = function * (fly) {
 ```
 
 #### task.start(task, [options])
-See [`fly.start`](#task.start).
+See [`fly.start`](#flystarttask-options).
 
 #### task.parallel(tasks, [options])
-See [`fly.parallel`](#task.parallel).
+See [`fly.parallel`](#flyparalleltasks-options).
 
 #### task.serial(tasks, [options])
-See [`fly.serial`](#task.serial).
+See [`fly.serial`](#flyserialtasks-options).
 
 ### Utilities
 
