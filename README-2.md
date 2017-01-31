@@ -41,10 +41,6 @@ Fly is a highly performant task automatation tool, much like Gulp or Grunt, but 
 
 Fly is extremely extensible, so _anything_ can be a task. Our core system will accept whatever you throw at it, resulting in a modular system of reusable plugins and tasks, connected by a declarative `flyfile.js` that's easy to read.
 
-<div align="center">
-	<sub>Built with ❤︎ by <a href="https://github.com/lukeed">Luke Edwards</a>, <a href="https://github.com/jbucaran">Jorge Bucaran</a>, and <a href="https://github.com/flyjs/fly/graphs/contributors">contributors</a></sub>
-</div>
-
 <h2>Table of Contents</h2>
 <details>
 	<summary>Table of Contents</summary>
