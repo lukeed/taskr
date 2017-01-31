@@ -92,22 +92,22 @@ Fly is extremely extensible, so _anything_ can be a task. Our core system will a
 Here's a simple [`flyfile`](#flyfiles) (with [shorthand generator methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Method_definitions#Shorthand_generator_methods)) depicting a [parallel](#parallel) chain.
 
 ```js
-const sass = 'src/{admin,client}/*.sass';
-const js = 'src/{admin,client}/*.js';
-const dist = 'build';
+const sass = "src/{admin,client}/*.sass"
+const js = "src/{admin,client}/*.js"
+const dist = "build"
 
 module.exports = {
   *lint(fly) {
-    yield fly.source(js).xo({esnext: true});
+    yield fly.source(js).xo({ esnext: true })
   },
   *scripts(fly) {
-    yield fly.source(js).babel({presets: ['es2015']}).target(`${dist}/js`);
+    yield fly.source(js).babel({ presets: ["es2015"] }).target(`${dist}/js`)
   },
   *styles(fly) {
-    yield fly.source(sass).sass({outputStyle: 'compressed'}).autoprefixer().target(`${dist}/css`);
+    yield fly.source(sass).sass({ outputStyle: "compressed" }).autoprefixer().target(`${dist}/css`)
   },
   *build(fly) {
-    yield fly.parallel(['lint', 'scripts', 'styles'])
+    yield fly.parallel(["lint", "scripts", "styles"])
   }
 }
 ```
@@ -145,18 +145,18 @@ Lastly, tasks have the power to [start]() other Tasks, including [serial]() and 
 Much like Gulp, Fly uses a `flyfile.js` (case sensitive) to read and run your Tasks. However, because it's a regular JavaScript file, you may also `require()` additional modules and incorporate them directly into your Tasks, without the need for a custom Plugin!
 
 ```js
-const browserSync = require('browser-sync');
+const browserSync = require("browser-sync")
 
 exports.serve = function * (fly) {
   browserSync({
     port: 3000,
-    server: 'dist',
+    server: "dist",
     middleware: [
-      require('connect-history-api-fallback')()
+      require("connect-history-api-fallback")()
     ]
-  });
-  yield fly.$.log('> Listening on localhost:3000');
-};
+  })
+  yield fly.$.log("> Listening on localhost:3000")
+}
 ```
 
 Flyfiles should generally be placed in the root of your project, alongside your `package.json`. Although this is not required, Fly (strongly) prefers this location.
@@ -198,7 +198,7 @@ Start a Task by its name; may also pass initial values. Can return anything the 
 
 ##### task
 Type: `String`<br>
-Default: `'defaut'`<br>
+Default: `'default'`<br>
 The Task's name to run. Task must exist/be defined or an Error is thrown.<br>
 > **Important!** Fly expects a `default` task if no task is specified. This also applies to CLI usage.
 
@@ -230,22 +230,22 @@ Initial values to start with; passed to each task in the group. Does cascade.
 ```js
 module.exports = {
   *default(fly) {
-    yield fly.serial(['first', 'second'], {val: 10});
+    yield fly.serial(["first", "second"], {val: 10})
   },
   *first(fly, opts) {
-    yield fly.$.log(`first: ${opts.val}`);
-    return opts.val * 4;
+    yield fly.$.log(`first: ${opts.val}`)
+    return opts.val * 4
   },
   *second(fly, opts) {
-    yield fly.$.log(`second: ${opts.val}`);
-    return opts.val + 2;
+    yield fly.$.log(`second: ${opts.val}`)
+    return opts.val + 2
   }
 }
 
-const output = yield fly.start();
+const output = yield fly.start()
 //=> first: 10
 //=> second: 40
-console.log(output);
+console.log(output)
 //=> 42
 ```
 
@@ -277,13 +277,13 @@ See [`task.run`](#taskrunoptions-generator) for a simple example. The same inlin
 
 ```js
 exports.foo = function * (fly) {
-  yield fly.source('src/*.js').run({
+  yield fly.source("src/*.js").run({
     every: false,
     *func(files) {
-      Array.isArray(files); //=> true
-      yield Promise.resolve('this will run once.');
+      Array.isArray(files) //=> true
+      yield Promise.resolve("this will run once.")
     }
-  }).target('dist');
+  }).target("dist")
 }
 ```
 
@@ -296,21 +296,20 @@ Similar to inline plugins, there are two ways of defining an exported module -- 
 When using a _functional definition_, the **definition** receives the [Fly](#fly-1) instance and the [utilities](#utilities) object.
 
 ```js
-
 module.exports = function (fly, utils) {
-  // promisify before running; else repeats per execution
-  const render = utils.promisify(function () {});
+  // promisify before running else repeats per execution
+  const render = utils.promisify(function () {})
   // verbose API
-  fly.plugin('myName', {every: false}, function * (files, opts) {
-    console.log('all my files: ', files); //=> Array
-    console.log(this._.files === files); //=> true
-    console.log(this instanceof Task); //=> true
-    console.log('user options: ', opts);
-    yield render(opts);
+  fly.plugin("myName", {every: false}, function * (files, opts) {
+    console.log("all my files: ", files) //=> Array
+    console.log(this._.files === files) //=> true
+    console.log(this instanceof Task) //=> true
+    console.log("user options: ", opts)
+    yield render(opts)
   })
   // or w/condensed API
   fly.plugin({
-    name: 'myName',
+    name: "myName",
     every: false,
     *func(files, opts) {
       // ...same
@@ -323,7 +322,7 @@ When using an _object definition_, you are not provided the `fly` or `utils` obj
 
 ```js
 module.exports = {
-  name: 'myName',
+  name: "myName",
   every: false,
   *func(files, opts) {
     // do stuff
@@ -335,7 +334,7 @@ Then, within your Task, you may use it like so:
 
 ```js
 exports.default = function * (fly) {
-  yield fly.source('src/*.js').myName({foo: 'bar'}).target('dist');
+  yield fly.source("src/*.js").myName({ foo: "bar" }).target("dist")
 }
 ```
 
@@ -359,13 +358,13 @@ In order to use a local plugin, add a `fly` key to your `package.json` file. The
 For [programmatic usage](#programmatic), simply pass an array of definitions to the `plugins` key:
 
 ```js
-const Fly = require('fly');
+const Fly = require('fly')
 const fly = new Fly({
   plugins: [
     require("./build/custom-plugin-one.js"),
     require("./build/custom-plugin-two.js"),
     {
-      name: 'plugThree',
+      name: "plugThree",
       every: false,
       files: false,
       *func(globs, opts) {
@@ -384,23 +383,23 @@ Tasks are exported from a `flyfile.js`, which means you can use either syntax:
 
 ```js
 exports.foo = function * (fly) {
-  yield fly.source('src/*.js').target('dist/js');
+  yield fly.source("src/*.js").target("dist/js")
 }
 exports.bar = function * (fly) {
-  yield fly.source('src/*.css').target('dist/css');
+  yield fly.source("src/*.css").target("dist/css")
 }
 // or
 module.exports = {
   *foo(fly) {
-    yield fly.source('src/*.js').target('dist/js');
+    yield fly.source("src/*.js").target("dist/js")
   },
   *bar(fly) {
-    yield fly.source('src/*.css').target('dist/css');
+    yield fly.source("src/*.css").target("dist/css")
   }
 }
 ```
 
-Each Task also receives an `opts` object, consisting of `src` and `val` keys. Although `src` is primarily used for [`fly-watch`](), the `val` key can be used or set at any time; see [`fly.serial`]().
+Each Task also receives an `opts` object, consisting of `src` and `val` keys. Although `src` is primarily used for [`fly-watch`](), the `val` key can be used or set at any time see [`fly.serial`]().
 
 All methods and values below are exposed within a Task's function.
 
@@ -443,9 +442,9 @@ The destination folder(s).
 Please note that `task.source()` glob ambiguity affects the destination structure.
 
 ```js
-yield fly.source('src/*.js').target('dist');
+yield fly.source("src/*.js").target("dist")
 //=> dist/foo.js, dist/bar.js
-yield fly.source('src/**/*.js').target('dist');
+yield fly.source("src/**/*.js").target("dist")
 //=> dist/foo.js, dist/bar.js, dist/sub/baz.js, dist/sub/deep/bat.js
 ```
 
@@ -461,14 +460,14 @@ The action to perform; must be a `Generator` function.
 
 ```js
 exports.foo = function * (fly) {
-  yield fly.source('src/*.js').run({every: false}, function * (files) {
-    Array.isArray(files); //=> true
-    yield Promise.resolve('this will run once.');
-  }).target('dist');
+  yield fly.source("src/*.js").run({every: false}, function * (files) {
+    Array.isArray(files) //=> true
+    yield Promise.resolve("this will run once.")
+  }).target("dist")
 }
 ```
 
-#### task.start('name', [options])
+#### task.start(task, [options])
 See [`fly.start`](#task.start).
 
 #### task.parallel(tasks, [options])
@@ -556,17 +555,17 @@ $ npm install --save-dev fly
 
   ```js
   export.default = function * (fly) {
-    yield fly.parallel(['styles', 'scripts'])
+    yield fly.parallel(["styles", "scripts"])
   }
 
   export.styles = function * (fly) {
-    yield fly.source('src/**/*.css').autoprefixer().target('dist/css');
+    yield fly.source("src/**/*.css").autoprefixer().target("dist/css")
   }
 
   export.scripts = function * (fly) {
-    yield fly.source('src/**/*.js').babel({
+    yield fly.source("src/**/*.js").babel({
       presets: [
-        ['es2015', {loose: true, modules: false}]
+        ["es2015", {loose: true, modules: false}]
       ]
     })
   }
@@ -598,14 +597,14 @@ Fly is extremely flexible should you choose to use Fly outside of it's standard 
 The quickest path to a valid `Fly` instance is to send a `tasks` object:
 
 ```js
-const Fly = require('Fly');
+const Fly = require("Fly")
 const fly = new Fly({
   tasks: {
     *foo(f) {},
     *bar(f) {}
   }
-});
-fly.start('foo');
+})
+fly.start("foo")
 ```
 
 Passing `plugins` is also achievable; applicable for [external](#external-plugins) and [local](#local-plugins) plugins.
@@ -613,9 +612,9 @@ Passing `plugins` is also achievable; applicable for [external](#external-plugin
 ```js
 const fly = new Fly({
   plugins: [
-    require('fly-clear'),
-    require('fly-concat'),
-    require('./my-plugin')
+    require("fly-clear"),
+    require("fly-concat"),
+    require("./my-plugin")
   ]
 })
 ```
