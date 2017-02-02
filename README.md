@@ -634,3 +634,4 @@ If you'd like to create and share a plugin for Fly, we have a [Yeoman generator]
 - [fly-autoprefixer](https://github.com/lukeed/fly-autoprefixer) -
 - [fly-mocha](https://github.com/flyjs/fly-mocha) - Fly plugin for Mocha
 - [fly-xo](https://github.com/lukeed/fly-xo) - XO plugin for Fly
+- [fly-ava](https://github.com/flyjs/fly-ava) - Fly plugin for Ava
