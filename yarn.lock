@@ -39,9 +39,9 @@ chalk@^1.0.0:
     strip-ansi "^3.0.0"
     supports-color "^2.0.0"
 
-clor@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/clor/-/clor-5.0.0.tgz#42a05ecba9c9e6295c1a75a9f9b38011ed3fd4c6"
+clor@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/clor/-/clor-5.0.1.tgz#597c9183a9ebc033d671721333c2ca862d1dfabf"
 
 concat-map@0.0.1:
   version "0.0.1"
