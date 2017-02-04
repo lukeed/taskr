@@ -628,7 +628,7 @@ If you'd like to create and share a plugin for Fly, we have a [Yeoman generator]
 - [fly-shell](https://github.com/lukeed/fly-shell) - Execute shell commands with Fly
 - [fly-rev](https://github.com/lukeed/fly-rev) - Append a unique hash to filenames
 - [fly-zip](https://github.com/lukeed/fly-zip) - ZIP compress files with Fly
-- [fly-gzip](https://github.com/lukeed/fly-zip) - Gzip plugin for Fly
+- [fly-gzip](https://github.com/lukeed/fly-gzip) - Gzip plugin for Fly
 - [fly-precache](https://github.com/lukeed/fly-precache) - Generate a service worker to cache resources and make them available offline.
 - [fly-htmlmin](https://github.com/lukeed/fly-htmlmin) - Minify HTML with Fly
 - [fly-autoprefixer](https://github.com/lukeed/fly-autoprefixer) -
