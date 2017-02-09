@@ -2,6 +2,7 @@
 
 const test = require("tape")
 const join = require("path").join
+const stat = require("fs").statSync
 const co = require("bluebird").coroutine
 
 const del = require("./helpers")
@@ -79,6 +80,19 @@ test("utils.write", co(function* (t) {
 	yield del(nest)
 
 	t.end()
+}))
+
+test.only("utils.write (options)", co(function * (t) {
+	t.plan(1)
+	const tmp = join(fixtures, ".tmp")
+	const file = join(tmp, "bar.txt")
+
+	yield $.write(file, "hello", {mode: 0o755})
+
+	const info = stat(file)
+	t.equal(info.mode, 33261, "wrote an executable file")
+
+	yield del(tmp)
 }))
 
 test("utils.expand", co(function* (t) {

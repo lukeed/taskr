@@ -260,7 +260,7 @@ Internal plugins are for single-use only. If you're defining the same behavior r
 
 > **Note:** Inline plugins have no need for a second argument in their generator function; you are the "user" here.
 
-See [`task.run`](#taskrunoptions-generator) for a simple example. The same inline example may be writen purely as an object:
+See [`task.run`](#taskrunoptions-generator) for a simple example. The same inline example may be written purely as an object:
 
 ```js
 exports.foo = function * (fly) {
@@ -516,7 +516,7 @@ Additional options, passed to [`fs.readFile`](https://nodejs.org/api/fs.html#fs_
 #### trace(stack)
 Parse and prettify an Error's stack.
 
-#### write(filepath, data)
+#### write(filepath, data, options)
 Yield: `null`<br>
 Write given data to a filepath. Will create directories as needed.
 ##### filepath
@@ -525,6 +525,9 @@ The full filepath to write into.
 ##### data
 Type: `String|Buffer`<br>
 The data to be written; see [`fs.writeFile`](https://nodejs.org/api/fs.html#fs_fs_writefile_file_data_options_callback).
+##### options
+Type: `Object`<br>
+Additional options, passed to [`fs.writeFile`](https://nodejs.org/api/fs.html#fs_fs_writefile_file_data_options_callback).
 
 ## Installation
 
