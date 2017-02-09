@@ -1,6 +1,7 @@
 "use strict"
 
 const Promise = require("bluebird")
+const stat = require("fs").statSync
 const join = require("path").join
 const test = require("tape")
 
@@ -118,7 +119,7 @@ test("task.source", co(function * (t) {
 }))
 
 test("task.target", co(function * (t) {
-	t.plan(10)
+	t.plan(11)
 	const glob1 = join(fixtures, "one", "two", "*.md")
 	const glob2 = join(fixtures, "one", "*.md")
 	const glob3 = join(fixtures, "**", "*.md")
@@ -181,11 +182,17 @@ test("task.target", co(function * (t) {
 				const str1 = yield f.$.find(join(dest6, "two", "two-1.md"))
 				const str2 = yield f.$.find(join(dest6, "sub", "fake.foo"))
 				t.true(str1.length && str2.length, "perform all actions in double-target chain")
+			},
+			*f(f) {
+				const src = join(fixtures, "bar.txt")
+				yield f.source(src).target(dest1, {mode: 0o755})
+				const info = stat(`${dest1}/bar.txt`)
+				t.equal(info.mode, 33261, "pass `mode` option to `utils.write`")
 			}
 		}
 	})
 
-	yield fly.parallel(["a", "b", "c", "d", "e"])
+	yield fly.parallel(["a", "b", "c", "d", "e", "f"])
 	// clean up
 	yield del([dest1, dest2, dest3, dest4, dest5, dest6])
 }))

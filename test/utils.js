@@ -82,7 +82,7 @@ test("utils.write", co(function* (t) {
 	t.end()
 }))
 
-test.only("utils.write (options)", co(function * (t) {
+test("utils.write (options)", co(function * (t) {
 	t.plan(1)
 	const tmp = join(fixtures, ".tmp")
 	const file = join(tmp, "bar.txt")

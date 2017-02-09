@@ -424,6 +424,10 @@ Additional options, passed directly to [`node-glob`](https://github.com/isaacs/n
 ##### dirs
 Type: `Array|String`<br>
 The destination folder(s).
+##### options
+Type: `Object`<br>
+Default: `{}`<br>
+Additional options, passed directly to [`fs.writeFile`](https://nodejs.org/api/fs.html#fs_fs_writefile_file_data_options_callback).
 
 <!-- Please note that the first instance of ambiguity within `task.source()` defines the destination's structure. -->
 Please note that `task.source()` glob ambiguity affects the destination structure.
