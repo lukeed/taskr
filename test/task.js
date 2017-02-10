@@ -1,13 +1,13 @@
 "use strict"
 
 const Promise = require("bluebird")
-const stat = require("fs").statSync
 const join = require("path").join
 const test = require("tape")
 
+const isMode = require("./helpers").isMode
+const del = require("./helpers").del
 const Task = require("../lib/task")
 const Fly = require("../lib/fly")
-const del = require("./helpers")
 const $ = require("../lib/fn")
 
 const protos = ["source", "target", "start", "parallel", "serial", "emit", "run", "exec"]
@@ -186,8 +186,8 @@ test("task.target", co(function * (t) {
 			*f(f) {
 				const src = join(fixtures, "bar.txt")
 				yield f.source(src).target(dest1, {mode: 0o755})
-				const info = stat(`${dest1}/bar.txt`)
-				t.equal(info.mode, 33261, "pass `mode` option to `utils.write`")
+				const isExe = yield isMode(`${dest1}/bar.txt`, 755)
+				t.true(isExe, "pass `mode` option to `utils.write`")
 			}
 		}
 	})

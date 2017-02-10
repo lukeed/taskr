@@ -5,7 +5,7 @@ const join = require("path").join
 const test = require("tape")
 
 const Fly = require("../lib/fly")
-const del = require("./helpers")
+const del = require("./helpers").del
 const $ = require("../lib/fn")
 
 const co = Promise.coroutine

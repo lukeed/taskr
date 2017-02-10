@@ -4,7 +4,7 @@ const Promise = require("bluebird")
 const join = require("path").join
 const test = require("tape")
 
-const del = require("./helpers")
+const del = require("./helpers").del
 const plugs = require("../lib/plugins")
 const Fly = require("../lib/fly")
 const cli = require("../lib/cli")

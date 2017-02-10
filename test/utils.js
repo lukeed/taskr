@@ -5,7 +5,8 @@ const join = require("path").join
 const stat = require("fs").statSync
 const co = require("bluebird").coroutine
 
-const del = require("./helpers")
+const isMode = require("./helpers").isMode
+const del = require("./helpers").del
 const $ = require("../lib/utils")
 
 const fixtures = join(__dirname, "fixtures", "utils")
@@ -89,8 +90,8 @@ test("utils.write (options)", co(function * (t) {
 
 	yield $.write(file, "hello", {mode: 0o755})
 
-	const info = stat(file)
-	t.equal(info.mode, 33261, "wrote an executable file")
+	const isExe = yield isMode(file, 755)
+	t.true(isExe, "wrote an executable file")
 
 	yield del(tmp)
 }))
