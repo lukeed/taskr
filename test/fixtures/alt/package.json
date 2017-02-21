@@ -2,7 +2,10 @@
   "dependencies": {
     "fly-plugin1": "*",
     "fly-plugin-2": "*",
-    "fly-no-exist": "*"
+    "fly-no-exist": "*",
+    "@demo/fly-thing": "*",
+    "@foo-bar/fly-fake": "*",
+    "@foo/ignore": "*"
   },
   "devDependencies": {
     "fake": "*"
