@@ -631,6 +631,7 @@ If you'd like to create and share a plugin for Fly, we have a [Yeoman generator]
 - [fly-eslint](https://github.com/flyjs/fly-eslint) - ESLint plugin for Fly
 - [fly-coffee](https://github.com/flyjs/fly-coffee) - Compile CoffeeScript with Fly
 - [fly-concat](https://github.com/lukeed/fly-concat) - Concatenate files with optional source maps.
+- [fly-flatten](https://github.com/lukeed/fly-flatten) - Flatten all source files to a specified maximum of sub-directories.
 - [fly-esnext](https://github.com/lukeed/fly-esnext) - Allow for ES6 and ES7 support throughout a Fly environment.
 - [fly-shell](https://github.com/lukeed/fly-shell) - Execute shell commands with Fly
 - [fly-rev](https://github.com/lukeed/fly-rev) - Append a unique hash to filenames
