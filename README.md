@@ -364,7 +364,7 @@ const fly = new Fly({
 
 ### Task
 
-A Task receives itself as its first argument. We choose to name the parameter `fly` simply because of the convention; of course, you may call it whatever you'd like.
+A Task receives itself as its first argument. We choose to name the parameter `fly` simply as a convention; of course, you may call it whatever you'd like.
 
 Tasks are exported from a `flyfile.js`, which means you can use either syntax:
 
