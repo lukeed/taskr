@@ -1,43 +1,43 @@
 <div align="center">
-	<img src="https://avatars1.githubusercontent.com/u/20690665?v=3&s=200" alt="fly logo" width="80">
+    <img src="https://avatars1.githubusercontent.com/u/20690665?v=3&s=200" alt="fly logo" width="80">
 </div>
 
 <h1 align="center">fly</h1>
 
 <div align="center">
-	<!-- NPM version -->
-	<a href="https://npmjs.org/package/fly">
-		<img src="https://img.shields.io/npm/v/fly.svg" alt="NPM version"/>
-	</a>
-	<!-- Build Status -->
-	<a href="https://travis-ci.org/flyjs/fly">
-		<img src="https://img.shields.io/travis/flyjs/fly.svg" alt="Build Status"/>
-	</a>
-	<!-- Test Coverage -->
-	<!-- <a href="https://codecov.io/github/flyjs/fly"> -->
-		<!-- <img src="https://img.shields.io/codecov/c/github/flyjs/fly/master.svg" alt="Test Coverage"/> -->
-	<!-- </a> -->
-	<!-- AppVeyor -->
-	<a href="https://ci.appveyor.com/project/lukeed/fly/branch/master">
-		<img src="https://ci.appveyor.com/api/projects/status/jjw7gor0edirylu5/branch/master?svg=true" alt="Windows Status"/>
-	</a>
-	<!-- Downloads -->
-	<a href="https://npmjs.org/package/fly">
-		<img src="https://img.shields.io/npm/dm/fly.svg" alt="Downloads"/>
-	</a>
+    <!-- NPM version -->
+    <a href="https://npmjs.org/package/fly">
+        <img src="https://img.shields.io/npm/v/fly.svg" alt="NPM version"/>
+    </a>
+    <!-- Build Status -->
+    <a href="https://travis-ci.org/flyjs/fly">
+        <img src="https://img.shields.io/travis/flyjs/fly.svg" alt="Build Status"/>
+    </a>
+    <!-- Test Coverage -->
+    <!-- <a href="https://codecov.io/github/flyjs/fly"> -->
+        <!-- <img src="https://img.shields.io/codecov/c/github/flyjs/fly/master.svg" alt="Test Coverage"/> -->
+    <!-- </a> -->
+    <!-- AppVeyor -->
+    <a href="https://ci.appveyor.com/project/lukeed/fly/branch/master">
+        <img src="https://ci.appveyor.com/api/projects/status/jjw7gor0edirylu5/branch/master?svg=true" alt="Windows Status"/>
+    </a>
+    <!-- Downloads -->
+    <a href="https://npmjs.org/package/fly">
+        <img src="https://img.shields.io/npm/dm/fly.svg" alt="Downloads"/>
+    </a>
 </div>
 
 <div align="center">
-	A generator & coroutine-based task runner.
+    A generator & coroutine-based task runner.
 </div>
 
 <div align="center">
-	<strong>Fasten your seatbelt. :rocket:</strong>
+    <strong>Fasten your seatbelt. :rocket:</strong>
 </div>
 
 <br />
 
-Fly is a highly performant task automatation tool, much like Gulp or Grunt, but written with concurrency in mind. With Fly, everything is a [coroutine](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127#.vpryf5tyb), which allows for cascading and composable tasks; but unlike Gulp, it's not limited to the stream metaphor.
+Fly is a highly performant task automation tool, much like Gulp or Grunt, but written with concurrency in mind. With Fly, everything is a [coroutine](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127#.vpryf5tyb), which allows for cascading and composable tasks; but unlike Gulp, it's not limited to the stream metaphor.
 
 Fly is extremely extensible, so _anything_ can be a task. Our core system will accept whatever you throw at it, resulting in a modular system of reusable plugins and tasks, connected by a declarative `flyfile.js` that's easy to read.
 
@@ -47,26 +47,26 @@ Fly is extremely extensible, so _anything_ can be a task. Our core system will a
 - [Features](#features)
 - [Example](#example)
 - [Concepts](#concepts)
-	* [Core](#core)
-	* [Plugins](#plugins)
-	* [Tasks](#tasks)
-	* [Flyfiles](#flyfiles)
+    * [Core](#core)
+    * [Plugins](#plugins)
+    * [Tasks](#tasks)
+    * [Flyfiles](#flyfiles)
 - [CLI](#cli)
 - [API](#api)
-	* [Fly](#fly-1)
-	* [Plugin](#plugin)
-	* [Task](#task-1)
-	* [Utilities](#utilities)
+    * [Fly](#fly-1)
+    * [Plugin](#plugin)
+    * [Task](#task-1)
+    * [Utilities](#utilities)
 - [Installation](#installation)
 - [Usage](#usage)
-	* [Getting Started](#getting-started)
-	* [Programmatic](#programmatic)
+    * [Getting Started](#getting-started)
+    * [Programmatic](#programmatic)
 - [Ecosystem](#ecosystem)
 </details>
 
 ## Features
 - **lightweight:** with `5` dependencies, [installation](#installation) takes seconds
-- **minimal api:** Fly only exposes a couple methods, but they're everything you'll ever need
+- **minimal API:** Fly only exposes a couple methods, but they're everything you'll ever need
 - **performant:** because of [Bluebird](https://github.com/petkaantonov/bluebird/), creating and running Tasks are quick and inexpensive
 - **cascading:** sequential Task chains can cascade their return values, becoming the next Task's argument
 - **asynchronous:** concurrent Task chains run without side effects & can be `yield`ed consistently
@@ -105,7 +105,7 @@ module.exports = {
 
 Fly is a task runner. It's designed to get you from `A` to `B` -- that's it.
 
-If it helps, imagine you're dining in a restaraunt and Fly is the food runner. Fly's role is solely to collect meals from the kitchen (`fly.source`) and deliver them to the correct table (`fly.target`). As a food runner, Fly may do this one plate at a time (`fly.serial`) or deliver multiple plates at once (`fly.parallel`). Either way, Fly only cares about going from `A` to `B`. It may not be the most glamarous job, but as far as you (the patron) are concerned, it's incredibly important because it brings you food.
+If it helps, imagine you're dining in a restaurant and Fly is the food runner. Fly's role is solely to collect meals from the kitchen (`fly.source`) and deliver them to the correct table (`fly.target`). As a food runner, Fly may do this one plate at a time (`fly.serial`) or deliver multiple plates at once (`fly.parallel`). Either way, Fly only cares about going from `A` to `B`. It may not be the most glamorous job, but as far as you (the patron) are concerned, it's incredibly important because it brings you food.
 
 ### Plugins
 
@@ -364,7 +364,7 @@ const fly = new Fly({
 
 ### Task
 
-A Task receives itself as its first argument. We choose to name the parameter `fly` simply because of convention; of course, you may call it whatever you'd like.
+A Task receives itself as its first argument. We choose to name the parameter `fly` simply because of the convention; of course, you may call it whatever you'd like.
 
 Tasks are exported from a `flyfile.js`, which means you can use either syntax:
 
@@ -586,7 +586,7 @@ You may be interested in checking out a [Web Starter Kit](https://github.com/luk
 
 ### Programmatic
 
-Fly is extremely flexible should you choose to use Fly outside of it's standard configuration.
+Fly is extremely flexible should you choose to use Fly outside of its standard configuration.
 
 The quickest path to a valid `Fly` instance is to send a `tasks` object:
 
