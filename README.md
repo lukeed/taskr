@@ -44,6 +44,7 @@ Fly is extremely extensible, so _anything_ can be a task. Our core system will a
 <h2>Table of Contents</h2>
 <details>
 <summary>Table of Contents</summary>
+
 - [Features](#features)
 - [Example](#example)
 - [Concepts](#concepts)
