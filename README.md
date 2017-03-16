@@ -44,24 +44,38 @@ Fly is extremely extensible, so _anything_ can be a task. Our core system will a
 <h2>Table of Contents</h2>
 <details>
 <summary>Table of Contents</summary>
-- [Features](#features)
-- [Example](#example)
-- [Concepts](#concepts)
-	* [Core](#core)
-	* [Plugins](#plugins)
-	* [Tasks](#tasks)
-	* [Flyfiles](#flyfiles)
-- [CLI](#cli)
-- [API](#api)
-	* [Fly](#fly-1)
-	* [Plugin](#plugin)
-	* [Task](#task-1)
-	* [Utilities](#utilities)
-- [Installation](#installation)
-- [Usage](#usage)
-	* [Getting Started](#getting-started)
-	* [Programmatic](#programmatic)
-- [Ecosystem](#ecosystem)
+<ul>
+	<li><a href="#features">Features</a></li>
+	<li><a href="#example">Example</a></li>
+	<li>
+		<a href="#concepts">Concepts</a>
+		<ul>
+			<li><a href="#core">Core</a></li>
+			<li><a href="#plugins">Plugins</a></li>
+			<li><a href="#tasks">Tasks</a></li>
+			<li><a href="#flyfiles">Flyfiles</a></li>
+		</ul>
+	</li>
+	<li><a href="#cli">CLI</a></li>
+	<li>
+		<a href="#api">API</a>
+		<ul>
+			<li><a href="#fly-1">Fly</a></li>
+			<li><a href="#plugin">Plugin</a></li>
+			<li><a href="#task-1">Task</a></li>
+			<li><a href="#utilities">Utilities</a></li>
+		</ul>
+	</li>
+	<li><a href="#installation">Installation</a></li>
+	<li>
+		<a href="#usage">Usage</a>
+		<ul>
+			<li><a href="#getting-started">Getting Started</a></li>
+			<li><a href="#programmatic">Programmatic</a></li>
+		</ul>
+	</li>
+	<li><a href="#ecosystem">Ecosystem</a></li>
+</ul>
 </details>
 
 ## Features
