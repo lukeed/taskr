@@ -23,6 +23,7 @@
     "lib",
     "cli.js"
   ],
+  "typings": "./d.ts/index.d.ts",
   "dependencies": {
     "bluebird": "^3.4.7",
     "clor": "^5.0.1",
