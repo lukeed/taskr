@@ -617,9 +617,18 @@ const fly = new Fly({
 })
 ```
 
-> **Important:** If you don't provide a `file` _or_ a `tasks` object, your `plugins` will not be mounted to the instance.
+> **Important:** This assumes you have provided a valid `file` _or_ `tasks` object. Without either of these, your Fly instance will be incomplete and therefore invalid. This will cause the instance to exit early, which means that your `plugins` will not be mounted to the instance.
 
-You may also supply a `flyfile.js` path to `file` and a directory path to `cwd`.
+You may also define your `tasks` by supplying a `flyfile.js` path to `file`. Whenever you do this, you **should** also update the `cwd` key because your [root](#taskroot) has changed!
+
+```js
+const join = require("path").join
+
+const cwd = join(__dirname, "..", "build")
+const file = join(cwd, "flyfile.js")
+
+const fly = new Fly({ file, cwd })
+```
 
 
 ## Ecosystem
