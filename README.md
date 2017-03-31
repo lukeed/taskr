@@ -351,6 +351,7 @@ const fly = new Fly({
   plugins: [
     require("./build/custom-plugin-one.js"),
     require("./build/custom-plugin-two.js"),
+    require("fly-clear")
     {
       name: "plugThree",
       every: false,
@@ -602,7 +603,9 @@ const fly = new Fly({
 fly.start("foo")
 ```
 
-Passing `plugins` is also achievable; applicable for [external](#external-plugins) and [local](#local-plugins) plugins.
+By default, your new Fly instance will not include any plugins. You have the power to pick and choose what your instance needs!
+
+To do this, you may pass an array of [external](#external-plugins) and [local](#local-plugins) `plugins`:
 
 ```js
 const fly = new Fly({
