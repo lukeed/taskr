@@ -365,10 +365,6 @@ through@2, through@~2.3.4, through@~2.3.8:
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
 
-tinydate@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/tinydate/-/tinydate-1.0.0.tgz#20f31756a13959ef8c57ec133ba29b5ade042cac"
-
 trim@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/trim/-/trim-0.0.1.tgz#5858547f6b290757ee95cccc666fb50084c460dd"
