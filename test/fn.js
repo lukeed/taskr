@@ -82,7 +82,7 @@ test("fn.getTime", t => {
 	const out = $.getTime()
 	t.equal(typeof out, "string", "returns a string")
 	t.equal(out.split(":").length, 3, "has 3 segments")
-	t.equal(out.length, 8, "is always 8 characters long")
+	t.equal(out.length, 10, "is always 10 characters long")
 	t.end()
 })
 
