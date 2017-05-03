@@ -28,7 +28,8 @@
     "clor": "^5.0.1",
     "glob": "^7.1.1",
     "minimist": "^1.2.0",
-    "mkdirp": "^0.5.1"
+    "mkdirp": "^0.5.1",
+    "tinydate": "^1.0.0"
   },
   "devDependencies": {
     "rimraf": "^2.5.4",
