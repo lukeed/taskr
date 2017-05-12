@@ -31,7 +31,7 @@
     "mkdirp": "^0.5.1"
   },
   "devDependencies": {
-    "rimraf": "^2.5.4",
+    "rimraf": "^2.6.1",
     "tap-spec": "^4.1.1",
     "tape": "^4.6.3"
   },
