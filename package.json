@@ -25,7 +25,7 @@
   ],
   "dependencies": {
     "bluebird": "^3.5.0",
-    "clor": "^5.0.1",
+    "clor": "^5.1.0",
     "glob": "^7.1.1",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1"
