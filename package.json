@@ -21,9 +21,10 @@
   "bin": "cli.js",
   "files": [
     "lib",
-    "cli.js"
+    "cli.js",
+    "fly.d.ts"
   ],
-  "typings": "./d.ts/index.d.ts",
+  "typings": "fly.d.ts",
   "dependencies": {
     "bluebird": "^3.4.7",
     "clor": "^5.0.1",

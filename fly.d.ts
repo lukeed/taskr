@@ -1,4 +1,4 @@
-declare namespace Fly {
+declare namespace fly {
 		export interface Instance {
 			/**
 			 * Start a Task by its name; may also pass initial values.
@@ -70,7 +70,7 @@ declare namespace Fly {
 			/**
 			 * Write given data to a filepath. Will create directories as needed.
 			 */
-			write(filepath: string, data: String | BufferSource, options: object)
+			write(filepath: string, data: any , options: object)
 		}
 
 		type PluginOptions = {
@@ -131,6 +131,6 @@ declare namespace Fly {
 			 * @param {Object} options pass plugins options
 			 * @param {Function} plugin plugin generator function
 			 */
-			run(options: object, plugin: () => IterableIterator<any>)
+			run(options: object, plugin: () => Iterator<any>)
 		}
 }
