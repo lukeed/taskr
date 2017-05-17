@@ -17,6 +17,10 @@ declare namespace fly {
 			serial(tasks: Array<string>, options?: object): IterableIterator<any>
 		}
 
+		export type Generator<T> = () => Iterator<T>
+
+		export type Plugin = (fly: Task) => Iterator<any>
+
 		export interface Utils {
 			/**
 			 * Print to console with timestamp and alert coloring
@@ -73,9 +77,6 @@ declare namespace fly {
 			write(filepath: string, data: any , options: object)
 		}
 
-		type PluginOptions = {
-			// pass
-		}
 
 		type InnerState = {
 			/**
