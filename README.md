@@ -10,6 +10,9 @@ Fly is extremely extensible, so _anything_ can be a task. Our core system will a
 
 <h2>Table of Contents</h2>
 
+<details>
+<summary>Table of Contents</summary>
+
 - [Features](#features)
 - [Example](#example)
 - [Concepts](#concepts)
@@ -28,6 +31,7 @@ Fly is extremely extensible, so _anything_ can be a task. Our core system will a
     * [Getting Started](#getting-started)
     * [Programmatic](#programmatic)
 - [Ecosystem](#ecosystem)
+</details>
 
 ## Features
 - **lightweight:** with `5` dependencies, [installation](#installation) takes seconds
