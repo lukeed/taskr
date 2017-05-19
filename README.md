@@ -1,49 +1,14 @@
-<div align="center">
-    <img src="https://avatars1.githubusercontent.com/u/20690665?v=3&s=200" alt="fly logo" width="80">
-</div>
-
-<h1 align="center">fly</h1>
-
-<div align="center">
-    <!-- NPM version -->
-    <a href="https://npmjs.org/package/fly">
-        <img src="https://img.shields.io/npm/v/fly.svg" alt="NPM version"/>
-    </a>
-    <!-- Build Status -->
-    <a href="https://travis-ci.org/flyjs/fly">
-        <img src="https://img.shields.io/travis/flyjs/fly.svg" alt="Build Status"/>
-    </a>
-    <!-- Test Coverage -->
-    <!-- <a href="https://codecov.io/github/flyjs/fly"> -->
-        <!-- <img src="https://img.shields.io/codecov/c/github/flyjs/fly/master.svg" alt="Test Coverage"/> -->
-    <!-- </a> -->
-    <!-- AppVeyor -->
-    <a href="https://ci.appveyor.com/project/lukeed/fly/branch/master">
-        <img src="https://ci.appveyor.com/api/projects/status/jjw7gor0edirylu5/branch/master?svg=true" alt="Windows Status"/>
-    </a>
-    <!-- Downloads -->
-    <a href="https://npmjs.org/package/fly">
-        <img src="https://img.shields.io/npm/dm/fly.svg" alt="Downloads"/>
-    </a>
-</div>
-
-<div align="center">
-    A generator & coroutine-based task runner.
-</div>
-
-<div align="center">
-    <strong>Fasten your seatbelt. :rocket:</strong>
-</div>
-
-<br />
+# fly
+[![npm](https://img.shields.io/npm/v/fly.svg)](https://npmjs.org/package/fly)
+[![Travis CI](https://img.shields.io/travis/flyjs/fly.svg)](https://travis-ci.org/flyjs/fly)
+[![Appveyor](https://ci.appveyor.com/api/projects/status/jjw7gor0edirylu5/branch/master?svg=true)](https://ci.appveyor.com/project/lukeed/fly/branch/master)
+[![Downloads](https://img.shields.io/npm/dm/fly.svg)](https://cdnjs.com/libraries/hyperapp)
 
 Fly is a highly performant task automation tool, much like Gulp or Grunt, but written with concurrency in mind. With Fly, everything is a [coroutine](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127#.vpryf5tyb), which allows for cascading and composable tasks; but unlike Gulp, it's not limited to the stream metaphor.
 
 Fly is extremely extensible, so _anything_ can be a task. Our core system will accept whatever you throw at it, resulting in a modular system of reusable plugins and tasks, connected by a declarative `flyfile.js` that's easy to read.
 
 <h2>Table of Contents</h2>
-<details>
-<summary>Table of Contents</summary>
 
 - [Features](#features)
 - [Example](#example)
@@ -63,7 +28,6 @@ Fly is extremely extensible, so _anything_ can be a task. Our core system will a
     * [Getting Started](#getting-started)
     * [Programmatic](#programmatic)
 - [Ecosystem](#ecosystem)
-</details>
 
 ## Features
 - **lightweight:** with `5` dependencies, [installation](#installation) takes seconds
