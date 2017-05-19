@@ -518,15 +518,15 @@ $ npm install --save-dev fly
 3. Define `default` and additional tasks within your `flyfile.js`.
 
   ```js
-  export.default = function * (fly) {
+  exports.default = function * (fly) {
     yield fly.parallel(["styles", "scripts"])
   }
 
-  export.styles = function * (fly) {
+  exports.styles = function * (fly) {
     yield fly.source("src/**/*.css").autoprefixer().target("dist/css")
   }
 
-  export.scripts = function * (fly) {
+  exports.scripts = function * (fly) {
     yield fly.source("src/**/*.js").babel({
       presets: [
         ["es2015", {loose: true, modules: false}]
