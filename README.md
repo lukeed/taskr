@@ -2,7 +2,7 @@
 [![npm](https://img.shields.io/npm/v/fly.svg)](https://npmjs.org/package/fly)
 [![Travis CI](https://img.shields.io/travis/flyjs/fly.svg)](https://travis-ci.org/flyjs/fly)
 [![Appveyor](https://ci.appveyor.com/api/projects/status/jjw7gor0edirylu5/branch/master?svg=true)](https://ci.appveyor.com/project/lukeed/fly/branch/master)
-[![Downloads](https://img.shields.io/npm/dm/fly.svg)](https://cdnjs.com/libraries/hyperapp)
+[![Downloads](https://img.shields.io/npm/dm/fly.svg)](https://npmjs.org/package/fly)
 
 Fly is a highly performant task automation tool, much like Gulp or Grunt, but written with concurrency in mind. With Fly, everything is a [coroutine](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127#.vpryf5tyb), which allows for cascading and composable tasks; but unlike Gulp, it's not limited to the stream metaphor.
 
