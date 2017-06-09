@@ -1,22 +1,15 @@
 {
-  "name": "fly",
-  "version": "2.0.6",
-  "description": "Generator & Coroutine-based build system. Fasten your seatbelt.",
+  "name": "taskr",
+  "version": "0.8.0",
+  "description": "Generator & Coroutine-based task runner. Fasten your seatbelt.",
   "license": "MIT",
-  "repository": "flyjs/fly",
-  "homepage": "https://github.com/flyjs/fly",
+  "repository": "lukeed/taskr",
+  "homepage": "https://github.com/lukeed/taskr",
   "author": {
-    "name": "Jorge Bucaran",
-    "email": "jbucaran@gmail.com",
-    "url": "https://github.com/jbucaran"
+    "name": "Luke Edwards",
+    "email": "luke@lukeed.com",
+    "url": "https://lukeed.com"
   },
-  "contributors": [
-    {
-      "name": "Luke Edwards",
-      "email": "luke@lukeed.com",
-      "url": "https://lukeed.com"
-    }
-  ],
   "main": "lib/fly.js",
   "bin": "cli.js",
   "files": [
