@@ -1,14 +1,34 @@
-# fly
-[![npm](https://img.shields.io/npm/v/fly.svg)](https://npmjs.org/package/fly)
-[![Travis CI](https://img.shields.io/travis/flyjs/fly.svg)](https://travis-ci.org/flyjs/fly)
-[![Appveyor](https://ci.appveyor.com/api/projects/status/jjw7gor0edirylu5/branch/master?svg=true)](https://ci.appveyor.com/project/lukeed/fly/branch/master)
-[![Downloads](https://img.shields.io/npm/dm/fly.svg)](https://cdnjs.com/libraries/hyperapp)
+# Taskr
 
-Fly is a highly performant task automation tool, much like Gulp or Grunt, but written with concurrency in mind. With Fly, everything is a [coroutine](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127#.vpryf5tyb), which allows for cascading and composable tasks; but unlike Gulp, it's not limited to the stream metaphor.
+[![npm](https://img.shields.io/npm/v/taskr.svg)](https://npmjs.org/package/taskr)
+[![Travis CI](https://img.shields.io/travis/lukeed/taskr.svg)](https://travis-ci.org/lukeed/taskr)
+[![Appveyor](https://ci.appveyor.com/api/projects/status/jjw7gor0edirylu5/branch/master?svg=true)](https://ci.appveyor.com/project/lukeed/taskr/branch/master)
+[![Downloads](https://img.shields.io/npm/dm/taskr.svg)](https://npmjs.org/package/taskr)
 
-Fly is extremely extensible, so _anything_ can be a task. Our core system will accept whatever you throw at it, resulting in a modular system of reusable plugins and tasks, connected by a declarative `flyfile.js` that's easy to read.
+Taskr is a highly performant task automation tool, much like Gulp or Grunt, but written with concurrency in mind. With Taskr, everything is a [coroutine](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127#.vpryf5tyb), which allows for cascading and composable tasks; but unlike Gulp, it's not limited to the stream metaphor.
+
+Taskr is extremely extensible, so _anything_ can be a task. Our core system will accept whatever you throw at it, resulting in a modular system of reusable plugins and tasks, connected by a declarative `taskfile.js` that's easy to read.
+
+---
+
+> :warning: **Important:** This is the successor to [Fly](https://github.com/flyjs/fly)!
+
+I was forcibly removed by its inactive co-owner, due to his newfound "interest" in the project (aka, the stars). He's also taken to alter Fly's commit history in order to remove evidence of my work.
+
+As a result of this dispute, Taskr exists as a separate repo but includes the full, _original_ history for Fly.
+
+In regards the NPM downloadable(s), `taskr@1.0.0` is equivalent to `fly@2.0.6` --- with the sole exception that `flyfile.js` has been renamed to `taskfile.js`. At this point, the [plugin ecosystem](#ecosystem) is interchangeable, which means that you can install `taskr` and use any `fly-*` plugins of your choosing.
+
+Please pardon the short-term awkwardness. No one expects something like this to happen.
+
+I plan to update the ecosystem and completely detach from all Fly relations before resuming work on furthering the library itself. I greatly appreciate any and all help/suggestions!
+
+---
 
 <h2>Table of Contents</h2>
+
+<details>
+<summary>Table of Contents</summary>
 
 - [Features](#features)
 - [Example](#example)
@@ -16,10 +36,10 @@ Fly is extremely extensible, so _anything_ can be a task. Our core system will a
     * [Core](#core)
     * [Plugins](#plugins)
     * [Tasks](#tasks)
-    * [Flyfiles](#flyfiles)
+    * [Taskfiles](#taskfiles)
 - [CLI](#cli)
 - [API](#api)
-    * [Fly](#fly-1)
+    * [Taskr](#taskr-1)
     * [Plugin](#plugin)
     * [Task](#task-1)
     * [Utilities](#utilities)
@@ -28,10 +48,12 @@ Fly is extremely extensible, so _anything_ can be a task. Our core system will a
     * [Getting Started](#getting-started)
     * [Programmatic](#programmatic)
 - [Ecosystem](#ecosystem)
+- [Credits](#credits)
+</details>
 
 ## Features
 - **lightweight:** with `5` dependencies, [installation](#installation) takes seconds
-- **minimal API:** Fly only exposes a couple methods, but they're everything you'll ever need
+- **minimal API:** Taskr only exposes a couple methods, but they're everything you'll ever need
 - **performant:** because of [Bluebird](https://github.com/petkaantonov/bluebird/), creating and running Tasks are quick and inexpensive
 - **cascading:** sequential Task chains can cascade their return values, becoming the next Task's argument
 - **asynchronous:** concurrent Task chains run without side effects & can be `yield`ed consistently
@@ -41,25 +63,25 @@ Fly is extremely extensible, so _anything_ can be a task. Our core system will a
 
 ## Example
 
-Here's a simple [`flyfile`](#flyfiles) (with [shorthand generator methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Method_definitions#Shorthand_generator_methods)) depicting a [parallel](#flyparalleltasks-options) chain.
+Here's a simple [`taskfile`](#taskfiles) (with [shorthand generator methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Method_definitions#Shorthand_generator_methods)) depicting a [parallel](#taskrparalleltasks-options) chain.
 
 ```js
-const sass = "src/{admin,client}/*.sass"
-const js = "src/{admin,client}/*.js"
-const dist = "build"
+const sass = 'src/{admin,client}/*.sass'
+const js = 'src/{admin,client}/*.js'
+const dist = 'build'
 
 module.exports = {
-  *lint(fly) {
-    yield fly.source(js).xo({ esnext: true })
+  *lint(task) {
+    yield task.source(js).xo({ esnext: true })
   },
-  *scripts(fly) {
-    yield fly.source(js).babel({ presets: ["es2015"] }).target(`${dist}/js`)
+  *scripts(task) {
+    yield task.source(js).babel({ presets: ['es2015'] }).target(`${dist}/js`)
   },
-  *styles(fly) {
-    yield fly.source(sass).sass({ outputStyle: "compressed" }).autoprefixer().target(`${dist}/css`)
+  *styles(task) {
+    yield task.source(sass).sass({ outputStyle: 'compressed' }).autoprefixer().target(`${dist}/css`)
   },
-  *build(fly) {
-    yield fly.parallel(["lint", "scripts", "styles"])
+  *build(task) {
+    yield task.parallel(['lint', 'scripts', 'styles'])
   }
 }
 ```
@@ -68,15 +90,15 @@ module.exports = {
 
 ### Core
 
-Fly is a task runner. It's designed to get you from `A` to `B` -- that's it.
+Taskr is a task runner. It's designed to get you from `A` to `B` -- that's it.
 
-If it helps, imagine you're dining in a restaurant and Fly is the food runner. Fly's role is solely to collect meals from the kitchen (`fly.source`) and deliver them to the correct table (`fly.target`). As a food runner, Fly may do this one plate at a time (`fly.serial`) or deliver multiple plates at once (`fly.parallel`). Either way, Fly only cares about going from `A` to `B`. It may not be the most glamorous job, but as far as you (the patron) are concerned, it's incredibly important because it brings you food.
+If it helps, imagine you're dining in a restaurant and Taskr is the food runner. Taskr's role is solely to collect meals from the kitchen (`task.source`) and deliver them to the correct table (`task.target`). As a food runner, Taskr may do this one plate at a time (`task.serial`) or deliver multiple plates at once (`task.parallel`). Either way, Taskr only cares about going from `A` to `B`. It may not be the most glamorous job, but as far as you (the patron) are concerned, it's incredibly important because it brings you food.
 
 ### Plugins
 
-Because Fly is single-minded and cares only about executing [tasks](#tasks), **everything else is a plugin**. This keeps development with Fly easy, approachable, and lightweight.
+Because Taskr is single-minded and cares only about executing [tasks](#tasks), **everything else is a plugin**. This keeps development with Taskr easy, approachable, and lightweight.
 
-You see, installing Fly gives access to a reliable task runner. You decide what it _can do_, provide it functionality, and dictate when to do it. You're in full control.
+You see, installing Taskr gives access to a reliable task runner. You decide what it _can do_, provide it functionality, and dictate when to do it. You're in full control.
 
 Through plugins, you are able to capture useful behavior and share them across tasks or projects for repeated use. Plugins come in three flavors:
 
@@ -86,46 +108,46 @@ Through plugins, you are able to capture useful behavior and share them across t
 
 ### Tasks
 
-Tasks are used to tell Fly what to do. They are written as generator functions & converted to coroutines internally. They're also fully self-contained and, like plugins, can be shared across projects if desired.
+Tasks are used to tell Taskr what to do. They are written as generator functions & converted to coroutines internally. They're also fully self-contained and, like plugins, can be shared across projects if desired.
 
-Upon runtime, tasks are cheap to create, so are also destroyed once completed. This also helps Fly remain efficient; history won't weigh it down.
+Upon runtime, tasks are cheap to create, so are also destroyed once completed. This also helps Taskr remain efficient; history won't weigh it down.
 
 Lastly, tasks have the power to [start](#taskstarttask-options) other Tasks, including [serial](#taskserialtasks-options) and [parallel](#taskparalleltasks-options) chains!
 
-### Flyfiles
+### Taskfiles
 
-Much like Gulp, Fly uses a `flyfile.js` (case sensitive) to read and run your Tasks. However, because it's a regular JavaScript file, you may also `require()` additional modules and incorporate them directly into your Tasks, without the need for a custom Plugin!
+Much like Gulp, Taskr uses a `taskfile.js` (case sensitive) to read and run your Tasks. However, because it's a regular JavaScript file, you may also `require()` additional modules and incorporate them directly into your Tasks, without the need for a custom Plugin!
 
 ```js
-const browserSync = require("browser-sync")
+const browserSync = require('browser-sync')
 
-exports.serve = function * (fly) {
+exports.serve = function * (task) {
   browserSync({
     port: 3000,
-    server: "dist",
+    server: 'dist',
     middleware: [
-      require("connect-history-api-fallback")()
+      require('connect-history-api-fallback')()
     ]
   })
-  yield fly.$.log("> Listening on localhost:3000")
+  yield task.$.log('> Listening on localhost:3000')
 }
 ```
 
-Flyfiles should generally be placed in the root of your project, alongside your `package.json`. Although this is not required, Fly (strongly) prefers this location.
+Taskfiles should generally be placed in the root of your project, alongside your `package.json`. Although this is not required, Taskr (strongly) prefers this location.
 
 > **Note:** You may set an alternate directory path through the CLI's `cwd` option.
 
-Through Node, Fly only supports ES5 syntax; however, if you prefer ES6 or ES7, just install [`fly-esnext`](https://github.com/lukeed/fly-esnext)!
+Through Node, Taskr only supports ES5 syntax; however, if you prefer ES6 or ES7, just install [`fly-esnext`](https://github.com/lukeed/fly-esnext)!
 
 ## CLI
 
-Fly's CLI tool is very simple and straightforward.
+Taskr's CLI tool is very simple and straightforward.
 
 ```
-fly [options] <tasks>
-fly --mode=parallel task1 task2 ...
+taskr [options] <task names>
+taskr --mode=parallel task1 task2 ...
 ```
-> Please run `fly --help` or `fly -h` for usage information.
+> Please run `taskr --help` or `taskr -h` for usage information.
 
 Most commonly, the CLI is used for [NPM script](https://docs.npmjs.com/misc/scripts) definitions.
 
@@ -133,18 +155,18 @@ Most commonly, the CLI is used for [NPM script](https://docs.npmjs.com/misc/scri
 // package.json
 {
   "scripts": {
-    "build": "fly task1 task2"
+    "build": "taskr foo bar"
   }
 }
 ```
 
 ## API
 
-### Fly
+### Taskr
 
-Fly itself acts as a "parent" class to its `Task` children. Because of this, Fly's methods are purely executive; aka, they manage Tasks and tell them how & when to run.
+Taskr itself acts as a "parent" class to its `Task` children. Because of this, Taskr's methods are purely executive; aka, they manage Tasks and tell them how & when to run.
 
-#### fly.start(task, [options])
+#### Taskr.start(task, [options])
 Yield: `Any`<br>
 Start a Task by its name; may also pass initial values. Can return anything the Task is designed to.
 
@@ -152,14 +174,14 @@ Start a Task by its name; may also pass initial values. Can return anything the 
 Type: `String`<br>
 Default: `'default'`<br>
 The Task's name to run. Task must exist/be defined or an Error is thrown.<br>
-> **Important!** Fly expects a `default` task if no task is specified. This also applies to CLI usage.
+> **Important!** Taskr expects a `default` task if no task is specified. This also applies to CLI usage.
 
 ##### options
 Type: `Object`<br>
 Default: `{src: null, val: null}`<br>
 Initial/Custom values to start with. You may customize the object shape, but only `val` will be cascaded from Task to Task.
 
-#### fly.parallel(tasks, [options])
+#### Taskr.parallel(tasks, [options])
 Yield: `Any`<br>
 Run a group of tasks simultaneously. Cascading is disabled.
 ##### tasks
@@ -169,7 +191,7 @@ The names of Tasks to run. Task names must be `string`s and must be defined.
 Type: `Object`<br>
 Initial values to start with; passed to each task in the group. Does not cascade.
 
-#### fly.serial(tasks, [options])
+#### Taskr.serial(tasks, [options])
 Yield: `Any`<br>
 Run a group of tasks sequentially. Cascading is enabled.
 ##### tasks
@@ -181,20 +203,20 @@ Initial values to start with; passed to each task in the group. Does cascade.
 
 ```js
 module.exports = {
-  *default(fly) {
-    yield fly.serial(["first", "second"], {val: 10})
+  *default(task) {
+    yield task.serial(['first', 'second'], {val: 10})
   },
-  *first(fly, opts) {
-    yield fly.$.log(`first: ${opts.val}`)
+  *first(task, opts) {
+    yield task.$.log(`first: ${opts.val}`)
     return opts.val * 4
   },
-  *second(fly, opts) {
-    yield fly.$.log(`second: ${opts.val}`)
+  *second(task, opts) {
+    yield task.$.log(`second: ${opts.val}`)
     return opts.val + 2
   }
 }
 
-const output = yield fly.start()
+const output = yield task.start()
 //=> first: 10
 //=> second: 40
 console.log(output)
@@ -228,14 +250,14 @@ Internal plugins are for single-use only. If you're defining the same behavior r
 See [`task.run`](#taskrunoptions-generator) for a simple example. The same inline example may be written purely as an object:
 
 ```js
-exports.foo = function * (fly) {
-  yield fly.source("src/*.js").run({
+exports.foo = function * (task) {
+  yield task.source('src/*.js').run({
     every: false,
     *func(files) {
       Array.isArray(files) //=> true
-      yield Promise.resolve("this will run once.")
+      yield Promise.resolve('this will run once.')
     }
-  }).target("dist")
+  }).target('dist')
 }
 ```
 
@@ -245,23 +267,23 @@ Unlike "inline" plugins, external and local plugins are defined before a Task is
 
 Similar to inline plugins, there are two ways of defining an exported module -- via functional or object definitions.
 
-When using a _functional definition_, the **definition** receives the [Fly](#fly-1) instance and the [utilities](#utilities) object.
+When using a _functional definition_, the **definition** receives the [Taskr](#taskr-1) instance and the [utilities](#utilities) object.
 
 ```js
-module.exports = function (fly, utils) {
+module.exports = function (task, utils) {
   // promisify before running else repeats per execution
   const render = utils.promisify(function () {})
   // verbose API
-  fly.plugin("myName", {every: false}, function * (files, opts) {
-    console.log("all my files: ", files) //=> Array
+  task.plugin('myName', {every: false}, function * (files, opts) {
+    console.log('all my files: ', files) //=> Array
     console.log(this._.files === files) //=> true
     console.log(this instanceof Task) //=> true
-    console.log("user options: ", opts)
+    console.log('user options: ', opts)
     yield render(opts)
   })
   // or w/condensed API
-  fly.plugin({
-    name: "myName",
+  task.plugin({
+    name: 'myName',
     every: false,
     *func(files, opts) {
       // ...same
@@ -270,11 +292,11 @@ module.exports = function (fly, utils) {
 }
 ```
 
-When using an _object definition_, you are not provided the `fly` or `utils` objects. **This assumes that you do not need any prep work for your plugin!**
+When using an _object definition_, you are not provided the `task` or `utils` parameters. **This assumes that you do not need any prep work for your plugin!**
 
 ```js
 module.exports = {
-  name: "myName",
+  name: 'myName',
   every: false,
   *func(files, opts) {
     // do stuff
@@ -285,8 +307,8 @@ module.exports = {
 Then, within your Task, you may use it like so:
 
 ```js
-exports.default = function * (fly) {
-  yield fly.source("src/*.js").myName({ foo: "bar" }).target("dist")
+exports.default = function * (task) {
+  yield task.source('src/*.js').myName({ foo: 'bar' }).target('dist')
 }
 ```
 
@@ -310,14 +332,14 @@ In order to use a local plugin, add a `fly` key to your `package.json` file. The
 For [programmatic usage](#programmatic), simply pass an array of definitions to the `plugins` key:
 
 ```js
-const Fly = require('fly')
-const fly = new Fly({
+const Taskr = require('taskr')
+const taskr = new Taskr({
   plugins: [
-    require("./build/custom-plugin-one.js"),
-    require("./build/custom-plugin-two.js"),
-    require("fly-clear")
+    require('./build/custom-plugin-one.js'),
+    require('./build/custom-plugin-two.js'),
+    require('fly-clear')
     {
-      name: "plugThree",
+      name: 'plugThree',
       every: false,
       files: false,
       *func(globs, opts) {
@@ -330,35 +352,35 @@ const fly = new Fly({
 
 ### Task
 
-A Task receives itself as its first argument. We choose to name the parameter `fly` simply as a convention; of course, you may call it whatever you'd like.
+A Task receives itself as its first argument. We choose to name the parameter `task` simply as a convention; of course, you may call it whatever you'd like.
 
-Tasks are exported from a `flyfile.js`, which means you can use either syntax:
+Tasks are exported from a `taskfile.js`, which means you can use either syntax:
 
 ```js
-exports.foo = function * (fly) {
-  yield fly.source("src/*.js").target("dist/js")
+exports.foo = function * (task) {
+  yield task.source('src/*.js').target('dist/js')
 }
-exports.bar = function * (fly) {
-  yield fly.source("src/*.css").target("dist/css")
+exports.bar = function * (task) {
+  yield task.source('src/*.css').target('dist/css')
 }
 // or
 module.exports = {
-  *foo(fly) {
-    yield fly.source("src/*.js").target("dist/js")
+  *foo(task) {
+    yield task.source('src/*.js').target('dist/js')
   },
-  *bar(fly) {
-    yield fly.source("src/*.css").target("dist/css")
+  *bar(task) {
+    yield task.source('src/*.css').target('dist/css')
   }
 }
 ```
 
-Each Task also receives an `opts` object, consisting of `src` and `val` keys. Although `src` is primarily used for [`fly-watch`](https://github.com/flyjs/fly-watch), the `val` key can be used or set at any time see [`fly.serial`](#flyserialtasks-options).
+Each Task also receives an `opts` object, consisting of `src` and `val` keys. Although `src` is primarily used for [`fly-watch`](https://github.com/flyjs/fly-watch), the `val` key can be used or set at any time see [`Taskr.serial`](#taskrserialtasks-options).
 
 All methods and values below are exposed within a Task's function.
 
 #### task.root
 Type: `String`<br>
-The directory wherein `flyfile.js` resides, now considered the root. Also accessible within plugins.
+The directory wherein `taskfile.js` resides, now considered the root. Also accessible within plugins.
 
 #### task.$
 Type: `Object`<br>
@@ -395,13 +417,12 @@ Type: `Object`<br>
 Default: `{}`<br>
 Additional options, passed directly to [`fs.writeFile`](https://nodejs.org/api/fs.html#fs_fs_writefile_file_data_options_callback).
 
-<!-- Please note that the first instance of ambiguity within `task.source()` defines the destination's structure. -->
 Please note that `task.source()` glob ambiguity affects the destination structure.
 
 ```js
-yield fly.source("src/*.js").target("dist")
+yield task.source('src/*.js').target('dist')
 //=> dist/foo.js, dist/bar.js
-yield fly.source("src/**/*.js").target("dist")
+yield task.source('src/**/*.js').target('dist')
 //=> dist/foo.js, dist/bar.js, dist/sub/baz.js, dist/sub/deep/bat.js
 ```
 
@@ -416,22 +437,22 @@ Type: `Function`<br>
 The action to perform; must be a `Generator` function.
 
 ```js
-exports.foo = function * (fly) {
-  yield fly.source("src/*.js").run({every: false}, function * (files) {
+exports.foo = function * (task) {
+  yield task.source('src/*.js').run({every: false}, function * (files) {
     Array.isArray(files) //=> true
-    yield Promise.resolve("this will run once.")
-  }).target("dist")
+    yield Promise.resolve('this will run once.')
+  }).target('dist')
 }
 ```
 
 #### task.start(task, [options])
-See [`fly.start`](#flystarttask-options).
+See [`Taskr.start`](#taskrstarttask-options).
 
 #### task.parallel(tasks, [options])
-See [`fly.parallel`](#flyparalleltasks-options).
+See [`Taskr.parallel`](#taskrparalleltasks-options).
 
 #### task.serial(tasks, [options])
-See [`fly.serial`](#flyserialtasks-options).
+See [`Taskr.serial`](#taskrserialtasks-options).
 
 ### Utilities
 
@@ -502,30 +523,30 @@ Additional options, passed to [`fs.writeFile`](https://nodejs.org/api/fs.html#fs
 ## Installation
 
 ```sh
-$ npm install --save-dev fly
+$ npm install --save-dev taskr
 ```
 
 ## Usage
 
 ### Getting Started
 
-1. Install Fly & any desired plugins. (see [installation](#installation) and [ecosystem](#ecosystem))
-2. Create a `flyfile.js` next to your `package.json`.
-3. Define `default` and additional tasks within your `flyfile.js`.
+1. Install Taskr & any desired plugins. (see [installation](#installation) and [ecosystem](#ecosystem))
+2. Create a `taskfile.js` next to your `package.json`.
+3. Define `default` and additional tasks within your `taskfile.js`.
 
   ```js
-  exports.default = function * (fly) {
-    yield fly.parallel(["styles", "scripts"])
+  exports.default = function * (task) {
+    yield task.parallel(['styles', 'scripts'])
   }
 
-  exports.styles = function * (fly) {
-    yield fly.source("src/**/*.css").autoprefixer().target("dist/css")
+  exports.styles = function * (task) {
+    yield task.source('src/**/*.css').autoprefixer().target('dist/css')
   }
 
-  exports.scripts = function * (fly) {
-    yield fly.source("src/**/*.js").babel({
+  exports.scripts = function * (task) {
+    yield task.source('src/**/*.js').babel({
       presets: [
-        ["es2015", {loose: true, modules: false}]
+        ['es2015', {loose: true, modules: false}]
       ]
     })
   }
@@ -536,7 +557,7 @@ $ npm install --save-dev fly
   {
     "name": "my-project",
     "scripts": {
-      "build": "fly"
+      "build": "taskr"
     }
   }
   ```
@@ -552,46 +573,46 @@ You may be interested in checking out a [Web Starter Kit](https://github.com/luk
 
 ### Programmatic
 
-Fly is extremely flexible should you choose to use Fly outside of its standard configuration.
+Taskr is extremely flexible should you choose to use Taskr outside of its standard configuration.
 
-The quickest path to a valid `Fly` instance is to send a `tasks` object:
+The quickest path to a valid `Taskr` instance is to send a `tasks` object:
 
 ```js
-const Fly = require("Fly")
-const fly = new Fly({
+const Taskr = require('Taskr')
+const taskr = new Taskr({
   tasks: {
     *foo(f) {},
     *bar(f) {}
   }
 })
-fly.start("foo")
+taskr.start('foo')
 ```
 
-By default, your new Fly instance will not include any plugins. You have the power to pick and choose what your instance needs!
+By default, your new Taskr instance will not include any plugins. You have the power to pick and choose what your instance needs!
 
 To do this, you may pass an array of [external](#external-plugins) and [local](#local-plugins) `plugins`:
 
 ```js
-const fly = new Fly({
+const taskr = new Taskr({
   plugins: [
-    require("fly-clear"),
-    require("fly-concat"),
-    require("./my-plugin")
+    require('fly-clear'),
+    require('fly-concat'),
+    require('./my-plugin')
   ]
 })
 ```
 
-> **Important:** This assumes you have provided a valid `file` _or_ `tasks` object. Without either of these, your Fly instance will be incomplete and therefore invalid. This will cause the instance to exit early, which means that your `plugins` will not be mounted to the instance.
+> **Important:** This assumes you have provided a valid `file` _or_ `tasks` object. Without either of these, your Taskr instance will be incomplete and therefore invalid. This will cause the instance to exit early, which means that your `plugins` will not be mounted to the instance.
 
-You may also define your `tasks` by supplying a `flyfile.js` path to `file`. Whenever you do this, you **should** also update the `cwd` key because your [root](#taskroot) has changed!
+You may also define your `tasks` by supplying a `taskfile.js` path to `file`. Whenever you do this, you **should** also update the `cwd` key because your [root](#taskroot) has changed!
 
 ```js
-const join = require("path").join
+const join = require('path').join
 
-const cwd = join(__dirname, "..", "build")
-const file = join(cwd, "flyfile.js")
+const cwd = join(__dirname, '..', 'build')
+const file = join(cwd, 'taskfile.js')
 
-const fly = new Fly({ file, cwd })
+const taskr = new Taskr({ file, cwd })
 ```
 
 
@@ -599,25 +620,32 @@ const fly = new Fly({ file, cwd })
 
 Below is a list of official plugins. You may also [browse all fly-related plugins](https://www.npmjs.com/browse/keyword/fly-plugin) on NPM.
 
-If you'd like to create and share a plugin for Fly, we have a [Yeoman generator](https://github.com/flyjs/generator-fly) to speed up the process.
+If you'd like to create and share a plugin for Taskr, we have a [Yeoman generator](https://github.com/flyjs/generator-fly) to speed up the process.
 
 - [fly-clear](https://github.com/flyjs/fly-clear) - Remove one or multiple directories
 - [fly-watch](https://github.com/flyjs/fly-watch) - Watch files & Execute specified tasks on change
-- [fly-babel](https://github.com/flyjs/fly-babel) - Babel plugin for Fly
-- [fly-uglify](https://github.com/flyjs/fly-uglify) - UglifyJS2 plugin for Fly
-- [fly-eslint](https://github.com/flyjs/fly-eslint) - ESLint plugin for Fly
-- [fly-coffee](https://github.com/flyjs/fly-coffee) - Compile CoffeeScript with Fly
-- [fly-typescript](https://github.com/flyjs/fly-typescript) - TypeScript plugin for Fly
+- [fly-babel](https://github.com/flyjs/fly-babel) - Babel plugin for Taskr
+- [fly-uglify](https://github.com/flyjs/fly-uglify) - UglifyJS2 plugin for Taskr
+- [fly-eslint](https://github.com/flyjs/fly-eslint) - ESLint plugin for Taskr
+- [fly-coffee](https://github.com/flyjs/fly-coffee) - Compile CoffeeScript with Taskr
+- [fly-typescript](https://github.com/flyjs/fly-typescript) - TypeScript plugin for Taskr
 - [fly-concat](https://github.com/lukeed/fly-concat) - Concatenate files with optional source maps.
 - [fly-flatten](https://github.com/lukeed/fly-flatten) - Flatten all source files to a specified maximum of sub-directories.
-- [fly-esnext](https://github.com/lukeed/fly-esnext) - Allow for ES6 and ES7 support throughout a Fly environment.
-- [fly-shell](https://github.com/lukeed/fly-shell) - Execute shell commands with Fly
+- [fly-esnext](https://github.com/lukeed/fly-esnext) - Allow for ES6 and ES7 support throughout a Taskr environment.
+- [fly-shell](https://github.com/lukeed/fly-shell) - Execute shell commands with Taskr
 - [fly-rev](https://github.com/lukeed/fly-rev) - Append a unique hash to filenames
-- [fly-zip](https://github.com/lukeed/fly-zip) - ZIP compress files with Fly
-- [fly-gzip](https://github.com/lukeed/fly-gzip) - Gzip plugin for Fly
+- [fly-zip](https://github.com/lukeed/fly-zip) - ZIP compress files with Taskr
+- [fly-gzip](https://github.com/lukeed/fly-gzip) - Gzip plugin for Taskr
 - [fly-precache](https://github.com/lukeed/fly-precache) - Generate a service worker to cache resources and make them available offline.
-- [fly-htmlmin](https://github.com/lukeed/fly-htmlmin) - Minify HTML with Fly
+- [fly-htmlmin](https://github.com/lukeed/fly-htmlmin) - Minify HTML with Taskr
 - [fly-autoprefixer](https://github.com/lukeed/fly-autoprefixer) -
-- [fly-mocha](https://github.com/flyjs/fly-mocha) - Fly plugin for Mocha
-- [fly-xo](https://github.com/lukeed/fly-xo) - XO plugin for Fly
-- [fly-ava](https://github.com/flyjs/fly-ava) - Fly plugin for AVA
+- [fly-mocha](https://github.com/flyjs/fly-mocha) - Taskr plugin for Mocha
+- [fly-xo](https://github.com/lukeed/fly-xo) - XO plugin for Taskr
+- [fly-ava](https://github.com/flyjs/fly-ava) - Taskr plugin for AVA
+
+
+## Credits
+
+This project used to be called `fly`, but was forced to relocate & rename due to the inexplicable actions of an individual.
+
+A **huge thanks** to [Constantin Titarenko](https://github.com/titarenko) for coming to the rescue and donating the name `taskr` -- very much appreciated!
