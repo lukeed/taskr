@@ -4,7 +4,7 @@ const co = require("bluebird").coroutine
 const join = require("path").join
 const test = require("tape")
 
-const Fly = require("../lib/fly")
+const Taskr = require("../lib/fly")
 const cli = require("../lib/cli")
 const $ = require("../lib/fn")
 
@@ -74,14 +74,14 @@ test("cli.spawn", co(function * (t) {
 	const taskfile = join(alt, "taskfile.js")
 
 	const f = yield cli.spawn(alt)
-	t.true(f instanceof Fly, "via dir; spawns Fly")
+	t.true(f instanceof Taskr, "via dir; spawns Taskr")
 	t.equal(f.file, taskfile, "via dir; finds taskfile")
-	t.true($.isObject(f.tasks) && "a" in f.tasks, "via dir; loads Fly tasks (obj)")
+	t.true($.isObject(f.tasks) && "a" in f.tasks, "via dir; loads Taskr tasks (obj)")
 	t.equal(Object.keys(f.plugins).length, 3, "via dir; found all VALID plugins")
-	t.true($.isObject(f.plugins), "via dir; loads Fly plugins (obj)")
+	t.true($.isObject(f.plugins), "via dir; loads Taskr plugins (obj)")
 
 	const fly1 = yield cli.spawn()
-	t.true(fly1 instanceof Fly, "via `null` still spawns Fly")
+	t.true(fly1 instanceof Taskr, "via `null` still spawns Taskr")
 	t.equal(fly1.file, undefined, "via `null` but without a taskfile")
 
 	const fly2 = yield cli.spawn("/fake12312")

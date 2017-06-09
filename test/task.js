@@ -7,7 +7,7 @@ const test = require("tape")
 const isMode = require("./helpers").isMode
 const del = require("./helpers").del
 const Task = require("../lib/task")
-const Fly = require("../lib/fly")
+const Taskr = require("../lib/fly")
 const $ = require("../lib/fn")
 
 const protos = ["source", "target", "start", "parallel", "serial", "emit", "run", "exec"]
@@ -15,7 +15,7 @@ const fixtures = join(__dirname, "fixtures")
 const co = Promise.coroutine
 
 test("Task.constructor (basic)", co(function * (t) {
-	const fly = new Fly()
+	const fly = new Taskr()
 	const task = new Task(fly)
 	t.true($.isObject(task), "returns an object")
 	protos.forEach(str => {
@@ -25,7 +25,7 @@ test("Task.constructor (basic)", co(function * (t) {
 }))
 
 test("Task.constructor (plugins)", co(function * (t) {
-	const fly = new Fly({
+	const fly = new Taskr({
 		tasks: { *a(){} },
 		plugins: [{ name: "foo", *func(){} }]
 	})
@@ -38,7 +38,7 @@ test("Task.constructor (plugins)", co(function * (t) {
 test("task.constructor (internal)", co(function * (t) {
 	t.plan(30)
 
-	const fly = new Fly({
+	const fly = new Taskr({
 		tasks: {
 			*foo(f) {
 				t.true(f instanceof Task, "task receives bound Task instance")
@@ -78,7 +78,7 @@ test("task.source", co(function * (t) {
 	const glob2 = join(fixtures, "*.*")
 	const opts1 = { ignore: "foo" }
 
-	const fly = new Fly({
+	const fly = new Taskr({
 		tasks: {
 			*foo(f) {
 				yield f.source([[["*.a", ["*.b"]]], ["*.c"]], opts1)
@@ -135,7 +135,7 @@ test("task.target", co(function * (t) {
 	// clean slate
 	yield del([dest1, dest2, dest3, dest4, dest5])
 
-	const fly = new Fly({
+	const fly = new Taskr({
 		plugins: [{
 			every: 0,
 			name: "fakeConcat",
@@ -201,7 +201,7 @@ test("task.run (w/function)", co(function * (t) {
 	t.plan(10)
 	const src = join(fixtures, "*.txt")
 
-	const fly = new Fly({
+	const fly = new Taskr({
 		tasks: {
 			*foo(f) {
 				const tar = join(fixtures, ".tmp1")
@@ -241,7 +241,7 @@ test("task.run (w/object)", co(function * (t) {
 	t.plan(10)
 	const src = join(fixtures, "*.txt")
 
-	const fly = new Fly({
+	const fly = new Taskr({
 		tasks: {
 			*foo(f) {
 				const tar = join(fixtures, ".tmp3")
@@ -286,7 +286,7 @@ test("task.run (w/object)", co(function * (t) {
 
 test("task.exec", co(function * (t) {
 	t.plan(4)
-	const fly = new Fly()
+	const fly = new Taskr()
 	const task = new Task(fly)
 
 	const obj1 = { foo: "bar" }

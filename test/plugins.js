@@ -6,7 +6,7 @@ const test = require("tape")
 
 const del = require("./helpers").del
 const plugs = require("../lib/plugins")
-const Fly = require("../lib/fly")
+const Taskr = require("../lib/fly")
 const cli = require("../lib/cli")
 const $ = require("../lib/fn")
 
@@ -137,7 +137,7 @@ test("fly.plugins (params)", co(function* (t) {
 	const tar = join(fixtures, ".tmp")
 	const expect = ["p0", "p1", "p2", "p3", "p4", "p5"]
 
-	const fly = new Fly({
+	const fly = new Taskr({
 		plugins: [{
 			name: 'p0',
 			*func(one) {

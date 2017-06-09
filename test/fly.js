@@ -4,7 +4,7 @@ const Promise = require("bluebird")
 const join = require("path").join
 const test = require("tape")
 
-const Fly = require("../lib/fly")
+const Taskr = require("../lib/fly")
 const del = require("./helpers").del
 const $ = require("../lib/fn")
 
@@ -12,23 +12,23 @@ const co = Promise.coroutine
 const fixtures = join(__dirname, "fixtures")
 
 test("fly.prototype", t => {
-	t.ok(Fly !== undefined, "is defined")
+	t.ok(Taskr !== undefined, "is defined")
 
 	const cmds = [
 		"emit", "on", "plugin",
 		"start", "serial", "parallel"
 	]
 	cmds.forEach(cmd => {
-		t.equal(typeof Fly.prototype[cmd], "function", `Fly.prototype.${cmd} is defined`)
+		t.equal(typeof Taskr.prototype[cmd], "function", `Taskr.prototype.${cmd} is defined`)
 	})
 
 	t.end()
 })
 
 test("fly.constructor (defaults)", t => {
-	const fly = new Fly()
+	const fly = new Taskr()
 
-	t.true(fly instanceof Fly, "returns a Fly class")
+	t.true(fly instanceof Taskr, "returns a Taskr class")
 	t.equal(fly.file, undefined, "`fly.file` is `undefined`")
 	t.equal(fly.root, process.cwd(), "`fly.root` is `process.cwd()`")
 	t.true($.isEmptyObj(fly.tasks), "`fly.tasks` is an empty object")
@@ -42,7 +42,7 @@ test("fly.constructor (defaults)", t => {
 test("fly.constructor (values)", t => {
 	const foo = { a: 'a', * b() {}}
 	const fake = { file: "fake", cwd: fixtures, tasks: foo, plugins: foo }
-	const fly = new Fly(fake)
+	const fly = new Taskr(fake)
 
 	t.equal(fly.file, fake.file, "accept `file` value")
 	t.equal(fly.root, fake.cwd, "accept `root|cwd` value")
@@ -62,12 +62,12 @@ test("fly.constructor (exits)", t => {
 	const fn = () => this.plugin("hello", {}, function * () {})
 	const plugins = { plugins: [fn] }
 
-	const fly1 = new Fly({ plugins, tasks: ['foo'] })
+	const fly1 = new Taskr({ plugins, tasks: ['foo'] })
 	// test for `tasks_force_object` ?
 	fly1.on("tasks_force_object", () => console.log('HELLO?'))
 	t.true(!fly1.file && !fly1.plugins, "exits EARLY if invalid `tasks` type")
 
-	const fly2 = new Fly({ plugins })
+	const fly2 = new Taskr({ plugins })
 	t.true(fly2.hasOwnProperty('file') && fly2.hasOwnProperty('tasks'), "constructs shape")
 	t.true($.isEmptyObj(fly2.plugins), "stops before `plugins` loop if no `tasks` or `file`")
 
@@ -79,7 +79,7 @@ test("fly.start", co(function* (t) {
 
 	t.plan(13)
 
-	const fly1 = new Fly({
+	const fly1 = new Taskr({
 		tasks: {
 			* a() {
 				val = 5
@@ -91,7 +91,7 @@ test("fly.start", co(function* (t) {
 	yield fly1.start("a")
 	t.equal(val, 5, "truly `await` a task's completion")
 
-	const fly2 = new Fly({
+	const fly2 = new Taskr({
 		tasks: {
 			* a() { },
 			* err() {
@@ -120,7 +120,7 @@ test("fly.start", co(function* (t) {
 	}
 
 	const demo = { val: 5 }
-	const fly3 = new Fly({
+	const fly3 = new Taskr({
 		tasks: {
 			* a(f, obj) {
 				t.ok(obj.val === demo.val, "pass a value to a task")
@@ -147,7 +147,7 @@ test("fly.parallel", co(function* (t) {
 	const order = []
 	const demo = { val: 10 }
 
-	const fly = new Fly({
+	const fly = new Taskr({
 		tasks: {
 			* a(f, opts) {
 				yield Promise.delay(9)
@@ -186,7 +186,7 @@ test("fly.parallel (sources)", co(function * (t) {
 	const baz = join(fixtures, "*.txt")
 	const bat = join(fixtures, "bar.txt")
 
-	const fly = new Fly({
+	const fly = new Taskr({
 		tasks: {
 			* a(f) {
 				yield f.source(foo).run(ops, function * (globs) {
@@ -224,7 +224,7 @@ test("fly.serial", co(function* (t) {
 
 	const int = 3
 	const order = []
-	const fly1 = new Fly({
+	const fly1 = new Taskr({
 		tasks: {
 			* a(f, opts) {
 				yield Promise.delay(2)
@@ -252,7 +252,7 @@ test("fly.serial", co(function* (t) {
 	t.deepEqual(order, ["a", "b", "c"], "execute tasks in order, regardless of delay")
 
 	let num = 0
-	const fly2 = new Fly({
+	const fly2 = new Taskr({
 		tasks: {
 			* a() {
 				num++
@@ -276,7 +276,7 @@ test("fly.serial", co(function* (t) {
 test("fly.plugin (conflict)", co(function * (t) {
 	t.plan(6)
 	const expect = ["foo", "foo1"]
-	const fly = new Fly({
+	const fly = new Taskr({
 		tasks: { *a(f) {} }
 	})
 
