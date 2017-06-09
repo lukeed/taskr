@@ -20,10 +20,10 @@ class Emit extends E {
 test("fly.reporter", t => {
 	const all = [
 		"fake_event",
-		"fly_run",
+		"task_run",
 		"taskfile_not_found",
-		"fly_watch",
-		"fly_watch_event",
+		"task_watch",
+		"task_watch_event",
 		"globs_no_match",
 		"plugin_load",
 		"plugin_load_error",

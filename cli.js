@@ -21,21 +21,21 @@ co(function* () {
 		return cli.version(pkg)
 	}
 
-	const fly = yield cli.spawn(o.cwd)
-	reporter.call(fly)
+	const taskr = yield cli.spawn(o.cwd)
+	reporter.call(taskr)
 
-	if (!fly.file) {
-		return fly.emit("taskfile_not_found")
+	if (!taskr.file) {
+		return taskr.emit("taskfile_not_found")
 	}
 
 	if (o.list) {
-		return cli.list(fly.tasks, o.list === "bare")
+		return cli.list(taskr.tasks, o.list === "bare")
 	}
 
 	// announce start
-	fly.emit("fly_run", fly.file)
+	taskr.emit("task_run", taskr.file)
 	// run `tasks` in `mode`
-	fly[o.mode](t)
+	taskr[o.mode](t)
 
 })().catch(err => {
 	if (err.type === "cli") {
