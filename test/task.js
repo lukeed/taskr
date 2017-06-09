@@ -103,7 +103,7 @@ test("task.source", co(function * (t) {
 				t.ok(Buffer.isBuffer(f1.data), "file's `data` is a `Buffer`")
 			},
 			*baz(f) {
-				yield f.source(glob2, { ignore: join(fixtures, "flyfile.js") })
+				yield f.source(glob2, { ignore: join(fixtures, "taskfile.js") })
 				t.equal(f._.files.length, 3, "tunnels options to `utils.expand` (ignore)")
 			}
 		}

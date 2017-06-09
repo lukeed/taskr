@@ -15,7 +15,7 @@ const co = Promise.coroutine
 const fixtures = join(__dirname, "fixtures")
 const altDir = join(fixtures, "alt")
 const pkgfile = join(altDir, "package.json")
-const flyfile = join(altDir, "flyfile.js")
+const taskfile = join(altDir, "taskfile.js")
 
 test("plugins", t => {
 	t.ok(Object.keys(plugs).length, "export some methods")
@@ -56,11 +56,11 @@ test("plugins.getDependencies", co(function* (t) {
 }))
 
 test("plugins.load", co(function* (t) {
-	// const out1 = yield plugs.load(join("/fake123", "flyfile.js"))
+	// const out1 = yield plugs.load(join("/fake123", "taskfile.js"))
 	// t.true(Array.isArray(out1) && out1.length === 0, "via invalid file returns an empty array")
 	// ^^ logs error message to test disrupts formatting
 
-	const out = yield plugs.load(flyfile)
+	const out = yield plugs.load(taskfile)
 	t.ok(Array.isArray(out), "returns an array")
 	t.equal(out.length, 6, "filters down to fly-* plugins only")
 	t.equal(typeof out[0], "function", "is an array of functions")

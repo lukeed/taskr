@@ -25,7 +25,7 @@ co(function* () {
 	reporter.call(fly)
 
 	if (!fly.file) {
-		return fly.emit("flyfile_not_found")
+		return fly.emit("taskfile_not_found")
 	}
 
 	if (o.list) {

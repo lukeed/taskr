@@ -9,7 +9,7 @@ const cli = require("../lib/cli")
 const $ = require("../lib/fn")
 
 const fixtures = join(__dirname, "fixtures")
-const flypath = join(fixtures, "flyfile.js")
+const flypath = join(fixtures, "taskfile.js")
 
 function log(func) {
 	const _log = console.log
@@ -71,18 +71,18 @@ test("cli.list", t => {
 
 test("cli.spawn", co(function * (t) {
 	const alt = join(fixtures, "alt")
-	const flyfile = join(alt, "flyfile.js")
+	const taskfile = join(alt, "taskfile.js")
 
 	const f = yield cli.spawn(alt)
 	t.true(f instanceof Fly, "via dir; spawns Fly")
-	t.equal(f.file, flyfile, "via dir; finds flyfile")
+	t.equal(f.file, taskfile, "via dir; finds taskfile")
 	t.true($.isObject(f.tasks) && "a" in f.tasks, "via dir; loads Fly tasks (obj)")
 	t.equal(Object.keys(f.plugins).length, 3, "via dir; found all VALID plugins")
 	t.true($.isObject(f.plugins), "via dir; loads Fly plugins (obj)")
 
 	const fly1 = yield cli.spawn()
 	t.true(fly1 instanceof Fly, "via `null` still spawns Fly")
-	t.equal(fly1.file, undefined, "via `null` but without a flyfile")
+	t.equal(fly1.file, undefined, "via `null` but without a taskfile")
 
 	const fly2 = yield cli.spawn("/fake12312")
 	t.equal(fly2.file, undefined, "fake directory no `fly.file` attached")

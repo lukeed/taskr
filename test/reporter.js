@@ -21,7 +21,7 @@ test("fly.reporter", t => {
 	const all = [
 		"fake_event",
 		"fly_run",
-		"flyfile_not_found",
+		"taskfile_not_found",
 		"fly_watch",
 		"fly_watch_event",
 		"globs_no_match",
