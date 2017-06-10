@@ -2,7 +2,7 @@
   "name": "fake-sub-pkg",
   "dependencies": {
   },
-  "fly": {
+  "taskr": {
     "pkg": "../"
   }
 }

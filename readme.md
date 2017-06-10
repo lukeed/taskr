@@ -316,11 +316,11 @@ exports.default = function * (task) {
 
 Local plugins are defined exactly like external plugins. The only difference is that they're not installable via NPM.
 
-In order to use a local plugin, add a `fly` key to your `package.json` file. Then define a `requires` array with paths to your plugins.
+In order to use a local plugin, add a `taskr` key to your `package.json` file. Then define a `requires` array with paths to your plugins.
 
 ```js
 {
-  "fly": {
+  "taskr": {
     "requires": [
       "./build/custom-plugin-one.js",
       "./build/custom-plugin-two.js"

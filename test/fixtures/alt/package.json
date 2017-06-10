@@ -13,7 +13,7 @@
   "peerDependencies": {
     "peer": "*"
   },
-  "fly": {
+  "taskr": {
     "requires": [
       "./local-plugin.js"
     ]
