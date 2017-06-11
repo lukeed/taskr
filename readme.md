@@ -17,7 +17,12 @@ I was forcibly removed by its inactive co-owner, due to his newfound "interest" 
 
 As a result of this dispute, Taskr exists as a separate repo but includes the full, _original_ history for Fly.
 
-In regards the NPM downloadable(s), `taskr@1.0.0` is equivalent to `fly@2.0.6` --- with the sole exception that `flyfile.js` has been renamed to `taskfile.js`. At this point, the [plugin ecosystem](#ecosystem) is interchangeable, which means that you can install `taskr` and use any `fly-*` plugins of your choosing.
+In regards the NPM downloadable(s), `taskr@1.0.0` is equivalent to `fly@2.0.6` --- with the sole exceptions that:
+
+1. The `flyfile.js` has been renamed to `taskfile.js`;
+2. The `fly` key inside `package.json` has been renamed to `taskr`. (See [Local Plugins](#local-plugins))
+
+At this point, the [plugin ecosystem](#ecosystem) is fully interchangeable, which means that you can install `taskr` and use any `fly-*` plugins of your choosing.
 
 Please pardon the short-term awkwardness. No one expects something like this to happen.
 
@@ -52,14 +57,14 @@ I plan to update the ecosystem and completely detach from all Fly relations befo
 </details>
 
 ## Features
-- **lightweight:** with `5` dependencies, [installation](#installation) takes seconds
+- **lightweight:** with `6` dependencies, [installation](#installation) takes seconds
 - **minimal API:** Taskr only exposes a couple methods, but they're everything you'll ever need
 - **performant:** because of [Bluebird](https://github.com/petkaantonov/bluebird/), creating and running Tasks are quick and inexpensive
 - **cascading:** sequential Task chains can cascade their return values, becoming the next Task's argument
 - **asynchronous:** concurrent Task chains run without side effects & can be `yield`ed consistently
 - **composable:** chain APIs and Tasks directly; say goodbye to `pipe()` x 100!
 - **modular:** easily share or export individual Tasks or Plugins for later use
-- **stable:** requires Node `6.x` to run (LTS is `6.9`)
+- **stable:** requires Node `>= 4.6` to run (LTS is `6.11`)
 
 ## Example
 
