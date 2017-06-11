@@ -47,7 +47,7 @@ test("plugins.getDependencies", co(function* (t) {
 	const pkg = yield plugs.getPackage(altDir)
 	const out2 = plugs.getDependencies(pkg.data)
 	t.true(Array.isArray(out2), "via dir; returns an array")
-	t.equal(out2.length, 8, "via dir; find all the available dependencies")
+	t.equal(out2.length, 9, "via dir; find all the available dependencies")
 
 	const out3 = plugs.getDependencies({})
 	t.true(Array.isArray(out3) && out3.length === 0, "via `{}`; returns an empty array")
@@ -62,7 +62,7 @@ test("plugins.load", co(function* (t) {
 
 	const out = yield plugs.load(taskfile)
 	t.ok(Array.isArray(out), "returns an array")
-	t.equal(out.length, 6, "filters down to fly-* plugins only")
+	t.equal(out.length, 7, "filters down to fly|taskr plugins only")
 	t.equal(typeof out[0], "function", "is an array of functions")
 	t.equal(out[2], undefined, "returns `undefined` for faulty plugins")
 

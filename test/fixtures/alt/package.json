@@ -1,8 +1,9 @@
 {
   "dependencies": {
     "fly-plugin1": "*",
-    "fly-plugin-2": "*",
+    "taskr-plugin-2": "*",
     "fly-no-exist": "*",
+    "@taskr/foobar": "*",
     "@demo/fly-thing": "*",
     "@foo-bar/fly-fake": "*",
     "@foo/ignore": "*"
