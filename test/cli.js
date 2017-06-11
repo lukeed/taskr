@@ -73,18 +73,24 @@ test("cli.spawn", co(function * (t) {
 	const alt = join(fixtures, "alt")
 	const flyfile = join(alt, "flyfile.js")
 
-	const f = yield cli.spawn(alt)
+	const spawn = co(function* (opts) {
+		const fly = yield cli.spawn(opts)
+		yield fly.start()
+		return fly
+	})
+
+	const f = yield spawn(alt)
 	t.true(f instanceof Fly, "via dir; spawns Fly")
 	t.equal(f.file, flyfile, "via dir; finds flyfile")
 	t.true($.isObject(f.tasks) && "a" in f.tasks, "via dir; loads Fly tasks (obj)")
 	t.equal(Object.keys(f.plugins).length, 3, "via dir; found all VALID plugins")
 	t.true($.isObject(f.plugins), "via dir; loads Fly plugins (obj)")
 
-	const fly1 = yield cli.spawn()
+	const fly1 = yield spawn()
 	t.true(fly1 instanceof Fly, "via `null` still spawns Fly")
 	t.equal(fly1.file, undefined, "via `null` but without a flyfile")
 
-	const fly2 = yield cli.spawn("/fake12312")
+	const fly2 = yield spawn("/fake12312")
 	t.equal(fly2.file, undefined, "fake directory no `fly.file` attached")
 
 	t.end()
