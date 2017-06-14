@@ -20,8 +20,8 @@
     "bluebird": "^3.5.0",
     "clor": "^5.1.0",
     "glob": "^7.1.2",
-    "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
+    "mri": "^1.1.0",
     "tinydate": "^1.0.0"
   },
   "devDependencies": {
