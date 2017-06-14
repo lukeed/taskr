@@ -114,7 +114,7 @@ test("cli.options", t => {
 	try {
 		cli.options(['--foo=bar'])
 	} catch (err) {
-		t.true(/Invalid option/.test(err.toString()), "throws error if unknown argument")
+		t.true(/Unknown/.test(err.toString()), "throws error if unknown argument")
 	}
 
 	t.end()
