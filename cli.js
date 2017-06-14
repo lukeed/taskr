@@ -11,7 +11,7 @@ const co = Promise.coroutine
 co(function* () {
 	// get command options
 	const o = cli.options()
-	const t = o._.length ? o._ : ["default"]
+	const t = o.tasks.length ? o.tasks : ["default"]
 
 	if (o.help) {
 		return cli.help()
