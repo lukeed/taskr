@@ -463,14 +463,18 @@ See [`Taskr.serial`](#taskrserialtasks-options).
 
 A collection of utility helpers to make life easy.
 
-#### alert()
+#### alert(msg)
 Print to console with timestamp and alert coloring.
+##### msg
+Type: `String`
 
 #### coroutine(generator)
 See [Bluebird.coroutine](http://bluebirdjs.com/docs/api/promise.coroutine.html).
 
-#### error()
+#### error(msg)
 Print to console with timestamp and error coloring.
+##### msg
+Type: `String`
 
 #### expand(globs, options)
 Yield: `Array`<br>
@@ -493,8 +497,10 @@ Type: `String`<br>
 Default: `'.'`<br>
 The directory to look within. Will be prepended to the `filename` value.
 
-#### log()
+#### log(msg)
 Print to console with timestamp and normal coloring.
+##### msg
+Type: `String`
 
 #### promisify(function, callback)
 See [Bluebird.promisify](http://bluebirdjs.com/docs/api/promise.promisify.html).
