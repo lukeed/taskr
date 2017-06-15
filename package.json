@@ -12,9 +12,11 @@
   },
   "main": "lib/fly.js",
   "bin": "cli.js",
+  "types": "taskr.d.ts",
   "files": [
     "lib",
-    "cli.js"
+    "cli.js",
+    "taskr.d.ts"
   ],
   "dependencies": {
     "bluebird": "^3.5.0",
