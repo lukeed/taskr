@@ -1,0 +1,41 @@
+{
+  "name": "@taskr/browserify",
+  "version": "2.0.3",
+  "description": "Browserify plugin for Taskr.",
+  "repository": "lukeed/taskr",
+  "main": "index.js",
+  "license": "MIT",
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "taskr",
+    "taskr-plugin",
+    "browserify"
+  ],
+  "scripts": {
+    "test": "tape test/*.js | tap-spec"
+  },
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke.edwards05@gmail.com",
+    "url": "https://lukeed.com"
+  },
+  "dependencies": {
+    "arrify": "^1.0.1",
+    "browserify": "^13.0.0"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.18.0",
+    "babelify": "^7.3.0",
+    "taskr": "*"
+  },
+  "engines": {
+    "node": ">= 4.6.0"
+  },
+  "xo": {
+    "rules": {
+      "promise/param-names": 1
+    }
+  }
+}
