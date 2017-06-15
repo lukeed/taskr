@@ -6,8 +6,8 @@ A source's directory structure isn't always desirable in the output. With `@task
 
 ## Install
 
-```a
-npm install --save-dev @taskr/flatten
+```
+$ npm install --save-dev @taskr/flatten
 ```
 
 ## Usage

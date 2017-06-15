@@ -5,8 +5,8 @@
 
 ## Install
 
-```a
-npm install --save-dev @taskr/coffee
+```
+$ npm install --save-dev @taskr/coffee
 ```
 
 ## Usage
