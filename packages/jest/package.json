@@ -1,0 +1,40 @@
+{
+  "name": "@taskr/jest",
+  "version": "1.0.0",
+  "description": "Jest plugin for Taskr",
+  "repository": "lukeed/taskr",
+  "main": "index.js",
+  "license": "MIT",
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "taskr",
+    "taskr-plugin",
+    "jest"
+  ],
+  "scripts": {
+    "test": "tape test/*.js | tap-spec"
+  },
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke.edwards05@gmail.com",
+    "url": "https://lukeed.com"
+  },
+  "dependencies": {
+    "jest-cli": "^19.0.2"
+  },
+  "devDependencies": {
+    "taskr": "*"
+  },
+  "engines": {
+    "node": ">= 4.6"
+  },
+  "xo": {
+    "rules": {
+      "generator-star-spacing": 0,
+      "capitalized-comments": 0,
+      "require-yield": 0
+    }
+  }
+}
