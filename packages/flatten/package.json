@@ -1,0 +1,32 @@
+{
+  "name": "@taskr/flatten",
+  "version": "1.0.1",
+  "description": "Flatten all source files to a specified maximum of sub-directories.",
+  "repository": "https://github.com/lukeed/taskr",
+  "license": "MIT",
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "taskr",
+    "taskr-plugin",
+    "directories",
+    "flatten",
+    "glob"
+  ],
+  "scripts": {
+    "test": "tape test/*.js | tap-spec"
+  },
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke.edwards05@gmail.com",
+    "url": "https://lukeed.com"
+  },
+  "devDependencies": {
+    "@taskr/clear": "*",
+    "taskr": "*"
+  },
+  "engines": {
+    "node": ">= 4.6"
+  }
+}
