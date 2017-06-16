@@ -10,6 +10,7 @@
     "email": "luke@lukeed.com",
     "url": "https://lukeed.com"
   },
+<<<<<<< HEAD
   "main": "lib/fly.js",
   "bin": "cli.js",
   "types": "taskr.d.ts",
@@ -25,6 +26,11 @@
     "mkdirp": "^0.5.1",
     "mri": "^1.1.0",
     "tinydate": "^1.0.0"
+=======
+  "scripts": {
+    "pretest": "lerna bootstrap",
+    "test": "lerna run test"
+>>>>>>> run ‘lerna bootstrap’ as pretest
   },
   "devDependencies": {
     "rimraf": "^2.6.1",
