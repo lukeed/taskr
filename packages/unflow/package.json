@@ -17,7 +17,7 @@
     "flow"
   ],
   "scripts": {
-    "test": "xo && tape test/*.js | tap-spec"
+    "test": "tape test/*.js | tap-spec"
   },
   "author": {
     "name": "Luke Edwards",

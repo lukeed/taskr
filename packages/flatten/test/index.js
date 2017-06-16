@@ -19,13 +19,6 @@ test('@taskr/flatten', t => {
 		],
 		tasks: {
 			*a(f) {
-				f.emit = (evt, obj) => {
-					if (evt === 'plugin_warning') {
-						t.pass('emits plugin warning if no source files');
-						t.ok(/source files/i.test(obj.warning), 'informs user with message');
-					}
-				};
-
 				yield f.source(`${dir}/*.foo`).flatten().target(tmp);
 			},
 			*b(f) {
@@ -66,6 +59,14 @@ test('@taskr/flatten', t => {
 			}
 		}
 	});
+
+	// for task `a`
+	taskr.emit = (evt, obj) => {
+		if (evt === 'plugin_warning') {
+			t.pass('emits plugin warning if no source files');
+			t.ok(/source files/i.test(obj.warning), 'informs user with message');
+		}
+	};
 
 	t.ok('flatten' in taskr.plugins, 'add the `flatten` plugin');
 

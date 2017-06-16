@@ -41,7 +41,7 @@
     "sort-keys": "^1.1.1"
   },
   "devDependencies": {
-    "@taskr/clear": "*"
+    "@taskr/clear": "*",
     "taskr": "*"
   },
   "engines": {

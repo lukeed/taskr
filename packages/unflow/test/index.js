@@ -45,7 +45,7 @@ test('@taskr/unflow (all:false)', t => {
 	create({
 		*foo(f) {
 			const tmp = tmpDir('tmp-2');
-			yield f.source(`${dir}/*.js`).unflow({all: false}).target(tmp);
+			yield f.source(`${dir}/*.js`).unflow({ all:false }).target(tmp);
 			const str1 = yield f.$.read(`${tmp}/foo.js`, 'utf8');
 			const str2 = yield f.$.read(`${tmp}/bar.js`, 'utf8');
 			t.false(hasFlow(str1), 'remove flow evidence from `foo.js`');
@@ -73,7 +73,7 @@ test('@taskr/unflow (sourceMap:`external`)', t => {
 	create({
 		*foo(f) {
 			const tmp = tmpDir('tmp-4');
-			yield f.source(`${dir}/*.js`).unflow({sourceMap: 'external'}).target(tmp);
+			yield f.source(`${dir}/*.js`).unflow({ sourceMap:'external' }).target(tmp);
 			const str = yield f.$.read(`${tmp}/foo.js`, 'utf8');
 			t.true(/sourceMappingURL=foo.js.map/.test(str), 'attach an `external` sourceMap link');
 			yield f.clear(tmp);
