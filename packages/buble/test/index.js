@@ -4,8 +4,8 @@ const test = require('tape');
 
 const plugins = [require('../'), require('@taskr/clear')];
 const dir = join(__dirname, 'fixtures');
-const tmp = join(__dirname, '.tmp');
 
+const tmpDir = str => join(__dirname, str);
 const create = tasks => new Taskr({ tasks, plugins });
 
 test('@taskr/buble (defaults)', t => {
@@ -13,6 +13,7 @@ test('@taskr/buble (defaults)', t => {
 
 	const taskr = create({
 		* foo(f) {
+			const tmp = tmpDir('tmp-1');
 			t.true('buble' in f, 'access to `buble()` plugin within task');
 			yield f.source(`${dir}/foo.js`).buble().target(tmp);
 
@@ -37,12 +38,13 @@ test('@taskr/buble (defaults)', t => {
 	t.true('buble' in taskr.plugins, 'mounts as taskr plugin');
 
 	taskr.start('foo');
-})
+});
 
 test('@taskr/buble (sourcemap options)', t => {
 	t.plan(5);
 	create({
 		* foo(f) {
+			const tmp = tmpDir('tmp-2');
 			yield f.source(`${dir}/foo.js`).buble({file: 'bar.js', source: 'foo/bar.js'}).target(tmp);
 
 			const arr = yield f.$.expand(`${tmp}/*`);
@@ -66,6 +68,7 @@ test('@taskr/buble (no sourcemap)', t => {
 	t.plan(2);
 	create({
 		* foo(f) {
+			const tmp = tmpDir('tmp-3');
 			yield f.source(`${dir}/foo.js`).buble({sourceMap: false}).target(tmp);
 
 			const arr = yield f.$.expand(tmp);
@@ -77,12 +80,13 @@ test('@taskr/buble (no sourcemap)', t => {
 			yield f.clear(tmp);
 		}
 	}).start('foo');
-})
+});
 
 test('@taskr/buble (inline)', t => {
 	t.plan(3);
 	create({
 		* foo(f) {
+			const tmp = tmpDir('tmp-4');
 			yield f.source(`${dir}/foo.js`).buble({inline: true}).target(tmp);
 
 			const arr = yield f.$.expand(tmp);
