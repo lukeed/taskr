@@ -1,6 +1,6 @@
 {
   "name": "@taskr/prettier",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "Prettier plugin for Taskr",
   "repository": "lukeed/taskr",
   "main": "index.js",
@@ -23,7 +23,7 @@
     "url": "https://lukeed.com"
   },
   "dependencies": {
-    "prettier": "^1.1.0"
+    "prettier": "^1.4.0"
   },
   "devDependencies": {
     "@taskr/clear": "*",

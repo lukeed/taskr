@@ -1,6 +1,6 @@
 {
   "name": "@taskr/zip",
-  "version": "2.1.0",
+  "version": "0.0.0",
   "description": "ZIP compress files with taskr",
   "repository": "lukeed/taskr",
   "license": "MIT",

@@ -1,6 +1,6 @@
 'use strict';
 
-const arrify = require('arrify');
+const toArr = val => Array.isArray(val) ? val : (val == null) ? [] : [val];
 
 const types = {
 	add: 'added',
@@ -10,8 +10,8 @@ const types = {
 
 module.exports = function (Taskr, utils) {
 	Taskr.plugin('watch', { every:false, files:false }, function * (_, globs, names, opts) {
-		globs = arrify(globs);
-		names = arrify(names);
+		globs = toArr(globs);
+		names = toArr(names);
 		opts = opts || {};
 
 		// announce start

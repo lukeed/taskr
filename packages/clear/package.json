@@ -1,6 +1,6 @@
 {
   "name": "@taskr/clear",
-  "version": "1.0.1",
+  "version": "0.0.0",
   "description": "Remove one or multiple directories",
   "repository": "lukeed/taskr",
   "license": "MIT",
@@ -28,7 +28,6 @@
     "remove"
   ],
   "dependencies": {
-    "arrify": "^1.0.1",
     "bluebird": "^3.5.0",
     "rimraf": "^2.5.4"
   },

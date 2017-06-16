@@ -1,10 +1,10 @@
 'use strict';
 
 const p = require('path');
-const arrify = require('arrify');
 const browserify = require('browserify');
 
 const NAME = '@taskr/browserify';
+const toArr = val => Array.isArray(val) ? val : (val == null) ? [] : [val];
 
 function setError(ctx, msg) {
 	const error = msg.replace(ctx.root, '')
@@ -20,7 +20,7 @@ module.exports = function (task) {
 		opts = opts || {};
 
 		if (opts.entries) {
-			files = arrify(opts.entries).map(p.parse);
+			files = toArr(opts.entries).map(p.parse);
 			delete opts.entries;
 		}
 
@@ -29,7 +29,7 @@ module.exports = function (task) {
 
 		// apply transforms
 		for (const t of opts.transform || []) {
-			b.transform.apply(b, arrify(t));
+			b.transform.apply(b, toArr(t));
 		}
 
 		delete opts.transform;

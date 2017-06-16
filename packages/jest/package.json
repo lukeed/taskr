@@ -1,6 +1,6 @@
 {
   "name": "@taskr/jest",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "Jest plugin for Taskr",
   "repository": "lukeed/taskr",
   "main": "index.js",
@@ -22,7 +22,7 @@
     "url": "https://lukeed.com"
   },
   "dependencies": {
-    "jest-cli": "^19.0.2"
+    "jest-cli": "^20.0.0"
   },
   "devDependencies": {
     "taskr": "*"

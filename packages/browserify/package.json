@@ -1,6 +1,6 @@
 {
   "name": "@taskr/browserify",
-  "version": "2.0.3",
+  "version": "0.0.0",
   "description": "Browserify plugin for Taskr.",
   "repository": "lukeed/taskr",
   "main": "index.js",
@@ -22,8 +22,7 @@
     "url": "https://lukeed.com"
   },
   "dependencies": {
-    "arrify": "^1.0.1",
-    "browserify": "^13.0.0"
+    "browserify": "^14.4.0"
   },
   "devDependencies": {
     "@taskr/clear": "*",

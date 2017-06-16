@@ -7,8 +7,9 @@ const fn = require('../');
 
 const dir1 = join(__dirname, 'tmp1');
 const dir2 = join(__dirname, 'tmp2');
+const plugins = [require('../')];
 
-const create = tasks => new Taskr({ tasks, plugins:[fn] });
+const create = tasks => new Taskr({ tasks, plugins });
 
 test('@taskr/clear: filepath (task)', co(function * (t) {
 	t.plan(2);

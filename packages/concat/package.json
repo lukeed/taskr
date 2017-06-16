@@ -1,6 +1,6 @@
 {
   "name": "@taskr/concat",
-  "version": "1.2.0",
+  "version": "0.0.0",
   "description": "Concatenate files with optional source maps.",
   "repository": "lukeed/taskr",
   "license": "MIT",

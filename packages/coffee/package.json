@@ -1,6 +1,6 @@
 {
   "name": "@taskr/coffee",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "CoffeeScript plugin for Taskr",
   "repository": "lukeed/taskr",
   "license": "MIT",
@@ -14,7 +14,7 @@
     "url": "https://lukeed.com"
   },
   "dependencies": {
-    "coffee-script": "^1.9.3"
+    "coffee-script": "^1.12.0"
   },
   "devDependencies": {
     "@taskr/clear": "*",
