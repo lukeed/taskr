@@ -1,6 +1,6 @@
 'use strict';
 
-const {join} = require('path');
+const join = require('path').join;
 const Taskr = require('taskr');
 const test = require('tape');
 
