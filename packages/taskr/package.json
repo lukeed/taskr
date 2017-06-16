@@ -10,11 +10,13 @@
     "email": "luke@lukeed.com",
     "url": "https://lukeed.com"
   },
+  "types": "taskr.d.ts",
   "main": "lib/fly.js",
   "bin": "cli.js",
   "files": [
     "lib",
-    "cli.js"
+    "cli.js",
+    "taskr.d.ts"
   ],
   "dependencies": {
     "bluebird": "^3.5.0",
