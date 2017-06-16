@@ -26,16 +26,16 @@ test('@taskr/sass', t => {
         yield f.source(src).sass().target(tmp);
         t.ok(yield f.$.find(tar), 'create a `.css` file correctly');
 
-        yield f.source(src).sass({outputStyle: 'compressed'}).target(tmp);
+        yield f.source(src).sass({ outputStyle:'compressed' }).target(tmp);
         t.equal(yield f.$.read(tar, 'utf8'), expect, 'resolve multi-level imports && types!');
 
-        yield f.source(src).sass({sourceMap: map}).target(tmp);
+        yield f.source(src).sass({ sourceMap:map }).target(tmp);
         const arr1 = yield f.$.expand(`${tmp}/*`);
         t.equal(arr1.length, 2, 'via `sourceMap`; create a source map');
         t.ok(yield f.$.find(map), 'via `sourceMap`; create a source map with custom name');
         yield f.clear(tmp);
 
-        yield f.source(src).sass({sourceMap: true, outFile: map}).target(tmp);
+        yield f.source(src).sass({ sourceMap:true, outFile:map }).target(tmp);
         const arr2 = yield f.$.expand(`${tmp}/*`);
         t.equal(arr2.length, 2, 'via `sourceMap + outFile`; create a source map');
         t.ok(yield f.$.find(map), 'via `sourceMap + outFile`; create a source map with custom name');
