@@ -8,7 +8,7 @@ module.exports = function (task) {
 		opts = Object.assign({}, opts, { fromString:true });
 
 		const ext = extname(file.base);
-		const rgx = new RegExp(ext, 'i');
+		const rgx = new RegExp(`\\${ext}$`, 'i');
 		// replace extension with `.js`
 		file.base = file.base.replace(rgx, '.js');
 
