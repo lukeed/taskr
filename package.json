@@ -1,62 +1,20 @@
 {
-  "name": "taskr",
-  "version": "0.9.1",
-  "description": "Generator & Coroutine-based task runner. Fasten your seatbelt.",
-  "license": "MIT",
+  "private": true,
   "repository": "lukeed/taskr",
   "homepage": "https://github.com/lukeed/taskr",
+  "license": "MIT",
   "author": {
     "name": "Luke Edwards",
     "email": "luke@lukeed.com",
     "url": "https://lukeed.com"
   },
-<<<<<<< HEAD
-  "main": "lib/fly.js",
-  "bin": "cli.js",
-  "types": "taskr.d.ts",
-  "files": [
-    "lib",
-    "cli.js",
-    "taskr.d.ts"
-  ],
-  "dependencies": {
-    "bluebird": "^3.5.0",
-    "clor": "^5.1.0",
-    "glob": "^7.1.2",
-    "mkdirp": "^0.5.1",
-    "mri": "^1.1.0",
-    "tinydate": "^1.0.0"
-=======
   "scripts": {
     "pretest": "lerna bootstrap",
     "test": "lerna run test"
->>>>>>> run ‘lerna bootstrap’ as pretest
   },
   "devDependencies": {
-    "rimraf": "^2.6.1",
+    "lerna": "^2.0.0-rc.5",
     "tap-spec": "^4.1.1",
     "tape": "^4.6.3"
-  },
-  "scripts": {
-    "test": "tape test/*.js | tap-spec"
-  },
-  "keywords": [
-    "cli",
-    "task",
-    "build",
-    "async",
-    "await",
-    "minify",
-    "uglify",
-    "promise",
-    "pipeline",
-    "generator",
-    "coroutine",
-    "automation",
-    "task runner",
-    "build system"
-  ],
-  "engines": {
-    "node": ">= 4.6"
   }
 }
