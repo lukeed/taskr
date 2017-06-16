@@ -1,5 +1,5 @@
 {
-  "name": "@taskr/sass",
+  "name": "@taskr/less",
   "version": "0.0.0",
   "description": "Compile LESS to CSS with Taskr",
   "repository": "lukeed/taskr",
