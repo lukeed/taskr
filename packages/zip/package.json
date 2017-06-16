@@ -1,0 +1,38 @@
+{
+  "name": "@taskr/zip",
+  "version": "2.1.0",
+  "description": "ZIP compress files with taskr",
+  "repository": "lukeed/taskr",
+  "license": "MIT",
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "taskr",
+    "taskr-plugin",
+    "zip",
+    "archive",
+    "archiver",
+    "compress",
+    "compression"
+  ],
+  "scripts": {
+    "test": "tape test/*.js | tap-spec"
+  },
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke.edwards05@gmail.com",
+    "url": "https://lukeed.com"
+  },
+  "dependencies": {
+    "jszip": "^3.1.0"
+  },
+  "devDependencies": {
+    "@taskr/clear": "*",
+    "taskr": "*"
+  },
+  "engines": {
+    "node": ">= 4.6"
+  }
+}
