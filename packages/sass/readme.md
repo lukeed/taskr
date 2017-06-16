@@ -10,7 +10,7 @@ $ npm install --save-dev @taskr/sass
 
 ## Usage
 
-The paths within `task.source()` should always point to individual files.
+The paths within `task.source()` should always point to files that you want transformed into `.css` files.
 
 #### Basic
 

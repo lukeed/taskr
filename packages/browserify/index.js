@@ -50,7 +50,7 @@ module.exports = function (task) {
 			b.reset();
 		}
 
-		// replace `fly._.files`
+		// replace `task._.files`
 		this._.files = files;
 	});
 };
