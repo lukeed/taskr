@@ -1,0 +1,40 @@
+{
+  "name": "@taskr/buble",
+  "version": "0.0.0",
+  "description": "Bublé plugin for Taskr.",
+  "repository": "lukeed/taskr",
+  "license": "MIT",
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "taskr",
+    "taskr-plugin",
+    "buble"
+  ],
+  "scripts": {
+    "test": "tape test/*.js | tap-spec"
+  },
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke@lukeed.com",
+    "url": "https://lukeed.com"
+  },
+  "dependencies": {
+    "buble": "^0.15.2"
+  },
+  "devDependencies": {
+    "@taskr/clear": "*",
+    "taskr": "*"
+  },
+  "engines": {
+    "node": ">= 4.6"
+  },
+  "xo": {
+    "semicolon": false,
+    "rules": {
+      "require-yield": 1
+    }
+  }
+}

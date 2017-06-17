@@ -1,0 +1,60 @@
+{
+  "name": "@taskr/rev",
+  "version": "0.0.0",
+  "description": "Append a unique hash to filename. Optionally create a manifest mapping. Optionally rewrite references to updated filenames.",
+  "repository": "lukeed/taskr",
+  "license": "MIT",
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "taskr",
+    "taskr-plugin",
+    "rev",
+    "revving",
+    "revision",
+    "version",
+    "replace",
+    "hash",
+    "optimize",
+    "version",
+    "versioning",
+    "manifest",
+    "manifest.json",
+    "cache",
+    "expire",
+    "static",
+    "asset",
+    "assets"
+  ],
+  "scripts": {
+    "test": "tape test/*.js | tap-spec"
+  },
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke@lukeed.com",
+    "url": "https://lukeed.com"
+  },
+  "dependencies": {
+    "rev-hash": "^1.0.0",
+    "sort-keys": "^2.0.0"
+  },
+  "devDependencies": {
+    "@taskr/clear": "*",
+    "taskr": "*"
+  },
+  "engines": {
+    "node": ">= 4.6"
+  },
+  "xo": {
+    "esnext": true,
+    "rules": {
+      "capitalized-comments": 0,
+      "require-yield": 1,
+      "no-loop-func": 1,
+      "one-var": 0,
+      "curly": 1
+    }
+  }
+}

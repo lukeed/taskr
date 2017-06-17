@@ -1,0 +1,37 @@
+{
+  "name": "@taskr/stylus",
+  "version": "0.0.0",
+  "description": "Compile Stylus to CSS with Taskr",
+  "repository": "lukeed/taskr",
+  "license": "MIT",
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "scripts": {
+    "test": "tape test/*.js | tap-spec"
+  },
+  "keywords": [
+    "taskr",
+    "taskr-plugin",
+    "compie",
+    "stylus",
+    "styles",
+    "css"
+  ],
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke@lukeed.com",
+    "url": "https://lukeed.com"
+  },
+  "dependencies": {
+    "stylus": "^0.54.0"
+  },
+  "devDependencies": {
+    "@taskr/clear": "*",
+    "taskr": "*"
+  },
+  "engines": {
+    "node": ">= 4.6"
+  }
+}
