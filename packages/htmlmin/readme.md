@@ -30,7 +30,9 @@ Please see [HTML-Minifier's Options](https://github.com/kangax/html-minifier#opt
 
 ## Support
 
-Any issues or questions can be sent to the [Taskr monorepo](https://github.com/lukeed/taskr/issues/new). Please be sure to specify that you are using `@taskr/htmlmin`.
+Any issues or questions can be sent to the [Taskr monorepo](https://github.com/lukeed/taskr/issues/new).
+
+Please be sure to specify that you are using `@taskr/htmlmin`.
 
 ## License
 

@@ -66,7 +66,9 @@ Initial options to be passed to each Task. See [`Taskr.start`](https://www.npmjs
 
 ## Support
 
-Any issues or questions can be sent to the [Taskr monorepo](https://github.com/lukeed/taskr/issues/new). Please be sure to specify that you are using `@taskr/watch`.
+Any issues or questions can be sent to the [Taskr monorepo](https://github.com/lukeed/taskr/issues/new).
+
+Please be sure to specify that you are using `@taskr/watch`.
 
 ## License
 

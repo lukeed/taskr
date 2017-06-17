@@ -29,7 +29,9 @@ Check out the Stylus [JavaScript API](http://stylus-lang.com/docs/js.html) and [
 
 ## Support
 
-Any issues or questions can be sent to the [Taskr monorepo](https://github.com/lukeed/taskr/issues/new). Please be sure to specify that you are using `@taskr/stylus`.
+Any issues or questions can be sent to the [Taskr monorepo](https://github.com/lukeed/taskr/issues/new).
+
+Please be sure to specify that you are using `@taskr/stylus`.
 
 ## License
 

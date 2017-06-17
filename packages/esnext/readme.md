@@ -34,7 +34,9 @@ export async function styles(task, obj) {
 
 ## Support
 
-Any issues or questions can be sent to the [Taskr monorepo](https://github.com/lukeed/taskr/issues/new). Please be sure to specify that you are using `@taskr/esnext`.
+Any issues or questions can be sent to the [Taskr monorepo](https://github.com/lukeed/taskr/issues/new).
+
+Please be sure to specify that you are using `@taskr/esnext`.
 
 ## License
 

@@ -56,7 +56,9 @@ All options are passed directly to `rimraf`. Please see its [documentation on op
 
 ## Support
 
-Any issues or questions can be sent to the [Taskr monorepo](https://github.com/lukeed/taskr/issues/new). Please be sure to specify that you are using `@taskr/clear`.
+Any issues or questions can be sent to the [Taskr monorepo](https://github.com/lukeed/taskr/issues/new).
+
+Please be sure to specify that you are using `@taskr/clear`.
 
 ## License
 

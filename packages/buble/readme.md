@@ -44,7 +44,9 @@ Creates an external sourcemap by default. Disable _all_ mapping behavior by sett
 
 ## Support
 
-Any issues or questions can be sent to the [Taskr monorepo](https://github.com/lukeed/taskr/issues/new). Please be sure to specify that you are using `@taskr/buble`.
+Any issues or questions can be sent to the [Taskr monorepo](https://github.com/lukeed/taskr/issues/new).
+
+Please be sure to specify that you are using `@taskr/buble`.
 
 ## License
 

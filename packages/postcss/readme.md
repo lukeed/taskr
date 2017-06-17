@@ -36,7 +36,9 @@ Check out PostCSS's [Options](https://github.com/postcss/postcss#options) docume
 
 ## Support
 
-Any issues or questions can be sent to the [Taskr monorepo](https://github.com/lukeed/taskr/issues/new). Please be sure to specify that you are using `@taskr/postcss`.
+Any issues or questions can be sent to the [Taskr monorepo](https://github.com/lukeed/taskr/issues/new).
+
+Please be sure to specify that you are using `@taskr/postcss`.
 
 ## License
 

@@ -55,7 +55,9 @@ Notice that `compilerOptions` is no longer defined, and instead, its children (`
 
 ## Support
 
-Any issues or questions can be sent to the [Taskr monorepo](https://github.com/lukeed/taskr/issues/new). Please be sure to specify that you are using `@taskr/typescript`.
+Any issues or questions can be sent to the [Taskr monorepo](https://github.com/lukeed/taskr/issues/new).
+
+Please be sure to specify that you are using `@taskr/typescript`.
 
 ## License
 

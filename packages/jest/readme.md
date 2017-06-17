@@ -25,7 +25,9 @@ See [Jest's Configuration Options](https://facebook.github.io/jest/docs/configur
 
 ## Support
 
-Any issues or questions can be sent to the [Taskr monorepo](https://github.com/lukeed/taskr/issues/new). Please be sure to specify that you are using `@taskr/jest`.
+Any issues or questions can be sent to the [Taskr monorepo](https://github.com/lukeed/taskr/issues/new).
+
+Please be sure to specify that you are using `@taskr/jest`.
 
 ## License
 

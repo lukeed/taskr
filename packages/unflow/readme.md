@@ -49,7 +49,9 @@ Create an inline or an external sourcemap for each entry file. A `sourceMappingU
 
 ## Support
 
-Any issues or questions can be sent to the [Taskr monorepo](https://github.com/lukeed/taskr/issues/new). Please be sure to specify that you are using `@taskr/unflow`.
+Any issues or questions can be sent to the [Taskr monorepo](https://github.com/lukeed/taskr/issues/new).
+
+Please be sure to specify that you are using `@taskr/unflow`.
 
 ## License
 
