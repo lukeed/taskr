@@ -10,7 +10,6 @@ module.exports = function (task) {
 		try {
 			const ctx = postcss(opts.plugins);
 			const out = yield ctx.process(file.data.toString(), opts);
-			console.log('i am here', out);
 			file.data = Buffer.from(out.css); // write new data
 		} catch (error) {
 			task.emit('plugin_error', {
