@@ -17,7 +17,7 @@ class Emit extends E {
 	}
 }
 
-test("fly.reporter", t => {
+test("Taskr.reporter", t => {
 	const all = [
 		"fake_event",
 		"task_run",

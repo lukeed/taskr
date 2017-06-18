@@ -4,10 +4,10 @@ const Promise = require("bluebird")
 const join = require("path").join
 const test = require("tape")
 
-const isMode = require("./helpers").isMode
 const del = require("./helpers").del
+const isMode = require("./helpers").isMode
+const Taskr = require("../lib/taskr")
 const Task = require("../lib/task")
-const Taskr = require("../lib/fly")
 const $ = require("../lib/fn")
 
 const protos = ["source", "target", "start", "parallel", "serial", "emit", "run", "exec"]
@@ -15,8 +15,8 @@ const fixtures = join(__dirname, "fixtures")
 const co = Promise.coroutine
 
 test("Task.constructor (basic)", co(function * (t) {
-	const fly = new Taskr()
-	const task = new Task(fly)
+	const taskr = new Taskr()
+	const task = new Task(taskr)
 	t.true($.isObject(task), "returns an object")
 	protos.forEach(str => {
 		t.true(task.hasOwnProperty(str), `Task.prototype.${str} is defined`)
@@ -25,11 +25,11 @@ test("Task.constructor (basic)", co(function * (t) {
 }))
 
 test("Task.constructor (plugins)", co(function * (t) {
-	const fly = new Taskr({
+	const taskr = new Taskr({
 		tasks: { *a(){} },
 		plugins: [{ name: "foo", *func(){} }]
 	})
-	const task = new Task(fly)
+	const task = new Task(taskr)
 	t.true(task.hasOwnProperty("foo"), "inherits the `foo()` plugin")
 	t.equal(typeof task.foo, "function", "mounts correctly as a function")
 	t.end()
@@ -38,7 +38,7 @@ test("Task.constructor (plugins)", co(function * (t) {
 test("task.constructor (internal)", co(function * (t) {
 	t.plan(30)
 
-	const fly = new Taskr({
+	const taskr = new Taskr({
 		tasks: {
 			*foo(f) {
 				t.true(f instanceof Task, "task receives bound Task instance")
@@ -68,7 +68,7 @@ test("task.constructor (internal)", co(function * (t) {
 		}
 	})
 
-	yield fly.parallel(["foo", "bar"]).start("baz", {val: 5})
+	yield taskr.parallel(["foo", "bar"]).start("baz", {val: 5})
 }))
 
 test("task.source", co(function * (t) {
@@ -78,7 +78,7 @@ test("task.source", co(function * (t) {
 	const glob2 = join(fixtures, "*.*")
 	const opts1 = { ignore: "foo" }
 
-	const fly = new Taskr({
+	const taskr = new Taskr({
 		tasks: {
 			*foo(f) {
 				yield f.source([[["*.a", ["*.b"]]], ["*.c"]], opts1)
@@ -109,13 +109,13 @@ test("task.source", co(function * (t) {
 		}
 	})
 
-	fly.on("globs_no_match", (g, o) => {
+	taskr.on("globs_no_match", (g, o) => {
 		t.pass("notify when globs match no files")
 		t.deepEqual(g, glob1, "warning receives the flattened globs")
 		t.deepEqual(o, opts1, "warning receives the `expand` options")
 	})
 
-	yield fly.parallel(["foo", "bar", "baz"])
+	yield taskr.parallel(["foo", "bar", "baz"])
 }))
 
 test("task.target", co(function * (t) {
@@ -135,7 +135,7 @@ test("task.target", co(function * (t) {
 	// clean slate
 	yield del([dest1, dest2, dest3, dest4, dest5])
 
-	const fly = new Taskr({
+	const taskr = new Taskr({
 		plugins: [{
 			every: 0,
 			name: "fakeConcat",
@@ -192,7 +192,7 @@ test("task.target", co(function * (t) {
 		}
 	})
 
-	yield fly.parallel(["a", "b", "c", "d", "e", "f"])
+	yield taskr.parallel(["a", "b", "c", "d", "e", "f"])
 	// clean up
 	yield del([dest1, dest2, dest3, dest4, dest5, dest6])
 }))
@@ -201,7 +201,7 @@ test("task.run (w/function)", co(function * (t) {
 	t.plan(10)
 	const src = join(fixtures, "*.txt")
 
-	const fly = new Taskr({
+	const taskr = new Taskr({
 		tasks: {
 			*foo(f) {
 				const tar = join(fixtures, ".tmp1")
@@ -234,14 +234,14 @@ test("task.run (w/function)", co(function * (t) {
 		}
 	})
 
-	yield fly.parallel(["foo", "bar"])
+	yield taskr.parallel(["foo", "bar"])
 }))
 
 test("task.run (w/object)", co(function * (t) {
 	t.plan(10)
 	const src = join(fixtures, "*.txt")
 
-	const fly = new Taskr({
+	const taskr = new Taskr({
 		tasks: {
 			*foo(f) {
 				const tar = join(fixtures, ".tmp3")
@@ -281,7 +281,7 @@ test("task.run (w/object)", co(function * (t) {
 		}
 	})
 
-	yield fly.parallel(["foo", "bar"])
+	yield taskr.parallel(["foo", "bar"])
 }))
 
 test("task.exec", co(function * (t) {

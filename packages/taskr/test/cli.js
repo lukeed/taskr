@@ -4,12 +4,12 @@ const co = require("bluebird").coroutine
 const join = require("path").join
 const test = require("tape")
 
-const Taskr = require("../lib/fly")
+const Taskr = require("../lib/taskr")
 const cli = require("../lib/cli")
 const $ = require("../lib/fn")
 
 const fixtures = join(__dirname, "fixtures")
-const flypath = join(fixtures, "taskfile.js")
+const taskpath = join(fixtures, "taskfile.js")
 
 function log(func) {
 	const _log = console.log
@@ -31,14 +31,14 @@ test("cli", t => {
 test("cli.version", t => {
 	const pkg = require("../package")
 	const out = log(() => cli.version(pkg))
-	t.ok(out.length, "shows fly version")
+	t.ok(out.length, "shows Taskr version")
 	t.equal(out, `${pkg.name}, ${pkg.version}`, "shows correct version")
 	t.end()
 })
 
 test("cli.help", t => {
 	const out = log(cli.help)
-	t.ok(out.length, "shows fly help")
+	t.ok(out.length, "shows Taskr help")
 	t.true(/Usage/gm.test(out), "includes `Usage` section")
 	t.true(/Options/gm.test(out), "includes `Options` section")
 	t.true(/Examples/gm.test(out), "includes `Examples` section")
@@ -46,7 +46,7 @@ test("cli.help", t => {
 })
 
 test("cli.list", t => {
-	const file = require(flypath)
+	const file = require(taskpath)
 
 	const rgx1 = /Available tasks/i
 	const rgx2 = /task(A|B|C)/gm
@@ -80,12 +80,12 @@ test("cli.spawn", co(function * (t) {
 	t.equal(Object.keys(f.plugins).length, 3, "via dir; found all VALID plugins")
 	t.true($.isObject(f.plugins), "via dir; loads Taskr plugins (obj)")
 
-	const fly1 = yield cli.spawn()
-	t.true(fly1 instanceof Taskr, "via `null` still spawns Taskr")
-	t.equal(fly1.file, undefined, "via `null` but without a taskfile")
+	const t1 = yield cli.spawn()
+	t.true(t1 instanceof Taskr, "via `null` still spawns Taskr")
+	t.equal(t1.file, undefined, "via `null` but without a taskfile")
 
-	const fly2 = yield cli.spawn("/fake12312")
-	t.equal(fly2.file, undefined, "fake directory no `fly.file` attached")
+	const t2 = yield cli.spawn("/fake12312")
+	t.equal(t2.file, undefined, "fake directory no `taskr.file` attached")
 
 	t.end()
 }))

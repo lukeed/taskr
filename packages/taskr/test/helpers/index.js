@@ -6,7 +6,7 @@ const rimraf = bb.promisify(require("rimraf"))
 const toArray = require("../../lib/fn").toArray
 
 /**
- * `fly-clear` stub
+ * `@taskr/clear` stub
  * serves as test-util only
  */
 exports.del = bb.coroutine(function * (src) {

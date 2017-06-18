@@ -4,7 +4,7 @@ const co = require("bluebird").coroutine
 const load = require("../plugins").load
 const find = require("../utils/find")
 const read = require("../utils/read")
-const Taskr = require("../fly")
+const Taskr = require("../taskr")
 
 /**
  * Create a new Taskr instance

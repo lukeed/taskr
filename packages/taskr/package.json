@@ -11,7 +11,7 @@
     "url": "https://lukeed.com"
   },
   "types": "taskr.d.ts",
-  "main": "lib/fly.js",
+  "main": "lib/taskr.js",
   "bin": "cli.js",
   "files": [
     "lib",

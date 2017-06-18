@@ -6,7 +6,7 @@ const test = require("tape")
 
 const del = require("./helpers").del
 const plugs = require("../lib/plugins")
-const Taskr = require("../lib/fly")
+const Taskr = require("../lib/taskr")
 const cli = require("../lib/cli")
 const $ = require("../lib/fn")
 
@@ -35,7 +35,7 @@ test("plugins.getPackage", co(function* (t) {
 	// "fly" > "pkg" tests
 	const subDir = join(altDir, "sub")
 	const out2 = yield plugs.getPackage(subDir)
-	t.equal(out2.file, pkgfile, "read `fly.pkg` config to find alternate `package.json` file")
+	t.equal(out2.file, pkgfile, "read `taskr.pkg` config to find alternate `package.json` file")
 
 	t.end()
 }))
@@ -69,15 +69,15 @@ test("plugins.load", co(function* (t) {
 	t.end()
 }))
 
-test("fly.plugins (auto-load)", co(function* (t) {
+test("Taskr.plugins (auto-load)", co(function* (t) {
 	t.plan(7)
-	const fly = yield cli.spawn(altDir)
+	const taskr = yield cli.spawn(altDir)
 
 	const ext = "*.txt"
 	const src = join(fixtures, ext)
 	const tar = join(fixtures, ".tmp")
 
-	fly.tasks = {
+	taskr.tasks = {
 		a: {
 			data: {},
 			func: co(function * (f) {
@@ -126,10 +126,10 @@ test("fly.plugins (auto-load)", co(function* (t) {
 		}
 	}
 
-	yield fly.serial(["a", "b"])
+	yield taskr.serial(["a", "b"])
 }))
 
-test("fly.plugins (params)", co(function* (t) {
+test("Taskr.plugins (params)", co(function* (t) {
 	t.plan(15)
 
 	const ext = "*.txt"
@@ -137,7 +137,7 @@ test("fly.plugins (params)", co(function* (t) {
 	const tar = join(fixtures, ".tmp")
 	const expect = ["p0", "p1", "p2", "p3", "p4", "p5"]
 
-	const fly = new Taskr({
+	const taskr = new Taskr({
 		plugins: [{
 			name: 'p0',
 			*func(one) {
@@ -194,17 +194,17 @@ test("fly.plugins (params)", co(function* (t) {
 		}
 	})
 
-	t.deepEqual(fly.plugNames, expect, "store all custom plugin names")
-	t.equal(Object.keys(fly.plugins).length, expect.length, "attach all plugin methods")
+	t.deepEqual(taskr.plugNames, expect, "store all custom plugin names")
+	t.equal(Object.keys(taskr.plugins).length, expect.length, "attach all plugin methods")
 
-	yield fly.start("a")
+	yield taskr.start("a")
 }))
 
-test("fly.plugin (export fn params)", co(function * (t) {
+test("Taskr.plugin (export fn params)", co(function * (t) {
 	t.plan(3)
-	const fly = yield cli.spawn(altDir)
+	const taskr = yield cli.spawn(altDir)
 
-	fly.tasks = {
+	taskr.tasks = {
 		foo: {
 			data: [],
 			func: co(function * (f) {
@@ -213,5 +213,5 @@ test("fly.plugin (export fn params)", co(function * (t) {
 		}
 	}
 
-	yield fly.start("foo")
+	yield taskr.start("foo")
 }))
