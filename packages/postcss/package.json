@@ -1,6 +1,6 @@
 {
   "name": "@taskr/postcss",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "PostCSS plugin for Taskr",
   "repository": "lukeed/taskr",
   "license": "MIT",
@@ -27,7 +27,7 @@
     "postcss": "^6.0.0"
   },
   "devDependencies": {
-    "@taskr/clear": "*",
+    "@taskr/clear": "^0.1.0",
     "autoprefixer": "^6.5.0",
     "postcss-scss": "^1.0.0",
     "taskr": "*"

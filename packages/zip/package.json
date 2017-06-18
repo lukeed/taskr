@@ -1,6 +1,6 @@
 {
   "name": "@taskr/zip",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "ZIP compress files with taskr",
   "repository": "lukeed/taskr",
   "license": "MIT",
@@ -29,7 +29,7 @@
     "jszip": "^3.1.0"
   },
   "devDependencies": {
-    "@taskr/clear": "*",
+    "@taskr/clear": "^0.1.0",
     "taskr": "*"
   },
   "engines": {

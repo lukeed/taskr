@@ -1,6 +1,6 @@
 {
   "name": "@taskr/babel",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Babel plugin for Taskr",
   "repository": "lukeed/taskr",
   "main": "index.js",
@@ -29,7 +29,7 @@
     "read-pkg-up": "^1.0.1"
   },
   "devDependencies": {
-    "@taskr/clear": "*",
+    "@taskr/clear": "^0.1.0",
     "babel-preset-es2015": "^6.3.0",
     "taskr": "*"
   },

@@ -1,6 +1,6 @@
 {
   "name": "@taskr/clear",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Remove one or multiple directories",
   "repository": "lukeed/taskr",
   "license": "MIT",

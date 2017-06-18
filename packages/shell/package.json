@@ -1,6 +1,6 @@
 {
   "name": "@taskr/shell",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Execute shell commands with Taskr",
   "repository": "lukeed/taskr",
   "license": "MIT",
@@ -27,7 +27,7 @@
     "execa": "^0.7.0"
   },
   "devDependencies": {
-    "@taskr/clear": "*",
+    "@taskr/clear": "^0.1.0",
     "taskr": "*"
   },
   "engines": {

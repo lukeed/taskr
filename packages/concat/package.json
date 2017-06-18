@@ -1,6 +1,6 @@
 {
   "name": "@taskr/concat",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Concatenate files with optional source maps.",
   "repository": "lukeed/taskr",
   "license": "MIT",
@@ -28,7 +28,7 @@
     "concat-with-sourcemaps": "^1.0.4"
   },
   "devDependencies": {
-    "@taskr/clear": "*",
+    "@taskr/clear": "^0.1.0",
     "taskr": "*"
   },
   "publishConfig": {

@@ -1,6 +1,6 @@
 {
   "name": "@taskr/htmlmin",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Minify HTML with Taskr",
   "repository": "lukeed/taskr",
   "license": "MIT",
@@ -30,7 +30,7 @@
     "html-minifier": "^3.5.0"
   },
   "devDependencies": {
-    "@taskr/clear": "*",
+    "@taskr/clear": "^0.1.0",
     "taskr": "*"
   },
   "engines": {

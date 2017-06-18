@@ -1,6 +1,6 @@
 {
   "name": "@taskr/less",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Compile LESS to CSS with Taskr",
   "repository": "lukeed/taskr",
   "license": "MIT",
@@ -27,7 +27,7 @@
     "less": "^2.7.0"
   },
   "devDependencies": {
-    "@taskr/clear": "*",
+    "@taskr/clear": "^0.1.0",
     "taskr": "*"
   },
   "engines": {

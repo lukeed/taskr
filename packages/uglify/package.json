@@ -1,6 +1,6 @@
 {
   "name": "@taskr/uglify",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Uglify plugin for Taskr",
   "repository": "lukeed/taskr",
   "license": "MIT",
@@ -22,7 +22,7 @@
     "uglify-js": "^2.8.0"
   },
   "devDependencies": {
-    "@taskr/clear": "*",
+    "@taskr/clear": "^0.1.0",
     "taskr": "*"
   },
   "engines": {

@@ -1,6 +1,6 @@
 {
   "name": "@taskr/buble",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Bublé plugin for Taskr.",
   "repository": "lukeed/taskr",
   "license": "MIT",
@@ -25,7 +25,7 @@
     "buble": "^0.15.2"
   },
   "devDependencies": {
-    "@taskr/clear": "*",
+    "@taskr/clear": "^0.1.0",
     "taskr": "*"
   },
   "engines": {

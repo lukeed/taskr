@@ -1,6 +1,6 @@
 {
   "name": "@taskr/unflow",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Removes Flow type annotations with Taskr",
   "repository": "lukeed/taskr",
   "main": "index.js",
@@ -28,7 +28,7 @@
     "flow-remove-types": "^1.2.0"
   },
   "devDependencies": {
-    "@taskr/clear": "*",
+    "@taskr/clear": "^0.1.0",
     "taskr": "*"
   },
   "engines": {

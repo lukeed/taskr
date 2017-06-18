@@ -1,6 +1,6 @@
 {
   "name": "@taskr/typescript",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Compile Typescript with Taskr.",
   "repository": "lukeed/taskr",
   "license": "MIT",
@@ -17,7 +17,7 @@
     "typescript": "^2.3.0"
   },
   "devDependencies": {
-    "@taskr/clear": "*",
+    "@taskr/clear": "^0.1.0",
     "taskr": "*"
   },
   "engines": {
