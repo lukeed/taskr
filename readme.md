@@ -53,7 +53,7 @@ module.exports = {
 
 ## History
 
-> **TL;DR** This is the continuation of and successor to [Taskr](https://github.com/flyjs/fly)!
+> **TL;DR** This is the continuation of and successor to [Fly](https://github.com/flyjs/fly)!
 
 I was forcibly removed by its inactive co-owner, due to his newfound "interest" in the project (aka, the stars). He's also taken to alter Fly's commit history in order to remove evidence of my work.
 
