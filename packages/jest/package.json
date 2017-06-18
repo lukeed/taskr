@@ -1,6 +1,6 @@
 {
   "name": "@taskr/jest",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Jest plugin for Taskr",
   "repository": "lukeed/taskr",
   "main": "index.js",
@@ -25,7 +25,7 @@
     "jest-cli": "^20.0.0"
   },
   "devDependencies": {
-    "taskr": "*"
+    "taskr": "^1.0.0"
   },
   "engines": {
     "node": ">= 4.6"

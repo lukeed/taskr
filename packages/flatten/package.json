@@ -1,6 +1,6 @@
 {
   "name": "@taskr/flatten",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Flatten all source files to a specified maximum of sub-directories.",
   "repository": "lukeed/taskr",
   "license": "MIT",
@@ -23,8 +23,8 @@
     "url": "https://lukeed.com"
   },
   "devDependencies": {
-    "@taskr/clear": "^0.1.0",
-    "taskr": "*"
+    "@taskr/clear": "^1.0.0",
+    "taskr": "^1.0.0"
   },
   "engines": {
     "node": ">= 4.6"

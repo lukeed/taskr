@@ -1,6 +1,6 @@
 {
   "name": "@taskr/gzip",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Gzip plugin for Taskr.",
   "repository": "lukeed/taskr",
   "license": "MIT",
@@ -24,8 +24,8 @@
     "url": "https://lukeed.com"
   },
   "devDependencies": {
-    "@taskr/clear": "^0.1.0",
-    "taskr": "*"
+    "@taskr/clear": "^1.0.0",
+    "taskr": "^1.0.0"
   },
   "engines": {
     "node": ">= 4.6"
