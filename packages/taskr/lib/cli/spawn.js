@@ -18,14 +18,14 @@ module.exports = co(function * (cwd) {
 		return new Taskr()
 	}
 
-	// find & `require()`. will load `fly-esnext` before spawning
+	// find & `require()`. will load `@taskr/esnext` before spawning
 	const plugins = yield load(file)
 
 	// spawn options
 	const opts = {cwd, file, plugins}
 
 	try {
-		const esnext = require("fly-esnext")
+		const esnext = require("@taskr/esnext")
 		if (esnext) {
 			const data = yield read(file, "utf8")
 			opts.tasks = esnext(file, data)

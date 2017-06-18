@@ -77,7 +77,7 @@ const getPackage = co(function * (dir) {
 })
 
 /**
- * Loads all fly-related plugins!
+ * Loads all (fly|taskr)-related plugins!
  * @param  {String} taskfile  The full `taskfile.js` path
  * @return {Array}           All loaded plugins.
  */
@@ -90,10 +90,10 @@ const load = co(function * (taskfile) {
 		return []
 	}
 
-	// get ALL deps filter down to fly-only
+	// get ALL deps filter down to (taskr|fly)-only
 	const deps = getDependencies(pkg.data).filter(dep => rgx.test(dep))
 	const locals = pkg.data.taskr && pkg.data.taskr.requires
-	const hasNext = deps.indexOf("fly-esnext")
+	const hasNext = deps.indexOf("@taskr/esnext")
 
 	if (locals) {
 		let i = 0
@@ -104,7 +104,7 @@ const load = co(function * (taskfile) {
 		}
 	}
 
-	// if "fly-esnext" remove from `deps`
+	// if "@taskr/esnext" remove from `deps`
 	if (hasNext !== -1) {
 		deps.splice(hasNext, 1)
 	}
