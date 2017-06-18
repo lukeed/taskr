@@ -26,7 +26,7 @@
   "dependencies": {
     "babel-core": "^6.3.0",
     "flatten": "^1.0.2",
-    "read-pkg-up": "^1.0.1"
+    "read-pkg-up": "^2.0.0"
   },
   "devDependencies": {
     "@taskr/clear": "^0.1.0",
