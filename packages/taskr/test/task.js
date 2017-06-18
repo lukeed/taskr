@@ -286,8 +286,8 @@ test("task.run (w/object)", co(function * (t) {
 
 test("task.exec", co(function * (t) {
 	t.plan(4)
-	const fly = new Taskr()
-	const task = new Task(fly)
+	const ctx = new Taskr()
+	const task = new Task(ctx)
 
 	const obj1 = { foo: "bar" }
 	const obj2 = { baz: "bat" }
