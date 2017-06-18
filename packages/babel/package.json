@@ -2,7 +2,7 @@
   "name": "@taskr/babel",
   "version": "0.0.0",
   "description": "Babel plugin for Taskr",
-  "repository": "https://github.com/lukeed/taskr",
+  "repository": "lukeed/taskr",
   "main": "index.js",
   "license": "MIT",
   "files": [
