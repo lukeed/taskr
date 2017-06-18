@@ -47,14 +47,7 @@
   "engines": {
     "node": ">= 4.6"
   },
-  "xo": {
-    "esnext": true,
-    "rules": {
-      "capitalized-comments": 0,
-      "require-yield": 1,
-      "no-loop-func": 1,
-      "one-var": 0,
-      "curly": 1
-    }
+  "publishConfig": {
+    "access": "public"
   }
 }

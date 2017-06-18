@@ -30,5 +30,8 @@
   "devDependencies": {
     "@taskr/clear": "*",
     "taskr": "*"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

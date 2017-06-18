@@ -28,5 +28,8 @@
     "taskr-plugin",
     "typescript",
     "compile"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }

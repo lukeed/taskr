@@ -29,5 +29,8 @@
     "coffee-script",
     "coffeescript",
     "coffee"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }

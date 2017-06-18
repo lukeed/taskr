@@ -34,11 +34,7 @@
   "engines": {
     "node": ">= 4.6"
   },
-  "xo": {
-    "rules": {
-      "generator-star-spacing": 0,
-      "capitalized-comments": 0,
-      "require-yield": 0
-    }
+  "publishConfig": {
+    "access": "public"
   }
 }

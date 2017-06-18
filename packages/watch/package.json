@@ -32,12 +32,7 @@
     "taskr": "*",
     "touch": "^1.0.0"
   },
-  "xo": {
-    "rules": {
-      "xo/no-process-exit": 0,
-      "require-yield": 1,
-      "quotes": 0,
-      "semi": 0
-    }
+  "publishConfig": {
+    "access": "public"
   }
 }

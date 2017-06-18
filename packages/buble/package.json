@@ -31,10 +31,7 @@
   "engines": {
     "node": ">= 4.6"
   },
-  "xo": {
-    "semicolon": false,
-    "rules": {
-      "require-yield": 1
-    }
+  "publishConfig": {
+    "access": "public"
   }
 }

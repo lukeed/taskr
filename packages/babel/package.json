@@ -48,5 +48,8 @@
     "harmony",
     "ES.next",
     "ecmascript"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }
