@@ -1,22 +1,65 @@
-# Taskr
+<div align="center">
+  <img src="/logo.png" alt="Taskr" width="128">
+</div>
 
-[![Travis CI](https://img.shields.io/travis/lukeed/taskr.svg)](https://travis-ci.org/lukeed/taskr)
-[![Appveyor](https://ci.appveyor.com/api/projects/status/jjw7gor0edirylu5/branch/master?svg=true)](https://ci.appveyor.com/project/lukeed/taskr/branch/master)
-[![Downloads](https://img.shields.io/npm/dm/taskr.svg)](https://npmjs.org/package/taskr)
+<h1 align="center">Taskr</h1>
+
+<div align="center">
+  <a href="https://npmjs.org/package/taskr">
+    <img src="https://img.shields.io/npm/v/taskr.svg" alt="NPM Version"/>
+  </a>
+  <a href="https://travis-ci.org/lukeed/taskr">
+    <img src="https://img.shields.io/travis/lukeed/taskr.svg" alt="TravisCI"/>
+  </a>
+  <!-- <a href="https://codecov.io/github/lukeed/taskr"> -->
+    <!-- <img src="https://img.shields.io/codecov/c/github/lukeed/taskr/master.svg" alt="Test Coverage"/> -->
+  <!-- </a> -->
+  <a href="https://ci.appveyor.com/project/lukeed/taskr/branch/master">
+    <img src="https://ci.appveyor.com/api/projects/status/jjw7gor0edirylu5/branch/master?svg=true" alt="AppVeyor"/>
+  </a>
+  <a href="https://npmjs.org/package/taskr">
+    <img src="https://img.shields.io/npm/dm/taskr.svg" alt="NPM Downloads"/>
+  </a>
+</div>
+
+<div align="center">A generator & coroutine-based task runner.</div>
+<div align="center"><strong>Fasten your seatbelt. :rocket:</strong></div>
+
+<br />
 
 Taskr is a highly performant task runner, much like Gulp or Grunt, but written with concurrency in mind. With Taskr, everything is a [coroutine](https://medium.com/@tjholowaychuk/callbacks-vs-coroutines-174f1fe66127#.vpryf5tyb), which allows for cascading and composable tasks; but unlike Gulp, it's not limited to the stream metaphor.
 
-Taskr is extremely extensible, so _anything_ can be a task. Our core system will accept whatever you throw at it, resulting in a modular system of reusable plugins and tasks, connected by a declarative `taskfile.js` that's easy to read.
+Taskr is extremely extensible, so _anything_ can be a task. Our core system will accept whatever you throw at it, resulting in a modular system of reusable plugins and tasks, connected by a declarative [`taskfile.js`](https://github.com/lukeed/taskr/tree/master/packages/taskr#taskfiles) that's easy to read.
+
+```js
+const src = 'src/{admin,client}';
+const dist = 'build';
+
+module.exports = {
+  *lint(task) {
+    yield task.source(`${src}/*.js`).xo({ esnext:true });
+  },
+  *scripts(task) {
+    yield task.source(`${src}/*.js`).babel({ presets:['es2015'] }).target(`${dist}/js`);
+  },
+  *styles(task) {
+    yield task.source(`${src}/*.sass`).sass().autoprefixer().target(`${dist}/css`);
+  },
+  *build(task) {
+    yield task.parallel(['lint', 'scripts', 'styles']);
+  }
+}
+```
 
 ## History
 
-> **TL;DR** This is the continuation of and successor to [Fly](https://github.com/flyjs/fly)!
+> **TL;DR** This is the continuation of and successor to [Taskr(https://github.com/flyjs/fly)!
 
 I was forcibly removed by its inactive co-owner, due to his newfound "interest" in the project (aka, the stars). He's also taken to alter Fly's commit history in order to remove evidence of my work.
 
 As a result of this dispute, Taskr exists as a separate (mono)repo but includes the full, _original_ history for Fly.
 
-In regards the NPM downloadable(s), `taskr@1.0.0` is equivalent to `fly@2.0.6` -- with a few exceptions:
+In regards the NPM downloadable(s), `taskr@1.0.5` is equivalent to `fly@2.0.6` -- with a few exceptions:
 
 1. The `flyfile.js` has been renamed to `taskfile.js`;
 2. The `fly` key inside `package.json` has been renamed to `taskr`. (See [Local Plugins](#https://github.com/lukeed/taskr/tree/master/packages/taskr#local-plugins))
