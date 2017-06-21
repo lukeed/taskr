@@ -6,6 +6,7 @@ const postcss = require('postcss');
 const base = { plugins:[], options:{} };
 const filenames = ['.postcssrc', '.postcssrc.js', 'postcss.config.js', 'package.json'];
 
+const isString = any => typeof any === 'string';
 const isObject = any => Boolean(any) && (any.constructor === Object);
 const isEmptyObj = any => isObject(any) && Object.keys(any).length === 0;
 
@@ -65,6 +66,14 @@ module.exports = function (task, utils) {
 						}
 						config.plugins = plugins; // update config
 					}
+
+					// reconstruct options
+					if (config.options !== void 0) {
+						const co = config.options;
+						config.options.parser = isString(co.parser) ? require(co.parser) : co.parser;
+						config.options.syntax = isString(co.syntax) ? require(co.syntax) : co.syntax;
+						config.options.stringifier = isString(co.stringifier) ? require(co.stringifier) : co.stringifier;
+						(co.plugins !== void 0) && (delete config.options.plugins);
 					}
 				}
 			}
