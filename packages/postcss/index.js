@@ -15,7 +15,7 @@ module.exports = function (task, utils) {
 	const getConfig = arr => Promise.all(arr.map(utils.find)).then(res => res.filter(Boolean)).then(res => res[0]);
 
 	task.plugin('postcss', { every:false }, function * (files, opts) {
-		let config;
+		let config, isJSON = false;
 
 		if (isEmptyObj(opts)) {
 			// autoload a file
@@ -26,7 +26,8 @@ module.exports = function (task, utils) {
 					config = require(fileConfig);
 				} catch (err) {
 					try {
-						config = JSON.parse(yield utils.read(fileConfig, 'utf8')); // .rc file
+						isJSON = true; // .rc file
+						config = JSON.parse(yield utils.read(fileConfig, 'utf8'));
 					} catch (_) {
 						return setError(err.message);
 					}
@@ -36,20 +37,34 @@ module.exports = function (task, utils) {
 					config = config(base); // send default values
 				} else if (isObject(config)) {
 					// grab "postcss" key (package.json)
-					config = config.postcss || config;
+					if (config.postcss !== void 0) {
+						config = config.postcss;
+						isJSON = true;
+					}
+
 					// reconstruct plugins?
 					if (isObject(config.plugins)) {
-						let k, plugins = [];
-						const old = config.plugins || {};
-						for (k in old) {
+						let k, plugins=[];
+						for (k in config.plugins) {
 							try {
-								plugins.push(require(k)(old[k]));
+								plugins.push(require(k)(config.plugins[k]));
 							} catch (err) {
 								return setError(`Loading PostCSS plugin (${k}) failed with: ${err.message}`);
 							}
 						}
-						// update config
-						config.plugins = plugins;
+						config.plugins = plugins; // update config
+					} else if (isJSON && Array.isArray(config.plugins)) {
+						const truthy = config.plugins.filter(Boolean);
+						let i=0, len=truthy.length, plugins=[];
+						for (; i<len; i++) {
+							try {
+								plugins.push(require(truthy[i]));
+							} catch (err) {
+								return setError(`Loading PostCSS plugin (${truthy[i]}) failed with: ${err.message}`);
+							}
+						}
+						config.plugins = plugins; // update config
+					}
 					}
 				}
 			}
