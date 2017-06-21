@@ -65,6 +65,29 @@ test('@taskr/postcss (options)', t => {
 	}).start('foo');
 });
 
+test('@taskr/postcss (postcssrc)', t => {
+	t.plan(2);
+	const taskr = new Taskr({
+		plugins,
+		cwd: join(dir, 'sub1'),
+		tasks: {
+			*foo(f) {
+				const tmp = tmpDir('tmp-3');
+				yield f.source(`${dir}/*.css`).postcss().target(tmp);
+
+				const arr = yield f.$.expand(`${tmp}/*.*`);
+				t.equal(arr.length, 1, 'write one file to target');
+
+				const str = yield f.$.read(`${tmp}/foo.css`, 'utf8');
+				t.true(/-webkit-box/.test(str), 'applies `autoprefixer` plugin transform');
+
+				yield f.clear(tmp);
+			}
+		}
+	});
+	taskr.start('foo');
+});
+
 // test('@taskr/postcss (inline)', t => {
 // 	t.plan(2);
 // 	create({
