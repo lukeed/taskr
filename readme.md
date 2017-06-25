@@ -22,7 +22,7 @@
   </a>
 </div>
 
-<div align="center">A generator & coroutine-based task runner.</div>
+<div align="center">A fast, concurrency-focused task runner.</div>
 <div align="center"><strong>Fasten your seatbelt. :rocket:</strong></div>
 
 <br />
@@ -55,18 +55,19 @@ module.exports = {
 
 > **TL;DR** This is the continuation of and successor to [Fly](https://github.com/flyjs/fly)!
 
-I was forcibly removed by its inactive co-owner, due to his newfound "interest" in the project (aka, the stars). He's also taken to alter Fly's commit history in order to remove evidence of my work.
+Fly's original author, [Jorge Bucaran](https://github.com/jbucaran), has shifted focus to other exciting projects. Before leaving, he chose to guarantee Fly's future by transferring the project to [Luke Edwards](https://github.com/lukeed), who was one of the first and most enthused contributors.
 
-As a result of this dispute, Taskr exists as a separate (mono)repo but includes the full, _original_ history for Fly.
+To reflect this milestone, Fly has been renamed to Taskr and has a stable, exciting future ahead! :tada:
 
-In regards the NPM downloadable(s), `taskr@1.0.5` is equivalent to `fly@2.0.6` -- with a few exceptions:
+For existing Fly users, `taskr@1.0.x` is equivalent to `fly@2.0.6` -- with a few exceptions:
 
 1. The `flyfile.js` has been renamed to `taskfile.js`;
 2. The `fly` key inside `package.json` has been renamed to `taskr`. (See [Local Plugins](#https://github.com/lukeed/taskr/tree/master/packages/taskr#local-plugins))
 
-At this point, the Fly & [Taskr ecosystems](#packages) are fully interchangeable, which means that you can install `taskr` and use any `fly-*` or `taskr-*` plugins of your choosing. That said, most plugins have been ported over to the new namespace.
+At this point, the Fly & [Taskr ecosystems](#packages) are fully interchangeable, which means that you can install `taskr` and use any `fly-*` or `taskr-*` plugins of your choosing. That said, most plugins have _already_ been ported over to the new namespace!
 
-Please bear with me as we, collectively, transition into a stronger and more stable product!
+Lastly, Taskr will maintain a list of [official plugins](#official-packages). Don't forget to check 'em out!
+
 
 ## Core Features
 

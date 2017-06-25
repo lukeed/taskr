@@ -611,6 +611,6 @@ const taskr = new Taskr({ file, cwd });
 
 ## Credits
 
-This project used to be called `fly`, but was forced to relocate & rename due to the inexplicable actions of an individual.
+This project used to be called `fly`, but [Jorge Bucaran](https://github.com/jbucaran), its original author, generously handed over the project to [Luke Edwards](https://github.com/lukeed) in order to further development. The project is now named `taskr` to reflect the transition and its exicitng new future!
 
-A **huge thanks** to [Constantin Titarenko](https://github.com/titarenko) for coming to the rescue and donating the name `taskr` -- very much appreciated!
+A **big thanks** to [Constantin Titarenko](https://github.com/titarenko) for donating the name `taskr` on NPM -- very much appreciated!
