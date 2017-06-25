@@ -140,7 +140,7 @@ If you're still missing something, open a ticket so that the team & community ca
 
 ## License
 
-MIT © [Luke Edwards](https://lukeed.com)
+MIT © [Luke Edwards](https://lukeed.com) and [Jorge Bucaran](https://github.com/jbucaran)
 
 <!--
   [`@taskr/eslint`](/packages/eslint) | [![npm](https://img.shields.io/npm/v/@taskr/eslint.svg?maxAge=86400)](https://www.npmjs.com/package/@taskr/eslint) | [![Dependency Status](https://david-dm.org/lukeed/taskr.svg?path=packages/eslint)](https://david-dm.org/lukeed/taskr?path=packages/eslint)
