@@ -37,7 +37,7 @@
     "url": "https://lukeed.com"
   },
   "dependencies": {
-    "rev-hash": "^1.0.0",
+    "rev-hash": "^2.0.0",
     "sort-keys": "^2.0.0"
   },
   "devDependencies": {
