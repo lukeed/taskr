@@ -9,7 +9,7 @@ $.isObject = val => Boolean(val) && (val.constructor === Object);
 
 $.isEmptyObj = val => $.isObject(val) && !Object.keys(val).length;
 
-$.toArray = val => (val === null || val === undefined) ? [] : Array.isArray(val) ? val : [val];
+$.toArray = val => Array.isArray(val) ? val : (val == null) ? [] : [val];
 
 /**
  * Format a task's duration.
