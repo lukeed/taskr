@@ -1,6 +1,6 @@
 {
   "name": "@taskr/rev",
-  "version": "1.0.0",
+  "version": "1.0.6",
   "description": "Append a unique hash to filename. Optionally create a manifest mapping. Optionally rewrite references to updated filenames.",
   "repository": "lukeed/taskr",
   "license": "MIT",
@@ -41,8 +41,8 @@
     "sort-keys": "^2.0.0"
   },
   "devDependencies": {
-    "@taskr/clear": "^1.0.0",
-    "taskr": "^1.0.0"
+    "@taskr/clear": "^1.0.6",
+    "taskr": "^1.0.6"
   },
   "engines": {
     "node": ">= 4.6"

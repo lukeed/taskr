@@ -1,6 +1,6 @@
 {
   "name": "@taskr/clear",
-  "version": "1.0.0",
+  "version": "1.0.6",
   "description": "Remove one or multiple directories",
   "repository": "lukeed/taskr",
   "license": "MIT",
@@ -32,7 +32,7 @@
     "rimraf": "^2.5.4"
   },
   "devDependencies": {
-    "taskr": "^1.0.0"
+    "taskr": "^1.0.6"
   },
   "publishConfig": {
     "access": "public"
