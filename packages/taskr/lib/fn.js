@@ -2,7 +2,7 @@
 'use strict';
 const tinydate = require('tinydate');
 
-const $ = exports
+const $ = exports;
 
 // @see http://stackoverflow.com/a/16608074
 $.isObject = val => Boolean(val) && (val.constructor === Object);

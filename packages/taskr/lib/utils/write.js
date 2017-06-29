@@ -1,9 +1,9 @@
-'use strict'
+'use strict';
 
-const p = require('path')
-const mkdir = require('mk-dirs')
-const Promise = require('bluebird')
-const write = Promise.promisify(require('fs').writeFile)
+const p = require('path');
+const mkdir = require('mk-dirs');
+const Promise = require('bluebird');
+const write = Promise.promisify(require('fs').writeFile);
 
 /**
  * Write to a file with given data.

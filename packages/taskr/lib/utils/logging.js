@@ -1,14 +1,14 @@
-"use strict"
+'use strict';
 
 /**
  * @todo
- * 		- use "fmt" object definitions
+ * 		- use 'fmt' object definitions
  * 		- use es2015
  */
 
-const clor = require("clor")
-const homedir = require("os").homedir
-const getTime = require("../fn").getTime
+const clor = require('clor');
+const homedir = require('os').homedir;
+const getTime = require('../fn').getTime;
 
 /**
  * Apply args to the `console[method]` & Add a date stamp.
@@ -19,22 +19,18 @@ const getTime = require("../fn").getTime
  * @param  {String} args.custom   The custom styling to append to args
  */
 function stamp() {
-	let i = 0
-	const args = new Array(arguments.length)
+	let i = 0;
+	const args = new Array(arguments.length);
 	// i is always valid index
 	for (; i < args.length; ++i) {
-		args[i] = arguments[i]
+		args[i] = arguments[i];
 	}
 
-	// if (process.env.DEBUG) {
-	// 	return _.apply(_, args)
-	// }
-
 	// print the curr time.
-	process.stdout.write(clor[this.color](getTime()) + " ")
+	process.stdout.write(clor[this.color](getTime()) + ' ');
 
 	// apply arguments to `console` method
-	console[this.method].apply(console, (this.custom ? [this.custom].concat(args) : args))
+	console[this.method].apply(console, (this.custom ? [this.custom].concat(args) : args));
 }
 
 /**
@@ -42,24 +38,24 @@ function stamp() {
  */
 
 function log() {
-	stamp.apply({method: "log", color: "magenta"}, arguments)
-	return this
+	stamp.apply({method: 'log', color: 'magenta'}, arguments);
+	return this;
 }
 
 function error() {
-	stamp.apply({method: "error", color: "red"}, arguments)
-	return this
+	stamp.apply({method: 'error', color: 'red'}, arguments);
+	return this;
 }
 
 function alert() {
 	if (process.env.VERBOSE) {
 		stamp.apply({
 			custom: clor.yellow.bold("%s"),
-			color: "yellow",
-			method: "log"
-		}, arguments)
+			color: 'yellow',
+			method: 'log'
+		}, arguments);
 	}
-	return this
+	return this;
 }
 
-module.exports = {alert, error, log}
+module.exports = { alert, error, log };

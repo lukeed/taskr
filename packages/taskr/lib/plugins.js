@@ -1,15 +1,15 @@
-"use strict"
+'use strict';
 
-const p = require("path")
-const flatten = require("./fn").flatten
-const isObject = require("./fn").isObject
-const co = require("bluebird").coroutine
-const $ = require("./utils")
+const p = require('path');
+const flatten = require('./fn').flatten;
+const isObject = require('./fn').isObject;
+const co = require('bluebird').coroutine;
+const $ = require('./utils');
 
-const rgx = /^@(taskr|fly)|(taskr|fly)-/i
-const dirname = p.dirname
-const resolve = p.resolve
-const join = p.join
+const rgx = /^@(taskr|fly)|(taskr|fly)-/i;
+const dirname = p.dirname;
+const resolve = p.resolve;
+const join = p.join;
 
 /**
  * Attempt to dynamically `require()` a file or package
@@ -19,14 +19,14 @@ const join = p.join
 function req(name, base) {
 	try {
 		try {
-			name = require.resolve(name)
+			name = require.resolve(name);
 		} catch (_) {
-			name = join(base, name)
+			name = join(base, name);
 		} finally {
 			return require(name);
 		}
 	} catch (e) {
-		$.alert(e.message)
+		$.alert(e.message);
 	}
 }
 
@@ -37,19 +37,20 @@ function req(name, base) {
  */
 function getDependencies(pkg) {
 	if (!pkg) {
-		return []
+		return [];
 	}
 
 	if (!isObject(pkg)) {
-		$.error("Content from `package.json` must be an `Object`!")
-		return []
+		$.error('Content from `package.json` must be an `Object`!');
+		return [];
 	}
 
 	// get all possible dependencies
-	const deps = ["dependencies", "devDependencies", "peerDependencies"]
-		.filter(key => key in pkg).map(dep => Object.keys(pkg[dep]))
+	const deps = [
+		'dependencies', 'devDependencies', 'peerDependencies'
+	].filter(key => pkg[key] !== void 0).map(k => Object.keys(pkg[k]));
 
-	return flatten(deps)
+	return flatten(deps);
 }
 
 /**
@@ -59,22 +60,22 @@ function getDependencies(pkg) {
  */
 const getPackage = co(function * (dir) {
 	// traverse upwards from `dir`
-	const file = yield $.find("package.json", dir)
+	const file = yield $.find('package.json', dir);
 
 	if (!file) {
-		return false
+		return false;
 	}
 
-	// check if there"s a "taskr" config entry
-	const data = JSON.parse(yield $.read(file))
+	// check if there's a 'taskr' config entry
+	const data = JSON.parse(yield $.read(file));
 
 	if (data.taskr && data.taskr.pkg) {
-		dir = resolve(dir, data.taskr.pkg)
-		return yield getPackage(dir)
+		dir = resolve(dir, data.taskr.pkg);
+		return yield getPackage(dir);
 	}
 
-	return {file, data}
-})
+	return { file, data };
+});
 
 /**
  * Loads all (fly|taskr)-related plugins!
@@ -83,40 +84,40 @@ const getPackage = co(function * (dir) {
  */
 const load = co(function * (taskfile) {
 	// find a `package.json`, starting with `taskfile` dir
-	const pkg = yield getPackage(dirname(taskfile))
+	const pkg = yield getPackage(dirname(taskfile));
 
 	if (!pkg) {
-		$.error("No `package.json` found!")
-		return []
+		$.error('No `package.json` found!');
+		return [];
 	}
 
 	// get ALL deps filter down to (taskr|fly)-only
-	const deps = getDependencies(pkg.data).filter(dep => rgx.test(dep))
-	const locals = pkg.data.taskr && pkg.data.taskr.requires
-	const hasNext = deps.indexOf("@taskr/esnext")
+	const deps = getDependencies(pkg.data).filter(dep => rgx.test(dep));
+	const locals = pkg.data.taskr && pkg.data.taskr.requires;
+	const hasNext = deps.indexOf('@taskr/esnext');
 
 	if (locals) {
-		let i = 0
-		const len = locals.length
-		const pkgDir = dirname(pkg.file)
+		let i = 0;
+		const len = locals.length;
+		const pkgDir = dirname(pkg.file);
 		for (; i < len; i++) {
-			deps.push(join(pkgDir, locals[i]))
+			deps.push(join(pkgDir, locals[i]));
 		}
 	}
 
-	// if "@taskr/esnext" remove from `deps`
+	// if '@taskr/esnext' remove from `deps`
 	if (hasNext !== -1) {
-		deps.splice(hasNext, 1)
+		deps.splice(hasNext, 1);
 	}
 
-	const modules = join(dirname(pkg.file), "node_modules")
+	const modules = join(dirname(pkg.file), 'node_modules');
 
 	// format return
-	return deps.map(str => req(str, modules))
-})
+	return deps.map(str => req(str, modules));
+});
 
 module.exports = {
 	load,
 	getPackage,
 	getDependencies
-}
+};

@@ -1,6 +1,6 @@
-"use strict"
+'use strict';
 
-const c = require("clor")
+const c = require('clor');
 
 module.exports = {
 	complete: c.blue.bold,
@@ -10,4 +10,4 @@ module.exports = {
 	warn: c.bold.magenta,
 	text: c.bold.white,
 	time: c.green
-}
+};
