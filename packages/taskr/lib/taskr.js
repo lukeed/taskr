@@ -51,15 +51,35 @@ class Taskr extends Emitter {
 			};
 		}
 
-		let fn, i = 0;
-		for (; i < plugins.length; i++) {
-			if (!plugins[i]) continue;
-			fn = plugins[i];
-			if ($.isObject(fn)) {
-				this.plugin(fn);
-			} else if (fn.call) {
-				fn.call(this, this, util);
+
+		const loadPlugins = function loadPlugins( plugins ) {
+			let fn, i = 0
+			for (; i < plugins.length; i++) {
+				if (!plugins[i]) continue
+				fn = plugins[i]
+				if ($.isObject(fn)) {
+					this.plugin(fn)
+				} else if (fn.call) {
+					fn.call(this, this, util)
+				}
 			}
+		}.bind(this)
+
+		if (!this.pluginsReady) {
+			co(function* () {
+				const plugins = opts.plugins.concat(yield load(opts.file))
+
+				// bootstrap plugins
+				loadPlugins(plugins)
+
+				// let start continue
+				this.pluginsReady = true
+			}.bind(this))().catch(err => {
+				// TODO: handle error
+				console.error(err)
+			})
+		} else {
+			loadPlugins(opts.plugins)
 		}
 	}
 
@@ -82,6 +102,21 @@ class Taskr extends Emitter {
 	}
 
 	*start(name, opts) {
+		if (this.pluginsReady) {
+			return this._start(name, opts)
+		}
+
+		return yield new Promise(resolve => {
+			const next = () => {
+				if (this.pluginsReady) resolve(this._start(name, opts))
+				else setTimeout(next, 0)
+			}
+
+			next()
+		})
+        }
+
+	*_start(name, opts) {
 		name = name || 'default';
 		opts = Object.assign({ src:null, val:null }, opts);
 

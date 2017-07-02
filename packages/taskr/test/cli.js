@@ -73,14 +73,20 @@ test("cli.spawn", co(function * (t) {
 	const alt = join(fixtures, "alt")
 	const taskfile = join(alt, "taskfile.js")
 
-	const f = yield cli.spawn(alt)
+	const spawn = co(function* (opts) {
+		const fly = yield cli.spawn(opts)
+		yield fly.start()
+		return fly
+	})
+
+	const f = yield spawn(alt)
 	t.true(f instanceof Taskr, "via dir; spawns Taskr")
 	t.equal(f.file, taskfile, "via dir; finds taskfile")
 	t.true($.isObject(f.tasks) && "a" in f.tasks, "via dir; loads Taskr tasks (obj)")
 	t.equal(Object.keys(f.plugins).length, 3, "via dir; found all VALID plugins")
 	t.true($.isObject(f.plugins), "via dir; loads Taskr plugins (obj)")
 
-	const t1 = yield cli.spawn()
+	const t1 = yield spawn()
 	t.true(t1 instanceof Taskr, "via `null` still spawns Taskr")
 	t.equal(t1.file, undefined, "via `null` but without a taskfile")
 
