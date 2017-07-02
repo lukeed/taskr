@@ -1,0 +1,40 @@
+{
+  "name": "@taskr/unflow",
+  "version": "1.0.6",
+  "description": "Removes Flow type annotations with Taskr",
+  "repository": "lukeed/taskr",
+  "main": "index.js",
+  "license": "MIT",
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "taskr",
+    "taskr-plugin",
+    "flowtype",
+    "remove",
+    "types",
+    "flow"
+  ],
+  "scripts": {
+    "test": "tape test/*.js | tap-spec"
+  },
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke.edwards05@gmail.com",
+    "url": "http://github.com/lukeed"
+  },
+  "dependencies": {
+    "flow-remove-types": "^1.2.0"
+  },
+  "devDependencies": {
+    "@taskr/clear": "^1.0.6",
+    "taskr": "^1.0.6"
+  },
+  "engines": {
+    "node": ">= 4.6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

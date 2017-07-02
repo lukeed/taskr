@@ -1,0 +1,8 @@
+{
+  "name": "fake-sub-pkg",
+  "dependencies": {
+  },
+  "taskr": {
+    "pkg": "../"
+  }
+}

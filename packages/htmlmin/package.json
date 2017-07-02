@@ -1,0 +1,42 @@
+{
+  "name": "@taskr/htmlmin",
+  "version": "1.0.6",
+  "description": "Minify HTML with Taskr",
+  "repository": "lukeed/taskr",
+  "license": "MIT",
+  "main": "index.js",
+  "files": [
+    "*.js"
+  ],
+  "keywords": [
+    "taskr",
+    "taskr-plugin",
+    "htmlmin",
+    "htm",
+    "html",
+    "minifier",
+    "minification",
+    "minify"
+  ],
+  "scripts": {
+    "test": "tape test/*.js | tap-spec"
+  },
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke.edwards05@gmail.com",
+    "url": "https://lukeed.com"
+  },
+  "dependencies": {
+    "html-minifier": "^3.5.0"
+  },
+  "devDependencies": {
+    "@taskr/clear": "^1.0.6",
+    "taskr": "^1.0.6"
+  },
+  "engines": {
+    "node": ">= 4.6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

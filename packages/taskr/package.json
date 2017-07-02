@@ -1,0 +1,54 @@
+{
+  "name": "taskr",
+  "version": "1.0.6",
+  "description": "Generator & Coroutine-based task runner. Fasten your seatbelt.",
+  "homepage": "https://github.com/lukeed/taskr",
+  "repository": "lukeed/taskr",
+  "license": "MIT",
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke@lukeed.com",
+    "url": "https://lukeed.com"
+  },
+  "types": "taskr.d.ts",
+  "main": "lib/taskr.js",
+  "bin": "cli.js",
+  "files": [
+    "lib",
+    "cli.js",
+    "taskr.d.ts"
+  ],
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "clor": "^5.1.0",
+    "glob": "^7.1.2",
+    "mk-dirs": "^1.0.0",
+    "mri": "^1.1.0",
+    "tinydate": "^1.0.0"
+  },
+  "devDependencies": {
+    "rimraf": "^2.6.1"
+  },
+  "scripts": {
+    "test": "tape test/*.js | tap-spec"
+  },
+  "keywords": [
+    "cli",
+    "task",
+    "build",
+    "async",
+    "await",
+    "minify",
+    "uglify",
+    "promise",
+    "pipeline",
+    "generator",
+    "coroutine",
+    "automation",
+    "task runner",
+    "build system"
+  ],
+  "engines": {
+    "node": ">= 4.6"
+  }
+}

@@ -1,0 +1,13 @@
+base-color = #f938ab
+
+border-radius(val)
+	-webkit-border-radius: val
+	-moz-border-radius: val
+	border-radius: val
+
+.box
+	border-radius(5px)
+	color: saturate(base-color, 5%)
+	border-color: lighten(base-color, 30%)
+	div
+		border-radius(2px)

@@ -1,0 +1,40 @@
+{
+  "name": "@taskr/clear",
+  "version": "1.0.6",
+  "description": "Remove one or multiple directories",
+  "repository": "lukeed/taskr",
+  "license": "MIT",
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke.edwards05@gmail.com",
+    "url": "https://lukeed.com"
+  },
+  "engines": {
+    "node": ">=4.6"
+  },
+  "scripts": {
+    "test": "tape test/*.js | tap-spec"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "taskr",
+    "taskr-plugin",
+    "clear",
+    "del",
+    "delete",
+    "rimraf",
+    "remove"
+  ],
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "rimraf": "^2.5.4"
+  },
+  "devDependencies": {
+    "taskr": "^1.0.6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

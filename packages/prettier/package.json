@@ -1,0 +1,38 @@
+{
+  "name": "@taskr/prettier",
+  "version": "1.0.6",
+  "description": "Prettier plugin for Taskr",
+  "repository": "lukeed/taskr",
+  "main": "index.js",
+  "license": "MIT",
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "taskr",
+    "taskr-plugin",
+    "prettier",
+    "eslint"
+  ],
+  "scripts": {
+    "test": "tape test/*.js | tap-spec"
+  },
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke.edwards05@gmail.com",
+    "url": "https://lukeed.com"
+  },
+  "dependencies": {
+    "prettier": "^1.4.0"
+  },
+  "devDependencies": {
+    "@taskr/clear": "^1.0.6",
+    "taskr": "^1.0.6"
+  },
+  "engines": {
+    "node": ">= 4.6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

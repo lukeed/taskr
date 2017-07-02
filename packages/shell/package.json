@@ -1,0 +1,39 @@
+{
+  "name": "@taskr/shell",
+  "version": "1.0.6",
+  "description": "Execute shell commands with Taskr",
+  "repository": "lukeed/taskr",
+  "license": "MIT",
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "taskr",
+    "taskr-plugin",
+    "command",
+    "shell",
+    "exec"
+  ],
+  "scripts": {
+    "test": "tape test/*.js | tap-spec"
+  },
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke@lukeed.com",
+    "url": "http://github.com/lukeed"
+  },
+  "dependencies": {
+    "execa": "^0.7.0"
+  },
+  "devDependencies": {
+    "@taskr/clear": "^1.0.6",
+    "taskr": "^1.0.6"
+  },
+  "engines": {
+    "node": ">= 4.6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

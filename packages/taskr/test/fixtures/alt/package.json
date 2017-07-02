@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "fly-plugin1": "*",
+    "taskr-plugin-2": "*",
+    "fly-no-exist": "*",
+    "@taskr/foobar": "*",
+    "@demo/fly-thing": "*",
+    "@foo-bar/fly-fake": "*",
+    "@foo/ignore": "*"
+  },
+  "devDependencies": {
+    "fake": "*"
+  },
+  "peerDependencies": {
+    "peer": "*"
+  },
+  "taskr": {
+    "requires": [
+      "./local-plugin.js"
+    ]
+  }
+}

@@ -1,53 +1,20 @@
 {
-  "name": "fly",
-  "version": "2.0.6",
-  "description": "Generator & Coroutine-based build system. Fasten your seatbelt.",
+  "private": true,
+  "repository": "lukeed/taskr",
+  "homepage": "https://github.com/lukeed/taskr",
   "license": "MIT",
-  "repository": "flyjs/fly",
-  "homepage": "https://github.com/flyjs/fly",
   "author": {
-    "name": "Jorge Bucaran",
-    "email": "jbucaran@gmail.com",
-    "url": "https://github.com/jbucaran"
-  },
-  "main": "lib/fly.js",
-  "bin": "cli.js",
-  "files": [
-    "lib",
-    "cli.js"
-  ],
-  "dependencies": {
-    "bluebird": "^3.5.0",
-    "clor": "^5.1.0",
-    "glob": "^7.1.1",
-    "minimist": "^1.2.0",
-    "mkdirp": "^0.5.1"
-  },
-  "devDependencies": {
-    "rimraf": "^2.6.1",
-    "tap-spec": "^4.1.1",
-    "tape": "^4.6.3"
+    "name": "Luke Edwards",
+    "email": "luke@lukeed.com",
+    "url": "https://lukeed.com"
   },
   "scripts": {
-    "test": "tape test/*.js | tap-spec"
+    "pretest": "lerna bootstrap",
+    "test": "lerna run test"
   },
-  "keywords": [
-    "cli",
-    "task",
-    "build",
-    "async",
-    "await",
-    "minify",
-    "uglify",
-    "promise",
-    "pipeline",
-    "generator",
-    "coroutine",
-    "automation",
-    "task runner",
-    "build system"
-  ],
-  "engines": {
-    "node": ">= 4.6"
+  "devDependencies": {
+    "lerna": "^2.0.0-rc.5",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.6.3"
   }
 }

@@ -1,0 +1,34 @@
+{
+  "name": "@taskr/uglify",
+  "version": "1.0.6",
+  "description": "Uglify plugin for Taskr",
+  "repository": "lukeed/taskr",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test/*.js | tap-spec"
+  },
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke@lukeed.com",
+    "url": "https://lukeed.com"
+  },
+  "keywords": [
+    "taskr",
+    "taskr-plugin",
+    "uglify"
+  ],
+  "dependencies": {
+    "uglify-js": "^2.8.0"
+  },
+  "devDependencies": {
+    "@taskr/clear": "^1.0.6",
+    "taskr": "^1.0.6"
+  },
+  "engines": {
+    "node": ">= 4.6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "name": "@taskr/postcss",
+  "version": "1.0.6",
+  "description": "PostCSS plugin for Taskr",
+  "repository": "lukeed/taskr",
+  "license": "MIT",
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "scripts": {
+    "test": "tape test/*.js | tap-spec"
+  },
+  "keywords": [
+    "taskr",
+    "taskr-plugin",
+    "compile",
+    "postcss",
+    "css"
+  ],
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke@lukeed.com",
+    "url": "https://lukeed.com"
+  },
+  "dependencies": {
+    "postcss": "^6.0.0"
+  },
+  "devDependencies": {
+    "@taskr/clear": "^1.0.6",
+    "autoprefixer": "^6.5.0",
+    "postcss-scss": "^1.0.0",
+    "taskr": "^1.0.6"
+  },
+  "engines": {
+    "node": ">= 4.6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

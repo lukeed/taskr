@@ -1,8 +1,0 @@
-{
-  "name": "fake-sub-pkg",
-  "dependencies": {
-  },
-  "fly": {
-    "pkg": "../"
-  }
-}

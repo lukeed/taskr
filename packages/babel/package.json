@@ -1,0 +1,55 @@
+{
+  "name": "@taskr/babel",
+  "version": "1.0.6",
+  "description": "Babel plugin for Taskr",
+  "repository": "lukeed/taskr",
+  "main": "index.js",
+  "license": "MIT",
+  "files": [
+    "index.js"
+  ],
+  "scripts": {
+    "test": "tape test/*.js | tap-spec"
+  },
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke@lukeed.com",
+    "url": "https://lukeed.com"
+  },
+  "contributors": [
+    {
+      "name": "Oleh Kuchuk",
+      "email": "kuchuklehjs@gmail.com",
+      "url": "https://github.com/hzlmn"
+    }
+  ],
+  "dependencies": {
+    "babel-core": "^6.3.0",
+    "flatten": "^1.0.2",
+    "read-pkg-up": "^2.0.0"
+  },
+  "devDependencies": {
+    "@taskr/clear": "^1.0.6",
+    "babel-preset-es2015": "^6.3.0",
+    "taskr": "^1.0.6"
+  },
+  "engines": {
+    "node": ">= 4.6"
+  },
+  "keywords": [
+    "taskr",
+    "taskr-plugin",
+    "babel",
+    "es6",
+    "compile",
+    "esnext",
+    "transpile",
+    "6to5",
+    "harmony",
+    "ES.next",
+    "ecmascript"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

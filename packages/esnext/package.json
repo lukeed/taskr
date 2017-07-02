@@ -1,0 +1,25 @@
+{
+  "name": "@taskr/esnext",
+  "version": "1.0.0",
+  "description": "Allows taskfiles to be written with ES6 or ES7 syntax.",
+  "repository": "lukeed/taskr",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "tape test/*.js | tap-spec"
+  },
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke.edwards05@gmail.com",
+    "url": "https://lukeed.com"
+  },
+  "dependencies": {
+    "require-like": "^0.1.2"
+  },
+  "devDependencies": {
+    "bluebird": "^3.5.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

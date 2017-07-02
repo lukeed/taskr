@@ -1,0 +1,36 @@
+{
+  "name": "@taskr/coffee",
+  "version": "1.0.6",
+  "description": "CoffeeScript plugin for Taskr",
+  "repository": "lukeed/taskr",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test/*.js | tap-spec"
+  },
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke@lukeed.com",
+    "url": "https://lukeed.com"
+  },
+  "dependencies": {
+    "coffee-script": "^1.12.0"
+  },
+  "devDependencies": {
+    "@taskr/clear": "^1.0.6",
+    "taskr": "^1.0.6"
+  },
+  "engines": {
+    "node": ">= 4.6"
+  },
+  "keywords": [
+    "taskr",
+    "taskr-plugin",
+    "coffee-script",
+    "coffeescript",
+    "coffee"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

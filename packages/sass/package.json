@@ -1,0 +1,38 @@
+{
+  "name": "@taskr/sass",
+  "version": "1.0.6",
+  "description": "Compile SASS with `node-sass` and Taskr",
+  "repository": "lukeed/taskr",
+  "license": "MIT",
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "scripts": {
+    "test": "tape test/*.js | tap-spec"
+  },
+  "keywords": [
+    "taskr",
+    "taskr-plugin",
+    "node-sass",
+    "sass"
+  ],
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke@lukeed.com",
+    "url": "https://lukeed.com"
+  },
+  "dependencies": {
+    "node-sass": "^4.5.0"
+  },
+  "devDependencies": {
+    "@taskr/clear": "^1.0.6",
+    "taskr": "^1.0.6"
+  },
+  "engines": {
+    "node": ">= 4.6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
