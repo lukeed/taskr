@@ -79,7 +79,7 @@ test("cli.spawn", co(function * (t) {
 		return fly
 	})
 
-	const f = yield cli.spawn(alt)
+	const f = yield spawn(alt)
 	t.true(f instanceof Taskr, "via dir; spawns Taskr")
 	t.equal(f.file, taskfile, "via dir; finds taskfile")
 	t.true($.isObject(f.tasks) && "a" in f.tasks, "via dir; loads Taskr tasks (obj)")
