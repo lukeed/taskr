@@ -8,7 +8,7 @@
 $ npm install --save-dev @taskr/esnext
 ```
 
-**That's it!** :tada: You've now enabled `async`/`await` syntax for your `taskfile.js`!
+**That's it!** :tada: You've now enabled `async`/`await` and `import` syntax for your `taskfile.js`!
 
 > **Note:** This will NOT compile your ES6 files into ES5. You must download and setup [`@taskr/babel`](https://npmjs.com/package/@taskr/babel) or [`@taskr/buble`](https://npmjs.com/package/@taskr/buble) for that.
 
@@ -18,6 +18,7 @@ A `taskfile.js` may also include `require()` statements (not shown).
 
 ```js
 // taskfile.js
+import { foo, bar as baz } from './bat';
 
 export default async function (task) {
   await task.source('src/*.js') // etc...
