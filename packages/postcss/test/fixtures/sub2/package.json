@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  }
+}

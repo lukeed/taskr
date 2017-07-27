@@ -65,6 +65,123 @@ test('@taskr/postcss (options)', t => {
 	}).start('foo');
 });
 
+test('@taskr/postcss (postcssrc)', t => {
+	t.plan(2);
+	const taskr = new Taskr({
+		plugins,
+		cwd: join(dir, 'sub1'),
+		tasks: {
+			*foo(f) {
+				const tmp = tmpDir('tmp-3');
+				yield f.source(`${dir}/*.css`).postcss().target(tmp);
+
+				const arr = yield f.$.expand(`${tmp}/*.*`);
+				t.equal(arr.length, 1, 'write one file to target');
+
+				const str = yield f.$.read(`${tmp}/foo.css`, 'utf8');
+				t.true(/-webkit-box/.test(str), 'applies `autoprefixer` plugin transform');
+
+				yield f.clear(tmp);
+			}
+		}
+	});
+	taskr.start('foo');
+});
+
+test('@taskr/postcss (package.json)', t => {
+	t.plan(2);
+	const taskr = new Taskr({
+		plugins,
+		cwd: join(dir, 'sub2'),
+		tasks: {
+			*foo(f) {
+				const tmp = tmpDir('tmp-4');
+				yield f.source(`${dir}/*.css`).postcss().target(tmp);
+
+				const arr = yield f.$.expand(`${tmp}/*.*`);
+				t.equal(arr.length, 1, 'write one file to target');
+
+				const str = yield f.$.read(`${tmp}/foo.css`, 'utf8');
+				t.true(/-webkit-box/.test(str), 'applies `autoprefixer` plugin transform');
+
+				yield f.clear(tmp);
+			}
+		}
+	});
+	taskr.start('foo');
+});
+
+test('@taskr/postcss (postcss.config.js)', t => {
+	t.plan(2);
+	const taskr = new Taskr({
+		plugins,
+		cwd: join(dir, 'sub3'),
+		tasks: {
+			*foo(f) {
+				const tmp = tmpDir('tmp-5');
+				yield f.source(`${dir}/*.css`).postcss().target(tmp);
+
+				const arr = yield f.$.expand(`${tmp}/*.*`);
+				t.equal(arr.length, 1, 'write one file to target');
+
+				const str = yield f.$.read(`${tmp}/foo.css`, 'utf8');
+				t.true(/-webkit-box/.test(str), 'applies `autoprefixer` plugin transform');
+
+				yield f.clear(tmp);
+			}
+		}
+	});
+	taskr.start('foo');
+});
+
+test('@taskr/postcss (.postcssrc.js)', t => {
+	t.plan(2);
+	const taskr = new Taskr({
+		plugins,
+		cwd: join(dir, 'sub4'),
+		tasks: {
+			*foo(f) {
+				const tmp = tmpDir('tmp-6');
+				yield f.source(`${dir}/*.css`).postcss().target(tmp);
+
+				const arr = yield f.$.expand(`${tmp}/*.*`);
+				t.equal(arr.length, 1, 'write one file to target');
+
+				const str = yield f.$.read(`${tmp}/foo.css`, 'utf8');
+				t.true(/-webkit-box/.test(str), 'applies `autoprefixer` plugin transform');
+
+				yield f.clear(tmp);
+			}
+		}
+	});
+	taskr.start('foo');
+});
+
+test('@taskr/postcss (plugins<Array> + options<String>)', t => {
+	t.plan(4);
+	const taskr = new Taskr({
+		plugins,
+		cwd: join(dir, 'sub5'),
+		tasks: {
+			*foo(f) {
+				const tmp = tmpDir('tmp-7');
+				yield f.source(`${dir}/*.scss`).postcss().target(tmp);
+
+				const arr = yield f.$.expand(`${tmp}/*.*`);
+				t.equal(arr.length, 1, 'write one file to target');
+
+				const str = yield f.$.read(`${tmp}/bar.scss`, 'utf8');
+				t.true(str.indexOf('-ms-flexbox') !== -1, 'applies prefixer to CSS lookalike');
+				t.true(str.indexOf('-webkit-box-flex: val') !== -1, 'applies prefixer to SCSS mixin');
+				t.ok(str, 'retains `.scss` file extension');
+
+				yield f.clear(tmp);
+			}
+		}
+	});
+	taskr.start('foo');
+});
+
 // test('@taskr/postcss (inline)', t => {
 // 	t.plan(2);
 // 	create({
