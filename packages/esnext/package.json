@@ -14,7 +14,8 @@
     "url": "https://lukeed.com"
   },
   "dependencies": {
-    "require-like": "^0.1.2"
+    "require-like": "^0.1.2",
+    "rewrite-imports": "^1.0.0"
   },
   "devDependencies": {
     "bluebird": "^3.5.0"

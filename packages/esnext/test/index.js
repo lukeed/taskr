@@ -13,7 +13,7 @@ const hasYield = f => /yield/i.test(f.toString());
 const isGenerator = f => f.constructor.name === 'GeneratorFunction';
 
 test('@taskr/esnext', co(function * (t) {
-	t.plan(25);
+	t.plan(26);
 
 	t.equal(typeof fn, 'function', 'export a function');
 
@@ -42,4 +42,7 @@ test('@taskr/esnext', co(function * (t) {
 
 	const val2 = yield co(out.baz)('foo', 'bar');
 	t.deepEqual(val2, {one: 'foo', two: 'bar'}, 'accepts & handles multiple parameters');
+
+	const val3 = yield co(out.bat)();
+	t.equal(val3, 'hello world', 'handles aliased import partials correctly');
 }));
