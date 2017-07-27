@@ -1,6 +1,6 @@
 {
   "name": "taskr",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "Generator & Coroutine-based task runner. Fasten your seatbelt.",
   "homepage": "https://github.com/lukeed/taskr",
   "repository": "lukeed/taskr",
