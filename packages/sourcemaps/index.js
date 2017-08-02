@@ -15,6 +15,7 @@ const read = require('./utils/read');
 const urlRegex = /^(https?|webpack(-[^:]+)?):\/\//;
 const unixStylePath = value => value.split(path.sep).join('/');
 const isString = value => typeof value === 'string' || value instanceof String;
+const isBoolean = value => typeof value === 'boolean' || value instanceof Boolean;
 
 /**
  * Apply a source map to a taskr file, merging it into any existing sourcemaps
@@ -23,7 +24,7 @@ const isString = value => typeof value === 'string' || value instanceof String;
  * @param {object|string} sourceMap
  */
 function applySourceMap(file, sourceMap) {
-	if (isString(sourceMap)) {
+	if (isString(sourceMap) || Buffer.isBuffer(sourceMap)) {
 		sourceMap = JSON.parse(sourceMap);
 	}
 	if (file.sourceMap && isString(file.sourceMap)) {
@@ -127,7 +128,7 @@ const loadSourceMap = co(function * (file) {
 
 	// Fix source map  and remove map comment from file
 	const sourceMap = yield fixSourceMap(file, sources);
-	file.data = sources.data;
+	file.data = Buffer.from(sources.data);
 
 	return sourceMap;
 });
@@ -136,11 +137,12 @@ const loadSourceMap = co(function * (file) {
  * Initialize source maps for files, loading existing if specified
  *
  * @param {File[]} files
- * @param {object} [opts]
+ * @param {boolean|object} [opts] load option or opts object
  * @param {boolean} [opts.load = false]
  */
 const initSourceMaps = co(function * (files, opts) {
-	opts = opts || {};
+	if (opts == null) opts = { load: false };
+	if (isBoolean(opts)) opts = { load: opts };
 
 	const initSourceMap = co(function * (file) {
 		let sourceMap;
@@ -183,9 +185,7 @@ const initSourceMaps = co(function * (files, opts) {
  */
 const writeSourceMaps = co(function * (files, opts) {
 	opts = opts || {};
-	if (isString(opts)) {
-		opts = { dest: opts };
-	}
+	if (isString(opts)) opts = { dest: opts };
 
 	const writeSourceMap = co(function * (file) {
 		const sourceMap = file.sourceMap;

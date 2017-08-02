@@ -6,6 +6,7 @@ const wrapp = require('./wrapp');
 const util = require('./utils');
 const boot = require('./boot');
 const $ = require('./fn');
+const sourcemaps = require('@taskr/sourcemaps');
 
 const RGX = /[\\|\/]/g;
 const co = Promise.coroutine;
@@ -13,6 +14,8 @@ const normalize = p.normalize;
 const format = p.format;
 const parse = p.parse;
 const sep = p.sep;
+const initSourceMaps = sourcemaps.initSourceMaps;
+const writeSourceMaps = sourcemaps.writeSourceMaps;
 
 function Task(ctx) {
 	// construct shape
@@ -44,6 +47,8 @@ Task.prototype.run = co(function * (opts, func) {
 
 Task.prototype.source = co(function * (globs, opts) {
 	globs = $.flatten($.toArray(globs));
+	opts = opts || {};
+
 	const files = yield this.$.expand(globs, opts);
 
 	if (globs.length && !files.length) {
@@ -64,11 +69,19 @@ Task.prototype.source = co(function * (globs, opts) {
 			base: obj.base
 		};
 	});
+
+	if (opts.sourcemaps) {
+		yield initSourceMaps(this._.files, opts.sourcemaps);
+	}
 });
 
 Task.prototype.target = co(function * (dirs, opts) {
 	dirs = $.flatten($.toArray(dirs));
-	opts = opts || {};
+	opts = opts || { sourcemaps: true };
+
+	if (opts.sourcemaps !== false) {
+		yield writeSourceMaps(this._.files, opts.sourcemaps);
+	}
 
 	const files = this._.files;
 	// using `watcher`? original globs passed as `prevs`
