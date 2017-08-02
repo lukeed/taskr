@@ -1,0 +1,37 @@
+{
+  "name": "@taskr/sourcemaps",
+  "version": "1.0.6",
+  "description": "Source maps with taskr",
+  "repository": "lukeed/taskr",
+  "license": "MIT",
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "taskr",
+    "source",
+    "map",
+    "sourcemap"
+  ],
+  "scripts": {
+    "test": "tape test/*.js | tap-spec"
+  },
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke.edwards05@gmail.com",
+    "url": "https://lukeed.com"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "convert-source-map": "^1.5.0",
+    "detect-newline": "^2.1.0",
+    "source-map": "^0.5.6"
+  },
+  "engines": {
+    "node": ">= 4.6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

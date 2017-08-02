@@ -1,0 +1,1 @@
+{"version":3,"file":"existing.js","sourceRoot":"","sources":["say-hi.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,OAAO,GAAG,eAAe,OAAyB;IACvD,MAAM,EAAE,IAAI,EAAE,GAAG,OAAO,CAAC;IACzB,MAAM,CAAC,SAAS,IAAI,GAAG,CAAC;AAC1B,CAAC,CAAC","sourcesContent":["module.exports = function sayHi(options: { name: string }): string {\n  const { name } = options;\n  return `Howdy ${name}!`;\n};\n"]}
