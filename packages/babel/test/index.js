@@ -8,7 +8,7 @@ const dir = join(__dirname, 'fixtures');
 const tmp = join(__dirname, '.tmp');
 
 test('@taskr/babel', t => {
-	t.plan(16);
+	t.plan(19);
 
 	const src = `${dir}/a.js`;
 	const want = '"use strict";\n\nObject.defineProperty(exports, "__esModule"';
@@ -85,9 +85,22 @@ test('@taskr/babel', t => {
 				t.true(str.includes('System.register'), 'via `preload` + `presets`; keep detailed `presets` entry');
 
 				yield f.clear(tmp);
+			},
+			* g(f) {
+				yield f.source(`${dir}/*.js`, { sourcemaps: true })
+					.babel({presets: ['es2015']})
+					.target(tmp, { sourcemaps: '.' });
+
+				const arr = yield f.$.expand(`${tmp}/*`);
+				const str = yield f.$.read(`${tmp}/a.js`, 'utf8');
+				t.equal(arr.length, 2, 'via `@taskr/sourcemaps`; create file & external sourcemap');
+				t.true(/var a/.test(str), 'via `@taskr/sourcemaps`; transpile to es5 code');
+				t.true(/sourceMappingURL/.test(str), 'via `@taskr/sourcemaps`; append `sourceMappingURL` link');
+
+				yield f.clear(tmp);
 			}
 		}
 	});
 
-	taskr.serial(['a', 'b', 'c', 'd', 'e', 'f']);
+	taskr.serial(['a', 'b', 'c', 'd', 'e', 'f', 'g']);
 });

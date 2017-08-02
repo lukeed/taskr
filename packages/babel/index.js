@@ -3,6 +3,7 @@
 const transform = require('babel-core').transform;
 const readPkg = require('read-pkg-up');
 const flatten = require('flatten');
+const applySourceMap = require('@taskr/sourcemaps').applySourceMap;
 
 const BABEL_REGEX = /(^babel-)(preset|plugin)-(.*)/i;
 
@@ -36,13 +37,19 @@ module.exports = function (task) {
 				}
 			});
 		}
+		if (file.sourceMap && opts.sourcemaps == null) {
+			opts.sourceMaps = true;
+		}
 
 		// attach file's name
 		opts.filename = file.base;
 
 		const output = transform(file.data, opts);
 
-		if (output.map) {
+		if (file.sourceMap && output.map) {
+			applySourceMap(file, output.map);
+		} else if (output.map) {
+			// Backwards compatibility
 			const map = `${file.base}.map`;
 
 			// append `sourceMappingURL` to original file
@@ -59,6 +66,6 @@ module.exports = function (task) {
 		}
 
 		// update file's data
-		file.data = new Buffer(output.code);
+		file.data = Buffer.from(output.code);
 	});
 };
