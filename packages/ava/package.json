@@ -1,0 +1,37 @@
+{
+  "name": "@taskr/ava",
+  "version": "1.2.0",
+  "description": "A plugin for taskr that run ava tests",
+  "repository": "lukeed/taskr",
+  "license": "MIT",
+  "author": {
+    "name": "Pine Mizune",
+    "email": "pinemz@gmail.com",
+    "url": "https://github.com/pine"
+  },
+  "engines": {
+    "node": ">=4.6"
+  },
+  "scripts": {
+    "test": "ava -v test/*.js"
+  },
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "taskr",
+    "taskr-plugin",
+    "ava"
+  ],
+  "dependencies": {
+    "ava": ">=0.20.0 <0.21.0",
+    "pkg-conf": "^2.0.0"
+  },
+  "devDependencies": {
+    "taskr": "^1.1.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
