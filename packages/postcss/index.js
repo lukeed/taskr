@@ -7,7 +7,7 @@ const base = { plugins:[], options:{} };
 const filenames = ['.postcssrc', '.postcssrc.js', 'postcss.config.js', 'package.json'];
 
 const isString = any => typeof any === 'string';
-const isObject = any => Boolean(any) && (any.constructor === Object);
+const isObject = any => !!any && typeof any === 'object' && !Array.isArray(any);
 const isEmptyObj = any => isObject(any) && Object.keys(any).length === 0;
 
 module.exports = function (task, utils) {
