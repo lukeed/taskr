@@ -137,6 +137,7 @@ If you're still missing something, open a ticket so that the team & community ca
 | [`taskr-precache`](https://github.com/lukeed/taskr-precache) | [![npm](https://img.shields.io/npm/v/taskr-precache.svg?maxAge=86400)](https://www.npmjs.com/package/taskr-precache) | [![Dependency Status](https://david-dm.org/lukeed/taskr-precache.svg)](https://david-dm.org/lukeed/taskr-precache) | Cache assets for offline use via service worker |
 | [`taskr-svelte`](https://github.com/lukeed/taskr-svelte) | [![npm](https://img.shields.io/npm/v/taskr-svelte.svg?maxAge=86400)](https://www.npmjs.com/package/taskr-svelte) | [![Dependency Status](https://david-dm.org/lukeed/taskr-svelte.svg)](https://david-dm.org/lukeed/taskr-svelte) | Compile Svelte components with Taskr
 | [`taskr-xo`](https://github.com/lukeed/taskr-xo) | [![npm](https://img.shields.io/npm/v/taskr-xo.svg?maxAge=86400)](https://www.npmjs.com/package/taskr-xo) | [![Dependency Status](https://david-dm.org/lukeed/taskr-xo.svg)](https://david-dm.org/lukeed/taskr-xo) | XO plugin for Taskr
+| [`taskr-standard`](https://github.com/elmasse/taskr-standard) | [![npm](https://img.shields.io/npm/v/taskr-standard.svg?maxAge=86400)](https://www.npmjs.com/package/taskr-standard) | [![Dependency Status](https://david-dm.org/elmasse/taskr-standard.svg)](https://david-dm.org/elmasse/taskr-standard) | Standard plugin for Taskr
 
 ## License
 
