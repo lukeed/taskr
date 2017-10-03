@@ -118,7 +118,7 @@ class Taskr extends Emitter {
 		try {
 			yield Promise.all(tasks.map(t => this.start(t, opts)));
 		} catch (err) {
-			//
+			this.emit('parallel_error', err);
 		}
 	}
 
@@ -130,7 +130,7 @@ class Taskr extends Emitter {
 				return this.start(str, opts);
 			}, opts.val || null);
 		} catch (err) {
-			this.emit('serial_error');
+			this.emit('serial_error', err);
 		}
 	}
 }
