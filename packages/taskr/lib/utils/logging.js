@@ -6,7 +6,7 @@
  * 		- use es2015
  */
 
-const clor = require('clor');
+const clorox = require('clorox');
 const homedir = require('os').homedir;
 const getTime = require('../fn').getTime;
 
@@ -27,7 +27,7 @@ function stamp() {
 	}
 
 	// print the curr time.
-	process.stdout.write(clor[this.color](getTime()) + ' ');
+	process.stdout.write(clorox[this.color](getTime()) + ' ');
 
 	// apply arguments to `console` method
 	console[this.method].apply(console, (this.custom ? [this.custom].concat(args) : args));
@@ -50,7 +50,7 @@ function error() {
 function alert() {
 	if (process.env.VERBOSE) {
 		stamp.apply({
-			custom: clor.yellow.bold("%s"),
+			custom: clorox.yellow.bold("%s"),
 			color: 'yellow',
 			method: 'log'
 		}, arguments);

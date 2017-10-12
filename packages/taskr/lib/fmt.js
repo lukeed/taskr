@@ -1,6 +1,6 @@
 'use strict';
 
-const c = require('clor');
+const c = require('clorox');
 
 module.exports = {
 	complete: c.blue.bold,
