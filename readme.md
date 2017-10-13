@@ -55,7 +55,7 @@ module.exports = {
 
 > **TL;DR** This is the continuation of and successor to [Fly](https://github.com/flyjs/fly)!
 
-Fly's original author, [Jorge Bucaran](https://github.com/jbucaran), has shifted focus to other exciting projects. Before leaving, he chose to guarantee Fly's future by transferring the project to [Luke Edwards](https://github.com/lukeed), who was one of the first and most enthused contributors.
+Fly's original author, [Jorge Bucaran](https://github.com/JorgeBucaran), has shifted focus to other exciting projects. Before leaving, he chose to guarantee Fly's future by transferring the project to [Luke Edwards](https://github.com/lukeed), who was one of the first and most enthused contributors.
 
 To reflect this milestone, Fly has been renamed to Taskr and has a stable, exciting future ahead! :tada:
 
@@ -141,7 +141,7 @@ If you're still missing something, open a ticket so that the team & community ca
 
 ## License
 
-MIT © [Luke Edwards](https://lukeed.com) and [Jorge Bucaran](https://github.com/jbucaran)
+MIT © [Luke Edwards](https://lukeed.com) and [Jorge Bucaran](https://github.com/JorgeBucaran)
 
 <!--
   [`@taskr/eslint`](/packages/eslint) | [![npm](https://img.shields.io/npm/v/@taskr/eslint.svg?maxAge=86400)](https://www.npmjs.com/package/@taskr/eslint) | [![Dependency Status](https://david-dm.org/lukeed/taskr.svg?path=packages/eslint)](https://david-dm.org/lukeed/taskr?path=packages/eslint)
