@@ -20,7 +20,7 @@
   ],
   "dependencies": {
     "bluebird": "^3.5.0",
-    "clor": "^5.1.0",
+    "clorox": "^1.0.1",
     "glob": "^7.1.2",
     "mk-dirs": "^1.0.0",
     "mri": "^1.1.0",
