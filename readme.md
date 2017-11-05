@@ -53,7 +53,7 @@ module.exports = {
 
 ## History
 
-> **TL;DR** This is the continuation of and successor to [Fly](https://github.com/flyjs/fly)!
+> **TL;DR** This is the continuation of and successor to [Fly](https://www.npmjs.com/package/fly)!
 
 Fly's original author, [Jorge Bucaran](https://github.com/JorgeBucaran), has shifted focus to other exciting projects. Before leaving, he chose to guarantee Fly's future by transferring the project to [Luke Edwards](https://github.com/lukeed), who was one of the first and most enthused contributors.
 
