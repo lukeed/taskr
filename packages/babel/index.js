@@ -1,10 +1,10 @@
 'use strict';
 
-const transform = require('babel-core').transform;
+const transform = require('@babel/core').transform;
 const readPkg = require('read-pkg-up');
 const flatten = require('flatten');
 
-const BABEL_REGEX = /(^babel-)(preset|plugin)-(.*)/i;
+const BABEL_REGEX = /(^@babel\/)(preset|plugin)-(.*)/i;
 
 function getBabels() {
 	const pkg = readPkg.sync().pkg;
@@ -26,7 +26,7 @@ module.exports = function (task) {
 			cache.forEach(dep => {
 				const segs = BABEL_REGEX.exec(dep);
 				const type = `${segs[2]}s`;
-				const name = segs[3];
+				const name = `@babel/${segs[2]}-${segs[3]}`;
 
 				opts[type] = opts[type] || [];
 
