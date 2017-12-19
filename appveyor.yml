@@ -1,11 +1,11 @@
 environment:
   matrix:
-    - nodejs_version: "7"
+    - nodejs_version: "8"
     - nodejs_version: "6"
-    - nodejs_version: "4.6"
+    - nodejs_version: "4"
 
-max_jobs: 4
 clone_depth: 1
+
 branches:
   only:
   - master
@@ -14,20 +14,17 @@ version: "{build}"
 
 install:
   - ps: Install-Product node $env:nodejs_version
-  - npm -g install npm@latest
-  - set PATH=%APPDATA%\npm;%PATH%
   - npm install
-
-platform:
-  - x86
-  - x64
-
-matrix:
-  fast_finish: true
-
-build: off
 
 test_script:
   - node --version
   - npm --version
   - npm test
+
+build: off
+
+cache:
+  - node_modules
+
+matrix:
+  fast_finish: true
