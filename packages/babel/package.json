@@ -24,12 +24,12 @@
     }
   ],
   "dependencies": {
-    "@babel/core": "7.0.0-beta.32",
+    "@babel/core": "^7.0.0-beta.42",
     "flatten": "^1.0.2",
     "read-pkg-up": "^2.0.0"
   },
   "devDependencies": {
-    "@babel/preset-es2015": "7.0.0-beta.32",
+    "@babel/preset-es2015": "^7.0.0-beta.42",
     "@taskr/clear": "^1.1.0",
     "taskr": "^1.1.0"
   },
