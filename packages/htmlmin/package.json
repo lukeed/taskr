@@ -1,22 +1,11 @@
 {
-  "name": "@taskr/htmlmin",
   "version": "1.1.0",
+  "name": "@taskr/htmlmin",
   "description": "Minify HTML with Taskr",
   "repository": "lukeed/taskr",
   "license": "MIT",
-  "main": "index.js",
   "files": [
     "*.js"
-  ],
-  "keywords": [
-    "taskr",
-    "taskr-plugin",
-    "htmlmin",
-    "htm",
-    "html",
-    "minifier",
-    "minification",
-    "minify"
   ],
   "author": {
     "name": "Luke Edwards",
@@ -33,6 +22,16 @@
   "engines": {
     "node": ">=8"
   },
+  "keywords": [
+    "taskr",
+    "taskr-plugin",
+    "htmlmin",
+    "htm",
+    "html",
+    "minifier",
+    "minification",
+    "minify"
+  ],
   "publishConfig": {
     "access": "public"
   }

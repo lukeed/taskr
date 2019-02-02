@@ -1,17 +1,25 @@
 {
-  "name": "@taskr/watch",
   "version": "1.1.0",
+  "name": "@taskr/watch",
   "description": "Watch files & Execute specified tasks on change",
   "repository": "lukeed/taskr",
   "license": "MIT",
+  "files": [
+    "*.js"
+  ],
   "author": {
     "name": "Luke Edwards",
     "email": "luke.edwards05@gmail.com",
     "url": "https://lukeed.com"
   },
-  "files": [
-    "*.js"
-  ],
+  "dependencies": {
+    "chokidar": "^1.7.0"
+  },
+  "devDependencies": {
+    "bluebird": "^3.5.0",
+    "taskr": "^1.1.0",
+    "touch": "^1.0.0"
+  },
   "engines": {
     "node": ">=8"
   },
@@ -21,14 +29,6 @@
     "chokidar",
     "watch"
   ],
-  "dependencies": {
-    "chokidar": "^1.7.0"
-  },
-  "devDependencies": {
-    "bluebird": "^3.5.0",
-    "taskr": "^1.1.0",
-    "touch": "^1.0.0"
-  },
   "publishConfig": {
     "access": "public"
   }

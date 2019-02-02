@@ -1,17 +1,11 @@
 {
-  "name": "@taskr/jest",
   "version": "1.1.1",
+  "name": "@taskr/jest",
   "description": "Jest plugin for Taskr",
   "repository": "lukeed/taskr",
-  "main": "index.js",
   "license": "MIT",
   "files": [
     "*.js"
-  ],
-  "keywords": [
-    "taskr",
-    "taskr-plugin",
-    "jest"
   ],
   "author": {
     "name": "Luke Edwards",
@@ -27,6 +21,11 @@
   "engines": {
     "node": ">=8"
   },
+  "keywords": [
+    "taskr",
+    "taskr-plugin",
+    "jest"
+  ],
   "publishConfig": {
     "access": "public"
   }

@@ -1,26 +1,17 @@
 {
-  "name": "@taskr/concat",
   "version": "1.1.0",
+  "name": "@taskr/concat",
   "description": "Concatenate files with optional source maps.",
   "repository": "lukeed/taskr",
   "license": "MIT",
+  "files": [
+    "*.js"
+  ],
   "author": {
     "name": "Luke Edwards",
     "email": "luke.edwards05@gmail.com",
     "url": "lukeed.com"
   },
-  "engines": {
-    "node": ">=8"
-  },
-  "files": [
-    "*.js"
-  ],
-  "keywords": [
-    "taskr",
-    "taskr-plugin",
-    "sourcemap",
-    "concat"
-  ],
   "dependencies": {
     "concat-with-sourcemaps": "^1.0.4"
   },
@@ -28,6 +19,15 @@
     "@taskr/clear": "^1.1.0",
     "taskr": "^1.1.0"
   },
+  "engines": {
+    "node": ">=8"
+  },
+  "keywords": [
+    "taskr",
+    "taskr-plugin",
+    "sourcemap",
+    "concat"
+  ],
   "publishConfig": {
     "access": "public"
   }

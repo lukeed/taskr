@@ -1,17 +1,11 @@
 {
-  "name": "@taskr/browserify",
   "version": "1.1.0",
+  "name": "@taskr/browserify",
   "description": "Browserify plugin for Taskr.",
   "repository": "lukeed/taskr",
-  "main": "index.js",
   "license": "MIT",
   "files": [
     "*.js"
-  ],
-  "keywords": [
-    "taskr",
-    "taskr-plugin",
-    "browserify"
   ],
   "author": {
     "name": "Luke Edwards",
@@ -30,6 +24,11 @@
   "engines": {
     "node": ">=8"
   },
+  "keywords": [
+    "taskr",
+    "taskr-plugin",
+    "browserify"
+  ],
   "publishConfig": {
     "access": "public"
   }

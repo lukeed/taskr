@@ -1,19 +1,11 @@
 {
-  "name": "@taskr/postcss",
   "version": "1.1.2",
+  "name": "@taskr/postcss",
   "description": "PostCSS plugin for Taskr",
   "repository": "lukeed/taskr",
   "license": "MIT",
-  "main": "index.js",
   "files": [
     "*.js"
-  ],
-  "keywords": [
-    "taskr",
-    "taskr-plugin",
-    "compile",
-    "postcss",
-    "css"
   ],
   "author": {
     "name": "Luke Edwards",
@@ -32,6 +24,13 @@
   "engines": {
     "node": ">=8"
   },
+  "keywords": [
+    "taskr",
+    "taskr-plugin",
+    "compile",
+    "postcss",
+    "css"
+  ],
   "publishConfig": {
     "access": "public"
   }

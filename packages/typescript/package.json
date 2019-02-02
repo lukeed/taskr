@@ -1,10 +1,9 @@
 {
-  "name": "@taskr/typescript",
   "version": "1.1.0",
+  "name": "@taskr/typescript",
   "description": "Compile Typescript with Taskr.",
   "repository": "lukeed/taskr",
   "license": "MIT",
-  "main": "index.js",
   "author": {
     "name": "Luke Edwards",
     "email": "luke@lukeed.com",

@@ -1,10 +1,12 @@
 {
-  "name": "@taskr/coffee",
   "version": "1.1.0",
+  "name": "@taskr/coffee",
   "description": "CoffeeScript plugin for Taskr",
   "repository": "lukeed/taskr",
   "license": "MIT",
-  "main": "index.js",
+  "files": [
+    "*.js"
+  ],
   "author": {
     "name": "Luke Edwards",
     "email": "luke@lukeed.com",

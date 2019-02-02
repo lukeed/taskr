@@ -1,19 +1,11 @@
 {
-  "name": "@taskr/shell",
   "version": "1.1.0",
+  "name": "@taskr/shell",
   "description": "Execute shell commands with Taskr",
   "repository": "lukeed/taskr",
   "license": "MIT",
-  "main": "index.js",
   "files": [
     "*.js"
-  ],
-  "keywords": [
-    "taskr",
-    "taskr-plugin",
-    "command",
-    "shell",
-    "exec"
   ],
   "author": {
     "name": "Luke Edwards",
@@ -30,6 +22,13 @@
   "engines": {
     "node": ">=8"
   },
+  "keywords": [
+    "taskr",
+    "taskr-plugin",
+    "command",
+    "shell",
+    "exec"
+  ],
   "publishConfig": {
     "access": "public"
   }

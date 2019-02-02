@@ -1,13 +1,28 @@
 {
-  "name": "@taskr/rev",
   "version": "1.1.0",
+  "name": "@taskr/rev",
   "description": "Append a unique hash to filename. Optionally create a manifest mapping. Optionally rewrite references to updated filenames.",
   "repository": "lukeed/taskr",
   "license": "MIT",
-  "main": "index.js",
   "files": [
     "*.js"
   ],
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke@lukeed.com",
+    "url": "https://lukeed.com"
+  },
+  "dependencies": {
+    "rev-hash": "^2.0.0",
+    "sort-keys": "^2.0.0"
+  },
+  "devDependencies": {
+    "@taskr/clear": "^1.1.0",
+    "taskr": "^1.1.0"
+  },
+  "engines": {
+    "node": ">=8"
+  },
   "keywords": [
     "taskr",
     "taskr-plugin",
@@ -28,22 +43,6 @@
     "asset",
     "assets"
   ],
-  "author": {
-    "name": "Luke Edwards",
-    "email": "luke@lukeed.com",
-    "url": "https://lukeed.com"
-  },
-  "dependencies": {
-    "rev-hash": "^2.0.0",
-    "sort-keys": "^2.0.0"
-  },
-  "devDependencies": {
-    "@taskr/clear": "^1.1.0",
-    "taskr": "^1.1.0"
-  },
-  "engines": {
-    "node": ">=8"
-  },
   "publishConfig": {
     "access": "public"
   }

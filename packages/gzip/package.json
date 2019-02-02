@@ -1,19 +1,11 @@
 {
-  "name": "@taskr/gzip",
   "version": "1.1.0",
+  "name": "@taskr/gzip",
   "description": "Gzip plugin for Taskr.",
   "repository": "lukeed/taskr",
   "license": "MIT",
-  "main": "index.js",
   "files": [
     "*.js"
-  ],
-  "keywords": [
-    "taskr",
-    "taskr-plugin",
-    "compress",
-    "deflate",
-    "gzip"
   ],
   "author": {
     "name": "Luke Edwards",
@@ -27,6 +19,13 @@
   "engines": {
     "node": ">=8"
   },
+  "keywords": [
+    "taskr",
+    "taskr-plugin",
+    "compress",
+    "deflate",
+    "gzip"
+  ],
   "publishConfig": {
     "access": "public"
   }
