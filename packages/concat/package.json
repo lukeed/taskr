@@ -12,9 +12,6 @@
   "engines": {
     "node": ">=4.6"
   },
-  "scripts": {
-    "test": "tape test/*.js | tap-spec"
-  },
   "files": [
     "index.js"
   ],

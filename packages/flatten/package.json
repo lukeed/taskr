@@ -14,9 +14,6 @@
     "flatten",
     "glob"
   ],
-  "scripts": {
-    "test": "tape test/*.js | tap-spec"
-  },
   "author": {
     "name": "Luke Edwards",
     "email": "luke.edwards05@gmail.com",

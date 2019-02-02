@@ -9,12 +9,12 @@
     "url": "https://lukeed.com"
   },
   "scripts": {
-    "pretest": "lerna bootstrap",
-    "test": "lerna run test"
+    "pretest": "lerna bootstrap --hoist",
+    "test": "tape packages/*/test/*.js | tap-spec"
   },
   "devDependencies": {
-    "lerna": "^2.0.0-rc.5",
-    "tap-spec": "^4.1.1",
-    "tape": "^4.6.3"
+    "lerna": "^3.10.7",
+    "tap-spec": "^5.0.0",
+    "tape": "^4.9.2"
   }
 }

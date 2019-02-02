@@ -8,9 +8,6 @@
   "files": [
     "index.js"
   ],
-  "scripts": {
-    "test": "tape test/*.js | tap-spec"
-  },
   "keywords": [
     "taskr",
     "taskr-plugin",

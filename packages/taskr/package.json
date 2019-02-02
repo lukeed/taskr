@@ -29,9 +29,6 @@
   "devDependencies": {
     "rimraf": "^2.6.1"
   },
-  "scripts": {
-    "test": "tape test/*.js | tap-spec"
-  },
   "keywords": [
     "cli",
     "task",
