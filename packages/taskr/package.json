@@ -46,6 +46,6 @@
     "build system"
   ],
   "engines": {
-    "node": ">= 4.6"
+    "node": ">=8"
   }
 }

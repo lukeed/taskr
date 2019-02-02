@@ -9,12 +9,12 @@
     "email": "luke.edwards05@gmail.com",
     "url": "https://lukeed.com"
   },
-  "engines": {
-    "node": ">=4.6"
-  },
   "files": [
     "*.js"
   ],
+  "engines": {
+    "node": ">=8"
+  },
   "keywords": [
     "taskr",
     "taskr-plugin",

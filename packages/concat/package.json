@@ -10,7 +10,7 @@
     "url": "lukeed.com"
   },
   "engines": {
-    "node": ">=4.6"
+    "node": ">=8"
   },
   "files": [
     "*.js"

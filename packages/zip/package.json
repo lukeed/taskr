@@ -30,7 +30,7 @@
     "taskr": "^1.1.0"
   },
   "engines": {
-    "node": ">= 4.6"
+    "node": ">=8"
   },
   "publishConfig": {
     "access": "public"
