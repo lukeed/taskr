@@ -3,5 +3,17 @@ language: node_js
 node_js:
   - 8
 
+os:
+  - osx
+  - linux
+  - windows
+
+cache:
+  directories:
+    - "node_modules"
+
 git:
   depth: 1
+
+# after_success:
+  # if [[ "$TRAVIS_OS_NAME" != 'windows' ]]; then npm run coverage; fi
