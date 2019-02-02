@@ -13,7 +13,7 @@
     "node": ">=4.6"
   },
   "files": [
-    "index.js"
+    "*.js"
   ],
   "keywords": [
     "taskr",

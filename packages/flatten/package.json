@@ -5,7 +5,7 @@
   "repository": "lukeed/taskr",
   "license": "MIT",
   "files": [
-    "index.js"
+    "*.js"
   ],
   "keywords": [
     "taskr",

@@ -6,7 +6,7 @@
   "main": "index.js",
   "license": "MIT",
   "files": [
-    "index.js"
+    "*.js"
   ],
   "keywords": [
     "taskr",
