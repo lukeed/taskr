@@ -1,20 +1,38 @@
 {
   "private": true,
-  "repository": "lukeed/taskr",
-  "homepage": "https://github.com/lukeed/taskr",
-  "license": "MIT",
   "author": {
     "name": "Luke Edwards",
     "email": "luke@lukeed.com",
     "url": "https://lukeed.com"
   },
   "scripts": {
-    "pretest": "lerna bootstrap --hoist",
+    "pretest": "lerna bootstrap --hoist && eslint packages",
     "test": "tape packages/*/test/*.js | tap-spec"
   },
   "devDependencies": {
+    "eslint": "^5.13.0",
     "lerna": "^3.10.7",
     "tap-spec": "^5.0.0",
     "tape": "^4.9.2"
-  }
+  },
+  "eslintConfig": {
+    "env": {
+      "es6": true,
+      "node": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "ecmaVersion": 10,
+      "sourceType": "module"
+    },
+    "rules": {
+      "no-console": 1,
+      "no-cond-assign": 0,
+      "no-inner-declarations": 0,
+      "require-yield": 0
+    }
+  },
+  "eslintIgnore": [
+    "**/node_modules/**"
+  ]
 }
