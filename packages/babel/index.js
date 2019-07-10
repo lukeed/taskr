@@ -1,6 +1,6 @@
 'use strict';
 
-const transform = require('babel-core').transform;
+const transform = require('@babel/core').transform;
 const readPkg = require('read-pkg-up');
 const flatten = require('flatten');
 
