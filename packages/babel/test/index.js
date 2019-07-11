@@ -22,10 +22,11 @@ test('@taskr/babel', t => {
 			* a(f) {
 				t.ok('babel' in taskr.plugins, 'add the `babel` plugin');
 
-				yield f.source(src).babel({presets: ['es2015']}).target(tmp);
+				yield f.source(src).babel({presets: ['@babel/preset-es2015']}).target(tmp);
 
 				const arr = yield f.$.expand(`${tmp}/*`);
 				const str = yield f.$.read(`${tmp}/a.js`, 'utf8');
+
 				t.ok(str.length, 'via `presets`: write new file');
 				t.equal(arr.length, 1, 'via `presets`: exclude sourcemaps by default');
 				t.true(str.includes(want), 'via `presets`: transpile to es5 code');
@@ -38,12 +39,13 @@ test('@taskr/babel', t => {
 				const arr = yield f.$.expand(`${tmp}/*`);
 				const str = yield f.$.read(`${tmp}/a.js`, 'utf8');
 				t.equal(arr.length, 1, 'via `preload`: exclude sourcemaps by default');
+
 				t.true(str.includes(want), 'via `preload`: transpile to es5 code');
 
 				yield f.clear(tmp);
 			},
 			* c(f) {
-				yield f.source(`${dir}/*.js`).babel({presets: ['es2015'], sourceMaps: true}).target(tmp);
+				yield f.source(`${dir}/*.js`).babel({presets: ['@babel/preset-es2015'], sourceMaps: true}).target(tmp);
 
 				const arr = yield f.$.expand(`${tmp}/*`);
 				const str = yield f.$.read(`${tmp}/a.js`, 'utf8');
@@ -54,7 +56,7 @@ test('@taskr/babel', t => {
 				yield f.clear(tmp);
 			},
 			* d(f) {
-				yield f.source(`${dir}/*.js`).babel({presets: ['es2015'], sourceMaps: 'inline'}).target(tmp);
+				yield f.source(`${dir}/*.js`).babel({presets: ['@babel/preset-es2015'], sourceMaps: 'inline'}).target(tmp);
 
 				const arr = yield f.$.expand(`${tmp}/*`);
 				const str = yield f.$.read(`${tmp}/a.js`, 'utf8');
@@ -65,7 +67,7 @@ test('@taskr/babel', t => {
 				yield f.clear(tmp);
 			},
 			* e(f) {
-				yield f.source(`${dir}/*.js`).babel({presets: ['es2015'], sourceMaps: 'both'}).target(tmp);
+				yield f.source(`${dir}/*.js`).babel({presets: ['@babel/preset-es2015'], sourceMaps: 'both'}).target(tmp);
 
 				const arr = yield f.$.expand(`${tmp}/*`);
 				const str = yield f.$.read(`${tmp}/a.js`, 'utf8');
@@ -78,7 +80,7 @@ test('@taskr/babel', t => {
 			* f(f) {
 				yield f.source(`${dir}/*.js`).babel({
 					preload: true,
-					presets: [['es2015', {modules: 'systemjs'}]]
+					presets: [['@babel/preset-es2015', {modules: 'systemjs'}]]
 				}).target(tmp);
 
 				const str = yield f.$.read(`${tmp}/a.js`, 'utf8');
