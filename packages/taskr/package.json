@@ -30,6 +30,14 @@
   "devDependencies": {
     "rimraf": "^2.6.1"
   },
+  "peerDependencies": {
+    "@taskr/esnext": "^1.1.0"
+  },
+  "peerDependenciesMeta": {
+    "@taskr/esnext": {
+      "optional": true
+    }
+  },
   "scripts": {
     "test": "tape test/*.js | tap-spec"
   },
