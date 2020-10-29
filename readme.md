@@ -90,7 +90,7 @@ Each `@taskr/*` or `taskr-*` plugin will also include its own documentation, too
 
 The Taskr repo is managed as a monorepo that is composed of its many _official_ packages.
 
-> **Important:** The core pacakge is `taskr` and must be installed before using any additional plugins.
+> **Important:** The core package is `taskr` and must be installed before using any additional plugins.
 
 ### Official Packages
 
