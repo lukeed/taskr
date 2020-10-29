@@ -1,0 +1,6 @@
+module.exports = function sayHi(options) {
+    const { name } = options;
+    return `Howdy ${name}!`;
+};
+
+//# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNheS1oaS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxNQUFNLENBQUMsT0FBTyxHQUFHLGVBQWUsT0FBeUI7SUFDeEQsTUFBTSxFQUFFLElBQUksRUFBRSxHQUFHLE9BQU8sQ0FBQztJQUN6QixNQUFNLENBQUMsU0FBUyxJQUFJLEdBQUcsQ0FBQztBQUN6QixDQUFDLENBQUMiLCJmaWxlIjoic2F5LWhpLWludGVybmFsLmpzIiwic291cmNlc0NvbnRlbnQiOlsibW9kdWxlLmV4cG9ydHMgPSBmdW5jdGlvbiBzYXlIaShvcHRpb25zOiB7IG5hbWU6IHN0cmluZyB9KTogc3RyaW5nIHtcblx0Y29uc3QgeyBuYW1lIH0gPSBvcHRpb25zO1xuXHRyZXR1cm4gYEhvd2R5ICR7bmFtZX0hYDtcbn07XG4iXX0=

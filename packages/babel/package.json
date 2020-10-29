@@ -24,6 +24,7 @@
     }
   ],
   "dependencies": {
+    "@taskr/sourcemaps": "^1.1.0",
     "babel-core": "^6.3.0",
     "flatten": "^1.0.2",
     "read-pkg-up": "^2.0.0"

@@ -19,6 +19,7 @@
     "taskr.d.ts"
   ],
   "dependencies": {
+    "@taskr/sourcemaps": "^1.1.0",
     "bluebird": "^3.5.0",
     "clorox": "^1.0.1",
     "glob": "^7.1.2",

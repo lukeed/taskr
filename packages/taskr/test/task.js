@@ -3,6 +3,7 @@
 const Promise = require("bluebird")
 const join = require("path").join
 const test = require("tape")
+const applySourceMap = require("@taskr/sourcemaps").applySourceMap;
 
 const del = require("./helpers").del
 const isMode = require("./helpers").isMode
@@ -72,10 +73,11 @@ test("task.constructor (internal)", co(function * (t) {
 }))
 
 test("task.source", co(function * (t) {
-	t.plan(18)
+	t.plan(23)
 
 	const glob1 = ["*.a", "*.b", "*.c"]
 	const glob2 = join(fixtures, "*.*")
+	const glob3 = join(fixtures, "sourcemaps/*.js")
 	const opts1 = { ignore: "foo" }
 
 	const taskr = new Taskr({
@@ -105,6 +107,21 @@ test("task.source", co(function * (t) {
 			*baz(f) {
 				yield f.source(glob2, { ignore: join(fixtures, "taskfile.js") })
 				t.equal(f._.files.length, 3, "tunnels options to `utils.expand` (ignore)")
+			},
+			*qux(f) {
+				yield f.source(glob3)
+				t.false(f._.files[0].sourceMap, "does not initialize source maps by default")
+
+				yield f.source(glob3, { sourcemaps: true })
+				const external = f._.files[0]
+				const inline = f._.files[1]
+				const none = f._.files[2]
+				t.deepEqual(external.sourceMap.sources, ["say-hi.ts"], "loads external source map")
+				t.deepEqual(inline.sourceMap.sources, ["say-hi.ts"], "loads inline source map")
+				t.equal(none.sourceMap.version, 3, "initializes empty source map")
+
+				yield f.source(glob3, { sourcemaps: { load: false }})
+				t.deepEqual(f._.files[0].sourceMap.sources, ["say-hi-external.js"], "passes options to source map")
 			}
 		}
 	})
@@ -115,15 +132,16 @@ test("task.source", co(function * (t) {
 		t.deepEqual(o, opts1, "warning receives the `expand` options")
 	})
 
-	yield taskr.parallel(["foo", "bar", "baz"])
+	yield taskr.parallel(["foo", "bar", "baz", "qux"])
 }))
 
 test("task.target", co(function * (t) {
-	t.plan(11)
+	t.plan(13)
 	const glob1 = join(fixtures, "one", "two", "*.md")
 	const glob2 = join(fixtures, "one", "*.md")
 	const glob3 = join(fixtures, "**", "*.md")
 	const glob4 = join(fixtures, "one", "**", "*.md")
+	const glob5 = join(fixtures, "sourcemaps/*.js");
 
 	const dest1 = join(fixtures, ".tmp1")
 	const dest2 = join(fixtures, ".tmp2")
@@ -131,9 +149,11 @@ test("task.target", co(function * (t) {
 	const dest4 = join(fixtures, ".tmp4")
 	const dest5 = join(fixtures, ".tmp5")
 	const dest6 = join(fixtures, ".tmp6")
+	const dest7 = join(fixtures, ".tmp7")
+	const dest8 = join(fixtures, ".tmp8")
 
 	// clean slate
-	yield del([dest1, dest2, dest3, dest4, dest5])
+	yield del([dest1, dest2, dest3, dest4, dest5, dest6, dest7, dest8])
 
 	const taskr = new Taskr({
 		plugins: [{
@@ -141,6 +161,13 @@ test("task.target", co(function * (t) {
 			name: "fakeConcat",
 			*func(all) {
 				this._.files = [{ dir: all[0].dir, base: "fake.foo", data: new Buffer("bar") }]
+			}
+		}, {
+			every: false,
+			name: "fakeSourceMap",
+			*func(all) {
+				const sourceMap = yield this.$.read(join(fixtures, "sourcemaps/say-hi.js.map"));
+				applySourceMap(all[2], sourceMap);
 			}
 		}],
 		tasks: {
@@ -188,13 +215,26 @@ test("task.target", co(function * (t) {
 				yield f.source(src).target(dest1, {mode: 0o755})
 				const isExe = yield isMode(`${dest1}/bar.txt`, 755)
 				t.true(isExe, "pass `mode` option to `utils.write`")
+			},
+			*g(f) {
+				yield f.source(glob5, { sourcemaps: true }).fakeSourceMap().target(dest7)
+				const arr1 = yield f.$.expand(join(dest7, "*.*"))
+				const f1 = yield f.$.read(join(dest7, "say-hi-external.js"))
+				const hasInlineSourceMap = f1.toString().indexOf("sourceMappingURL=data") >= 0
+				t.true(arr1.length === 3 && hasInlineSourceMap, "write inline source maps");
+
+				yield f.source(glob5, { sourcemaps: true }).fakeSourceMap().target(dest8, { sourcemaps: '.' })
+				const arr2 = yield f.$.expand(join(dest8, "*.*"))
+				const f2 = yield f.$.read(join(dest8, "say-hi-internal.js"))
+				const hasExternalSourceMap = f2.toString().indexOf("sourceMappingURL=say-hi-internal.js.map") >= 0
+				t.true(arr2.length === 6 && hasExternalSourceMap, "write external source maps")
 			}
 		}
 	})
 
-	yield taskr.parallel(["a", "b", "c", "d", "e", "f"])
+	yield taskr.parallel(["a", "b", "c", "d", "e", "f", "g"])
 	// clean up
-	yield del([dest1, dest2, dest3, dest4, dest5, dest6])
+	yield del([dest1, dest2, dest3, dest4, dest5, dest6, dest7, dest8])
 }))
 
 test("task.run (w/function)", co(function * (t) {
