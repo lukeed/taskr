@@ -4,6 +4,7 @@ const p = require('path');
 const flatten = require('./fn').flatten;
 const isObject = require('./fn').isObject;
 const co = require('bluebird').coroutine;
+const createRequire = require('create-require');
 const $ = require('./utils');
 
 const rgx = /^@(taskr|fly)|(taskr|fly)-/i;
@@ -18,13 +19,8 @@ const join = p.join;
  */
 function req(name, base) {
 	try {
-		try {
-			name = require.resolve(name);
-		} catch (_) {
-			name = join(base, name);
-		} finally {
-			return require(name);
-		}
+		const relativeRequire = createRequire(base)
+		return relativeRequire(name);
 	} catch (e) {
 		$.alert(e.message);
 	}

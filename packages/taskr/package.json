@@ -19,6 +19,7 @@
     "taskr.d.ts"
   ],
   "dependencies": {
+    "create-require": "^1.0.2",
     "bluebird": "^3.5.0",
     "clorox": "^1.0.1",
     "glob": "^7.1.2",
@@ -28,6 +29,14 @@
   },
   "devDependencies": {
     "rimraf": "^2.6.1"
+  },
+  "peerDependencies": {
+    "@taskr/esnext": "^1.1.0"
+  },
+  "peerDependenciesMeta": {
+    "@taskr/esnext": {
+      "optional": true
+    }
   },
   "scripts": {
     "test": "tape test/*.js | tap-spec"
