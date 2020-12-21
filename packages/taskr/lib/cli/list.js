@@ -12,7 +12,7 @@ module.exports = function (tasks, bare) {
 	bare = bare || false
 	tasks = tasks || {}
 
-	const out = [`\n${fmt.text.dim("Available tasks")}`]
+	const out = [`\n${fmt.text().dim("Available tasks")}`]
 
 	// parse tasks" descriptions, if any
 	for (const k in tasks) {
