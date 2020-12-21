@@ -20,8 +20,8 @@
   ],
   "dependencies": {
     "bluebird": "^3.5.0",
-    "clorox": "^1.0.1",
     "glob": "^7.1.2",
+    "kleur": "^4.1.3",
     "mk-dirs": "^1.0.0",
     "mri": "^1.1.0",
     "tinydate": "^1.0.0"

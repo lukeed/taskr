@@ -1,13 +1,13 @@
 'use strict';
 
-const c = require('clorox');
+const k = require('kleur');
 
 module.exports = {
-	complete: c.blue.bold,
-	title: c.bold.yellow,
-	error: c.bold.red,
-	path: c.underline.cyan,
-	warn: c.bold.magenta,
-	text: c.bold.white,
-	time: c.green
+	complete: k.blue().bold,
+	title: k.bold().yellow,
+	error: k.bold().red,
+	path: k.underline().cyan,
+	warn: k.bold().magenta,
+	text: k.bold().white,
+	time: k.green
 };
